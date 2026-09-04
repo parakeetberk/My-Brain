@@ -156,8 +156,10 @@ Reportable = Yes is a *necessary* condition, not the only rule. Two things still
 sit on top of it:
 
 - **`sold`** in registry.json excludes a disposition the PDS has not caught up
-  with. The build raises a warning flag for any entry there that still reads
-  Reportable = Yes, so the disagreement is never silent.
+  with. Congress and Shell Pointe sit there, both confirmed sold by Austin on
+  2026-09-04. The build raises an informational flag for any entry still marked
+  Reportable, so the override stays visible and can be retired once the PDS
+  catches up.
 - **`roll_up`** attributes a non-reportable sub-ledger's money to its reportable
   parent. Northgate Utility bills against Northgate MH's lots, so its receivables
   belong to Northgate MH while its unit count does not.
@@ -176,8 +178,12 @@ unclassified shows up there instead of quietly changing a total.
 ### When Austin sells a property
 
 Flip Reportable to No in the Property Data Sheet and fill the Sale Date. That is
-the whole change. Add it to `sold` in registry.json only if it has to come out
-before the PDS is updated.
+the whole change, and it is the preferred one, because the roster then carries
+the truth on its own.
+
+Add it to `sold` in registry.json only when it has to come out before the PDS is
+updated. That override is a stopgap, not a home: the build keeps flagging it
+until the PDS agrees, and the entry should be deleted once it does.
 
 Historical receivables snapshots are **not** scrubbed when a property is sold —
 Austin's standing instruction from 2026-07-27. History stays as recorded; new
@@ -194,9 +200,10 @@ above the numbers they qualify. On the reportable roster the standing ones are:
   heuristic roster's frozen ledgers were masking the trend. Current billing
   collects fine; a growing pile ages through and never gets collected. Total
   receivables are up 62% year over year on the same roster.
-- **Congress and Shell Pointe are excluded as sold but still read Reportable =
-  Yes** with no Sale Date. Two rules disagree and the build says so rather than
-  picking silently.
+- **Congress and Shell Pointe are excluded by override rather than by the
+  roster.** Both are confirmed sold, so they are correctly out of every figure,
+  but the PDS still reads Reportable = Yes with no Sale Date. Flipping Reportable
+  to No and filling the Sale Date lets the `sold` entries be deleted.
 - **One community's lot count disagrees with the PDS.** The PDS is authoritative,
   so a gap means the Rent Manager unit list is out of step and that community's
   occupancy sits on the wrong denominator.

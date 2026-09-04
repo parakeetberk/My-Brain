@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-04T14:19:13+00:00",
+ "generated_at": "2026-09-04T14:39:43+00:00",
  "reportable_source": "pds_reportable.json",
  "counts": {
   "names_seen": 152,
@@ -164,7 +164,7 @@
   "Congress Mobile Home Park": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Sold: Recorded as sold July 2026 (standing rule from 2026-07-27)"
+   "reason": "Sold: Sold July 2026, confirmed by Austin 2026-09-04"
   },
   "Countryside MHC": {
    "disposition": "drop",
@@ -554,7 +554,7 @@
   "Shell Pointe MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Sold: Recorded as sold July 2026 (standing rule from 2026-07-27)"
+   "reason": "Sold: Sold July 2026, confirmed by Austin 2026-09-04"
   },
   "Shirleys Trailer Park I": {
    "disposition": "drop",

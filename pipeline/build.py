@@ -660,7 +660,8 @@ def build(raw_dir, out_dir, registry_path):
     if absent:
         flags.append({
             "severity": "warn",
-            "title": "%d reportable communities have no warehouse data" % len(absent),
+            "title": "%d reportable %s no warehouse data"
+                     % (len(absent), "community has" if len(absent) == 1 else "communities have"),
             "detail": ("The Property Data Sheet marks these Reportable = Yes but the "
                        "warehouse returned no rows for them, so they are missing from "
                        "every total: %s."
@@ -679,18 +680,19 @@ def build(raw_dir, out_dir, registry_path):
                                    for n, v in sorted(rolled_ar.items(), key=lambda x: -x[1]))),
         })
 
-    for entry in cfg.get("sold", []):
-        primary = entry["match"][0]
-        if primary.strip().lower() in reportable:
-            flags.append({
-                "severity": "warn",
-                "title": "%s is excluded as sold but still reads Reportable = Yes" % primary,
-                "detail": ("%s. The Property Data Sheet still marks it Reportable with no "
-                           "Sale Date, so the two rules disagree. It is held out of every "
-                           "figure until that is settled: either flip Reportable to No in "
-                           "the PDS, or remove it from `sold` in registry.json."
-                           % entry["reason"]),
-            })
+    stale_pds = [e["match"][0] for e in cfg.get("sold", [])
+                 if e["match"][0].strip().lower() in reportable]
+    if stale_pds:
+        flags.append({
+            "severity": "info",
+            "title": "%d sold %s excluded by override, not by the PDS"
+                     % (len(stale_pds), "property is" if len(stale_pds) == 1 else "properties are"),
+            "detail": ("%s. Correctly out of every figure, but the Property Data Sheet still "
+                       "reads Reportable = Yes with no Sale Date, so the exclusion rests on "
+                       "registry.json rather than the roster. Flipping Reportable to No and "
+                       "filling the Sale Date lets the override be retired."
+                       % ", ".join(stale_pds)),
+        })
 
     cl, lv = portfolio["closed"], portfolio["live"]
     if lv["ar_total"] and cl["ar_total"]:
@@ -735,7 +737,8 @@ def build(raw_dir, out_dir, registry_path):
     if frozen:
         flags.append({
             "severity": "warn",
-            "title": "%d communities hold all receivables in the 90+ bucket" % len(frozen),
+            "title": "%d %s all receivables in the 90+ bucket"
+                     % (len(frozen), "community holds" if len(frozen) == 1 else "communities hold"),
             "detail": ("Nothing current or mid-aged at all, which usually means a stale or "
                        "migrated ledger rather than live delinquency: %s."
                        % ", ".join(sorted(frozen))),
@@ -760,7 +763,9 @@ def build(raw_dir, out_dir, registry_path):
     if lot_gaps:
         flags.append({
             "severity": "warn",
-            "title": "%d communities' lot counts disagree with the Property Data Sheet" % len(lot_gaps),
+            "title": ("%d %s lot count disagrees with the Property Data Sheet" % (len(lot_gaps), "community's")
+                      if len(lot_gaps) == 1 else
+                      "%d communities' lot counts disagree with the Property Data Sheet" % len(lot_gaps)),
             "detail": ("The PDS is the authoritative lot count, so a gap means the Rent "
                        "Manager unit list is out of step: %s. Occupancy is computed on the "
                        "warehouse count, so these percentages sit on the wrong denominator "
@@ -785,7 +790,8 @@ def build(raw_dir, out_dir, registry_path):
     if no_budget:
         flags.append({
             "severity": "info",
-            "title": "%d communities post revenue with no budget loaded" % len(no_budget),
+            "title": "%d %s revenue with no budget loaded"
+                     % (len(no_budget), "community posts" if len(no_budget) == 1 else "communities post"),
             "detail": "Budget variance is blank for: %s." % ", ".join(sorted(no_budget)),
         })
 
@@ -794,8 +800,9 @@ def build(raw_dir, out_dir, registry_path):
     if zero_occ:
         flags.append({
             "severity": "warn",
-            "title": "%d communities report 0%% occupancy on %d lots"
-                     % (len(zero_occ), sum(u for _, u in zero_occ)),
+            "title": "%d %s 0%% occupancy on %d lots"
+                     % (len(zero_occ), "community reports" if len(zero_occ) == 1 else "communities report",
+                        sum(u for _, u in zero_occ)),
             "detail": ("Either genuinely empty or the ledger is not tracking occupancy: %s."
                        % ", ".join("%s (%d lots)" % (n, u) for n, u in sorted(zero_occ))),
         })

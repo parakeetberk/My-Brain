@@ -21,9 +21,13 @@
   "_grace_day_comment": "Rent bills on the 1st. After this day, unpaid current-month charges are late.",
   "_sold_comment": [
     "Excluded even while the PDS still reads Reportable = Yes, because a disposition",
-    "lands in the PDS later than it lands in reality. The build raises a warning flag",
-    "for every entry here that is still marked Reportable, so the disagreement is never",
-    "silent. To re-include one, delete its entry."
+    "lands in the PDS later than it lands in reality. Austin confirmed both entries",
+    "below on 2026-09-04.",
+    "",
+    "The build raises an informational flag for any entry here that is still marked",
+    "Reportable, so the override stays visible and can be retired once the PDS catches",
+    "up: flip Reportable to No and fill the Sale Date, then delete the entry here.",
+    "To re-include a property, delete its entry."
   ],
   "sold": [
     {
@@ -32,8 +36,9 @@
         "Congress",
         "CONG"
       ],
-      "reason": "Recorded as sold July 2026 (standing rule from 2026-07-27)",
-      "effective": "2026-07-27"
+      "reason": "Sold July 2026, confirmed by Austin 2026-09-04",
+      "effective": "2026-07-27",
+      "confirmed": "2026-09-04"
     },
     {
       "match": [
@@ -42,8 +47,9 @@
         "Shell Pointe",
         "SP"
       ],
-      "reason": "Recorded as sold July 2026 (standing rule from 2026-07-27)",
-      "effective": "2026-07-27"
+      "reason": "Sold July 2026, confirmed by Austin 2026-09-04",
+      "effective": "2026-07-27",
+      "confirmed": "2026-09-04"
     }
   ],
   "_roll_up_comment": [

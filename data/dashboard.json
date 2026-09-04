@@ -1,6 +1,6 @@
 {
  "schema_version": 4,
- "generated_at": "2026-09-04T14:19:13+00:00",
+ "generated_at": "2026-09-04T14:39:43+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -9310,14 +9310,9 @@
    "detail": "These ledgers are not reportable communities themselves, so their balances are attributed to the parent community rather than shown as their own row: Applegate Water $9K, Vantage Oaks Utility $2K, Northgate Utility $11."
   },
   {
-   "severity": "warn",
-   "title": "Congress Mobile Home Park is excluded as sold but still reads Reportable = Yes",
-   "detail": "Recorded as sold July 2026 (standing rule from 2026-07-27). The Property Data Sheet still marks it Reportable with no Sale Date, so the two rules disagree. It is held out of every figure until that is settled: either flip Reportable to No in the PDS, or remove it from `sold` in registry.json."
-  },
-  {
-   "severity": "warn",
-   "title": "Shell Pointe MHC is excluded as sold but still reads Reportable = Yes",
-   "detail": "Recorded as sold July 2026 (standing rule from 2026-07-27). The Property Data Sheet still marks it Reportable with no Sale Date, so the two rules disagree. It is held out of every figure until that is settled: either flip Reportable to No in the PDS, or remove it from `sold` in registry.json."
+   "severity": "info",
+   "title": "2 sold properties are excluded by override, not by the PDS",
+   "detail": "Congress Mobile Home Park, Shell Pointe MHC. Correctly out of every figure, but the Property Data Sheet still reads Reportable = Yes with no Sale Date, so the exclusion rests on registry.json rather than the roster. Flipping Reportable to No and filling the Sale Date lets the override be retired."
   },
   {
    "severity": "info",
@@ -9336,7 +9331,7 @@
   },
   {
    "severity": "warn",
-   "title": "1 communities' lot counts disagree with the Property Data Sheet",
+   "title": "1 community's lot count disagrees with the Property Data Sheet",
    "detail": "The PDS is the authoritative lot count, so a gap means the Rent Manager unit list is out of step: Cambridge MHC (PDS 92, RM 149). Occupancy is computed on the warehouse count, so these percentages sit on the wrong denominator until the ledgers agree."
   },
   {
