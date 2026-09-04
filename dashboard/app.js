@@ -728,16 +728,158 @@
     return { label: label, value: value, note: note, color: color };
   }
 
+  /* The hot sheet: the one screen a regional opens on a phone before a call.
+
+     Everything here is measured, never planned. It leads with occupancy over
+     core units -- occupied lots on the rent roll today -- which is NOT the
+     unit-day figure the rest of the dashboard trends on. Both are shown,
+     labelled, because a lot empty for half of August is half a vacancy to the
+     trend and a whole empty lot to the manager standing in front of it. */
+  function HotSheet(props) {
+    var c = props.community, d = props.data, mode = props.mode;
+    var hs = c.hot, v = pv(c, mode), th = d.thresholds;
+    if (!hs) {
+      return h("div", { className: "loading" },
+        "No rent roll rows for this community, so there is nothing to measure.");
+    }
+
+    var muted = { color: "var(--text-muted)" };
+    function row(label, value, note, color) {
+      return { label: label, value: value, note: note, color: color };
+    }
+    function list(items, fmt) {
+      return items.length ? items.map(fmt).join(" · ") : "—";
+    }
+
+    var dead = hs.core_units - hs.rentable_units;
+    // Split before printing: RV and transient lots bill per night or per
+    // season, so an empty recurring charge there is the billing model, not a
+    // miss. Rolling them together overstates the gap roughly sixfold.
+    var nb = hs.not_billing_by_type || [];
+    var real = nb.filter(function (x) { return !x.transient; });
+    var tran = nb.filter(function (x) { return x.transient; });
+    var realN = real.reduce(function (a, x) { return a + x.units; }, 0);
+    var realM = real.reduce(function (a, x) { return a + x.market; }, 0);
+    var tranN = tran.reduce(function (a, x) { return a + x.units; }, 0);
+
+    var rows = [
+      // The tile above this table reads the unit-day figure for the month and
+      // will not match. Say which is which here, where someone is looking at
+      // both at once, rather than letting them find the gap themselves.
+      row("Occupancy today", pct(hs.occupancy),
+          count(hs.occupied) + " of " + count(hs.core_units) +
+          " core lots on the rent roll right now · the tile above is " +
+          pct(v.occupancy) + " unit-day weighted across " +
+          monthLabel(d.period[mode === "live" ? "live" : "closed"]),
+          bandColor(band(hs.occupancy, th.occupancy))),
+      row("Occupancy, rentable", pct(hs.occupancy_rentable),
+          count(hs.rentable_units) + " lots, " + count(dead) + " demo or unusable excluded"),
+      row("Vacancies", count(hs.vacant),
+          list(hs.vacant_by_type, function (x) { return x.units + " " + x.type; })),
+      row("Lot rent, occupied",
+          hs.lot_rent_avg == null ? "—" : money(hs.lot_rent_avg),
+          hs.lot_rent_avg == null
+            ? "no lot is billing a recurring charge"
+            : money(hs.lot_rent_median) + " median across " +
+              count(hs.lots_billing) + " lots billing recurring rent")
+    ];
+
+    if (realN) {
+      rows.push(row("Occupied, not billing", count(realN) + (realN === 1 ? " lot" : " lots"),
+        money(realM) + "/mo at market · " +
+        list(real, function (x) { return x.units + " " + x.type; }), RED));
+    }
+    if (tranN) {
+      rows.push(row("Transient or seasonal", count(tranN) + (tranN === 1 ? " lot" : " lots"),
+        "billed per stay, so no recurring charge is expected · " +
+        list(tran, function (x) { return x.units + " " + x.type; })));
+    }
+
+    rows.push(
+      row("Loss to lease", money(hs.loss_to_lease),
+          hs.loss_to_lease_per_lot == null ? null
+            : money(hs.loss_to_lease_per_lot) + " per occupied lot"),
+      row("Park-owned homes",
+          hs.poh_total ? count(hs.poh_occupied) + " of " + count(hs.poh_total) : "—",
+          hs.poh_total
+            ? pct(hs.poh_pct) + " occupied · " +
+              list(hs.poh_vacant_by_status, function (x) { return x.homes + " " + x.status; })
+            : "no homes on the asset listing",
+          hs.poh_pct != null && hs.poh_pct < 60 ? YELLOW : null),
+      row(mode === "live" ? "Collected month to date" : "Collection rate",
+          v.charged ? pct(v.collection_pct) : "—",
+          money(v.paid) + " of " + money(v.charged) +
+          (mode === "live" ? " · a partial month, not comparable to a full one" : "")),
+      row("AR outstanding", money(v.ar_total),
+          count(v.ar_accounts) + (v.ar_accounts === 1 ? " account · " : " accounts · ") +
+          money(v.ar_past_due_30plus) +
+          " past due 30+ · " + money(v.ar_90_plus) + " over 90",
+          v.ar_past_due_30plus > 0 ? RED : null),
+      row("NOI year to date", money(c.closed.ytd_noi),
+          c.closed.ytd_noi_budget
+            ? money(c.closed.ytd_noi_budget) + " budget · " +
+              pct(c.closed.ytd_noi / c.closed.ytd_noi_budget * 100, 0) + " of plan"
+            : "no budget loaded",
+          c.closed.ytd_noi_budget && c.closed.ytd_noi < c.closed.ytd_noi_budget ? RED : GREEN),
+      row("Moves", count(v.move_ins) + " in / " + count(v.move_outs) + " out",
+          monthLabel(d.period[mode === "live" ? "live" : "closed"])),
+      row("Acquired",
+          hs.acquired_price == null ? "—" : money(hs.acquired_price, { compact: true }),
+          hs.acquired_date || "date not on the Property Data Sheet")
+    );
+
+    // The PDS is hand-maintained and the asset listing is not. Where they
+    // disagree, say so on the page rather than silently preferring one.
+    var notes = [];
+    if (hs.pds_poh && hs.poh_total && hs.pds_poh !== hs.poh_total) {
+      notes.push("The Property Data Sheet says " + hs.pds_poh +
+        " park-owned homes; the asset listing has " + hs.poh_total +
+        " once structures are removed. The two need reconciling.");
+    }
+    if (realN) {
+      notes.push(count(realN) + " occupied " +
+        (realN === 1 ? "lot carries" : "lots carry") +
+        " no recurring rent charge, worth " + money(realM) +
+        " a month at market. Either a billing gap or a deliberate arrangement, " +
+        "and nobody is currently looking at it.");
+    }
+
+    return h("div", null,
+      h("div", { className: "panel-head" },
+        h("h2", null, "Hot sheet"),
+        h("div", { className: "note" },
+          "Occupancy, vacancy, rent and homes are the rent roll and asset listing " +
+          "as of " + new Date(d.generated_at).toLocaleDateString("en-US",
+            { month: "short", day: "numeric" }) +
+          ". Collections, AR and NOI are " +
+          (mode === "live" ? "the open month through day " + d.period.live_day
+                           : monthLabel(d.period.closed)) + ".")),
+      h("div", { className: "panel-body" }, rows.map(function (r, i) {
+        return h("div", { className: "hs-row", key: i },
+          h("div", { className: "hs-head" },
+            h("span", { className: "hs-label" }, r.label),
+            h("span", { className: "hs-value", style: { color: r.color || null } },
+              r.value)),
+          r.note ? h("div", { className: "hs-note" }, r.note) : null);
+      })),
+      notes.length ? h("div", { className: "panel-body" },
+        notes.map(function (n, i) {
+          return h("div", { key: i, className: "note",
+                            style: { fontSize: "12px", marginTop: i ? "6px" : 0 } }, n);
+        })) : null);
+  }
+
   /* One community, four views: its rent roll, why its lots are empty, who owes
      money, and how its P&L reads against budget. */
   function CommunityDrill(props) {
     var c = props.community, d = props.data, mode = props.mode;
-    var st = useState(props.view || "rentroll");
+    var st = useState(props.view || "hot");
     var view = st[0], setView = st[1];
     var v = pv(c, mode), th = d.thresholds;
     var e = c.expenses || {}, ey = c.expenses_ytd || {};
 
     var VIEWS = [
+      { id: "hot", label: "Hot sheet" },
       { id: "rentroll", label: "Rent roll (" + (c.rent_roll || []).length + ")" },
       { id: "vacancy", label: "Vacant (" + (c.vacancy_detail || []).length + ")" },
       { id: "accounts", label: "Accounts owing (" + (c.ar_accounts || []).length + ")" },
@@ -748,7 +890,9 @@
     ];
 
     var body;
-    if (view === "rentroll") {
+    if (view === "hot") {
+      body = h(HotSheet, { community: c, data: d, mode: mode });
+    } else if (view === "rentroll") {
       var rr = c.rent_roll || [];
       body = rr.length
         ? h("div", null,
@@ -2651,7 +2795,11 @@
     var ds = useState(null);
     var drill = ds[0], setDrill = ds[1];
     var ctx = {
-      open: function (community, view) { setDrill({ community: community, view: view || "rentroll" }); },
+      // Opening a community lands on its hot sheet. Callers that want a
+      // specific view -- a vacancy band, an AR bucket -- still name one, and
+      // those deep links are the reason this default sits here rather than
+      // only in CommunityDrill.
+      open: function (community, view) { setDrill({ community: community, view: view || "hot" }); },
       close: function () { setDrill(null); }
     };
 

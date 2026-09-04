@@ -15,7 +15,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "40",
+  "acquired_date": "2022-04-22",
+  "acquired_price": 5390196.0,
+  "poh_pds": "9",
+  "mh_lot_rent_2026": 575.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "APPLE",
@@ -33,7 +39,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "88",
+  "acquired_date": "2021-09-24",
+  "acquired_price": 5300000.0,
+  "poh_pds": "17",
+  "mh_lot_rent_2026": 715.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "ARD",
@@ -51,7 +63,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "157",
+  "acquired_date": "2025-03-06",
+  "acquired_price": 13000000.0,
+  "poh_pds": "45",
+  "mh_lot_rent_2026": 675.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "BOVIPO",
@@ -69,7 +87,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "87",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 4900000.0,
+  "poh_pds": "3",
+  "mh_lot_rent_2026": 600.0,
+  "rv_lot_rent_2026": null
  },
  {
   "short_name": "BOVIIPO",
@@ -87,7 +111,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "34",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 2100000.0,
+  "poh_pds": "5",
+  "mh_lot_rent_2026": 670.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "BELL",
@@ -105,7 +135,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "93",
+  "acquired_date": "2024-05-31",
+  "acquired_price": 7500000.0,
+  "poh_pds": "47",
+  "mh_lot_rent_2026": 600.0,
+  "rv_lot_rent_2026": 600.0
  },
  {
   "short_name": "BRUN",
@@ -123,7 +159,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "62",
+  "acquired_date": "2024-10-11",
+  "acquired_price": 3850000.0,
+  "poh_pds": "27",
+  "mh_lot_rent_2026": 505.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "CARL",
@@ -141,7 +183,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "75",
+  "acquired_date": "2022-12-13",
+  "acquired_price": 8750000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 1230.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "CENT",
@@ -159,7 +207,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "64",
+  "acquired_date": "2021-10-19",
+  "acquired_price": 2440000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 680.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "CONG",
@@ -177,7 +231,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "31",
+  "acquired_date": "2021-09-16",
+  "acquired_price": 2150000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 995.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "CA",
@@ -195,7 +255,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "48",
+  "acquired_date": "2021-10-27",
+  "acquired_price": 1250000.0,
+  "poh_pds": "11",
+  "mh_lot_rent_2026": 660.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "DO",
@@ -213,7 +279,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "127",
+  "acquired_date": "2024-11-06",
+  "acquired_price": 3900000.0,
+  "poh_pds": "16",
+  "mh_lot_rent_2026": 550.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "EG",
@@ -231,7 +303,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "55",
+  "acquired_date": "2021-02-16",
+  "acquired_price": 1040000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 450.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "FOX",
@@ -249,7 +327,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "129",
+  "acquired_date": "2025-08-05",
+  "acquired_price": 11000000.0,
+  "poh_pds": "112",
+  "mh_lot_rent_2026": 520.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "GO",
@@ -267,7 +351,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "198",
+  "acquired_date": "2025-05-01",
+  "acquired_price": 14000000.0,
+  "poh_pds": "4",
+  "mh_lot_rent_2026": 0.0,
+  "rv_lot_rent_2026": 850.0
  },
  {
   "short_name": "GPT",
@@ -285,7 +375,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "95",
+  "acquired_date": "2025-02-18",
+  "acquired_price": 8700000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 690.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "GULFPO",
@@ -303,7 +399,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "39",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 3600000.0,
+  "poh_pds": "5",
+  "mh_lot_rent_2026": 680.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "HARB",
@@ -321,7 +423,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "46",
+  "acquired_date": "2021-10-19",
+  "acquired_price": 1760000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 680.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "HENDS",
@@ -339,7 +447,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "62",
+  "acquired_date": "2019-05-01",
+  "acquired_price": 1480000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 485.0,
+  "rv_lot_rent_2026": 600.0
  },
  {
   "short_name": "HP",
@@ -357,7 +471,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "76",
+  "acquired_date": "2025-04-08",
+  "acquired_price": 4900000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 550.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "HSMHC",
@@ -375,7 +495,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "25",
+  "acquired_date": "2024-08-01",
+  "acquired_price": 915000.0,
+  "poh_pds": "8",
+  "mh_lot_rent_2026": 585.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "JBJ",
@@ -393,7 +519,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "99",
+  "acquired_date": "2021-08-31",
+  "acquired_price": 14500000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 1155.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "LS",
@@ -411,7 +543,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "47",
+  "acquired_date": "2021-09-20",
+  "acquired_price": 2000000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 620.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "LWPO",
@@ -429,7 +567,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "47",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 2300000.0,
+  "poh_pds": "12",
+  "mh_lot_rent_2026": 590.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "LLMHC",
@@ -447,7 +591,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "53",
+  "acquired_date": "2017-11-02",
+  "acquired_price": 1086500.0,
+  "poh_pds": "3",
+  "mh_lot_rent_2026": 540.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "LUCK",
@@ -465,7 +615,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "121",
+  "acquired_date": "2022-04-28",
+  "acquired_price": 12000000.0,
+  "poh_pds": "17",
+  "mh_lot_rent_2026": 970.0,
+  "rv_lot_rent_2026": 1200.0
  },
  {
   "short_name": "MAY",
@@ -483,7 +639,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "50",
+  "acquired_date": "2020-02-05",
+  "acquired_price": 3500000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 740.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "MCG",
@@ -501,7 +663,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "232",
+  "acquired_date": "2026-05-01",
+  "acquired_price": 19500000.0,
+  "poh_pds": "9",
+  "mh_lot_rent_2026": 536.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "MWMHP",
@@ -519,7 +687,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "69",
+  "acquired_date": "2023-04-26",
+  "acquired_price": 4650000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 650.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "MON",
@@ -537,7 +711,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "61",
+  "acquired_date": "2022-04-22",
+  "acquired_price": 3469281.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 620.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "NALLS",
@@ -555,7 +735,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "19",
+  "acquired_date": "2019-06-11",
+  "acquired_price": 390000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 420.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "NGMH",
@@ -573,7 +759,13 @@
   "water_paid_by": "MH (Resident) / RV (Community)",
   "sewer_service": "WWTP",
   "sewer_paid_by": "MH (Resident) / RV (Community)",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "173",
+  "acquired_date": "2025-06-17",
+  "acquired_price": 16750000.0,
+  "poh_pds": "2",
+  "mh_lot_rent_2026": 725.0,
+  "rv_lot_rent_2026": 955.0
  },
  {
   "short_name": "OAK",
@@ -591,7 +783,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "93",
+  "acquired_date": "2025-03-12",
+  "acquired_price": 7850000.0,
+  "poh_pds": "10",
+  "mh_lot_rent_2026": 425.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "OCEANPO",
@@ -609,7 +807,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "50",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 5000000.0,
+  "poh_pds": "4",
+  "mh_lot_rent_2026": 665.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "OBOPO",
@@ -627,7 +831,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "62",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 3500000.0,
+  "poh_pds": "14",
+  "mh_lot_rent_2026": 635.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "PPH",
@@ -645,7 +855,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "60",
+  "acquired_date": "2021-11-23",
+  "acquired_price": 2050000.0,
+  "poh_pds": "11",
+  "mh_lot_rent_2026": 630.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "PSEPO",
@@ -663,7 +879,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "44",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 3100000.0,
+  "poh_pds": "12",
+  "mh_lot_rent_2026": 650.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "PL",
@@ -681,7 +903,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "178",
+  "acquired_date": "2022-08-19",
+  "acquired_price": 10100000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 0.0,
+  "rv_lot_rent_2026": 785.0
  },
  {
   "short_name": "PP",
@@ -699,7 +927,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "50",
+  "acquired_date": "2025-03-05",
+  "acquired_price": 3200000.0,
+  "poh_pds": "5",
+  "mh_lot_rent_2026": 530.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "PARK",
@@ -717,7 +951,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "90",
+  "acquired_date": "2025-01-10",
+  "acquired_price": 6500000.0,
+  "poh_pds": "33",
+  "mh_lot_rent_2026": 655.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "RED",
@@ -735,7 +975,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "81",
+  "acquired_date": "2024-10-21",
+  "acquired_price": 7125000.0,
+  "poh_pds": "2",
+  "mh_lot_rent_2026": 845.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "REG",
@@ -753,7 +999,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "424",
+  "acquired_date": "2026-04-14",
+  "acquired_price": 37293000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 373.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "RO",
@@ -771,7 +1023,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "110",
+  "acquired_date": "2021-12-06",
+  "acquired_price": 5475000.0,
+  "poh_pds": "7",
+  "mh_lot_rent_2026": 0.0,
+  "rv_lot_rent_2026": 875.0
  },
  {
   "short_name": "RW",
@@ -789,7 +1047,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "181",
+  "acquired_date": "2025-08-01",
+  "acquired_price": 21000000.0,
+  "poh_pds": "34",
+  "mh_lot_rent_2026": 883.0,
+  "rv_lot_rent_2026": 705.0
  },
  {
   "short_name": "RIV",
@@ -807,7 +1071,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "162",
+  "acquired_date": "2023-05-23",
+  "acquired_price": 15500000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 1070.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "ROYAL",
@@ -825,7 +1095,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "39",
+  "acquired_date": "2020-03-20",
+  "acquired_price": 1360000.0,
+  "poh_pds": "12",
+  "mh_lot_rent_2026": 615.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "RP",
@@ -843,7 +1119,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "51",
+  "acquired_date": "2021-02-16",
+  "acquired_price": 785000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 450.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "SS",
@@ -861,7 +1143,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "100",
+  "acquired_date": "2021-10-25",
+  "acquired_price": 6700000.0,
+  "poh_pds": "12",
+  "mh_lot_rent_2026": 795.0,
+  "rv_lot_rent_2026": 975.0
  },
  {
   "short_name": "SA",
@@ -879,7 +1167,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Lagoon",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "213",
+  "acquired_date": "2024-11-06",
+  "acquired_price": 11600000.0,
+  "poh_pds": "26",
+  "mh_lot_rent_2026": 600.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "SO",
@@ -897,7 +1191,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "37",
+  "acquired_date": "2021-09-20",
+  "acquired_price": 3000000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 1110.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "SP",
@@ -933,7 +1233,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "56",
+  "acquired_date": "2022-10-20",
+  "acquired_price": 5500000.0,
+  "poh_pds": "16",
+  "mh_lot_rent_2026": 910.0,
+  "rv_lot_rent_2026": 910.0
  },
  {
   "short_name": "SH",
@@ -951,7 +1257,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "126",
+  "acquired_date": "2025-06-17",
+  "acquired_price": 9600000.0,
+  "poh_pds": "41",
+  "mh_lot_rent_2026": 550.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "SOUTH",
@@ -969,7 +1281,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "102",
+  "acquired_date": "2022-02-24",
+  "acquired_price": 5500000.0,
+  "poh_pds": "14",
+  "mh_lot_rent_2026": 680.0,
+  "rv_lot_rent_2026": 850.0
  },
  {
   "short_name": "SUR",
@@ -987,7 +1305,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "79",
+  "acquired_date": "2024-10-21",
+  "acquired_price": 6125000.0,
+  "poh_pds": "19",
+  "mh_lot_rent_2026": 725.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "TC",
@@ -1005,7 +1329,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "65",
+  "acquired_date": "2025-08-01",
+  "acquired_price": 7500000.0,
+  "poh_pds": "10",
+  "mh_lot_rent_2026": 763.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "TO",
@@ -1023,7 +1353,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "190",
+  "acquired_date": "2025-08-01",
+  "acquired_price": 24000000.0,
+  "poh_pds": "30",
+  "mh_lot_rent_2026": 856.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "TCMHCPO",
@@ -1041,7 +1377,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "36",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 2900000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 565.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "TRADE",
@@ -1059,7 +1401,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "73",
+  "acquired_date": "2021-11-15",
+  "acquired_price": 4000000.0,
+  "poh_pds": "5",
+  "mh_lot_rent_2026": 665.0,
+  "rv_lot_rent_2026": 790.0
  },
  {
   "short_name": "SSS",
@@ -1077,7 +1425,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "234",
+  "acquired_date": "2022-03-11",
+  "acquired_price": 15450000.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 1367.0,
+  "rv_lot_rent_2026": 751.0
  },
  {
   "short_name": "VO",
@@ -1095,7 +1449,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "233",
+  "acquired_date": "2022-03-11",
+  "acquired_price": 5000000.0,
+  "poh_pds": "8",
+  "mh_lot_rent_2026": 600.0,
+  "rv_lot_rent_2026": 600.0
  },
  {
   "short_name": "WWPO",
@@ -1113,7 +1473,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Septic",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "44",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 2800000.0,
+  "poh_pds": "2",
+  "mh_lot_rent_2026": 625.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "WPMA",
@@ -1131,7 +1497,13 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "53",
+  "acquired_date": "2022-04-22",
+  "acquired_price": 2940523.0,
+  "poh_pds": "0",
+  "mh_lot_rent_2026": 615.0,
+  "rv_lot_rent_2026": 0.0
  },
  {
   "short_name": "WPMH",
@@ -1149,7 +1521,13 @@
   "water_paid_by": "Resident",
   "sewer_service": "Public",
   "sewer_paid_by": "Resident",
-  "trash_paid_by": "Resident"
+  "trash_paid_by": "Resident",
+  "core_units": "201",
+  "acquired_date": "2022-05-18",
+  "acquired_price": 15000000.0,
+  "poh_pds": "19",
+  "mh_lot_rent_2026": 775.0,
+  "rv_lot_rent_2026": 825.0
  },
  {
   "short_name": "WIND",
@@ -1167,7 +1545,13 @@
   "water_paid_by": "Community",
   "sewer_service": "WWTP",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "154",
+  "acquired_date": "2025-08-01",
+  "acquired_price": 17750000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 884.0,
+  "rv_lot_rent_2026": 794.0
  },
  {
   "short_name": "WOLFPO",
@@ -1185,6 +1569,12 @@
   "water_paid_by": "Community",
   "sewer_service": "Public",
   "sewer_paid_by": "Community",
-  "trash_paid_by": "Community"
+  "trash_paid_by": "Community",
+  "core_units": "45",
+  "acquired_date": "2025-12-30",
+  "acquired_price": 2500000.0,
+  "poh_pds": "1",
+  "mh_lot_rent_2026": 600.0,
+  "rv_lot_rent_2026": 0.0
  }
 ]

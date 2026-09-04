@@ -777,3 +777,16 @@ tr.child-row td:first-child { padding-left: 28px; }
    it reads heavier than the grid. */
 .candle-zero { stroke: var(--text-muted); stroke-width: 1.4; }
 .candle-wick { stroke-width: 1.6; }
+
+/* Hot sheet rows. Deliberately not a table: the note carries the meaning
+   ("13 Lot-RV · 10 Lot-Avail(POH) ...") and a third table column pushes it off
+   a phone screen behind a horizontal scroll, which is exactly the device this
+   view is for. Label and value sit on one line, the note wraps beneath. */
+.hs-row { padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
+.hs-row:last-child { border-bottom: 0; }
+.hs-head { display: flex; align-items: baseline; gap: 12px; }
+.hs-label { font-weight: 600; }
+.hs-value { margin-left: auto; font-weight: 700; text-align: right;
+            font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hs-note { margin-top: 3px; font-size: 12px; line-height: 1.45;
+           color: var(--text-muted); }

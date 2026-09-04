@@ -803,6 +803,11 @@ def build(raw_dir, out_dir, registry_path):
             "age_days": days_since(start),
             "title": (r.get("AssetTitleStatusesName") or "").strip(),
             "market_rent": rnd(num(r.get("MarketRentAmount")), 0),
+            # Somebody is living in it. The asset listing leaves OccupantName
+            # blank rather than writing "Vacant", and a status alone will not
+            # answer this -- a home can read For Sale with a resident still in
+            # it. The name itself is dropped; only the boolean survives.
+            "occupied": bool(str(r.get("OccupantName") or "").strip()),
         })
     for cname in assets_by_comm:
         assets_by_comm[cname].sort(key=lambda x: (x["status"], x["unit"]))
@@ -860,7 +865,17 @@ def build(raw_dir, out_dir, registry_path):
             "unit": str(r.get("SubEntitiesName") or ""),
             "type": utype,
             "vacant": vacant,
+            # A resident on the ledger. This is the hot sheet's occupancy
+            # signal, and it is deliberately not `not vacant`: an RV site
+            # billing transient stays has a resident but no move-in date and no
+            # vacancy loss, so the `vacant` flag above misses it in both
+            # directions. Belle Haven reads 55 occupied lots this way against
+            # 37 that bill recurring rent.
+            "occupied": bool(r.get("CustomersCustomerDisplayID")),
             "rent": rnd(num(r.get("RentCharges")), 0),
+            # RM calls scheduled market rent `Rented100`. Needed to price what
+            # an occupied lot billing nothing would be worth at market.
+            "market_rent": rnd(num(r.get("Rented100")), 0),
             "misc": rnd(num(r.get("MiscCharges")), 0),
             "charged": rnd(num(r.get("TotalCharged")), 0),
             "paid": rnd(num(r.get("TotalPaid")), 0),
@@ -1076,6 +1091,97 @@ def build(raw_dir, out_dir, registry_path):
         return sorted(agg.values(), key=lambda x: -x["units"])
 
     prior_closed = months[-3] if len(months) > 2 else None
+    # ------------------------------------------------------- the hot sheet ---
+    # Every unit type the asset listing calls a home. The rent roll returns
+    # lots AND homes as sibling rows -- Belle Haven is 93 lots plus 50 homes in
+    # 143 rows -- so a hot sheet that counts rows counts each POH twice. Derive
+    # the home vocabulary from the asset file rather than hardcoding it, and
+    # never treat a "Lot-" type as a home however it is spelled.
+    home_types = {(r.get("AssetTypesName") or "").strip() for r in asset_rows}
+    home_types = {t for t in home_types if t and not t.startswith("Lot")}
+
+    def hot_sheet(name, pds, comp):
+        """
+        The per-community hot sheet: occupied over core units, what is empty,
+        what the occupied lots actually pay, and the park-owned home split.
+
+        This deliberately does NOT reuse the warehouse occupancy figure. That
+        one is unit-day weighted across a whole month, which is the right
+        measure for a trend and the wrong one for "how full is this park right
+        now". Both appear on the page, labelled, because they answer different
+        questions and will not tie.
+        """
+        lots = [u for u in rent_roll.get(name, []) if u["type"] not in home_types]
+        if not lots:
+            return None
+
+        core = int(num(pds.get("core_units")) or len(lots))
+        occupied = sum(1 for u in lots if u["occupied"])
+        # Lots that cannot be leased are still core units, but they are not a
+        # leasing failure -- the rentable denominator drops them so a manager
+        # is not measured against a demo permit.
+        dead = sum(dd["units"] for t, dd in comp.items()
+                   if reg.unit_type(t)[1] == "not_rentable")
+        rentable = max(core - dead, 0)
+
+        billing = [u for u in lots if u["occupied"] and u["rent"] > 0]
+        silent = [u for u in lots if u["occupied"] and u["rent"] <= 0]
+        rents = sorted(u["rent"] for u in billing)
+
+        homes = [hm for hm in assets_by_comm.get(name, []) if hm["type"] in home_types]
+        poh_occ = sum(1 for hm in homes if hm["occupied"])
+
+        empty = Counter(u["type"] for u in lots if not u["occupied"])
+        ltl = sum(u["ltl"] for u in lots)
+
+        return {
+            "core_units": core,
+            "rentable_units": rentable,
+            "occupied": occupied,
+            "occupancy": rnd(occupied / core * 100) if core else None,
+            "occupancy_rentable": rnd(occupied / rentable * 100) if rentable else None,
+            "vacant": len(lots) - occupied,
+            "vacant_by_type": [{"type": t, "units": n}
+                               for t, n in empty.most_common()],
+            "lot_rent_avg": rnd(sum(rents) / len(rents), 0) if rents else None,
+            "lot_rent_median": _median(rents),
+            "lots_billing": len(billing),
+            # Occupied and paying nothing recurring. Reported BY TYPE and never
+            # as a single total, because the single total is a trap: portfolio
+            # wide it reads 743 lots and $349K a month, of which 581 lots and
+            # $299K are RV sites that bill transient or seasonal stays by
+            # design and can never carry a recurring charge. Quoting the gross
+            # figure as a billing gap would be wrong by a factor of six. The
+            # residual on residential lots is the number that means something.
+            "occupied_not_billing": len(silent),
+            "not_billing_market": rnd(sum(u["market_rent"] for u in silent
+                                          if u.get("market_rent")), 0),
+            "not_billing_by_type": [
+                {"type": t,
+                 "units": n,
+                 "market": rnd(sum(u["market_rent"] for u in silent
+                                   if u["type"] == t and u.get("market_rent")), 0),
+                 # RV and transient stays are billed per night or per season,
+                 # so an empty recurring charge is expected rather than missing.
+                 "transient": "RV" in t}
+                for t, n in Counter(u["type"] for u in silent).most_common()],
+            "loss_to_lease": rnd(ltl, 0),
+            "loss_to_lease_per_lot": rnd(ltl / occupied, 0) if occupied else None,
+            "poh_total": len(homes),
+            "poh_occupied": poh_occ,
+            "poh_pct": rnd(poh_occ / len(homes) * 100) if homes else None,
+            "poh_vacant_by_status": [{"status": s, "homes": n} for s, n in
+                                     Counter(hm["status"] for hm in homes
+                                             if not hm["occupied"]).most_common()],
+            "acquired_date": pds.get("acquired_date") or "",
+            "acquired_price": pds.get("acquired_price"),
+            # What the PDS asserts by hand, kept beside what we just measured
+            # so the two can be reconciled instead of quietly disagreeing.
+            "pds_poh": int(num(pds.get("poh_pds")) or 0) or None,
+            "pds_lot_rent_mh": pds.get("mh_lot_rent_2026"),
+            "pds_lot_rent_rv": pds.get("rv_lot_rent_2026"),
+        }
+
     communities = []
     for name in kept:
         closed = community_period(name, closed_month, prior_closed)
@@ -1129,6 +1235,7 @@ def build(raw_dir, out_dir, registry_path):
                   "vacant": dd["vacant"]}
                  for t, dd in comp.items()],
                 key=lambda x: -x["units"]),
+            "hot": hot_sheet(name, pds, comp),
             "closed": closed or {},
             "live": live or {},
             "expenses": expense_split(name, closed_month),
@@ -1593,6 +1700,71 @@ def build(raw_dir, out_dir, registry_path):
     # ---- flags -------------------------------------------------------------
 
     flags = []
+
+    # ---- hot sheet reconciliation -------------------------------------------
+    # The Property Data Sheet is maintained by hand and the Asset Listing is
+    # not, so where they disagree the page says so rather than silently
+    # preferring one. These raised 43 of 64 communities on the first run, which
+    # is a maintenance problem, not a rounding one.
+    poh_gap = [(c["short_name"] or c["name"], c["hot"]["pds_poh"], c["hot"]["poh_total"])
+               for c in communities
+               if c.get("hot") and c["hot"]["pds_poh"] and c["hot"]["poh_total"]
+               and c["hot"]["pds_poh"] != c["hot"]["poh_total"]]
+    if poh_gap:
+        poh_gap.sort(key=lambda x: -abs(x[1] - x[2]))
+        flags.append({
+            "severity": "warn",
+            "title": "%d communities disagree on how many park-owned homes they have"
+                     % len(poh_gap),
+            "detail": ("The Property Data Sheet's POH column and the Rent Manager asset "
+                       "listing return different counts. The listing is the live system "
+                       "and the PDS is typed by hand, so the PDS is the one to fix. "
+                       "Widest gaps: %s."
+                       % ", ".join("%s (PDS %d, listing %d)" % g for g in poh_gap[:6])),
+        })
+
+    # A residential lot with a resident and no recurring charge is either a
+    # billing gap or an arrangement nobody wrote down. RV and seasonal sites are
+    # excluded because they bill per stay by design -- including them turns a
+    # $55K question into a $349K one that is six-sevenths wrong.
+    silent = []
+    for c in communities:
+        if not c.get("hot"):
+            continue
+        real = [x for x in c["hot"]["not_billing_by_type"] if not x["transient"]]
+        n = sum(x["units"] for x in real)
+        if n:
+            silent.append((c["short_name"] or c["name"], n,
+                           sum(x["market"] for x in real)))
+    if silent:
+        silent.sort(key=lambda x: -x[1])
+        flags.append({
+            "severity": "warn",
+            "title": "%d occupied lots across %d communities bill no recurring rent"
+                     % (sum(s[1] for s in silent), len(silent)),
+            "detail": ("Residential lots with a resident on the ledger and no recurring "
+                       "charge, worth %s a month at market rent. RV, seasonal and "
+                       "transient sites are excluded, because those bill per stay and "
+                       "would otherwise inflate this sixfold. Largest: %s."
+                       % (money(sum(s[2] for s in silent)),
+                          ", ".join("%s (%d lots)" % (s[0], s[1]) for s in silent[:6]))),
+        })
+
+    core_gap = [(c["short_name"] or c["name"], c["hot"]["core_units"],
+                 c["hot"]["occupied"] + c["hot"]["vacant"])
+                for c in communities if c.get("hot")]
+    core_gap = [(s, a, b) for s, a, b in core_gap if abs(b - a) > 2]
+    if core_gap:
+        flags.append({
+            "severity": "info",
+            "title": "%d communities carry more lots in Rent Manager than the PDS counts"
+                     % len(core_gap),
+            "detail": ("Total Core Units on the Property Data Sheet is the occupancy "
+                       "denominator, so where the rent roll holds more lots than that, "
+                       "occupancy sits on the wrong base: %s."
+                       % ", ".join("%s (PDS %d, rent roll %d)" % g for g in core_gap[:6])),
+        })
+
 
     if unknown_types:
         flags.append({
