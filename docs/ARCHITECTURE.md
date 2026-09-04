@@ -480,6 +480,52 @@ months through 2026**, 1,400 moves netting −168 over the ten clean months to
 July. August 2026 reads +26 and is not real either — its move-outs have not
 posted, which is its own flag.
 
+## Financials tab: order and the utility panel
+
+The order came from Natalie's review, and it is the order the questions get
+asked in: **P&L by vehicle** first, because that is what people open the tab
+for; then **revenue and NOI against budget**, which is the next question asked
+of the P&L; then the **expense composition** and the **utility picture**, which
+are the analysis behind both.
+
+Two panels sit side by side and are deliberately symmetrical — one KPI
+percentage, its subline, its bar, its legend:
+
+| | Headline | Breakdown |
+|---|---|---|
+| Operating expense ratio | opex ÷ revenue | controllable vs non-controllable |
+| Utility recapture | billed back ÷ spend | recovered vs absorbed |
+
+The expense ratio bands against the portfolio's own history rather than a fixed
+target: **below 32% means expenses have not fully posted**, not that the month
+was efficient, and the panel says so on the number itself. August 2026 reads
+29% for exactly that reason.
+
+**"Who pays for what"** replaced a 61-row table that ran 2,467px — taller than
+the rest of the tab put together. It is now three donuts, one per service,
+sliced by who pays, with each group's real utility spend and recapture rate in
+the legend beside it. The per-community detail is not gone; it is folded behind
+a disclosure at the bottom of the panel. Tab height roughly halved.
+
+House guidance says part-to-whole belongs in a stacked bar and a two-slice pie
+belongs in a stat tile, and it is right on both counts. Donuts earn their place
+here because the question is "what are the services" asked three times over, and
+three small donuts read as three answers to one question in a way three stacked
+bars do not. They stay honest by never asking anyone to judge an angle: every
+slice carries its count and share in the legend, and the total sits in the hole.
+Service *type* — Public/Well, Public/Septic/WWTP/Lagoon — is a different
+question with four classes, so it stays a pair of bars.
+
+The slice colors are not the brand's green/yellow/navy. That trio fails the
+palette validator outright: navy at chroma 0.053 reads gray and yellow at
+L 0.87 blows the lightness band. The tokens `--pay-resident`, `--pay-mixed` and
+`--pay-community` are the nearest steps in the same three hues that clear every
+check (CVD ΔE 8.7 light, 9.5 dark), with per-theme values as elsewhere.
+
+What the panel makes visible in one look: where the **community** pays, recapture
+runs 37–40%; where **residents** pay, 52–56%. That gap is the whole recapture
+story, and the table never showed it.
+
 ## Occupancy, reported two ways
 
 A lot marked `Lot-Unusable` or `Lot-Demo` is not a leasing failure — it is

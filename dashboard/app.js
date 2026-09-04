@@ -537,6 +537,65 @@
       }, kids));
   }
 
+  /* A donut for one part-to-whole split, at most four slices.
+
+     The house guidance is that part-to-whole belongs in a stacked bar and a
+     two-slice pie belongs in a stat tile, and it is right about both. This
+     exists because the question here is "what are the services", asked three
+     times over -- water, sewer, trash -- and three small donuts in a row read
+     as three answers to the same question in a way three stacked bars do not.
+     It stays honest by never asking the reader to judge an angle: every slice
+     carries its count and share in the legend beside it, and the total sits in
+     the hole. A 2%-vs-3% comparison is not made here and must not be. */
+  function Donut(props) {
+    var rows = (props.rows || []).filter(function (r) { return r.n > 0; });
+    var total = rows.reduce(function (a, r) { return a + r.n; }, 0);
+    var S = props.size || 128, R = S / 2, stroke = props.stroke || 22;
+    var r0 = R - stroke / 2 - 1;
+    var circ = 2 * Math.PI * r0;
+
+    var arcs = [];
+    var acc = 0;
+    rows.forEach(function (row, i) {
+      var frac = total ? row.n / total : 0;
+      // A 2px gap between neighbouring fills, per the house mark spec. Skipped
+      // on a single full-circle slice, where a gap is just a nick.
+      var gap = rows.length > 1 ? 2 : 0;
+      var len = Math.max(0, frac * circ - gap);
+      arcs.push(h("circle", {
+        key: "a" + i, cx: R, cy: R, r: r0, fill: "none",
+        stroke: row.color, strokeWidth: stroke,
+        strokeDasharray: len + " " + (circ - len),
+        strokeDashoffset: -(acc * circ) + circ / 4,
+        // The dash runs clockwise from twelve o'clock.
+        transform: "scale(1,-1) translate(0," + -S + ")"
+      }, h("title", null, row.label + ": " + count(row.n) +
+                          (row.sub ? " \u00b7 " + row.sub : ""))));
+      acc += frac;
+    });
+
+    return h("div", { className: "util-donut" },
+      props.title ? h("h4", null, props.title) : null,
+      total
+        ? h("svg", { width: S, height: S, viewBox: "0 0 " + S + " " + S,
+                     role: "img", "aria-label": props.ariaLabel || props.title },
+            arcs,
+            h("text", { x: R, y: R + 2, textAnchor: "middle", className: "donut-center-n" },
+              count(total)),
+            h("text", { x: R, y: R + 16, textAnchor: "middle", className: "donut-center-l" },
+              props.centerLabel || "total"))
+        : h("div", { className: "loading" }, "No data."),
+      h("div", { className: "reason-legend" }, rows.map(function (row) {
+        return h("div", { className: "rl", key: row.key },
+          h("span", { className: "swatch", style: { background: row.color } }),
+          h("span", null,
+            h("span", { className: "rl-n" }, count(row.n)), " ", row.label,
+            h("span", { className: "rl-sub" },
+              "  " + (total ? pct(row.n / total * 100, 0) : "—") +
+              (row.sub ? "  \u00b7  " + row.sub : ""))));
+      })));
+  }
+
   function BarList(props) {
     var rows = props.rows || [];
     if (!rows.length) return h("div", { className: "loading" }, "Nothing to show.");
@@ -2435,12 +2494,83 @@
     var groups = groupByVehicle(d, filtered, mode);
 
     return h("div", null,
+      /* Order set by review: the P&L is what gets opened first, the budget
+         charts are the next question asked of it, and the expense composition
+         and utility picture are the analysis behind both. */
+      h("section", { className: "panel" },
+        h(GroupedTable, {
+          title: "P&L by vehicle",
+          note: "Closed " + monthLabel(d.period.closed) +
+                " · click a community for its line items, month and year to date",
+          cols: cols, groups: groups,
+          initialSort: { key: "noi", dir: -1 },
+          footer: [
+            "Portfolio", money(rev), money(ctrl), money(sumE("repairs_maintenance")),
+            money(nonCtrl), recapture == null ? "—" : pct(recapture, 0),
+            money(noi),
+            noiB ? ((noi - noiB >= 0 ? "+" : "−") + money(Math.abs(noi - noiB))) : "—",
+            rev ? pct(noi / rev * 100, 0) : "—",
+            money(sum("ytd_noi"))
+          ]
+        })),
+
+      h("div", { className: "grid-2" },
+        h(Panel, { title: "Revenue against budget",
+                   note: d.period.budget_from
+                     ? "Actual versus plan · budget loaded from " + monthLabel(d.period.budget_from)
+                     : "Actual versus plan, by closed month" },
+          h(LineChart, {
+            series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
+            lines: [{ key: "revenue", color: GREEN, area: true },
+                    { key: "revenue_budget", color: NAVY }],
+            fmtTick: function (v) { return "$" + (v / 1e6).toFixed(1) + "M"; },
+            fmtPoint: function (v) { return "$" + (v / 1e6).toFixed(2) + "M"; },
+            ariaLabel: "Revenue versus budget by month"
+          }),
+          h("div", { className: "legend" },
+            h("span", null, h("i", { style: { background: GREEN } }), "Actual"),
+            h("span", null, h("i", { style: { background: NAVY } }), "Budget"))),
+        h(Panel, { title: "NOI against budget",
+                   note: "Excludes debt service, CapEx and depreciation" +
+                     (d.period.budget_from ? " · budget from " + monthLabel(d.period.budget_from) : "") },
+          h(LineChart, {
+            series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
+            lines: [{ key: "noi", color: GREEN, area: true },
+                    { key: "noi_budget", color: NAVY }],
+            fmtTick: function (v) { return "$" + (v / 1e6).toFixed(1) + "M"; },
+            fmtPoint: function (v) { return "$" + (v / 1e6).toFixed(2) + "M"; },
+            ariaLabel: "NOI versus budget by month"
+          }),
+          h("div", { className: "legend" },
+            h("span", null, h("i", { style: { background: GREEN } }), "Actual"),
+            h("span", null, h("i", { style: { background: NAVY } }), "Budget")))),
+
       h("div", { className: "grid-2" },
         h(Panel, {
-          title: "Controllable against non-controllable",
-          note: "Closed " + monthLabel(d.period.closed) + " · " + money(opex) + " of operating expense"
+          title: "Operating expense ratio",
+          note: "Operating expense against revenue · closed " + monthLabel(d.period.closed)
         },
-          h("div", { className: "split-bar" },
+          /* The headline sits above the split, mirroring the recapture panel
+             next to it: one KPI percentage, then its breakdown. The ratio is
+             opex over revenue -- the figure the P&L is judged on -- while the
+             controllable / non-controllable shares stay labelled on the bar. */
+          (function () {
+            var rev = filtered.reduce(function (a, c) { return a + (c.closed.revenue || 0); }, 0);
+            var ratio = rev ? opex / rev * 100 : null;
+            // Below the historical 33-42% range means expenses have not fully
+            // posted, not that the month was efficient. Saying so is the
+            // difference between a KPI and a trap.
+            var low = ratio != null && ratio < 32;
+            return h("div", null,
+              h("div", { className: "bignum",
+                         style: { color: ratio == null ? "var(--text-muted)"
+                                  : low ? YELLOW : ratio <= 42 ? GREEN : RED } },
+                ratio == null ? "—" : pct(ratio, 0)),
+              h("div", { className: "ksub" },
+                money(opex) + " of expense against " + money(rev) + " of revenue" +
+                (low ? " · below the usual 33–42%, so expenses look part-posted" : "")));
+          })(),
+          h("div", { className: "split-bar", style: { marginTop: "12px" } },
             h("span", { style: { width: (opex ? ctrl / opex * 100 : 50) + "%", background: GREEN },
                         title: "Controllable " + money(ctrl) },
               opex && ctrl / opex > 0.16 ? pct(ctrl / opex * 100, 0) : ""),
@@ -2502,10 +2632,98 @@
             })()))),
 
       h(Panel, {
-        title: "Why recapture is where it is",
+        title: "Who pays for what",
         note: "A community that pays its own utilities has nothing to bill back, so a low rate there is the design and not a failure",
         flush: true
-      }, h(SortableTable, {
+      },
+        h("div", { className: "panel-body" },
+          h("div", { className: "util-donuts" },
+            ["water", "sewer", "trash"].map(function (svc) {
+              /* Slice by who pays, count by community, and carry each group's
+                 real utility spend and recapture into the legend. Weighting the
+                 slice by dollars would be the more interesting cut but would be
+                 wrong: the ledger gives one utilities figure per community, not
+                 one per service, so there is no honest way to split a
+                 community's spend across water, sewer and trash. */
+              var buckets = {};
+              filtered.forEach(function (c) {
+                var u = c.utilities_service || {}, e = E(c);
+                var who = (u[svc + "_paid_by"] || "").trim();
+                var key = !who ? "unknown"
+                  : /^resident/i.test(who) ? "resident"
+                  : /^communit/i.test(who) ? "community" : "mixed";
+                var t = buckets[key] || (buckets[key] = { n: 0, spend: 0, recovered: 0 });
+                t.n += 1;
+                t.spend += e.utilities || 0;
+                t.recovered += e.utility_reimbursements || 0;
+              });
+              var LABELS = {
+                resident: "Resident pays", community: "Community pays",
+                mixed: "Mixed by section", unknown: "Not recorded"
+              };
+              var COLORS = {
+                resident: "var(--pay-resident)", mixed: "var(--pay-mixed)",
+                community: "var(--pay-community)", unknown: "var(--text-muted)"
+              };
+              return h(Donut, {
+                key: svc,
+                title: svc.charAt(0).toUpperCase() + svc.slice(1),
+                centerLabel: "communities",
+                ariaLabel: "Who pays for " + svc + ", by community",
+                rows: ["resident", "mixed", "community", "unknown"]
+                  .filter(function (k) { return buckets[k]; })
+                  .map(function (k) {
+                    var t = buckets[k];
+                    return {
+                      key: k, label: LABELS[k], n: t.n, color: COLORS[k],
+                      sub: t.spend
+                        ? money(t.spend, { compact: true }) + " spend, " +
+                          pct(t.recovered / t.spend * 100, 0) + " back"
+                        : null
+                    };
+                  })
+              });
+            })),
+          /* Service type is a different question -- what infrastructure is
+             there -- and it has four classes on the sewer side, so it reads
+             better as two bars than as two more donuts. */
+          h("div", { style: { marginTop: "18px" } },
+            ["water", "sewer"].map(function (svc) {
+              var byType = {};
+              filtered.forEach(function (c) {
+                var t = ((c.utilities_service || {})[svc + "_service"] || "Not recorded").trim();
+                byType[t] = (byType[t] || 0) + 1;
+              });
+              var keys = Object.keys(byType).sort(function (a, b) { return byType[b] - byType[a]; });
+              var tot = keys.reduce(function (a, k) { return a + byType[k]; }, 0);
+              var SHADES = ["var(--pay-community)", "var(--pay-resident)",
+                            "var(--pay-mixed)", "#8FA3B2", "#C7D3DA"];
+              return h("div", { key: svc, style: { marginBottom: "12px" } },
+                h("div", { className: "rl-sub", style: { marginBottom: "4px" } },
+                  svc.charAt(0).toUpperCase() + svc.slice(1) + " service"),
+                h("div", { className: "split-bar" }, keys.map(function (k, i) {
+                  return h("span", {
+                    key: k, style: { width: (byType[k] / tot * 100) + "%", background: SHADES[i % 5] },
+                    title: k + ": " + count(byType[k]) + " communities"
+                  }, byType[k] / tot > 0.14 ? k + " " + byType[k] : "");
+                })));
+            })),
+          h("div", { className: "note",
+                     style: { marginTop: "6px", fontSize: "12px", color: "var(--text-muted)" } },
+            (function () {
+              var recov = filtered.filter(function (c) {
+                return (c.utilities_service || {}).recoverable;
+              });
+              return count(recov.length) + " of " + count(filtered.length) +
+                " communities bill at least one utility back to residents. The other " +
+                count(filtered.length - recov.length) + " pay their own, so nothing there " +
+                "is recoverable and a low rate is the design. Service and who-pays come " +
+                "from the Property Data Sheet; spend and billed-back come from the ledger.";
+            })())),
+        h("details", { className: "fold" },
+          h("summary", null, "Show all " + count(filtered.length) +
+            " communities with spend, billed back and what is absorbed"),
+          h(SortableTable, {
         cols: [
           { key: "name", label: "Community", render: function (r) {
               return h("button", { className: "linkish",
@@ -2547,55 +2765,7 @@
                    rate: e.utility_recapture_pct, net: e.utility_net || 0 };
         }).filter(function (r) { return r.spend || r.recovered; }),
         initialSort: { key: "net", dir: 1 }
-      })),
-
-      h("div", { className: "grid-2" },
-        h(Panel, { title: "Revenue against budget",
-                   note: d.period.budget_from
-                     ? "Actual versus plan · budget loaded from " + monthLabel(d.period.budget_from)
-                     : "Actual versus plan, by closed month" },
-          h(LineChart, {
-            series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
-            lines: [{ key: "revenue", color: GREEN, area: true },
-                    { key: "revenue_budget", color: NAVY }],
-            fmtTick: function (v) { return "$" + (v / 1e6).toFixed(1) + "M"; },
-            fmtPoint: function (v) { return "$" + (v / 1e6).toFixed(2) + "M"; },
-            ariaLabel: "Revenue versus budget by month"
-          }),
-          h("div", { className: "legend" },
-            h("span", null, h("i", { style: { background: GREEN } }), "Actual"),
-            h("span", null, h("i", { style: { background: NAVY } }), "Budget"))),
-        h(Panel, { title: "NOI against budget",
-                   note: "Excludes debt service, CapEx and depreciation" +
-                     (d.period.budget_from ? " · budget from " + monthLabel(d.period.budget_from) : "") },
-          h(LineChart, {
-            series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
-            lines: [{ key: "noi", color: GREEN, area: true },
-                    { key: "noi_budget", color: NAVY }],
-            fmtTick: function (v) { return "$" + (v / 1e6).toFixed(1) + "M"; },
-            fmtPoint: function (v) { return "$" + (v / 1e6).toFixed(2) + "M"; },
-            ariaLabel: "NOI versus budget by month"
-          }),
-          h("div", { className: "legend" },
-            h("span", null, h("i", { style: { background: GREEN } }), "Actual"),
-            h("span", null, h("i", { style: { background: NAVY } }), "Budget")))),
-
-      h("section", { className: "panel" },
-        h(GroupedTable, {
-          title: "P&L by vehicle",
-          note: "Closed " + monthLabel(d.period.closed) +
-                " · click a community for its line items, month and year to date",
-          cols: cols, groups: groups,
-          initialSort: { key: "noi", dir: -1 },
-          footer: [
-            "Portfolio", money(rev), money(ctrl), money(sumE("repairs_maintenance")),
-            money(nonCtrl), recapture == null ? "—" : pct(recapture, 0),
-            money(noi),
-            noiB ? ((noi - noiB >= 0 ? "+" : "−") + money(Math.abs(noi - noiB))) : "—",
-            rev ? pct(noi / rev * 100, 0) : "—",
-            money(sum("ytd_noi"))
-          ]
-        })));
+          }))));
   }
   function Exceptions(props) {
     var st = useState(false);

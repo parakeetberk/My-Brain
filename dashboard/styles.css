@@ -34,6 +34,16 @@
      hue to do the work alone: the body also sits above or below zero. */
   --gain: #4aba81;
   --loss: #b4551f;
+
+  /* Who pays a utility. Brand green/yellow/navy read as one family but fail the
+     palette validator outright -- navy at chroma 0.053 reads gray and yellow at
+     L 0.87 blows the lightness band -- so these are the nearest steps in the
+     same three hues that clear every check (CVD dE 8.7 light, 9.5 dark). Each
+     slice is directly labelled in the legend, which is the relief the sub-3:1
+     contrast requires. */
+  --pay-resident: #38a874;
+  --pay-mixed: #c98b12;
+  --pay-community: #2e6ea0;
   --good-wash: rgba(74, 186, 129, 0.12);
   --watch-wash: rgba(255, 204, 59, 0.16);
   --critical-wash: rgba(241, 98, 98, 0.12);
@@ -63,6 +73,9 @@
     --text-muted: #9db2c1;
     --gain: #38a874;
     --loss: #c9622f;
+    --pay-resident: #38a874;
+    --pay-mixed: #bc8511;
+    --pay-community: #4088bf;
     --good-wash: rgba(74, 186, 129, 0.18);
     --watch-wash: rgba(255, 204, 59, 0.2);
     --critical-wash: rgba(241, 98, 98, 0.18);
@@ -82,6 +95,9 @@
   --text-muted: #9db2c1;
   --gain: #38a874;
   --loss: #c9622f;
+  --pay-resident: #38a874;
+  --pay-mixed: #bc8511;
+  --pay-community: #4088bf;
   --good-wash: rgba(74, 186, 129, 0.18);
   --watch-wash: rgba(255, 204, 59, 0.2);
   --critical-wash: rgba(241, 98, 98, 0.18);
@@ -777,3 +793,39 @@ tr.child-row td:first-child { padding-left: 28px; }
    it reads heavier than the grid. */
 .candle-zero { stroke: var(--text-muted); stroke-width: 1.4; }
 .candle-wick { stroke-width: 1.6; }
+
+/* Utility services. Three donuts across, dropping to one column when the panel
+   gets narrow. This replaced a 61-row table that ran 2,467px tall. */
+.util-donuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.util-donut { text-align: center; }
+.util-donut h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+.util-donut svg { display: block; margin: 0 auto; }
+.util-donut .reason-legend { margin-top: 8px; text-align: left; }
+.donut-center-n { font-size: 22px; font-weight: 800; fill: var(--text); }
+.donut-center-l { font-size: 10px; fill: var(--text-muted); }
+
+/* The per-community detail, kept but folded away. */
+.fold { margin-top: 4px; border-top: 1px solid var(--line-soft); }
+.fold > summary {
+  cursor: pointer;
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  list-style: none;
+}
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::before { content: "\25B8  "; }
+.fold[open] > summary::before { content: "\25BE  "; }
+.fold > summary:hover, .fold > summary:focus-visible { color: var(--text); }
