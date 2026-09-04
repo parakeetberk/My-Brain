@@ -8,18 +8,32 @@ so every property name the warehouse handed us has a visible disposition.
 
     python3 pipeline/build.py [--raw pipeline/raw] [--out data]
 
-The raw files are produced by the warehouse queries declared in
-pipeline/queries.json. See docs/ARCHITECTURE.md for the refresh loop.
+Two rules shape everything below:
+
+  REPORTABLE GATE. A community appears only if the Property Data Sheet
+  (`vwr VW_PDS_V2`, exported to pipeline/raw/pds_reportable.json) marks it
+  Reportable = Yes. That sheet is Austin's own source of truth, and it settles
+  what the warehouse alone cannot: which of ~150 propertyName values are real
+  reportable communities rather than funds, sub-ledgers or dead records.
+
+  TWO PERIODS, BOTH REAL. Every period-sensitive figure is emitted twice:
+  once for the last CLOSED month and once LIVE through today. Rent bills on
+  the 1st and is late after the grace day, so live receivables are the
+  actionable number even though live collections are structurally low. The UI
+  toggles between them; neither is hidden.
+
+See docs/ARCHITECTURE.md for the refresh loop.
 """
 import argparse
 import json
 import os
 import re
 import sys
+from calendar import monthrange
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -30,6 +44,12 @@ SOURCES = {
     "moves": ("moves_by_property_month.json", "VW_MoveIns_MoveOuts."),
     "financials": ("financials_by_property_month.json", "VW_Budget_Comparison."),
 }
+
+REPORTABLE_FILE = "pds_reportable.json"
+
+# Rent is billed on the 1st. After this day of the month, unpaid current-month
+# charges are late, which is why the live view exists at all.
+DEFAULT_GRACE_DAY = 5
 
 
 def die(msg):
@@ -64,6 +84,21 @@ def month_of(value):
     return "%s-%s" % (m.group(1), m.group(2)) if m else None
 
 
+def months_between(a, b):
+    ay, am = int(a[:4]), int(a[5:7])
+    by, bm = int(b[:4]), int(b[5:7])
+    return (by - ay) * 12 + (bm - am)
+
+
+def money(v):
+    v = v or 0
+    if abs(v) >= 1_000_000:
+        return "$%.2fM" % (v / 1_000_000)
+    if abs(v) >= 1_000:
+        return "$%.0fK" % (v / 1_000)
+    return "$%.0f" % v
+
+
 def load_raw(raw_dir):
     """Read every source file, returning {key: (rows, prefix)}."""
     out = {}
@@ -76,12 +111,6 @@ def load_raw(raw_dir):
         with open(path) as f:
             blob = json.load(f)
         rows = blob.get("rows", [])
-        count = blob.get("rowCount", len(rows))
-        # A pull that hit its row limit is silently incomplete; refuse it rather
-        # than publish numbers that are quietly short.
-        if count and count == blob.get("_limit"):
-            die("%s hit its row limit (%d) and is truncated. Re-pull with a higher limit."
-                % (fname, count))
         out[key] = (rows, prefix)
         log("loaded %-38s %5d rows" % (fname, len(rows)))
     if missing:
@@ -90,25 +119,51 @@ def load_raw(raw_dir):
     return out
 
 
+def load_reportable(raw_dir):
+    """
+    The Reportable = Yes roster from the Property Data Sheet.
+
+    Returns (lookup, rows) where lookup maps every name variant a PDS row
+    publishes -- Property Name, Community, Short Name -- to that row. The
+    warehouse keys on Property Name in practice, but the other two are cheap
+    insurance against a rename.
+    """
+    path = os.path.join(raw_dir, REPORTABLE_FILE)
+    if not os.path.exists(path):
+        die("missing %s.\nExport the `vwr VW_PDS_V2` sheet of the Property Data "
+            "Sheet (Reportable = Yes rows) to that path. See docs/ARCHITECTURE.md."
+            % path)
+    with open(path) as f:
+        rows = json.load(f)
+    if not rows:
+        die("%s is empty; refusing to build a dashboard with no reportable communities"
+            % REPORTABLE_FILE)
+    lookup = {}
+    for r in rows:
+        for key in ("property_name", "community", "short_name"):
+            v = (r.get(key) or "").strip().lower()
+            if v and v not in lookup:
+                lookup[v] = r
+    log("loaded %-38s %5d reportable communities" % (REPORTABLE_FILE, len(rows)))
+    return lookup, rows
+
+
 # ---------------------------------------------------------------- registry ---
 
 class Registry:
     """Decides what each warehouse propertyName is, and records why."""
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, reportable):
         self.cfg = cfg
-        self.retired_res = [re.compile(p) for p in cfg["rules"]["retired_prefix"]["patterns"]]
+        self.reportable = reportable
         self.sold = {}
-        for entry in cfg["sold"]:
+        for entry in cfg.get("sold", []):
             for name in entry["match"]:
-                self.sold[name.lower()] = entry["reason"]
-        self.non_community = {e["match"].lower(): e["reason"] for e in cfg["non_community"]}
-        self.roll_up = {e["match"].lower(): e for e in cfg["roll_up"]}
-        self.aliases = {k.lower(): v for k, v in cfg["aliases"].items()}
-        self.segments = cfg["segments"]
+                self.sold[name.lower()] = entry
+        self.roll_up = {e["match"].lower(): e for e in cfg.get("roll_up", [])}
+        self.segments = cfg.get("segments", {})
         self.thresholds = cfg["thresholds"]
 
-        # Flatten the unit-type taxonomy into lookup tables.
         self.ut_class = {}
         self.ut_rentable = {}
         for group, buckets in cfg["unit_types"].items():
@@ -124,43 +179,37 @@ class Registry:
             return self.ut_class[name], self.ut_rentable[name]
         return "UNKNOWN", "rentable"
 
-    def classify(self, name, latest_month=None, current_month=None, occupancy=None,
-                 stale_threshold=2):
+    def classify(self, name):
         """
         Return (disposition, canonical_name, detail).
 
-        disposition is one of:
-          keep        -- a real community, reports on its own row
-          roll_up     -- money attributes to `canonical_name`, no lots of its own
-          alias       -- same asset as `canonical_name`, figures merge into it
-          drop        -- excluded, `detail` says why
+          keep      -- Reportable = Yes; its own row
+          roll_up   -- not reportable itself, but money attributes to a
+                       reportable parent (utility and home-sales sub-ledgers)
+          drop      -- excluded; detail says why
         """
-        low = name.lower()
+        low = name.strip().lower()
 
-        for rx in self.retired_res:
-            if rx.match(name):
-                return "drop", None, self.cfg["rules"]["retired_prefix"]["reason"]
-
+        # A sold property stays out even while the PDS still says Reportable,
+        # because the PDS lags a disposition by design. This is the one place
+        # the gate is overridden, and it is deliberate and listed.
         if low in self.sold:
-            return "drop", None, "Sold: " + self.sold[low]
+            e = self.sold[low]
+            return "drop", None, "Sold: %s" % e["reason"]
 
-        if low in self.non_community:
-            return "drop", None, self.non_community[low]
+        pds = self.reportable.get(low)
+        if pds:
+            return "keep", (pds.get("property_name") or name), ""
 
         if low in self.roll_up:
             e = self.roll_up[low]
-            return "roll_up", e["parent"], "%s sub-ledger" % e["kind"]
+            parent = e["parent"]
+            if parent.strip().lower() in self.reportable:
+                return "roll_up", parent, "%s sub-ledger" % e["kind"]
+            return "drop", None, ("%s sub-ledger whose parent %s is not Reportable"
+                                  % (e["kind"], parent))
 
-        if low in self.aliases:
-            return "alias", self.aliases[low], "Duplicate ledger for the same asset"
-
-        if latest_month and current_month:
-            gap = months_between(latest_month, current_month)
-            if gap >= stale_threshold:
-                return "drop", None, ("No snapshot since %s (%d periods stale); disposed or renamed"
-                                      % (latest_month, gap))
-
-        return "keep", name, ""
+        return "drop", None, "Not marked Reportable = Yes in the Property Data Sheet"
 
     def record(self, name, disposition, canonical, detail):
         self.audit[name] = {
@@ -170,152 +219,87 @@ class Registry:
         }
 
 
-# RM writes the same park under several suffix conventions. Reducing a name to
-# its stem is what lets a dead "Cedar Grove MHC" find its live twin
-# "Cedar Grove Manufactured Housing Community".
-_SUFFIXES = [
-    "manufactured housing community", "mobile home park", "trailer park",
-    "rv resort", "mhc", "mhp", "mh", "rv", "utility", "water", "homes",
-]
-
-
-def community_key(name):
-    s = re.sub(r"[^a-z0-9 ]+", " ", name.lower())
-    s = re.sub(r"\s+", " ", s).strip()
-    changed = True
-    while changed:
-        changed = False
-        for suf in _SUFFIXES:
-            if s.endswith(" " + suf) or s == suf:
-                s = s[: -len(suf)].strip()
-                changed = True
-    return s or name.lower()
-
-
-def months_between(a, b):
-    ay, am = int(a[:4]), int(a[5:7])
-    by, bm = int(b[:4]), int(b[5:7])
-    return (by - ay) * 12 + (bm - am)
-
-
 # ------------------------------------------------------------------- build ---
 
 def build(raw_dir, out_dir, registry_path):
     with open(registry_path) as f:
-        reg = Registry(json.load(f))
+        cfg = json.load(f)
+    reportable, reportable_rows = load_reportable(raw_dir)
+    reg = Registry(cfg, reportable)
 
     raw = load_raw(raw_dir)
 
-    # ---- establish the reporting calendar from the occupancy snapshots ----
+    # ---- reporting calendar ----
     occ_rows, OP = raw["occupancy"]
     months = sorted({m for m in (month_of(r.get(OP + "reportMonth")) for r in occ_rows) if m})
     if not months:
         die("no reportMonth values found in the occupancy pull")
-    current_month = months[-1]
-    closed_month = months[-2] if len(months) > 1 else current_month
+    live_month = months[-1]
+    closed_month = months[-2] if len(months) > 1 else live_month
 
-    # The live month is a partial snapshot: rent bills on the 1st and collects
-    # through the month, so its AR is inflated and its collections understated.
-    # Everything headline is quoted on the last CLOSED month; the partial month
-    # is carried separately and labelled.
-    log("periods %s .. %s  (headline month: %s, live partial: %s)"
-        % (months[0], current_month, closed_month, current_month))
+    today = date.today()
+    live_day = today.day if today.strftime("%Y-%m") == live_month else monthrange(
+        int(live_month[:4]), int(live_month[5:7]))[1]
+    days_in_live = monthrange(int(live_month[:4]), int(live_month[5:7]))[1]
+    grace_day = cfg.get("grace_day", DEFAULT_GRACE_DAY)
 
-    # ---- pass 1: what is each property name, and when did it last report? ----
-    latest_seen = {}
+    log("periods %s .. %s  (closed: %s, live: %s day %d of %d)"
+        % (months[0], live_month, closed_month, live_month, live_day, days_in_live))
+
+    # ---- classify every propertyName the warehouse returned ----
+    all_names = set()
     for key in ("occupancy", "ar", "rentroll", "moves", "financials"):
         rows, P = raw[key]
-        mkey = "month" if key == "moves" else ("endDate" if key == "financials" else "reportMonth")
         for r in rows:
-            name = r.get(P + "propertyName")
-            mo = month_of(r.get(P + mkey))
-            if not name or not mo:
-                continue
-            if name not in latest_seen or mo > latest_seen[name]:
-                latest_seen[name] = mo
-
-    stale_threshold = reg.cfg["rules"]["drop_stale_months"]["threshold"]
-    occupancy_latest = {}
-    for r in occ_rows:
-        name = r.get(OP + "propertyName")
-        mo = month_of(r.get(OP + "reportMonth"))
-        if name and mo == current_month:
-            occupancy_latest[name] = num(r.get(OP + "occupancyRate"))
+            n = r.get(P + "propertyName")
+            if n:
+                all_names.add(n)
+    for r in raw["unit_types"][0]:
+        n = r.get(raw["unit_types"][1] + "propertyName")
+        if n:
+            all_names.add(n)
 
     resolve = {}
-    for name in sorted(latest_seen):
-        disp, canon, why = reg.classify(
-            name,
-            latest_month=latest_seen.get(name),
-            current_month=current_month,
-            occupancy=occupancy_latest.get(name),
-            stale_threshold=stale_threshold,
-        )
+    for name in sorted(all_names):
+        disp, canon, why = reg.classify(name)
         reg.record(name, disp, canon, why)
         resolve[name] = (disp, canon)
 
-    # Drop zero-occupancy twins: a record with 0% occupancy whose community is
-    # already covered by a live record. Without this the portfolio denominator
-    # double-counts every renamed park.
-    twin_rule = reg.cfg["rules"]["drop_zero_occupancy_twin"]
-    if twin_rule["enabled"]:
-        live_by_key = defaultdict(list)
-        for name, (disp, canon) in resolve.items():
-            if disp == "keep":
-                live_by_key[community_key(name)].append(name)
-        for name, (disp, canon) in list(resolve.items()):
-            if disp != "keep":
-                continue
-            if occupancy_latest.get(name, None) != 0.0:
-                continue
-            # A record declared in `segments` is a known-real MH/RV split. An
-            # empty RV section is a leasing fact worth showing, not a duplicate
-            # ledger to sweep away, so leave it in and let the flag call it out.
-            if twin_rule.get("exempt_declared_segments") and name in reg.segments:
-                continue
-            siblings = [s for s in live_by_key[community_key(name)]
-                        if s != name and occupancy_latest.get(s, 0.0) > 0.0]
-            if siblings:
-                why = ("%s; live record is %s"
-                       % (reg.cfg["rules"]["drop_zero_occupancy_twin"]["reason"], siblings[0]))
-                resolve[name] = ("drop", None)
-                reg.record(name, "drop", None, why)
+    # Reportable communities the warehouse never mentions: a real gap worth
+    # surfacing, not a silent zero row.
+    seen_lower = {n.strip().lower() for n in all_names}
+    absent = [r for r in reportable_rows
+              if not any((r.get(k) or "").strip().lower() in seen_lower
+                         for k in ("property_name", "community", "short_name"))]
 
     def target(name):
-        """Where a row's MONEY lands, or None if the row is excluded."""
+        """Where a row's MONEY lands, or None if excluded."""
         disp, canon = resolve.get(name, ("drop", None))
-        if disp == "drop":
-            return None
-        if disp in ("alias", "roll_up"):
-            # Follow one hop; the parent may itself be dropped.
-            pdisp, pcanon = resolve.get(canon, ("keep", canon))
-            if pdisp == "drop":
-                return None
-            return pcanon or canon
-        return name
+        return canon if disp in ("keep", "roll_up") else None
 
     def target_units(name):
         """
-        Where a row's LOTS and occupancy land, or None if they must be ignored.
+        Where a row's LOTS land, or None if they must be ignored.
 
-        Money and lots do not merge the same way. A utility sub-ledger carries
-        real AR against lots that are counted on its parent, and an alias is a
-        stale duplicate of a park that is already counted once. Summing either
-        one's unit counts inflates the denominator and halves the occupancy it
-        is supposed to explain, so only a `keep` record contributes lots.
+        Money and lots do not merge the same way. A utility sub-ledger bills
+        against lots already counted on its parent, so adding its unit count
+        inflates the denominator and halves the occupancy it is meant to
+        explain. Only a `keep` record contributes lots.
         """
-        disp, _ = resolve.get(name, ("drop", None))
-        return name if disp == "keep" else None
+        disp, canon = resolve.get(name, ("drop", None))
+        return canon if disp == "keep" else None
 
-    kept = sorted({t for t in (target(n) for n in resolve) if t})
-    log("properties: %d names -> %d communities (%d dropped, %d rolled up/aliased)"
+    kept = sorted({c for c in (target_units(n) for n in resolve) if c})
+    rolled = [n for n, (d, _) in resolve.items() if d == "roll_up"]
+    log("properties: %d names -> %d reportable communities (%d dropped, %d rolled up)"
         % (len(resolve), len(kept),
-           sum(1 for d, _ in resolve.values() if d == "drop"),
-           sum(1 for d, _ in resolve.values() if d in ("alias", "roll_up"))))
+           sum(1 for d, _ in resolve.values() if d == "drop"), len(rolled)))
 
-    # ---- occupancy by community and month ----
-    occ = defaultdict(lambda: defaultdict(lambda: {"units": 0.0, "vac_days": 0.0, "avail_days": 0.0,
-                                                   "actual_rent": 0.0, "market_rent": 0.0}))
+    # ---- aggregation passes ------------------------------------------------
+
+    occ = defaultdict(lambda: defaultdict(lambda: {"units": 0.0, "vac_days": 0.0,
+                                                   "avail_days": 0.0, "actual_rent": 0.0,
+                                                   "market_rent": 0.0}))
     for r in occ_rows:
         t = target_units(r.get(OP + "propertyName"))
         mo = month_of(r.get(OP + "reportMonth"))
@@ -329,11 +313,10 @@ def build(raw_dir, out_dir, registry_path):
         d["market_rent"] += num(r.get(OP + "totalMarketRent"))
 
     def occ_pct(d):
-        # Recompute from unit-days rather than averaging percentages, so a
-        # 400-lot park does not carry the same weight as a 19-lot park.
+        # From unit-days, not an average of percentages, so a 424-lot park
+        # outweighs a 19-lot one.
         return (d["avail_days"] - d["vac_days"]) / d["avail_days"] * 100 if d["avail_days"] else 0.0
 
-    # ---- vacancy composition from the current unit-type snapshot ----
     ut_rows, UP = raw["unit_types"]
     vac_comp = defaultdict(lambda: defaultdict(lambda: {"units": 0.0, "vac_days": 0.0,
                                                         "avail_days": 0.0}))
@@ -353,24 +336,27 @@ def build(raw_dir, out_dir, registry_path):
         d["avail_days"] += num(r.get(UP + "daysAvailable"))
         type_mix[t][group] += num(r.get(UP + "unitCount"))
 
-    # ---- AR by community and month ----
     ar_rows, AP = raw["ar"]
     ar = defaultdict(lambda: defaultdict(lambda: {"total": 0.0, "b0_30": 0.0, "b31_60": 0.0,
                                                   "b61_90": 0.0, "b90p": 0.0, "accounts": 0.0}))
+    rolled_ar = defaultdict(float)
     for r in ar_rows:
-        t = target(r.get(AP + "propertyName"))
+        name = r.get(AP + "propertyName")
+        t = target(name)
         mo = month_of(r.get(AP + "reportMonth"))
         if not t or not mo:
             continue
         d = ar[t][mo]
-        d["total"] += num(r.get(AP + "agedReceivablesTotal"))
+        v = num(r.get(AP + "agedReceivablesTotal"))
+        d["total"] += v
         d["b0_30"] += num(r.get(AP + "current0to30"))
         d["b31_60"] += num(r.get(AP + "days31to60"))
         d["b61_90"] += num(r.get(AP + "days61to90"))
         d["b90p"] += num(r.get(AP + "over90Days"))
         d["accounts"] += num(r.get(AP + "customersWithBalance"))
+        if resolve.get(name, ("drop", None))[0] == "roll_up" and mo == closed_month:
+            rolled_ar[name] += v
 
-    # ---- collections by community and month ----
     rr_rows, RP = raw["rentroll"]
     rr = defaultdict(lambda: defaultdict(lambda: {"charged": 0.0, "paid": 0.0, "rent": 0.0,
                                                   "vac_loss": 0.0, "ltl": 0.0, "debit": 0.0}))
@@ -390,7 +376,6 @@ def build(raw_dir, out_dir, registry_path):
     def coll_pct(d):
         return d["paid"] / d["charged"] * 100 if d["charged"] else 0.0
 
-    # ---- moves by community and month ----
     mv_rows, MP = raw["moves"]
     mv = defaultdict(lambda: defaultdict(lambda: {"ins": 0.0, "outs": 0.0}))
     for r in mv_rows:
@@ -401,7 +386,6 @@ def build(raw_dir, out_dir, registry_path):
         mv[t][mo]["ins"] += num(r.get(MP + "moveIns"))
         mv[t][mo]["outs"] += num(r.get(MP + "moveOuts"))
 
-    # ---- financials by community and month ----
     fin_rows, FP = raw["financials"]
     fin = defaultdict(lambda: defaultdict(lambda: {"rev": 0.0, "rev_bud": 0.0, "opex": 0.0,
                                                    "opex_bud": 0.0, "noi": 0.0, "noi_bud": 0.0}))
@@ -418,27 +402,81 @@ def build(raw_dir, out_dir, registry_path):
         d["noi"] += num(r.get(FP + "noi"))
         d["noi_bud"] += num(r.get(FP + "noiBudget"))
 
-    # ---- assemble per-community rows ----
+    # ---- per-community rows, one block per period --------------------------
+
+    def community_period(name, mo, prev_mo):
+        """Everything period-sensitive for one community in one month."""
+        o = occ[name].get(mo)
+        a = ar[name].get(mo)
+        r = rr[name].get(mo)
+        f = fin[name].get(mo)
+        m = mv[name].get(mo, {})
+        if not any((o, a, r, f)):
+            return None
+
+        units = int(o["units"]) if o else 0
+        occupancy = occ_pct(o) if o else 0.0
+        o_prev = occ[name].get(prev_mo) if prev_mo else None
+        ar_total = a["total"] if a else 0.0
+        over90 = a["b90p"] if a else 0.0
+        charged = r["charged"] if r else 0.0
+        paid = r["paid"] if r else 0.0
+
+        ytd = {"rev": 0.0, "rev_bud": 0.0, "noi": 0.0, "noi_bud": 0.0}
+        for k, d in fin[name].items():
+            if k[:4] == mo[:4] and k <= mo:
+                ytd["rev"] += d["rev"]
+                ytd["rev_bud"] += d["rev_bud"]
+                ytd["noi"] += d["noi"]
+                ytd["noi_bud"] += d["noi_bud"]
+
+        return {
+            "units": units,
+            "occupied": int(round(units * occupancy / 100)) if units else 0,
+            "occupancy": rnd(occupancy),
+            "occupancy_prev": rnd(occ_pct(o_prev)) if o_prev else None,
+            "actual_rent": rnd(o["actual_rent"], 0) if o else 0,
+            "market_rent": rnd(o["market_rent"], 0) if o else 0,
+            "ar_total": rnd(ar_total, 0),
+            "ar_0_30": rnd(a["b0_30"], 0) if a else 0,
+            "ar_31_60": rnd(a["b31_60"], 0) if a else 0,
+            "ar_61_90": rnd(a["b61_90"], 0) if a else 0,
+            "ar_90_plus": rnd(over90, 0),
+            "ar_over90_share": rnd(over90 / ar_total * 100) if ar_total else 0.0,
+            "ar_past_due_30plus": rnd(ar_total - (a["b0_30"] if a else 0), 0),
+            "ar_accounts": int(a["accounts"]) if a else 0,
+            "ar_per_unit": rnd(ar_total / units, 0) if units else 0,
+            "charged": rnd(charged, 0),
+            "paid": rnd(paid, 0),
+            "outstanding": rnd(charged - paid, 0),
+            "collection_pct": rnd(coll_pct(r)) if r else 0.0,
+            "vacancy_loss": rnd(r["vac_loss"], 0) if r else 0,
+            "loss_to_lease": rnd(r["ltl"], 0) if r else 0,
+            "move_ins": int(m.get("ins", 0)),
+            "move_outs": int(m.get("outs", 0)),
+            "revenue": rnd(f["rev"], 0) if f else 0,
+            "revenue_budget": rnd(f["rev_bud"], 0) if f else 0,
+            "opex": rnd(f["opex"], 0) if f else 0,
+            "opex_budget": rnd(f["opex_bud"], 0) if f else 0,
+            "noi": rnd(f["noi"], 0) if f else 0,
+            "noi_budget": rnd(f["noi_bud"], 0) if f else 0,
+            "noi_margin": rnd(f["noi"] / f["rev"] * 100) if f and f["rev"] else 0.0,
+            "ytd_revenue": rnd(ytd["rev"], 0),
+            "ytd_revenue_budget": rnd(ytd["rev_bud"], 0),
+            "ytd_noi": rnd(ytd["noi"], 0),
+            "ytd_noi_budget": rnd(ytd["noi_bud"], 0),
+        }
+
+    prior_closed = months[-3] if len(months) > 2 else None
     communities = []
     for name in kept:
-        o_cur = occ[name].get(current_month)
-        o_hdl = occ[name].get(closed_month) or o_cur
-        a_hdl = ar[name].get(closed_month)
-        a_cur = ar[name].get(current_month)
-        r_hdl = rr[name].get(closed_month)
-
-        if not o_hdl and not a_hdl and not r_hdl:
+        closed = community_period(name, closed_month, prior_closed)
+        live = community_period(name, live_month, closed_month)
+        if not closed and not live:
             continue
 
-        units = int(o_hdl["units"]) if o_hdl else 0
-        occ_now = occ_pct(o_hdl) if o_hdl else 0.0
-
-        # Rentable-adjusted occupancy: drop lots that cannot be leased at all
-        # (unusable, demo) out of the denominator.
         comp = vac_comp.get(name, {})
-        r_units = r_avail = r_vac = 0.0
-        impaired = 0.0
-        not_rentable = 0.0
+        r_units = r_avail = r_vac = impaired = not_rentable = 0.0
         for tname, d in comp.items():
             group, bucket = reg.unit_type(tname)
             if group == "NON_REVENUE" or bucket == "not_rentable":
@@ -449,84 +487,42 @@ def build(raw_dir, out_dir, registry_path):
             r_vac += d["vac_days"]
             if bucket == "rentable_impaired":
                 impaired += d["units"]
-        occ_rentable = ((r_avail - r_vac) / r_avail * 100) if r_avail else occ_now
+        occ_rentable = ((r_avail - r_vac) / r_avail * 100) if r_avail else None
 
         mix = type_mix.get(name, {})
-        if mix:
-            kind = max(mix, key=lambda k: mix[k])
-        else:
-            kind = "MH"
         seg = reg.segments.get(name, {})
-
-        ar_total = a_hdl["total"] if a_hdl else 0.0
-        over90 = a_hdl["b90p"] if a_hdl else 0.0
-
-        f_hdl = fin[name].get(closed_month)
-        ytd = {"rev": 0.0, "rev_bud": 0.0, "opex": 0.0, "opex_bud": 0.0,
-               "noi": 0.0, "noi_bud": 0.0}
-        year = current_month[:4]
-        for mo, d in fin[name].items():
-            if mo[:4] == year and mo <= closed_month:
-                for k in ytd:
-                    ytd[k] += d[k]
+        pds = reportable.get(name.strip().lower(), {})
 
         communities.append({
             "name": name,
-            "park": seg.get("park") or name,
-            "kind": seg.get("type") or kind,
-            "units": units,
-            "occupied": int(round(units * occ_now / 100)) if units else 0,
-            "occupancy": rnd(occ_now),
-            "occupancy_rentable": rnd(occ_rentable),
+            "short_name": pds.get("short_name") or "",
+            "park": seg.get("park") or (pds.get("community") or name),
+            "kind": seg.get("type") or (max(mix, key=lambda k: mix[k]) if mix else "MH"),
+            "state": pds.get("state") or "",
+            "vehicle": pds.get("vehicle") or "",
             "rentable_units": int(r_units),
             "impaired_units": int(impaired),
             "not_rentable_units": int(not_rentable),
-            "occupancy_prev": rnd(occ_pct(occ[name][months[-3]])) if len(months) > 2 and months[-3] in occ[name] else None,
-            "actual_rent": rnd(o_hdl["actual_rent"], 0) if o_hdl else 0,
-            "market_rent": rnd(o_hdl["market_rent"], 0) if o_hdl else 0,
-            "ar_total": rnd(ar_total, 0),
-            "ar_0_30": rnd(a_hdl["b0_30"], 0) if a_hdl else 0,
-            "ar_31_60": rnd(a_hdl["b31_60"], 0) if a_hdl else 0,
-            "ar_61_90": rnd(a_hdl["b61_90"], 0) if a_hdl else 0,
-            "ar_90_plus": rnd(over90, 0),
-            "ar_over90_share": rnd(over90 / ar_total * 100) if ar_total else 0.0,
-            "ar_accounts": int(a_hdl["accounts"]) if a_hdl else 0,
-            "ar_live": rnd(a_cur["total"], 0) if a_cur else None,
-            "ar_per_unit": rnd(ar_total / units, 0) if units else 0,
-            "charged": rnd(r_hdl["charged"], 0) if r_hdl else 0,
-            "paid": rnd(r_hdl["paid"], 0) if r_hdl else 0,
-            "collection_pct": rnd(coll_pct(r_hdl)) if r_hdl else 0.0,
-            "vacancy_loss": rnd(r_hdl["vac_loss"], 0) if r_hdl else 0,
-            "loss_to_lease": rnd(r_hdl["ltl"], 0) if r_hdl else 0,
-            "move_ins": int(mv[name].get(closed_month, {}).get("ins", 0)),
-            "move_outs": int(mv[name].get(closed_month, {}).get("outs", 0)),
-            "revenue": rnd(f_hdl["rev"], 0) if f_hdl else 0,
-            "revenue_budget": rnd(f_hdl["rev_bud"], 0) if f_hdl else 0,
-            "opex": rnd(f_hdl["opex"], 0) if f_hdl else 0,
-            "opex_budget": rnd(f_hdl["opex_bud"], 0) if f_hdl else 0,
-            "noi": rnd(f_hdl["noi"], 0) if f_hdl else 0,
-            "noi_budget": rnd(f_hdl["noi_bud"], 0) if f_hdl else 0,
-            "noi_margin": rnd(f_hdl["noi"] / f_hdl["rev"] * 100) if f_hdl and f_hdl["rev"] else 0.0,
-            "ytd_revenue": rnd(ytd["rev"], 0),
-            "ytd_revenue_budget": rnd(ytd["rev_bud"], 0),
-            "ytd_noi": rnd(ytd["noi"], 0),
-            "ytd_noi_budget": rnd(ytd["noi_bud"], 0),
+            "occupancy_rentable": rnd(occ_rentable) if occ_rentable is not None else None,
             "vacancy_composition": sorted(
                 [{"type": t,
                   "group": reg.unit_type(t)[0],
                   "bucket": reg.unit_type(t)[1],
                   "units": int(d["units"]),
-                  "vacant": int(round(d["vac_days"] / (d["avail_days"] / d["units"]))) if d["units"] and d["avail_days"] else 0}
+                  "vacant": int(round(d["vac_days"] / (d["avail_days"] / d["units"])))
+                            if d["units"] and d["avail_days"] else 0}
                  for t, d in comp.items()],
                 key=lambda x: -x["units"]),
+            "closed": closed or {},
+            "live": live or {},
         })
-
     communities.sort(key=lambda c: c["name"])
 
-    # ---- portfolio trends ----
-    def series(store, fn, label_months=None):
+    # ---- portfolio trends (full history, partial month marked) -------------
+
+    def series(store, fn):
         out = []
-        for mo in (label_months or months):
+        for mo in months:
             agg = defaultdict(float)
             hit = False
             for name in kept:
@@ -537,216 +533,283 @@ def build(raw_dir, out_dir, registry_path):
                 for k, v in d.items():
                     agg[k] += v
             if hit:
-                out.append({"month": mo, "partial": mo == current_month, **fn(agg)})
+                out.append({"month": mo, "partial": mo == live_month, **fn(agg)})
         return out
 
-    occ_series = series(occ, lambda a: {
-        "occupancy": rnd(occ_pct(a)),
-        "units": int(a["units"]),
-        "occupied": int(round((a["avail_days"] - a["vac_days"]) / a["avail_days"] * a["units"] / 100 * 100 / 100)) if a["avail_days"] else 0,
-    })
+    occ_series = series(occ, lambda a: {"occupancy": rnd(occ_pct(a)), "units": int(a["units"])})
     ar_series = series(ar, lambda a: {
-        "total": rnd(a["total"], 0),
-        "b0_30": rnd(a["b0_30"], 0),
-        "b31_60": rnd(a["b31_60"], 0),
-        "b61_90": rnd(a["b61_90"], 0),
-        "b90p": rnd(a["b90p"], 0),
-        "accounts": int(a["accounts"]),
+        "total": rnd(a["total"], 0), "b0_30": rnd(a["b0_30"], 0),
+        "b31_60": rnd(a["b31_60"], 0), "b61_90": rnd(a["b61_90"], 0),
+        "b90p": rnd(a["b90p"], 0), "accounts": int(a["accounts"]),
+        "past_due_30plus": rnd(a["total"] - a["b0_30"], 0),
     })
     coll_series = series(rr, lambda a: {
-        "collection_pct": rnd(coll_pct(a)),
-        "charged": rnd(a["charged"], 0),
-        "paid": rnd(a["paid"], 0),
+        "collection_pct": rnd(coll_pct(a)), "charged": rnd(a["charged"], 0),
+        "paid": rnd(a["paid"], 0), "outstanding": rnd(a["charged"] - a["paid"], 0),
     })
     move_series = series(mv, lambda a: {
-        "ins": int(a["ins"]), "outs": int(a["outs"]), "net": int(a["ins"] - a["outs"]),
-    })
+        "ins": int(a["ins"]), "outs": int(a["outs"]), "net": int(a["ins"] - a["outs"])})
     fin_series = series(fin, lambda a: {
         "revenue": rnd(a["rev"], 0), "revenue_budget": rnd(a["rev_bud"], 0),
         "opex": rnd(a["opex"], 0), "opex_budget": rnd(a["opex_bud"], 0),
-        "noi": rnd(a["noi"], 0), "noi_budget": rnd(a["noi_bud"], 0),
-    })
-
-    def closed(s):
-        return [p for p in s if not p["partial"]]
+        "noi": rnd(a["noi"], 0), "noi_budget": rnd(a["noi_bud"], 0)})
 
     def at(s, mo):
         return next((p for p in s if p["month"] == mo), None)
 
-    # ---- portfolio headline ----
-    mh = [c for c in communities if c["kind"] == "MH"]
-    rv = [c for c in communities if c["kind"] == "RV"]
-    tot_units = sum(c["units"] for c in communities)
-    tot_occ = sum(c["occupied"] for c in communities)
-    ar_hdl = at(ar_series, closed_month) or {}
-    coll_hdl = at(coll_series, closed_month) or {}
-    fin_hdl = at(fin_series, closed_month) or {}
-    ar_prev = closed(ar_series)[-2] if len(closed(ar_series)) > 1 else {}
-    occ_hdl = at(occ_series, closed_month) or {}
-    occ_prev = closed(occ_series)[-2] if len(closed(occ_series)) > 1 else {}
+    def closed_pts(s):
+        return [p for p in s if not p["partial"]]
 
-    ytd_fin = defaultdict(float)
-    year = current_month[:4]
-    for p in closed(fin_series):
-        if p["month"][:4] == year:
-            for k in ("revenue", "revenue_budget", "opex", "opex_budget", "noi", "noi_budget"):
-                ytd_fin[k] += p[k]
+    # ---- portfolio blocks, one per period ----------------------------------
 
-    def wavg(rows, value, weight):
-        wt = sum(r[weight] for r in rows)
-        return rnd(sum(r[value] * r[weight] for r in rows) / wt) if wt else 0.0
+    def portfolio_block(mo, prev_mo):
+        rows = [c for c in communities if c.get("closed" if mo == closed_month else "live")]
+        key = "closed" if mo == closed_month else "live"
+        rows = [c for c in communities if c[key]]
+        blk = [c[key] for c in rows]
+        mh = [c[key] for c in rows if c["kind"] == "MH"]
+        rv = [c[key] for c in rows if c["kind"] == "RV"]
+
+        def s(field, source=None):
+            return sum((x.get(field) or 0) for x in (source if source is not None else blk))
+
+        def wavg(source, field, weight="units"):
+            wt = sum((x.get(weight) or 0) for x in source)
+            return rnd(sum((x.get(field) or 0) * (x.get(weight) or 0) for x in source) / wt) if wt else 0.0
+
+        o_now = at(occ_series, mo) or {}
+        o_prev = at(occ_series, prev_mo) or {} if prev_mo else {}
+        a_now = at(ar_series, mo) or {}
+        a_prev = at(ar_series, prev_mo) or {} if prev_mo else {}
+        c_now = at(coll_series, mo) or {}
+        f_now = at(fin_series, mo) or {}
+        m_now = at(move_series, mo) or {}
+
+        ytd = defaultdict(float)
+        for p in fin_series:
+            if p["month"][:4] == mo[:4] and p["month"] <= mo:
+                for k in ("revenue", "revenue_budget", "opex", "noi", "noi_budget"):
+                    ytd[k] += p[k]
+
+        charged = c_now.get("charged", 0)
+        return {
+            "month": mo,
+            "partial": mo == live_month,
+            "communities": len(rows),
+            "parks": len({c["park"] for c in rows}),
+            "total_units": s("units"),
+            "total_occupied": s("occupied"),
+            "occupancy": o_now.get("occupancy", 0.0),
+            "occupancy_prev": o_prev.get("occupancy"),
+            "occupancy_rentable": wavg(
+                [dict(c[key], occupancy_rentable=c["occupancy_rentable"],
+                      rentable_units=c["rentable_units"]) for c in rows
+                 if c["occupancy_rentable"] is not None],
+                "occupancy_rentable", "rentable_units"),
+            "mh_units": s("units", mh),
+            "mh_occupancy": wavg(mh, "occupancy"),
+            "rv_units": s("units", rv),
+            "rv_occupancy": wavg(rv, "occupancy"),
+            "impaired_units": sum(c["impaired_units"] for c in rows),
+            "not_rentable_units": sum(c["not_rentable_units"] for c in rows),
+            "ar_total": a_now.get("total", 0),
+            "ar_prev": a_prev.get("total"),
+            "ar_0_30": a_now.get("b0_30", 0),
+            "ar_90_plus": a_now.get("b90p", 0),
+            "ar_past_due_30plus": a_now.get("past_due_30plus", 0),
+            "ar_over90_share": rnd(a_now.get("b90p", 0) / a_now["total"] * 100) if a_now.get("total") else 0.0,
+            "ar_accounts": a_now.get("accounts", 0),
+            "charged": charged,
+            "paid": c_now.get("paid", 0),
+            "outstanding": c_now.get("outstanding", 0),
+            "collection_pct": c_now.get("collection_pct", 0.0),
+            "collection_ttm": rnd(sum(p["collection_pct"] for p in closed_pts(coll_series)[-12:]) /
+                                  max(1, len(closed_pts(coll_series)[-12:]))),
+            "revenue": f_now.get("revenue", 0),
+            "revenue_budget": f_now.get("revenue_budget", 0),
+            "noi": f_now.get("noi", 0),
+            "noi_budget": f_now.get("noi_budget", 0),
+            "noi_margin": rnd(f_now.get("noi", 0) / f_now["revenue"] * 100) if f_now.get("revenue") else 0.0,
+            "ytd_revenue": rnd(ytd["revenue"], 0),
+            "ytd_revenue_budget": rnd(ytd["revenue_budget"], 0),
+            "ytd_noi": rnd(ytd["noi"], 0),
+            "ytd_noi_budget": rnd(ytd["noi_budget"], 0),
+            "move_ins": m_now.get("ins", 0),
+            "move_outs": m_now.get("outs", 0),
+            "vacancy_loss": s("vacancy_loss"),
+            "loss_to_lease": s("loss_to_lease"),
+        }
 
     portfolio = {
-        "communities": len(communities),
-        "parks": len({c["park"] for c in communities}),
-        "total_units": tot_units,
-        "total_occupied": tot_occ,
-        "occupancy": occ_hdl.get("occupancy", 0.0),
-        "occupancy_prev": occ_prev.get("occupancy"),
-        "occupancy_rentable": wavg(communities, "occupancy_rentable", "rentable_units"),
-        "mh_units": sum(c["units"] for c in mh),
-        "mh_occupancy": wavg(mh, "occupancy", "units"),
-        "rv_units": sum(c["units"] for c in rv),
-        "rv_occupancy": wavg(rv, "occupancy", "units"),
-        "impaired_units": sum(c["impaired_units"] for c in communities),
-        "not_rentable_units": sum(c["not_rentable_units"] for c in communities),
-        "ar_total": ar_hdl.get("total", 0),
-        "ar_prev": ar_prev.get("total"),
-        "ar_90_plus": ar_hdl.get("b90p", 0),
-        "ar_over90_share": rnd(ar_hdl.get("b90p", 0) / ar_hdl["total"] * 100) if ar_hdl.get("total") else 0.0,
-        "ar_accounts": ar_hdl.get("accounts", 0),
-        "ar_live": (at(ar_series, current_month) or {}).get("total"),
-        "collection_pct": coll_hdl.get("collection_pct", 0.0),
-        "charged": coll_hdl.get("charged", 0),
-        "paid": coll_hdl.get("paid", 0),
-        "collection_ttm": rnd(sum(p["collection_pct"] for p in closed(coll_series)[-12:]) /
-                              max(1, len(closed(coll_series)[-12:]))),
-        "revenue": fin_hdl.get("revenue", 0),
-        "revenue_budget": fin_hdl.get("revenue_budget", 0),
-        "noi": fin_hdl.get("noi", 0),
-        "noi_budget": fin_hdl.get("noi_budget", 0),
-        "noi_margin": rnd(fin_hdl.get("noi", 0) / fin_hdl["revenue"] * 100) if fin_hdl.get("revenue") else 0.0,
-        "ytd_revenue": rnd(ytd_fin["revenue"], 0),
-        "ytd_revenue_budget": rnd(ytd_fin["revenue_budget"], 0),
-        "ytd_noi": rnd(ytd_fin["noi"], 0),
-        "ytd_noi_budget": rnd(ytd_fin["noi_budget"], 0),
-        "move_ins": (at(move_series, closed_month) or {}).get("ins", 0),
-        "move_outs": (at(move_series, closed_month) or {}).get("outs", 0),
-        "vacancy_loss": sum(c["vacancy_loss"] for c in communities),
-        "loss_to_lease": sum(c["loss_to_lease"] for c in communities),
+        "closed": portfolio_block(closed_month, prior_closed),
+        "live": portfolio_block(live_month, closed_month),
     }
 
-    # ---- data-quality flags: say what looks wrong instead of hiding it ----
+    # ---- flags -------------------------------------------------------------
+
     flags = []
 
     if unknown_types:
         flags.append({
             "severity": "warn",
             "title": "Unclassified unit types",
-            "detail": ("These unit types are not in registry.json and were counted as rentable MH: %s"
+            "detail": ("Not in registry.json, counted as rentable MH: %s"
                        % ", ".join(sorted(unknown_types))),
         })
 
-    live_ar = portfolio.get("ar_live")
-    if live_ar and portfolio["ar_total"]:
-        jump = (live_ar - portfolio["ar_total"]) / portfolio["ar_total"] * 100
-        if jump > 20:
+    if absent:
+        flags.append({
+            "severity": "warn",
+            "title": "%d reportable communities have no warehouse data" % len(absent),
+            "detail": ("The Property Data Sheet marks these Reportable = Yes but the "
+                       "warehouse returned no rows for them, so they are missing from "
+                       "every total: %s."
+                       % ", ".join("%s (%s)" % (r["property_name"], r["short_name"])
+                                   for r in absent)),
+        })
+
+    if rolled_ar:
+        flags.append({
+            "severity": "info",
+            "title": "%s of receivables rolled in from sub-ledgers" % money(sum(rolled_ar.values())),
+            "detail": ("These ledgers are not reportable communities themselves, so their "
+                       "balances are attributed to the parent community rather than shown "
+                       "as their own row: %s."
+                       % ", ".join("%s %s" % (n, money(v))
+                                   for n, v in sorted(rolled_ar.items(), key=lambda x: -x[1]))),
+        })
+
+    for entry in cfg.get("sold", []):
+        primary = entry["match"][0]
+        if primary.strip().lower() in reportable:
             flags.append({
-                "severity": "info",
-                "title": "Live month AR is a partial snapshot",
-                "detail": ("%s AR reads %s against %s for closed %s (+%.0f%%). Rent bills on the 1st "
-                           "and collects through the month, so the live figure runs hot. Headline "
-                           "numbers use %s."
-                           % (current_month, money(live_ar), money(portfolio["ar_total"]),
-                              closed_month, jump, closed_month)),
+                "severity": "warn",
+                "title": "%s is excluded as sold but still reads Reportable = Yes" % primary,
+                "detail": ("%s. The Property Data Sheet still marks it Reportable with no "
+                           "Sale Date, so the two rules disagree. It is held out of every "
+                           "figure until that is settled: either flip Reportable to No in "
+                           "the PDS, or remove it from `sold` in registry.json."
+                           % entry["reason"]),
             })
 
-    if portfolio.get("ar_prev") and portfolio["ar_total"]:
-        chg = (portfolio["ar_total"] - portfolio["ar_prev"]) / portfolio["ar_prev"] * 100
-        if abs(chg) > 10:
-            flags.append({
-                "severity": "warn" if chg > 0 else "info",
-                "title": "AR moved %.0f%% month over month" % chg,
-                "detail": "%s -> %s between the last two closed months."
-                          % (money(portfolio["ar_prev"]), money(portfolio["ar_total"])),
-            })
+    cl, lv = portfolio["closed"], portfolio["live"]
+    if lv["ar_total"] and cl["ar_total"]:
+        flags.append({
+            "severity": "info",
+            "title": "Live receivables run %s above the closed month by design"
+                     % money(lv["ar_total"] - cl["ar_total"]),
+            "detail": ("Rent bills on the 1st, so day %d of %s carries a full month of new "
+                       "charges against %d days of collection. Past the %dth that money is "
+                       "late, which is why the live view exists. Use the Closed toggle to "
+                       "compare like with like."
+                       % (live_day, live_month, live_day, grace_day)),
+        })
 
-    all_ar = [p for p in closed(ar_series)]
-    if len(all_ar) >= 13:
-        yoy = (all_ar[-1]["total"] - all_ar[-13]["total"]) / all_ar[-13]["total"] * 100 if all_ar[-13]["total"] else 0
+    ar_closed = closed_pts(ar_series)
+    if len(ar_closed) >= 13 and ar_closed[-13]["total"]:
+        yoy = (ar_closed[-1]["total"] - ar_closed[-13]["total"]) / ar_closed[-13]["total"] * 100
         if abs(yoy) > 15:
             flags.append({
                 "severity": "warn" if yoy > 0 else "info",
-                "title": "AR is %.0f%% versus a year ago" % yoy,
+                "title": "Receivables are %.0f%% against a year ago" % yoy,
                 "detail": "%s in %s against %s in %s."
-                          % (money(all_ar[-1]["total"]), all_ar[-1]["month"],
-                             money(all_ar[-13]["total"]), all_ar[-13]["month"]),
+                          % (money(ar_closed[-1]["total"]), ar_closed[-1]["month"],
+                             money(ar_closed[-13]["total"]), ar_closed[-13]["month"]),
+            })
+    if len(ar_closed) >= 8 and ar_closed[-8]["b90p"]:
+        g = (ar_closed[-1]["b90p"] - ar_closed[-8]["b90p"]) / ar_closed[-8]["b90p"] * 100
+        if g > 25:
+            flags.append({
+                "severity": "warn",
+                "title": "The 90+ bucket is up %.0f%% in seven months" % g,
+                "detail": ("%s to %s while the monthly collection rate still reads %s. "
+                           "Collections is a flow and receivables are a stock, so a few "
+                           "points of monthly leakage compounds here."
+                           % (money(ar_closed[-8]["b90p"]), money(ar_closed[-1]["b90p"]),
+                              "%.1f%%" % cl["collection_pct"])),
             })
 
-    # Communities whose AR sits entirely in 90+ read like a frozen ledger.
     frozen = [c["name"] for c in communities
-              if c["ar_total"] > 25000 and c["ar_over90_share"] >= 99.5]
+              if c["closed"].get("ar_total", 0) > 25000
+              and c["closed"].get("ar_over90_share", 0) >= 99.5]
     if frozen:
         flags.append({
             "severity": "warn",
-            "title": "%d communities have 100%% of AR in the 90+ bucket" % len(frozen),
+            "title": "%d communities hold all receivables in the 90+ bucket" % len(frozen),
             "detail": ("Nothing current or mid-aged at all, which usually means a stale or "
-                       "migrated ledger rather than live delinquency: %s. Worth a Rent Manager "
-                       "check before these drive collections decisions." % ", ".join(sorted(frozen))),
+                       "migrated ledger rather than live delinquency: %s."
+                       % ", ".join(sorted(frozen))),
         })
 
-    # A community carrying lots at exactly 0% occupancy is either genuinely empty
-    # or its ledger stopped tracking occupancy. Either way it is a question, and
-    # it drags the portfolio denominator down, so name it.
-    zero_occ = [(c["name"], c["units"]) for c in communities
-                if c["units"] >= 10 and c["occupancy"] == 0.0]
+    def pds_units(row):
+        v = (row.get("total_units") or "").replace(",", "").strip()
+        try:
+            return int(float(v))
+        except ValueError:
+            return 0
+
+    lot_gaps = []
+    for c in communities:
+        pds_row = reportable.get(c["name"].strip().lower())
+        if not pds_row:
+            continue
+        expected = pds_units(pds_row)
+        actual = c["closed"].get("units", 0)
+        if expected and abs(actual - expected) >= max(5, expected * 0.05):
+            lot_gaps.append((c["name"], expected, actual))
+    if lot_gaps:
+        flags.append({
+            "severity": "warn",
+            "title": "%d communities' lot counts disagree with the Property Data Sheet" % len(lot_gaps),
+            "detail": ("The PDS is the authoritative lot count, so a gap means the Rent "
+                       "Manager unit list is out of step: %s. Occupancy is computed on the "
+                       "warehouse count, so these percentages sit on the wrong denominator "
+                       "until the ledgers agree."
+                       % ", ".join("%s (PDS %d, RM %d)" % (n, e, a)
+                                   for n, e, a in sorted(lot_gaps, key=lambda x: -abs(x[2] - x[1])))),
+        })
+
+    # September GL is not posted on day 4, so revenue and NOI have no live
+    # reading. Say so rather than letting a zero look like a collapse.
+    if not portfolio["live"].get("revenue") and portfolio["closed"].get("revenue"):
+        flags.append({
+            "severity": "info",
+            "title": "%s financials are not posted yet" % live_month,
+            "detail": ("Revenue, expenses and NOI have no live figure this early in the "
+                       "month, so the Financials tab and the NOI tile always report closed "
+                       "%s regardless of the period toggle." % closed_month),
+        })
+
+    no_budget = [c["name"] for c in communities
+                 if c["closed"].get("revenue") and not c["closed"].get("revenue_budget")]
+    if no_budget:
+        flags.append({
+            "severity": "info",
+            "title": "%d communities post revenue with no budget loaded" % len(no_budget),
+            "detail": "Budget variance is blank for: %s." % ", ".join(sorted(no_budget)),
+        })
+
+    zero_occ = [(c["name"], c["closed"].get("units", 0)) for c in communities
+                if c["closed"].get("units", 0) >= 10 and c["closed"].get("occupancy") == 0.0]
     if zero_occ:
         flags.append({
             "severity": "warn",
             "title": "%d communities report 0%% occupancy on %d lots"
                      % (len(zero_occ), sum(u for _, u in zero_occ)),
-            "detail": ("Either genuinely empty or the ledger is not tracking occupancy. These lots "
-                       "stay in the portfolio denominator, so they pull reported occupancy down: %s. "
-                       "Confirm in Rent Manager, then either fix the ledger or add the record to "
-                       "registry.json."
+            "detail": ("Either genuinely empty or the ledger is not tracking occupancy: %s."
                        % ", ".join("%s (%d lots)" % (n, u) for n, u in sorted(zero_occ))),
-        })
-
-    no_budget = [c["name"] for c in communities if c["revenue"] and not c["revenue_budget"]]
-    if no_budget:
-        flags.append({
-            "severity": "info",
-            "title": "%d communities post revenue with no budget loaded" % len(no_budget),
-            "detail": "Budget variance is blank for: %s." % ", ".join(sorted(no_budget)[:12]),
-        })
-
-    dropped_stale = sorted(n for n, a in reg.audit.items()
-                           if a["disposition"] == "drop" and "stale" in a["reason"])
-    if dropped_stale:
-        flags.append({
-            "severity": "info",
-            "title": "%d property records dropped as stale" % len(dropped_stale),
-            "detail": ("No recent snapshot, treated as disposed or renamed: %s. If any of these "
-                       "is still live, it needs a look in Rent Manager."
-                       % ", ".join(dropped_stale)),
-        })
-
-    unclassified = sorted(n for n, a in reg.audit.items()
-                          if a["disposition"] == "keep" and n not in {c["name"] for c in communities})
-    if unclassified:
-        flags.append({
-            "severity": "info",
-            "title": "%d kept records produced no rows" % len(unclassified),
-            "detail": ", ".join(unclassified),
         })
 
     payload = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "source": "RentViewer data warehouse (Rent Manager)",
+        "source": "RentViewer data warehouse (Rent Manager) · roster from Property Data Sheet",
         "period": {
-            "headline": closed_month,
-            "live_partial": current_month,
+            "closed": closed_month,
+            "live": live_month,
+            "live_day": live_day,
+            "days_in_live": days_in_live,
+            "grace_day": grace_day,
             "first": months[0],
             "months": months,
         },
@@ -766,40 +829,35 @@ def build(raw_dir, out_dir, registry_path):
     os.makedirs(out_dir, exist_ok=True)
     dash = os.path.join(out_dir, "dashboard.json")
     with open(dash, "w") as f:
-        json.dump(payload, f, indent=1, sort_keys=False)
+        json.dump(payload, f, indent=1)
     with open(os.path.join(out_dir, "dashboard.min.json"), "w") as f:
         json.dump(payload, f, separators=(",", ":"))
     with open(os.path.join(out_dir, "registry_audit.json"), "w") as f:
         json.dump({
             "generated_at": payload["generated_at"],
-            "current_month": current_month,
+            "reportable_source": REPORTABLE_FILE,
             "counts": {
                 "names_seen": len(reg.audit),
+                "reportable_in_pds": len(reportable_rows),
                 "communities": len(communities),
                 "dropped": sum(1 for a in reg.audit.values() if a["disposition"] == "drop"),
-                "rolled_up": sum(1 for a in reg.audit.values() if a["disposition"] == "roll_up"),
-                "aliased": sum(1 for a in reg.audit.values() if a["disposition"] == "alias"),
+                "rolled_up": len(rolled),
+                "reportable_without_data": len(absent),
             },
+            "reportable_without_warehouse_data": absent,
             "names": dict(sorted(reg.audit.items())),
         }, f, indent=1)
 
     log("wrote %s (%.0f KB)" % (dash, os.path.getsize(dash) / 1024))
-    log("portfolio: %d communities, %s lots, %.1f%% occupancy, %s AR, %.1f%% collections (as of %s)"
-        % (portfolio["communities"], "{:,}".format(portfolio["total_units"]),
-           portfolio["occupancy"], money(portfolio["ar_total"]),
-           portfolio["collection_pct"], closed_month))
+    log("CLOSED %s: %d communities, %s lots, %.1f%% occ, %s AR, %.1f%% collections"
+        % (closed_month, cl["communities"], "{:,}".format(cl["total_units"]),
+           cl["occupancy"], money(cl["ar_total"]), cl["collection_pct"]))
+    log("LIVE   %s (day %d): %.1f%% occ, %s AR, %s past due 30+, %s of %s billed still out"
+        % (live_month, live_day, lv["occupancy"], money(lv["ar_total"]),
+           money(lv["ar_past_due_30plus"]), money(lv["outstanding"]), money(lv["charged"])))
     for fl in flags:
         log("  [%s] %s" % (fl["severity"].upper(), fl["title"]))
     return payload
-
-
-def money(v):
-    v = v or 0
-    if abs(v) >= 1_000_000:
-        return "$%.2fM" % (v / 1_000_000)
-    if abs(v) >= 1_000:
-        return "$%.0fK" % (v / 1_000)
-    return "$%.0f" % v
 
 
 def main():

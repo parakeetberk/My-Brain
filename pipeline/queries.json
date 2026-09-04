@@ -2,12 +2,15 @@
   "_comment": [
     "Warehouse queries that feed the ops dashboard, in the order they should run.",
     "",
-    "These are executed against the RentViewer data warehouse MCP tool",
+    "These run against the RentViewer data warehouse MCP tool",
     "(mcp__RentViewer_Data_Warehouse__run_query). The warehouse is reachable only",
     "through an authenticated MCP connector, so a plain HTTP job cannot run them --",
     "the refresh is driven by a scheduled Claude session. See docs/ARCHITECTURE.md.",
     "",
     "Each entry's `out` is the filename build.py expects under pipeline/raw/.",
+    "",
+    "THE ROSTER IS NOT IN THESE QUERIES. Which communities are reportable comes from",
+    "the Property Data Sheet, not the warehouse -- see `reportable_roster` below.",
     "",
     "TWO RULES THAT MATTER:",
     "  1. Keep `limit` comfortably above the real row count. A pull that hits its",
@@ -19,7 +22,6 @@
     "If a query times out at 60s, drop a measure or narrow the time range and",
     "re-run rather than lowering the limit."
   ],
-
   "queries": [
     {
       "out": "occupancy_by_property_month.json",
@@ -148,5 +150,42 @@
         "question": "Revenue, operating expenses, NOI and budget by community by month for the financials tab"
       }
     }
-  ]
+  ],
+  "reportable_roster": {
+    "out": "pds_reportable.json",
+    "_comment": [
+      "The Reportable = Yes roster, and the gate on everything the dashboard shows.",
+      "",
+      "It lives in the `vwr VW_PDS_V2` sheet of the Property Data Sheet on SharePoint,",
+      "NOT in the warehouse: the warehouse MCP connector exposes only five models and",
+      "VW_PDS_V2 is not among them. If RentViewer ever enables it for AI analysis, this",
+      "becomes a seventh query and the SharePoint read goes away.",
+      "",
+      "Read the newest file under the SharePoint path below with the Microsoft 365",
+      "connector, take the `vwr VW_PDS_V2` sheet, keep rows where Reportable is exactly",
+      "Yes (blank and No are both excluded), and write one JSON object per row with the",
+      "fields listed in `fields`. The warehouse joins on `property_name` exactly.",
+      "",
+      "Refuse to build if this file is missing or empty rather than falling back to a",
+      "heuristic roster: guessing which of ~150 propertyName values are real communities",
+      "is exactly what this file exists to prevent."
+    ],
+    "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/main/Shared Documents/Asset Management & Finance/Property Data Sheet/",
+    "sheet": "vwr VW_PDS_V2",
+    "filter": "Reportable == 'Yes'",
+    "fields": [
+      "short_name",
+      "property_name",
+      "community",
+      "vehicle",
+      "state",
+      "mh_lots",
+      "rv_lots",
+      "other_units",
+      "total_units",
+      "sale_date",
+      "property_type"
+    ],
+    "expect_rows_min": 50
+  }
 }

@@ -149,7 +149,9 @@
 
     var lines = props.lines;
     var vals = [];
-    series.forEach(function (p) {
+    var scaleFrom = series.filter(function (p) { return !p.partial; });
+    if (!scaleFrom.length) scaleFrom = series;
+    scaleFrom.forEach(function (p) {
       lines.forEach(function (l) { if (p[l.key] != null) vals.push(p[l.key]); });
     });
     if (props.zeroBase) vals.push(0);
@@ -162,7 +164,10 @@
 
     var innerW = Math.max(60, W - padL - padR);
     var x = function (i) { return padL + (i / (series.length - 1)) * innerW; };
-    var y = function (v) { return padT + (1 - (v - min) / (max - min)) * (H - padT - padB); };
+    var y = function (v) {
+      var t = padT + (1 - (v - min) / (max - min)) * (H - padT - padB);
+      return Math.max(padT - 2, Math.min(H - padB, t));
+    };
 
     var ticks = niceTicks(min, max, props.tickCount || 3);
     var fmtTick = props.fmtTick || function (v) { return Math.round(v); };
@@ -179,9 +184,14 @@
     });
 
     lines.forEach(function (l, li) {
-      var pts = [];
+      var pts = [], liveHop = null;
       series.forEach(function (p, i) {
-        if (p[l.key] != null) pts.push([x(i), y(p[l.key])]);
+        if (p[l.key] == null) return;
+        if (p.partial) {
+          if (pts.length) liveHop = [pts[pts.length - 1], [x(i), y(p[l.key])], p[l.key]];
+        } else {
+          pts.push([x(i), y(p[l.key])]);
+        }
       });
       if (!pts.length) return;
 
@@ -205,13 +215,34 @@
         }));
       }
 
-      // Emphasize the final reading: the figure the headline quotes.
+      if (liveHop) {
+        kids.push(h("path", {
+          key: "lh" + li,
+          d: "M" + liveHop[0][0] + "," + liveHop[0][1] + "L" + liveHop[1][0] + "," + liveHop[1][1],
+          fill: "none", stroke: l.color, strokeWidth: 2, strokeDasharray: "4 3",
+          strokeLinecap: "round", opacity: 0.8
+        }));
+        kids.push(h("circle", {
+          key: "lhc" + li, cx: liveHop[1][0], cy: liveHop[1][1], r: 3.4,
+          fill: "var(--ground)", stroke: l.color, strokeWidth: 1.8
+        }));
+        if (li === 0) {
+          kids.push(h("text", {
+            key: "lhl", x: liveHop[1][0] - 6,
+            y: Math.min(H - padB - 4, liveHop[1][1] + FS_VAL + 2),
+            textAnchor: "end", style: { fontSize: FS_VAL + "px", fontWeight: 700 },
+            fill: l.color
+          }, (props.fmtPoint || props.fmtTick || String)(liveHop[2])));
+        }
+      }
+
+      // Emphasize the final closed reading: the figure the headline quotes.
       var last = pts[pts.length - 1];
       kids.push(h("circle", { key: "e" + li, cx: last[0], cy: last[1], r: 3.2, fill: l.color }));
       if (li === 0) {
         var lastVal = null;
         for (var i = series.length - 1; i >= 0; i--) {
-          if (series[i][l.key] != null) { lastVal = series[i][l.key]; break; }
+          if (!series[i].partial && series[i][l.key] != null) { lastVal = series[i][l.key]; break; }
         }
         if (lastVal != null) {
           kids.push(h("text", {
@@ -234,7 +265,7 @@
         key: "xl" + i, x: x(i), y: H - padB + FS_AXIS + 6,
         textAnchor: i === 0 ? "start" : i === series.length - 1 ? "end" : "middle",
         style: { fontSize: FS_AXIS + "px" }
-      }, monthShort(series[i].month)));
+      }, monthShort(series[i].month) + (series[i].partial ? " ○" : "")));
     });
 
     return h("div", { ref: ref, style: { width: "100%" } },
@@ -251,15 +282,20 @@
     var ref = mw[0], W = mw[1];
     var series = props.series || [];
     var H = props.height || 250;
-    var padL = 58, padR = 16, padT = 20, padB = 28;
+    var padL = 58, padR = 16, padT = 30, padB = 28;
 
     if (!series.length) return h("div", { ref: ref, className: "loading" }, "No data.");
 
     var keys = props.keys;
-    var totals = series.map(function (p) {
+    var closedTotals = series.filter(function (p) { return !p.partial; }).map(function (p) {
       return keys.reduce(function (s, k) { return s + (p[k.key] || 0); }, 0);
     });
-    var max = Math.max.apply(null, totals) * 1.12 || 1;
+    if (!closedTotals.length) {
+      closedTotals = series.map(function (p) {
+        return keys.reduce(function (s, k) { return s + (p[k.key] || 0); }, 0);
+      });
+    }
+    var max = Math.max.apply(null, closedTotals) * 1.12 || 1;
 
     var innerW = Math.max(60, W - padL - padR);
     var band = innerW / series.length;
@@ -281,13 +317,38 @@
       keys.forEach(function (k, ki) {
         var v = p[k.key] || 0;
         if (v <= 0) return;
-        var y0 = y(acc + v), y1 = y(acc);
+        var y0 = Math.max(padT, y(acc + v)), y1 = Math.max(padT, y(acc));
         kids.push(h("rect", {
           key: "b" + i + "_" + ki, x: cx - bw / 2, y: y0, width: bw,
-          height: Math.max(0.6, y1 - y0), fill: k.color
+          height: Math.max(0.6, y1 - y0), fill: k.color,
+          fillOpacity: p.partial ? 0.4 : 1,
+          stroke: p.partial ? k.color : "none", strokeWidth: p.partial ? 1 : 0
         }));
         acc += v;
       });
+    });
+
+    // Cap marker and true total for a live stack that exceeds the closed scale.
+    series.forEach(function (p, i) {
+      if (!p.partial) return;
+      var total = keys.reduce(function (a, k) { return a + (p[k.key] || 0); }, 0);
+      if (!total) return;
+      var cx = padL + band * i + band / 2;
+      var over = total > max;
+      if (over) {
+        for (var z = 0; z < 2; z++) {
+          kids.push(h("line", {
+            key: "brk" + z, x1: cx - bw / 2 - 2, x2: cx + bw / 2 + 2,
+            y1: padT + 3 + z * 4, y2: padT - 1 + z * 4,
+            stroke: "var(--ground)", strokeWidth: 2.4
+          }));
+        }
+      }
+      kids.push(h("text", {
+        key: "plbl", x: cx, y: Math.max(9, padT - 6), textAnchor: "middle",
+        style: { fontSize: FS_VAL + "px", fontWeight: 700 }, fill: "var(--text)"
+      }, (total >= 1e6 ? "$" + (total / 1e6).toFixed(2) + "M"
+                       : "$" + Math.round(total / 1000) + "K") + (over ? " ↑" : "")));
     });
 
     kids.push(h("line", { key: "ax", className: "axis-line", x1: padL, x2: W - padR, y1: H - padB, y2: H - padB }));
@@ -299,7 +360,7 @@
       kids.push(h("text", {
         key: "xl" + i, x: padL + band * i + band / 2, y: H - padB + FS_AXIS + 6,
         textAnchor: "middle", style: { fontSize: FS_AXIS + "px" }
-      }, monthShort(p.month)));
+      }, monthShort(p.month) + (p.partial ? " ○" : "")));
     });
 
     return h("div", { ref: ref, style: { width: "100%" } },
@@ -331,6 +392,30 @@
 
   function closedOnly(series) {
     return (series || []).filter(function (p) { return !p.partial; });
+  }
+
+  /* Period accessors. `mode` is "closed" or "live"; Financials always reads
+     closed because the general ledger has not posted for the open month. */
+  function pv(c, mode) { return (c && c[mode]) || {}; }
+
+  function PeriodToggle(props) {
+    var d = props.data, mode = props.mode;
+    var lp = d.period;
+    return h("div", { className: "period-toggle no-print", role: "group",
+                      "aria-label": "Reporting period" },
+      [["closed", "Closed", monthLabel(lp.closed), "month end"],
+       ["live", "Live", monthLabel(lp.live), "through day " + lp.live_day]
+      ].map(function (o) {
+        var active = mode === o[0];
+        return h("button", {
+          key: o[0], className: "pbtn" + (active ? " active" : ""),
+          "aria-pressed": active ? "true" : "false",
+          onClick: function () { props.onChange(o[0]); }
+        },
+          h("span", { className: "pbtn-kind" }, o[1]),
+          h("span", { className: "pbtn-month" }, o[2]),
+          h("span", { className: "pbtn-note" }, o[3]));
+      }));
   }
 
   // ----------------------------------------------------------- table pieces ---
@@ -410,37 +495,36 @@
       h("div", { className: "panel-body" + (props.flush ? " flush" : "") }, props.children));
   }
 
-  function OverviewTab(d) {
-    var p = d.portfolio, t = d.trends, th = d.thresholds;
-    var closedAr = t.ar.filter(function (x) { return !x.partial; });
-    var closedColl = t.collections.filter(function (x) { return !x.partial; });
-
+  function OverviewTab(d, filtered, mode) {
+    var p = d.portfolio[mode], t = d.trends, th = d.thresholds;
     // Where the pain is: worst occupancy and biggest 90+ balances.
     var zeroCount = d.communities.filter(function (c) {
-      return c.units >= 20 && c.occupancy === 0;
+      return pv(c, mode).units >= 20 && pv(c, mode).occupancy === 0;
     }).length;
     var worstOcc = d.communities.slice()
-      .filter(function (c) { return c.units >= 20 && c.occupancy > 0; })
-      .sort(function (a, b) { return a.occupancy - b.occupancy; }).slice(0, 8)
+      .filter(function (c) { return pv(c, mode).units >= 20 && pv(c, mode).occupancy > 0; })
+      .sort(function (a, b) { return pv(a, mode).occupancy - pv(b, mode).occupancy; }).slice(0, 8)
       .map(function (c) {
-        return { label: c.name, value: c.occupancy, display: pct(c.occupancy),
-                 color: bandColor(band(c.occupancy, th.occupancy)) };
+        var o = pv(c, mode).occupancy;
+        return { label: c.name, value: o, display: pct(o),
+                 color: bandColor(band(o, th.occupancy)) };
       });
 
     var worstAr = d.communities.slice()
-      .sort(function (a, b) { return b.ar_90_plus - a.ar_90_plus; }).slice(0, 8)
+      .sort(function (a, b) { return pv(b, mode).ar_90_plus - pv(a, mode).ar_90_plus; }).slice(0, 8)
       .map(function (c) {
-        return { label: c.name, value: c.ar_90_plus, display: money(c.ar_90_plus, { compact: true }),
-                 color: c.ar_90_plus > 100000 ? RED : c.ar_90_plus > 40000 ? YELLOW : GREEN };
+        var v = pv(c, mode).ar_90_plus;
+        return { label: c.name, value: v, display: money(v, { compact: true }),
+                 color: v > 100000 ? RED : v > 40000 ? YELLOW : GREEN };
       });
 
     return h("div", null,
       h("div", { className: "grid-2" },
         h(Panel, {
           title: "Portfolio occupancy",
-          note: "Weighted by unit-days · closed months"
+          note: "Weighted by unit-days · ○ is the open month"
         }, h(LineChart, {
-          series: closedOnly(t.occupancy), zeroBase: false, height: 230,
+          series: t.occupancy, zeroBase: false, height: 230,
           lines: [{ key: "occupancy", color: GREEN, area: true }],
           fmtTick: function (v) { return v.toFixed(0) + "%"; },
           fmtPoint: function (v) { return v.toFixed(1) + "%"; },
@@ -448,9 +532,9 @@
         })),
         h(Panel, {
           title: "Collections rate",
-          note: "Payments ÷ charges · closed months"
+          note: "Payments ÷ charges · ○ open month collects all month"
         }, h(LineChart, {
-          series: closedOnly(t.collections), zeroBase: false, height: 230,
+          series: t.collections, zeroBase: false, height: 230,
           lines: [{ key: "collection_pct", color: NAVY, area: true }],
           fmtTick: function (v) { return v.toFixed(0) + "%"; },
           fmtPoint: function (v) { return v.toFixed(1) + "%"; },
@@ -459,10 +543,10 @@
 
       h(Panel, {
         title: "Receivables by age",
-        note: "Closed months · the 90+ band is the one that compounds"
+        note: "○ open month carries fresh billing · the 90+ band is the one that compounds"
       },
         h(StackedBars, {
-          series: closedOnly(t.ar), height: 250,
+          series: t.ar, height: 250,
           keys: [
             { key: "b0_30", color: GREEN, label: "0–30 days" },
             { key: "b31_60", color: NAVY, label: "31–60 days" },
@@ -475,7 +559,8 @@
           h("span", null, h("i", { style: { background: GREEN } }), "0–30"),
           h("span", null, h("i", { style: { background: NAVY } }), "31–60"),
           h("span", null, h("i", { style: { background: YELLOW } }), "61–90"),
-          h("span", null, h("i", { style: { background: RED } }), "90+"))),
+          h("span", null, h("i", { style: { background: RED } }), "90+"),
+          h("span", null, "○ open month, still collecting"))),
 
       h("div", { className: "grid-2" },
         h(Panel, {
@@ -484,55 +569,74 @@
             ? "20+ lot communities · " + zeroCount + " reporting exactly 0% held back, see data notes"
             : "20+ lot communities"
         }, h(BarList, { rows: worstOcc, max: 100 })),
-        h(Panel, { title: "Largest 90+ balances", note: "As of " + monthLabel(d.period.headline) },
+        h(Panel, { title: "Largest 90+ balances", note: "As of " + monthLabel(d.period[mode === "live" ? "live" : "closed"]) },
           h(BarList, { rows: worstAr }))));
   }
 
-  function CommunitiesTab(d, filtered) {
+  function CommunitiesTab(d, filtered, mode) {
     var th = d.thresholds;
+    var V = function (c) { return pv(c, mode); };
     var cols = [
       { key: "name", label: "Community", render: function (r) {
           return h("span", null, r.name, " ",
             h("span", { className: "tag" }, r.kind)); } },
-      { key: "units", label: "Lots", numeric: true, render: function (r) { return count(r.units); } },
-      { key: "occupancy", label: "Occupancy", numeric: true, render: function (r) {
-          return h(Chip, { band: band(r.occupancy, th.occupancy) }, pct(r.occupancy)); } },
+      { key: "units", label: "Lots", numeric: true, sortValue: function (r) { return V(r).units; },
+        render: function (r) { return count(V(r).units); } },
+      { key: "occupancy", label: "Occupancy", numeric: true,
+        sortValue: function (r) { return V(r).occupancy; },
+        render: function (r) {
+          return h(Chip, { band: band(V(r).occupancy, th.occupancy) }, pct(V(r).occupancy)); } },
       { key: "occupancy_rentable", label: "Occ (rentable)", numeric: true,
         title: "Occupancy with unusable and demo lots out of the denominator",
         render: function (r) { return pct(r.occupancy_rentable); } },
-      { key: "collection_pct", label: "Collections", numeric: true,
+      { key: "collection_pct", label: mode === "live" ? "Collected MTD" : "Collections", numeric: true,
         title: "Blank where nothing was charged, which is an absent ledger rather than a 0% rate",
+        sortValue: function (r) { return V(r).collection_pct; },
         render: function (r) {
-          return r.charged
-            ? h(Chip, { band: band(r.collection_pct, th.collections) }, pct(r.collection_pct))
+          return V(r).charged
+            ? h(Chip, { band: band(V(r).collection_pct, mode === "live" ? { red: -1, yellow: -1 } : th.collections) },
+                pct(V(r).collection_pct))
             : "—"; } },
-      { key: "ar_total", label: "AR", numeric: true, render: function (r) { return money(r.ar_total, { compact: true }); } },
-      { key: "ar_90_plus", label: "90+", numeric: true, render: function (r) { return money(r.ar_90_plus, { compact: true }); } },
-      { key: "ar_over90_share", label: "90+ share", numeric: true, render: function (r) {
-          return h(Chip, { band: band(r.ar_over90_share, th.over90_share, true) }, pct(r.ar_over90_share, 0)); } },
-      { key: "ar_per_unit", label: "AR / lot", numeric: true, render: function (r) { return money(r.ar_per_unit); } },
-      { key: "noi", label: "NOI", numeric: true, render: function (r) { return money(r.noi, { compact: true }); } },
+      { key: "ar_total", label: "AR", numeric: true, sortValue: function (r) { return V(r).ar_total; },
+        render: function (r) { return money(V(r).ar_total, { compact: true }); } },
+      { key: "ar_90_plus", label: "90+", numeric: true, sortValue: function (r) { return V(r).ar_90_plus; },
+        render: function (r) { return money(V(r).ar_90_plus, { compact: true }); } },
+      { key: "ar_past_due_30plus", label: "Past due 30+", numeric: true,
+        title: "Everything outside the 0-30 bucket: money that is genuinely late",
+        sortValue: function (r) { return V(r).ar_past_due_30plus; },
+        render: function (r) { return money(V(r).ar_past_due_30plus, { compact: true }); } },
+      { key: "ar_per_unit", label: "AR / lot", numeric: true, sortValue: function (r) { return V(r).ar_per_unit; },
+        render: function (r) { return money(V(r).ar_per_unit); } },
+      { key: "noi", label: "NOI", numeric: true,
+        title: "Always the closed month; the general ledger has not posted for the open month",
+        sortValue: function (r) { return r.closed.noi; },
+        render: function (r) { return money(r.closed.noi, { compact: true }); } },
       { key: "noi_margin", label: "NOI margin", numeric: true,
-        title: "Only shown where monthly revenue clears $5K; below that the ratio is noise",
+        title: "Closed month. Only shown where revenue clears $5K; below that the ratio is noise",
+        sortValue: function (r) { return r.closed.noi_margin; },
         render: function (r) {
-          return r.revenue >= 5000
-            ? h(Chip, { band: band(r.noi_margin, th.noi_margin) }, pct(r.noi_margin, 0)) : "—"; } },
+          return r.closed.revenue >= 5000
+            ? h(Chip, { band: band(r.closed.noi_margin, th.noi_margin) }, pct(r.closed.noi_margin, 0)) : "—"; } },
       { key: "move_ins", label: "In / Out", numeric: true,
-        sortValue: function (r) { return r.move_ins - r.move_outs; },
-        render: function (r) { return r.move_ins + " / " + r.move_outs; } }
+        sortValue: function (r) { return V(r).move_ins - V(r).move_outs; },
+        render: function (r) { return V(r).move_ins + " / " + V(r).move_outs; } }
     ];
 
-    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (c[k] || 0); }, 0); };
+    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (V(c)[k] || 0); }, 0); };
     var units = sum("units");
-    var occW = units ? filtered.reduce(function (s, c) { return s + c.occupancy * c.units; }, 0) / units : 0;
+    var occW = units ? filtered.reduce(function (s, c) { return s + V(c).occupancy * V(c).units; }, 0) / units : 0;
     var charged = sum("charged"), paid = sum("paid");
     var arTot = sum("ar_total"), ar90 = sum("ar_90_plus");
-    var rev = sum("revenue"), noi = sum("noi");
+    var noi = filtered.reduce(function (s, c) { return s + (c.closed.noi || 0); }, 0);
+    var rev = filtered.reduce(function (s, c) { return s + (c.closed.revenue || 0); }, 0);
 
     return h("div", null,
       h(Panel, {
         title: filtered.length + " communities",
-        note: "Every figure as of closed " + monthLabel(d.period.headline) + " · click a heading to sort",
+        note: (mode === "live"
+                 ? "Live through " + monthLabel(d.period.live) + " day " + d.period.live_day
+                 : "Closed " + monthLabel(d.period.closed)) +
+              " · NOI always closed " + monthLabel(d.period.closed) + " · click a heading to sort",
         flush: true
       }, h(SortableTable, {
         cols: cols, rows: filtered,
@@ -545,7 +649,7 @@
           charged ? pct(paid / charged * 100) : "—",
           money(arTot, { compact: true }),
           money(ar90, { compact: true }),
-          arTot ? pct(ar90 / arTot * 100, 0) : "—",
+          money(sum("ar_past_due_30plus"), { compact: true }),
           units ? money(arTot / units) : "—",
           money(noi, { compact: true }),
           rev ? pct(noi / rev * 100, 0) : "—",
@@ -554,21 +658,26 @@
       })));
   }
 
-  function OccupancyTab(d, filtered) {
+  function OccupancyTab(d, filtered, mode) {
     var th = d.thresholds;
+    var V = function (c) { return pv(c, mode); };
     var mh = filtered.filter(function (c) { return c.kind === "MH"; });
     var rv = filtered.filter(function (c) { return c.kind === "RV"; });
+    var periodLabel = monthLabel(d.period[mode === "live" ? "live" : "closed"]);
 
     function wavg(rows) {
-      var u = rows.reduce(function (s, c) { return s + c.units; }, 0);
-      return u ? rows.reduce(function (s, c) { return s + c.occupancy * c.units; }, 0) / u : 0;
+      var u = rows.reduce(function (s, c) { return s + V(c).units; }, 0);
+      return u ? rows.reduce(function (s, c) { return s + V(c).occupancy * V(c).units; }, 0) / u : 0;
+    }
+    function lots(rows) {
+      return rows.reduce(function (s, c) { return s + V(c).units; }, 0);
     }
 
     var byPark = {};
     filtered.forEach(function (c) {
       if (!byPark[c.park]) byPark[c.park] = { park: c.park, units: 0, occupied: 0 };
-      byPark[c.park].units += c.units;
-      byPark[c.park].occupied += c.occupied;
+      byPark[c.park].units += V(c).units;
+      byPark[c.park].occupied += V(c).occupied;
     });
     var parks = Object.keys(byPark).map(function (k) { return byPark[k]; })
       .filter(function (p) { return p.units >= 20; })
@@ -579,79 +688,115 @@
 
     return h("div", null,
       h("div", { className: "grid-3" },
-        h(Panel, { title: "MH occupancy", note: count(mh.length) + " communities" },
-          h("div", { className: "kvalue", style: { fontSize: "30px", fontWeight: 800 } }, pct(wavg(mh))),
-          h("div", { className: "ksub" }, count(mh.reduce(function (s, c) { return s + c.units; }, 0)) + " lots")),
-        h(Panel, { title: "RV occupancy", note: count(rv.length) + " communities" },
-          h("div", { className: "kvalue", style: { fontSize: "30px", fontWeight: 800 } }, pct(wavg(rv))),
-          h("div", { className: "ksub" }, count(rv.reduce(function (s, c) { return s + c.units; }, 0)) + " lots")),
-        h(Panel, { title: "Move-ins vs move-outs", note: monthLabel(d.period.headline) },
-          h("div", { className: "kvalue", style: { fontSize: "30px", fontWeight: 800 } },
+        h(Panel, { title: "MH occupancy", note: count(mh.length) + " communities · " + periodLabel },
+          h("div", { className: "bignum" }, pct(wavg(mh))),
+          h("div", { className: "ksub" }, count(lots(mh)) + " lots")),
+        h(Panel, { title: "RV occupancy", note: count(rv.length) + " communities · " + periodLabel },
+          h("div", { className: "bignum" }, pct(wavg(rv))),
+          h("div", { className: "ksub" }, count(lots(rv)) + " lots")),
+        h(Panel, { title: "Move-ins vs move-outs", note: periodLabel },
+          h("div", { className: "bignum" },
             (function () {
-              var net = filtered.reduce(function (s, c) { return s + c.move_ins - c.move_outs; }, 0);
+              var net = filtered.reduce(function (s, c) { return s + V(c).move_ins - V(c).move_outs; }, 0);
               return (net > 0 ? "+" : "") + net;
             })()),
           h("div", { className: "ksub" },
-            filtered.reduce(function (s, c) { return s + c.move_ins; }, 0) + " in, " +
-            filtered.reduce(function (s, c) { return s + c.move_outs; }, 0) + " out"))),
+            filtered.reduce(function (s, c) { return s + V(c).move_ins; }, 0) + " in, " +
+            filtered.reduce(function (s, c) { return s + V(c).move_outs; }, 0) + " out"))),
 
-      h(Panel, { title: "Move-in / move-out history", note: "Net resident movement by month" },
+      h(Panel, { title: "Move-in / move-out history", note: "Net resident movement · ○ open month" },
         h(LineChart, {
-          series: closedOnly(d.trends.moves), zeroBase: true, height: 230,
-          lines: [
-            { key: "ins", color: GREEN },
-            { key: "outs", color: RED }
-          ],
+          series: d.trends.moves, zeroBase: true, height: 230,
+          lines: [{ key: "ins", color: GREEN }, { key: "outs", color: RED }],
           fmtTick: function (v) { return Math.round(v); },
           ariaLabel: "Move-ins and move-outs by month"
         }),
         h("div", { className: "legend" },
           h("span", null, h("i", { style: { background: GREEN } }), "Move-ins"),
-          h("span", null, h("i", { style: { background: RED } }), "Move-outs"))),
+          h("span", null, h("i", { style: { background: RED } }), "Move-outs"),
+          h("span", null, "○ open month, partial"))),
 
-      h(Panel, { title: "Occupancy by park", note: "20+ lot parks, MH and RV segments combined" },
+      h(Panel, { title: "Occupancy by park",
+                 note: "20+ lot parks, MH and RV segments combined · " + periodLabel },
         h(BarList, { rows: parks, max: 100 })));
   }
-
-  function CollectionsTab(d, filtered) {
+  function CollectionsTab(d, filtered, mode) {
     var th = d.thresholds;
+    var V = function (c) { return pv(c, mode); };
+    var live = mode === "live";
+    // A month-to-date rate is structurally low and must not be banded against
+    // a full-month threshold; the "still out" and "past due 30+" columns are
+    // what carry the signal in the live view.
+    var rateBand = live ? { red: -1, yellow: -1 } : th.collections;
+
     var cols = [
       { key: "name", label: "Community" },
-      { key: "charged", label: "Charged", numeric: true, render: function (r) { return money(r.charged); } },
-      { key: "paid", label: "Collected", numeric: true, render: function (r) { return money(r.paid); } },
-      { key: "collection_pct", label: "Rate", numeric: true, render: function (r) {
-          return r.charged
-            ? h(Chip, { band: band(r.collection_pct, th.collections) }, pct(r.collection_pct))
+      { key: "charged", label: "Charged", numeric: true,
+        sortValue: function (r) { return V(r).charged; },
+        render: function (r) { return money(V(r).charged); } },
+      { key: "paid", label: "Collected", numeric: true,
+        sortValue: function (r) { return V(r).paid; },
+        render: function (r) { return money(V(r).paid); } },
+      { key: "outstanding", label: "Still out", numeric: true,
+        title: "Charged minus collected for this period",
+        sortValue: function (r) { return V(r).outstanding; },
+        render: function (r) { return money(V(r).outstanding); } },
+      { key: "collection_pct", label: live ? "Rate MTD" : "Rate", numeric: true,
+        sortValue: function (r) { return V(r).collection_pct; },
+        render: function (r) {
+          return V(r).charged
+            ? h(Chip, { band: band(V(r).collection_pct, rateBand) }, pct(V(r).collection_pct))
             : "—"; } },
-      { key: "ar_0_30", label: "0–30", numeric: true, render: function (r) { return money(r.ar_0_30); } },
-      { key: "ar_31_60", label: "31–60", numeric: true, render: function (r) { return money(r.ar_31_60); } },
-      { key: "ar_61_90", label: "61–90", numeric: true, render: function (r) { return money(r.ar_61_90); } },
-      { key: "ar_90_plus", label: "90+", numeric: true, render: function (r) { return money(r.ar_90_plus); } },
-      { key: "ar_total", label: "Total AR", numeric: true, render: function (r) { return money(r.ar_total); } },
-      { key: "ar_accounts", label: "Accounts", numeric: true, render: function (r) { return count(r.ar_accounts); } }
+      { key: "ar_0_30", label: "0–30", numeric: true,
+        sortValue: function (r) { return V(r).ar_0_30; },
+        render: function (r) { return money(V(r).ar_0_30); } },
+      { key: "ar_31_60", label: "31–60", numeric: true,
+        sortValue: function (r) { return V(r).ar_31_60; },
+        render: function (r) { return money(V(r).ar_31_60); } },
+      { key: "ar_61_90", label: "61–90", numeric: true,
+        sortValue: function (r) { return V(r).ar_61_90; },
+        render: function (r) { return money(V(r).ar_61_90); } },
+      { key: "ar_90_plus", label: "90+", numeric: true,
+        sortValue: function (r) { return V(r).ar_90_plus; },
+        render: function (r) { return money(V(r).ar_90_plus); } },
+      { key: "ar_past_due_30plus", label: "Past due 30+", numeric: true,
+        title: "Everything outside 0–30: money that is genuinely late",
+        sortValue: function (r) { return V(r).ar_past_due_30plus; },
+        render: function (r) {
+          var v = V(r).ar_past_due_30plus;
+          return h("span", { className: v > 40000 ? "down" : "" }, money(v)); } },
+      { key: "ar_total", label: "Total AR", numeric: true,
+        sortValue: function (r) { return V(r).ar_total; },
+        render: function (r) { return money(V(r).ar_total); } },
+      { key: "ar_accounts", label: "Accounts", numeric: true,
+        sortValue: function (r) { return V(r).ar_accounts; },
+        render: function (r) { return count(V(r).ar_accounts); } }
     ];
-    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (c[k] || 0); }, 0); };
+    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (V(c)[k] || 0); }, 0); };
     var charged = sum("charged"), paid = sum("paid");
 
     return h("div", null,
       h(Panel, {
         title: "Aging detail",
-        note: "Closed " + monthLabel(d.period.headline) + " · the open month is excluded because rent bills on the 1st",
+        note: live
+          ? ("Live through " + monthLabel(d.period.live) + " day " + d.period.live_day +
+             " · rent billed on the 1st is late after the " + d.period.grace_day + "th")
+          : ("Closed " + monthLabel(d.period.closed) + " · a full month billed and collected"),
         flush: true
       }, h(SortableTable, {
-        cols: cols, rows: filtered, initialSort: { key: "ar_90_plus", dir: -1 },
+        cols: cols, rows: filtered, initialSort: { key: "ar_past_due_30plus", dir: -1 },
         footer: [
           "Portfolio",
-          money(charged), money(paid),
+          money(charged), money(paid), money(sum("outstanding")),
           charged ? pct(paid / charged * 100) : "—",
           money(sum("ar_0_30")), money(sum("ar_31_60")),
           money(sum("ar_61_90")), money(sum("ar_90_plus")),
+          money(sum("ar_past_due_30plus")),
           money(sum("ar_total")), count(sum("ar_accounts"))
         ]
       })));
   }
-
-  function VacancyTab(d, filtered) {
+  function VacancyTab(d, filtered, mode) {
     // Roll every community's unit-type composition into one portfolio view, so
     // "vacant" separates into lots you could lease today and lots that do not
     // functionally exist yet.
@@ -696,7 +841,7 @@
       h("div", { className: "grid-3" },
         Object.keys(BUCKET_LABEL).map(function (b) {
           return h(Panel, { key: b, title: BUCKET_LABEL[b], note: "Vacant lots in this standing" },
-            h("div", { className: "kvalue", style: { fontSize: "30px", fontWeight: 800, color: BUCKET_COLOR[b] } },
+            h("div", { className: "bignum", style: { color: BUCKET_COLOR[b] } },
               count(totals[b] || 0)));
         })),
       h(Panel, {
@@ -706,33 +851,38 @@
       }, h(SortableTable, { cols: cols, rows: rows, initialSort: { key: "vacant", dir: -1 } })));
   }
 
-  function FinancialsTab(d, filtered) {
+  function FinancialsTab(d, filtered, mode) {
     var th = d.thresholds;
+    // Always the closed month. The general ledger does not post intra-month, so
+    // an open-month revenue or NOI figure would read as a collapse to zero.
+    var V = function (c) { return c.closed; };
     var cols = [
       { key: "name", label: "Community" },
-      { key: "revenue", label: "Revenue", numeric: true, render: function (r) { return money(r.revenue); } },
-      { key: "revenue_budget", label: "Rev budget", numeric: true, render: function (r) { return r.revenue_budget ? money(r.revenue_budget) : "—"; } },
+      { key: "revenue", label: "Revenue", numeric: true, render: function (r) { return money(V(r).revenue); } },
+      { key: "revenue_budget", label: "Rev budget", numeric: true, render: function (r) { return V(r).revenue_budget ? money(V(r).revenue_budget) : "—"; } },
       { key: "rev_var", label: "Rev var", numeric: true,
-        sortValue: function (r) { return r.revenue_budget ? r.revenue - r.revenue_budget : 0; },
+        sortValue: function (r) { return V(r).revenue_budget ? V(r).revenue - V(r).revenue_budget : 0; },
         render: function (r) {
-          if (!r.revenue_budget) return "—";
-          var v = r.revenue - r.revenue_budget;
+          if (!V(r).revenue_budget) return "—";
+          var v = V(r).revenue - V(r).revenue_budget;
           return h("span", { className: v >= 0 ? "up" : "down" }, (v >= 0 ? "+" : "−") + money(Math.abs(v))); } },
-      { key: "opex", label: "OpEx", numeric: true, render: function (r) { return money(r.opex); } },
-      { key: "noi", label: "NOI", numeric: true, render: function (r) { return money(r.noi); } },
-      { key: "noi_budget", label: "NOI budget", numeric: true, render: function (r) { return r.noi_budget ? money(r.noi_budget) : "—"; } },
+      { key: "opex", label: "OpEx", numeric: true, render: function (r) { return money(V(r).opex); } },
+      { key: "noi", label: "NOI", numeric: true, render: function (r) { return money(V(r).noi); } },
+      { key: "noi_budget", label: "NOI budget", numeric: true, render: function (r) { return V(r).noi_budget ? money(V(r).noi_budget) : "—"; } },
       { key: "noi_var", label: "NOI var", numeric: true,
-        sortValue: function (r) { return r.noi_budget ? r.noi - r.noi_budget : 0; },
+        sortValue: function (r) { return V(r).noi_budget ? V(r).noi - V(r).noi_budget : 0; },
         render: function (r) {
-          if (!r.noi_budget) return "—";
-          var v = r.noi - r.noi_budget;
+          if (!V(r).noi_budget) return "—";
+          var v = V(r).noi - V(r).noi_budget;
           return h("span", { className: v >= 0 ? "up" : "down" }, (v >= 0 ? "+" : "−") + money(Math.abs(v))); } },
-      { key: "noi_margin", label: "Margin", numeric: true, render: function (r) {
-          return r.revenue >= 5000
-            ? h(Chip, { band: band(r.noi_margin, th.noi_margin) }, pct(r.noi_margin, 0)) : "—"; } },
-      { key: "ytd_noi", label: "YTD NOI", numeric: true, render: function (r) { return money(r.ytd_noi); } }
+      { key: "noi_margin", label: "Margin", numeric: true,
+        sortValue: function (r) { return V(r).noi_margin; },
+        render: function (r) {
+          return V(r).revenue >= 5000
+            ? h(Chip, { band: band(V(r).noi_margin, th.noi_margin) }, pct(V(r).noi_margin, 0)) : "—"; } },
+      { key: "ytd_noi", label: "YTD NOI", numeric: true, render: function (r) { return money(V(r).ytd_noi); } }
     ];
-    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (c[k] || 0); }, 0); };
+    var sum = function (k) { return filtered.reduce(function (s, c) { return s + (c.closed[k] || 0); }, 0); };
     var rev = sum("revenue"), noi = sum("noi");
     var revB = sum("revenue_budget"), noiB = sum("noi_budget");
 
@@ -769,7 +919,7 @@
 
       h(Panel, {
         title: "Per-community P&L",
-        note: "Closed " + monthLabel(d.period.headline) + " · YTD through the same month",
+        note: "Closed " + monthLabel(d.period.closed) + " · YTD through the same month · the ledger does not post intra-month",
         flush: true
       }, h(SortableTable, {
         cols: cols, rows: filtered, initialSort: { key: "noi", dir: -1 },
@@ -819,7 +969,7 @@
   // -------------------------------------------------------------------- app ---
 
   var TABS = [
-    { id: "overview", label: "Overview", render: function (d) { return OverviewTab(d); } },
+    { id: "overview", label: "Overview", render: OverviewTab },
     { id: "communities", label: "Communities", render: CommunitiesTab },
     { id: "occupancy", label: "Occupancy", render: OccupancyTab },
     { id: "collections", label: "Collections & AR", render: CollectionsTab },
@@ -831,23 +981,32 @@
     var d = props.data;
     var ts = useState("overview");
     var tab = ts[0], setTab = ts[1];
+    // Default to Live: past the grace day the open month is the actionable
+    // view, and it is what someone opening this mid-month wants to see.
+    var ms = useState(d.period.live_day >= d.period.grace_day ? "live" : "closed");
+    var mode = ms[0], setMode = ms[1];
     var fs = useState({ kind: "all", search: "", size: "all" });
     var filters = fs[0], setFilters = fs[1];
 
     var filtered = useMemo(function () {
       return d.communities.filter(function (c) {
         if (filters.kind !== "all" && c.kind !== filters.kind) return false;
-        if (filters.size === "large" && c.units < 100) return false;
-        if (filters.size === "small" && c.units >= 100) return false;
+        var u = pv(c, mode).units || 0;
+        if (filters.size === "large" && u < 100) return false;
+        if (filters.size === "small" && u >= 100) return false;
         if (filters.search) {
           var q = filters.search.toLowerCase();
-          if (c.name.toLowerCase().indexOf(q) === -1 && String(c.park).toLowerCase().indexOf(q) === -1) return false;
+          if (c.name.toLowerCase().indexOf(q) === -1 &&
+              String(c.park).toLowerCase().indexOf(q) === -1 &&
+              String(c.short_name).toLowerCase().indexOf(q) === -1) return false;
         }
         return true;
       });
-    }, [d.communities, filters.kind, filters.search, filters.size]);
+    }, [d.communities, filters.kind, filters.search, filters.size, mode]);
 
-    var p = d.portfolio, th = d.thresholds;
+    var p = d.portfolio[mode], th = d.thresholds;
+    var closedP = d.portfolio.closed;
+    var live = mode === "live";
     var active = TABS.filter(function (t) { return t.id === tab; })[0];
     var showFilters = tab !== "overview";
 
@@ -863,16 +1022,11 @@
           window.__PK_LOGO__ ? h("div", { className: "rule" }) : null,
           h("div", null,
             h("h1", null, "Property Operations"),
-            h("div", { className: "sub" }, p.communities + " communities · " + count(p.total_units) + " lots · FL, GA, SC"))),
-        h("div", { className: "periods" },
-          h("div", { className: "period" },
-            h("div", { className: "plabel" }, "Reporting month"),
-            h("div", { className: "pvalue" }, monthLabel(d.period.headline)),
-            h("div", { className: "pnote" }, "closed · every figure below")),
-          h("div", { className: "period live" },
-            h("div", { className: "plabel" }, "Open month"),
-            h("div", { className: "pvalue" }, monthLabel(d.period.live_partial)),
-            h("div", { className: "pnote" }, "partial · see data notes")))),
+            h("div", { className: "sub" },
+              p.communities + " reportable communities · " + count(p.total_units) +
+              " lots · " + monthLabel(d.period[live ? "live" : "closed"]) +
+              (live ? " through day " + d.period.live_day : " closed")))),
+        h(PeriodToggle, { data: d, mode: mode, onChange: setMode })),
 
       h(Exceptions, { flags: d.flags }),
 
@@ -882,41 +1036,63 @@
           value: pct(p.occupancy),
           color: bandColor(band(p.occupancy, th.occupancy)),
           sub: count(p.total_occupied) + " of " + count(p.total_units) + " lots"
-        }, h(Delta, { curr: p.occupancy, prev: p.occupancy_prev, unit: "pt" })),
+        }, h(Delta, { curr: p.occupancy, prev: p.occupancy_prev, unit: "pt",
+                      suffix: live ? "vs " + monthLabel(d.period.closed) : "vs prior month" })),
+
+        live
+          ? h(Kpi, {
+              label: "Billed, still out",
+              value: money(p.outstanding, { compact: true }),
+              color: YELLOW,
+              sub: money(p.paid, { compact: true }) + " of " + money(p.charged, { compact: true }) +
+                   " collected · day " + d.period.live_day + " of " + d.period.days_in_live
+            }, h("div", { className: "kdelta flat" },
+                h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
+                  pct(p.collection_pct) + " month to date")))
+          : h(Kpi, {
+              label: "Collections",
+              value: pct(p.collection_pct),
+              color: bandColor(band(p.collection_pct, th.collections)),
+              sub: money(p.paid, { compact: true }) + " of " + money(p.charged, { compact: true })
+            }, h("div", { className: "kdelta flat" },
+                h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
+                  pct(p.collection_ttm) + " trailing 12-month"))),
+
         h(Kpi, {
-          label: "Collections",
-          value: pct(p.collection_pct),
-          color: bandColor(band(p.collection_pct, th.collections)),
-          sub: money(p.paid, { compact: true }) + " of " + money(p.charged, { compact: true })
-        }, h("div", { className: "kdelta flat" },
-          h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
-            pct(p.collection_ttm) + " trailing 12-month"))),
-        h(Kpi, {
-          label: "Total receivables",
-          value: money(p.ar_total, { compact: true }),
-          sub: count(p.ar_accounts) + " accounts · " + money(p.ar_total / (p.total_units || 1)) + " per lot"
-        }, h(Delta, { curr: p.ar_total, prev: p.ar_prev, money: true, invert: true })),
+          label: "Past due 30+",
+          value: money(p.ar_past_due_30plus, { compact: true }),
+          color: RED,
+          sub: "everything outside the 0–30 bucket"
+        }, h(Delta, { curr: p.ar_past_due_30plus, prev: closedP.ar_past_due_30plus, money: true,
+                      invert: true,
+                      suffix: live ? "vs " + monthLabel(d.period.closed) + " close" : "vs prior month",
+                      fallback: " " })),
+
         h(Kpi, {
           label: "90+ days",
           value: money(p.ar_90_plus, { compact: true }),
           color: bandColor(band(p.ar_over90_share, th.over90_share, true)),
-          sub: pct(p.ar_over90_share, 0) + " of all receivables"
+          sub: pct(p.ar_over90_share, 0) + " of " + money(p.ar_total, { compact: true }) + " total AR"
         }),
+
         h(Kpi, {
           label: "NOI",
-          value: money(p.noi, { compact: true }),
-          color: p.noi_budget && p.noi < p.noi_budget ? RED : GREEN,
-          sub: p.noi_budget
-            ? (p.noi >= p.noi_budget ? "ahead of " : "behind ") + money(p.noi_budget, { compact: true }) + " budget"
+          value: money(closedP.noi, { compact: true }),
+          color: closedP.noi_budget && closedP.noi < closedP.noi_budget ? RED : GREEN,
+          sub: closedP.noi_budget
+            ? (closedP.noi >= closedP.noi_budget ? "ahead of " : "behind ") +
+              money(closedP.noi_budget, { compact: true }) + " budget"
             : "no budget loaded"
-        }, h("div", { className: "kdelta " + (p.noi >= (p.noi_budget || 0) ? "up" : "down") },
-          h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
-            pct(p.noi_margin, 0) + " margin on " + money(p.revenue, { compact: true })))),
+        }, h("div", { className: "kdelta flat" },
+            h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
+              pct(closedP.noi_margin, 0) + " margin · closed " + monthLabel(d.period.closed)))),
+
         h(Kpi, {
           label: "Vacant, not leasable",
           value: count(p.not_rentable_units + p.impaired_units),
           color: YELLOW,
-          sub: count(p.impaired_units) + " need rehab · " + count(p.not_rentable_units) + " demo or unusable"
+          sub: count(p.impaired_units) + " need rehab · " + count(p.not_rentable_units) +
+               " demo or unusable"
         })),
 
       h("div", { className: "tabs", role: "tablist" }, TABS.map(function (t) {
@@ -931,7 +1107,7 @@
         h("div", { className: "field" },
           h("label", { htmlFor: "f-search" }, "Find"),
           h("input", {
-            id: "f-search", type: "search", placeholder: "Community or park",
+            id: "f-search", type: "search", placeholder: "Community, park or code",
             value: filters.search,
             onChange: function (e) {
               var v = e.target.value;
@@ -969,7 +1145,7 @@
             : "Showing " + filtered.length + " of " + d.communities.length)) : null,
 
       h("div", { role: "tabpanel", "aria-labelledby": "tab-" + tab },
-        active.render(d, filtered)),
+        active.render(d, filtered, mode)),
 
       h("footer", { className: "foot" },
         h("div", null, "Source: ", d.source, " · built ",

@@ -1,43 +1,45 @@
 {
- "generated_at": "2026-09-04T13:51:56+00:00",
- "current_month": "2026-09",
+ "generated_at": "2026-09-04T14:19:13+00:00",
+ "reportable_source": "pds_reportable.json",
  "counts": {
   "names_seen": 152,
-  "communities": 81,
-  "dropped": 49,
-  "rolled_up": 11,
-  "aliased": 10
+  "reportable_in_pds": 68,
+  "communities": 66,
+  "dropped": 80,
+  "rolled_up": 6,
+  "reportable_without_data": 0
  },
+ "reportable_without_warehouse_data": [],
  "names": {
   "A2Z Community Partners": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "A2Z Fund I LPs": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "A2Z Fund I, LLC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "A2Z ND Portfolio Partners": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "A2Z Prop Mgmt": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Management company"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "A2Z Wolf Bay Partners": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "American": {
    "disposition": "keep",
@@ -45,9 +47,9 @@
    "reason": ""
   },
   "Apple Creek": {
-   "disposition": "keep",
-   "canonical": "Apple Creek",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Applegate MHC": {
    "disposition": "keep",
@@ -67,22 +69,22 @@
   "BEDROCK I GROUP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "BEDROCK MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Placeholder ledger, 1 unit"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "BEDROCK MHC FUND II GP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund GP"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "BEDROCK MHC Fund II LP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund LP"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Bay Oaks Village I": {
    "disposition": "keep",
@@ -117,7 +119,7 @@
   "Cambridge MHP Investment": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Investment entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Carley's Mobile Home Park": {
    "disposition": "keep",
@@ -125,19 +127,19 @@
    "reason": ""
   },
   "Cedar Grove Homes": {
-   "disposition": "roll_up",
-   "canonical": "Cedar Grove Manufactured Housing Community",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Cedar Grove MHC": {
-   "disposition": "alias",
-   "canonical": "Cedar Grove Manufactured Housing Community",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Cedar Grove Manufactured Housing Community": {
-   "disposition": "keep",
-   "canonical": "Cedar Grove Manufactured Housing Community",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Central Mobile Home Park": {
    "disposition": "keep",
@@ -145,29 +147,29 @@
    "reason": ""
   },
   "Colonial Homes": {
-   "disposition": "roll_up",
-   "canonical": "Colonial Manufactured Housing Community",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Colonial MHC": {
-   "disposition": "alias",
-   "canonical": "Colonial Manufactured Housing Community",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Colonial Manufactured Housing Community": {
-   "disposition": "keep",
-   "canonical": "Colonial Manufactured Housing Community",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Congress Mobile Home Park": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Sold: Sold July 2026"
+   "reason": "Sold: Recorded as sold July 2026 (standing rule from 2026-07-27)"
   },
   "Countryside MHC": {
-   "disposition": "keep",
-   "canonical": "Countryside MHC",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Crystal Acres": {
    "disposition": "keep",
@@ -192,7 +194,7 @@
   "Geiger Key Fish Camp Opco": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Operating company, not lots"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Geiger Key RV Resort": {
    "disposition": "keep",
@@ -202,12 +204,12 @@
   "Geiger Key Resort Propco": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Property company, not lots"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Geiger RV": {
-   "disposition": "keep",
-   "canonical": "Geiger RV",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Great Oak RV Resort": {
    "disposition": "keep",
@@ -222,17 +224,17 @@
   "Grove Banyan": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Grove Banyan Holdings": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Grove Banyan Holdings - B": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Gulf Breeze MHC": {
    "disposition": "keep",
@@ -240,9 +242,9 @@
    "reason": ""
   },
   "Gulf Breeze MHP": {
-   "disposition": "alias",
-   "canonical": "Gulf Breeze MHC",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Harbour Mobile Home Park": {
    "disposition": "keep",
@@ -260,14 +262,14 @@
    "reason": ""
   },
   "Highlands": {
-   "disposition": "keep",
-   "canonical": "Highlands",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Hunter Springs MHC": {
-   "disposition": "alias",
-   "canonical": "Hunter Springs MHP",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Hunter Springs MHP": {
    "disposition": "keep",
@@ -287,7 +289,7 @@
   "Lake Toho": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Lake Wales MHC": {
    "disposition": "keep",
@@ -305,14 +307,14 @@
    "reason": ""
   },
   "Lambeth MHC": {
-   "disposition": "alias",
-   "canonical": "Lambeth Manufactured Housing Community",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Lambeth Manufactured Housing Community": {
-   "disposition": "keep",
-   "canonical": "Lambeth Manufactured Housing Community",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Lucky Clover": {
    "disposition": "keep",
@@ -320,9 +322,9 @@
    "reason": ""
   },
   "Lucky Clover RV": {
-   "disposition": "keep",
-   "canonical": "Lucky Clover RV",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Mayflower Hills": {
    "disposition": "keep",
@@ -342,17 +344,17 @@
   "Medallion": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Mobile Manor": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Mobile Manor Homes": {
-   "disposition": "roll_up",
-   "canonical": "Mobile Manor",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Monson": {
    "disposition": "keep",
@@ -362,7 +364,7 @@
   "ND Communities": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Portfolio entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Nalls Court MHC": {
    "disposition": "keep",
@@ -377,12 +379,12 @@
   "Northgate MHP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Parent ledger; lots live on Northgate MH / Northgate RV"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Northgate RV": {
-   "disposition": "keep",
-   "canonical": "Northgate RV",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Northgate Utility": {
    "disposition": "roll_up",
@@ -420,9 +422,9 @@
    "reason": ""
   },
   "Paradise Lakes RV": {
-   "disposition": "keep",
-   "canonical": "Paradise Lakes RV",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Paradise Palms": {
    "disposition": "keep",
@@ -432,67 +434,67 @@
   "Parakeet Communities": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Corporate entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Founders Group": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Corporate entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Home Sales": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Home sales entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Home Sales SC, LLC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Home sales entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Homes": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Home sales entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet MHC Hold Co I": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Holding company"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet MHC Hold Co II": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Holding company"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet MHC Senior": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Debt entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Origins I GP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund GP"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parakeet Origins Portfolio I": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Fund"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parktown MHC": {
-   "disposition": "keep",
-   "canonical": "Parktown MHC",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parkwood MHC": {
-   "disposition": "alias",
-   "canonical": "Parkwood Mobile Home Park",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parkwood Manufactured Housing Community": {
-   "disposition": "alias",
-   "canonical": "Parkwood Mobile Home Park",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Parkwood Mobile Home Park": {
    "disposition": "keep",
@@ -552,17 +554,17 @@
   "Shell Pointe MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Sold: Sold July 2026"
+   "reason": "Sold: Recorded as sold July 2026 (standing rule from 2026-07-27)"
   },
   "Shirleys Trailer Park I": {
-   "disposition": "keep",
-   "canonical": "Shirleys Trailer Park I",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Shirleys Trailer Park II": {
-   "disposition": "keep",
-   "canonical": "Shirleys Trailer Park II",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Silver Breeze": {
    "disposition": "keep",
@@ -587,7 +589,7 @@
   "Tarheel MHC Investment": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "Investment entity"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Terrace Crossings": {
    "disposition": "keep",
@@ -610,9 +612,9 @@
    "reason": ""
   },
   "Trailerama MHP": {
-   "disposition": "keep",
-   "canonical": "Trailerama MHP",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Triple S Marina": {
    "disposition": "keep",
@@ -620,29 +622,29 @@
    "reason": ""
   },
   "Valley View Homes": {
-   "disposition": "roll_up",
-   "canonical": "Valley View MHC",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Valley View MHC": {
-   "disposition": "keep",
-   "canonical": "Valley View MHC",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Vandemere Homes": {
-   "disposition": "roll_up",
-   "canonical": "Vandemere Manufactured Housing Community",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Vandemere MHC": {
-   "disposition": "alias",
-   "canonical": "Vandemere Manufactured Housing Community",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Vandemere Manufactured Housing Community": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Vantage Oaks": {
    "disposition": "keep",
@@ -660,9 +662,9 @@
    "reason": ""
   },
   "Westwood MHP": {
-   "disposition": "alias",
-   "canonical": "Westwood MHC",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Whispering Pines MA": {
    "disposition": "keep",
@@ -675,9 +677,9 @@
    "reason": ""
   },
   "Whispering Pines RV FL": {
-   "disposition": "keep",
-   "canonical": "Whispering Pines RV FL",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Windward Knoll": {
    "disposition": "keep",
@@ -695,79 +697,79 @@
    "reason": ""
   },
   "Wolf Bay Manufactured Housing Community": {
-   "disposition": "alias",
-   "canonical": "Wolf Bay MHC",
-   "reason": "Duplicate ledger for the same asset"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "XRiver Oaks": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xBay Oaks Village I": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xBay Oaks Village II": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xGulf Breeze MHP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xLake Saunders RV": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xLake Wales MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xOceanaire MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xOrmond Beach Oasis": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xPalm Spring Estates": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xParkwood MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xParkwood Manufactured Housing Community": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xTown & Country MHC": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xWestwood MHP": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "xWolf Bay Manufactured Housing Community": {
    "disposition": "drop",
    "canonical": null,
-   "reason": "RM retired-record convention: renamed or superseded ledger"
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   }
  }
 }

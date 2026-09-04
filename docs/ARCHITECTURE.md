@@ -68,7 +68,8 @@ warehouse stops rather than republishing a stale payload to the live URL.
 ## Running it by hand
 
 ```bash
-# 1. refresh pipeline/raw/*.json  (needs the warehouse connector; see queries.json)
+# 1. refresh pipeline/raw/*.json  (warehouse connector + the PDS roster from
+#    SharePoint; both are specified in pipeline/queries.json)
 # 2. build the payload
 python3 pipeline/build.py
 
@@ -84,73 +85,127 @@ Read those before shipping a refresh.
 
 ## The two-period model
 
-This is the single most important thing to understand about the numbers.
+Every period-sensitive figure is built twice, and the dashboard has a toggle in
+the masthead to switch between them. Both are real; neither is hidden.
 
-The warehouse reloads a full snapshot each month, so the **open month is
-partial**. Rent bills on the 1st and collects through the month, which means an
-open-month snapshot taken on the 4th shows:
-
-- AR roughly **80% higher** than reality (everything just billed, nothing paid)
-- open accounts jumping from ~900 to ~2,250
-- a collection rate around **45%** instead of ~99%
-
-So every headline figure, table and chart uses the **last closed month**. The
-open month appears in the masthead and in the data notes, and nowhere else.
-Ignoring this distinction is the easiest way to produce a badly wrong number
-from this warehouse.
-
-## The property registry
-
-`pipeline/registry.json` decides what each `propertyName` in the warehouse
-actually is. Rent Manager carries several parallel record types under that one
-field, and about half the names are not communities:
-
-| Kind | Example | Treatment |
+| | **Closed** | **Live** |
 |---|---|---|
-| Live community | `Riverwalk` | `keep` — its own row |
-| Retired record | `xGulf Breeze MHP` | dropped by the `^x[A-Z]` rule |
-| Duplicate ledger | `Colonial MHC` beside `Colonial Manufactured Housing Community` | `alias` — money merges, **lots do not** |
-| Utility sub-ledger | `Northgate Utility` | `roll_up` — money to parent, no lots |
-| Home-sales ledger | `Cedar Grove Homes` | `roll_up` — money to parent, no lots |
-| Fund / holdco / GP | `Parakeet MHC Hold Co I`, `A2Z Fund I, LLC` | dropped, not a community |
-| Sold | `Congress Mobile Home Park` | dropped, per the standing July 2026 rule |
-| Stale | no snapshot in 4+ periods | dropped, and flagged for confirmation |
+| Period | Last completed month | Current month through today |
+| Use it for | Comparing like with like, trends, board numbers | What is actually owed right now |
+| Occupancy | 80.0% (Aug) | 79.8% (Sep 4) |
+| Receivables | $928K | $2.09M |
+| Past due 30+ | $711K | $800K |
+| Collections | 99.2% for the full month | 44.5% month to date |
+
+The warehouse reloads a full snapshot each month, so the open month is partial.
+Rent bills on the 1st, which means an open-month snapshot carries a full month of
+fresh charges against only a few days of collection. That makes the live
+collection *rate* structurally low and not comparable to a closed month, but it
+does **not** make live receivables wrong: past the grace day (`grace_day` in
+registry.json, currently the 5th) that money is late, and the live view is the
+actionable one. It is what the collections team should be working from.
+
+Consequences that are wired in rather than left to the reader:
+
+- The toggle **defaults to Live once the month is past the grace day**, and to
+  Closed before it. Opening the page on the 12th shows what is late.
+- **Charts always show the full history including the open month**, drawn as a
+  dashed hop to a hollow marker (`○` on the axis). The y-scale comes from closed
+  months only, because a live receivables reading roughly doubles the axis and
+  would flatten twenty months of history. A live bar that exceeds the scale is
+  capped with a break mark and labelled with its true total.
+- **`Past due 30+` is a headline tile in both modes.** Everything outside the
+  0–30 bucket, which is the number that survives the month-start distortion.
+- **Financials always read the closed month**, in both modes. The general ledger
+  does not post intra-month, so a live NOI would read as a collapse to zero. The
+  tab and the NOI tile both say so.
+- Live collection rates are **not colour-banded** against the full-month
+  threshold. A 44% month-to-date rate on day 4 is not a red flag.
+
+## The reportable gate
+
+**A community appears only if the Property Data Sheet marks it Reportable = Yes.**
+That single field, maintained by Austin, is the roster.
+
+It lives in the `vwr VW_PDS_V2` sheet of the Property Data Sheet on SharePoint,
+exported to `pipeline/raw/pds_reportable.json`. It is **not** in the warehouse:
+the RentViewer MCP connector exposes five models and `VW_PDS_V2` is not among
+them. If RentViewer enables it for AI analysis, the SharePoint read goes away and
+it becomes a seventh query.
+
+The gate matters because the warehouse's `propertyName` mixes about 150 values,
+and roughly half are not communities: funds, holdcos, GPs, LP entities, utility
+sub-ledgers, home-sales ledgers, `x`-prefixed retired records, and dead
+duplicates of live parks. An earlier build inferred all of that from name
+patterns and occupancy heuristics and got 81 communities. The Reportable flag
+gives 68, joins to the warehouse on Property Name with zero fuzzy matching, and
+resolves both data-quality problems the heuristic build had raised: the five
+records reporting exactly 0% occupancy on 457 lots and the communities holding
+100% of their receivables in the 90+ bucket all sit outside the reportable set.
+
+The gate moved the portfolio numbers materially:
+
+| | Inferred roster | Reportable = Yes |
+|---|---|---|
+| Communities | 81 | 66 |
+| Lots | 7,812 | 6,516 |
+| Occupancy | 75.2% | 80.0% |
+| Receivables | $1.48M | $928K |
+
+Reportable = Yes is a *necessary* condition, not the only rule. Two things still
+sit on top of it:
+
+- **`sold`** in registry.json excludes a disposition the PDS has not caught up
+  with. The build raises a warning flag for any entry there that still reads
+  Reportable = Yes, so the disagreement is never silent.
+- **`roll_up`** attributes a non-reportable sub-ledger's money to its reportable
+  parent. Northgate Utility bills against Northgate MH's lots, so its receivables
+  belong to Northgate MH while its unit count does not.
 
 **Money and lots do not merge the same way.** This caused a real bug worth
-remembering: merging an alias's unit count as well as its money gave Colonial
-230 lots instead of 115 and reported its occupancy as 45% instead of 90%. A
-duplicate ledger describes lots that are already counted once, so only a `keep`
-record contributes lots. `target()` routes money; `target_units()` routes lots.
+remembering: merging a duplicate ledger's unit count as well as its money gave
+Colonial 230 lots instead of 115 and reported 45% occupancy against an actual
+90%. A sub-ledger or duplicate describes lots already counted once, so only a
+`keep` record contributes lots. `target()` routes money; `target_units()` routes
+lots.
 
-Every name the pipeline sees lands in `data/registry_audit.json` with its
-disposition and the reason, so a new or reclassified property shows up there
-instead of quietly changing a total.
+Every name the warehouse returns lands in `data/registry_audit.json` with its
+disposition and reason, so anything newly reportable, newly missing, or newly
+unclassified shows up there instead of quietly changing a total.
 
 ### When Austin sells a property
 
-Add it to `sold` in `registry.json` with every name variant the warehouse uses
-(full RM name, community name, short code), then rebuild. Do not edit `build.py`.
+Flip Reportable to No in the Property Data Sheet and fill the Sale Date. That is
+the whole change. Add it to `sold` in registry.json only if it has to come out
+before the PDS is updated.
 
-Historical AR snapshots are **not** scrubbed when a property is sold — that is
+Historical receivables snapshots are **not** scrubbed when a property is sold —
 Austin's standing instruction from 2026-07-27. History stays as recorded; new
-snapshots simply exclude the sold community.
+snapshots simply exclude it.
 
 ## Data-quality flags
 
-`build.py` raises flags rather than papering over problems, and the UI shows
-them above the numbers they qualify. Current standing ones:
+`build.py` raises flags rather than papering over problems, and the UI shows them
+above the numbers they qualify. On the reportable roster the standing ones are:
 
-- **90+ receivables have nearly doubled** in eight months ($625K → $1.18M) while
-  monthly collections still read ~99%. Collections is a flow and AR is a stock;
-  1–3% monthly leakage on $4.2M compounds. This is the real story in the data.
-- **Three communities hold 100% of their AR in the 90+ bucket** with nothing
-  current — a signature of a migrated or frozen ledger, not live delinquency.
-- **Five records report exactly 0% occupancy on 457 lots.** They stay in the
-  portfolio denominator (the conservative reading) and are held out of the
-  "lowest occupancy" ranking so they don't crowd out real leasing problems.
-  Confirm each in Rent Manager, then either fix the ledger or classify it.
-- **Nine communities post revenue with no budget loaded**, so their variance is
+- **The 90+ bucket is up 148% in seven months**, $254K in January to $630K in
+  August, while the monthly collection rate still reads 99.2%. This is the real
+  story in the data, and the reportable gate made it *clearer*, not smaller: the
+  heuristic roster's frozen ledgers were masking the trend. Current billing
+  collects fine; a growing pile ages through and never gets collected. Total
+  receivables are up 62% year over year on the same roster.
+- **Congress and Shell Pointe are excluded as sold but still read Reportable =
+  Yes** with no Sale Date. Two rules disagree and the build says so rather than
+  picking silently.
+- **One community's lot count disagrees with the PDS.** The PDS is authoritative,
+  so a gap means the Rent Manager unit list is out of step and that community's
+  occupancy sits on the wrong denominator.
+- **September financials are not posted**, so the Financials tab and NOI tile
+  stay on the closed month.
+- **Six communities post revenue with no budget loaded**, so their variance is
   blank.
+- **Receivables rolled in from sub-ledgers** are reported as a total with the
+  ledgers named, so the attribution is visible.
 
 ## Occupancy, reported two ways
 
@@ -170,7 +225,8 @@ can fill this week and one that needs a demo permit.
 | Path | What it is |
 |---|---|
 | `pipeline/queries.json` | The six warehouse queries, with row-limit warnings |
-| `pipeline/registry.json` | Property classification, exclusions, thresholds |
+| `pipeline/raw/pds_reportable.json` | The Reportable = Yes roster — the gate |
+| `pipeline/registry.json` | Sold overrides, roll-ups, segments, unit types, thresholds |
 | `pipeline/build.py` | Raw pulls → `data/dashboard.json` |
 | `pipeline/publish.py` | Payload + UI → one standalone HTML |
 | `pipeline/raw/` | Committed raw query results |

@@ -70,7 +70,7 @@ def main():
                .replace(" ", "\\u2028")
                .replace(" ", "\\u2029"))
 
-    period = payload["period"]["headline"]
+    period = "%s closed, %s live" % (payload["period"]["closed"], payload["period"]["live"])
     title = "Property Operations"
 
     html = """<title>{title}</title>
