@@ -187,5 +187,40 @@
       "property_type"
     ],
     "expect_rows_min": 50
+  },
+  "eviction_tracker": {
+    "out": "eviction_tracker.json",
+    "_comment": [
+      "The eviction tracker, and the only source that can say which receivables are",
+      "already in eviction. Without it the 90+ bucket is one undifferentiated number.",
+      "",
+      "It is a scripted Rent Manager report, not an API report and not a warehouse",
+      "model, so it cannot be pulled with run_report. It lands on SharePoint daily.",
+      "",
+      "READ THE UNDATED FILE at `sharepoint_file`. A dated copy is archived into",
+      "`Historical Eviction Tracker/`, but that folder runs a day or two behind the",
+      "live one -- an earlier build looked only there, saw nothing past Aug 31, and",
+      "wrongly concluded the daily job had stopped.",
+      "",
+      "Pipe the connector's output straight into the staging script, which strips the",
+      "resident name and case number and normalises the dates:",
+      "",
+      "    python3 pipeline/stage_eviction.py <downloaded-or-mcp-output>",
+      "",
+      "Never write this file by hand and never stage it without that script. It is the",
+      "only raw source that arrives with resident names attached, and the standalone",
+      "build gets emailed around.",
+      "",
+      "The build survives without it: the in-eviction bucket simply empties and every",
+      "balance falls through to needs-action. So check the as-of date in the output --",
+      "build.py raises a flag once it is more than two days old."
+    ],
+    "sharepoint_file": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Rent Manager/Eviction Tracker.csv",
+    "stage_with": "pipeline/stage_eviction.py",
+    "join_on": "ShortName plus Name (the unit), against EntitiesShortName plus SubEntitiesName on the AR detail",
+    "dropped_columns": [
+      "FullName",
+      "CaseNumber"
+    ]
   }
 }

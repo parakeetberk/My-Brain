@@ -48,14 +48,21 @@ everything downstream stays as is.
 
 A Claude Routine, `Ops dashboard refresh (weekday 7am ET)`
 (`trig_01CAF7XT9fnnH67xFe2JBS1D`), fires weekdays at 11:00 UTC / 7am ET, ahead
-of Austin's 9am meeting floor. It re-runs the six queries, rebuilds, republishes
-to the same artifact URL, and pushes to this branch.
+of Austin's 9am meeting floor. It re-runs the six queries, re-reads the PDS
+roster and the eviction tracker, rebuilds, republishes to the same artifact URL,
+and pushes to this branch.
 
 It is bound to the session that built the dashboard rather than spawning a fresh
 one, because the warehouse connector lives on that session. The trigger record
 itself stores no connector grant, so if a run ever reports the
 `mcp__RentViewer_Data_Warehouse__run_query` tool as missing, attach the
 RentViewer connector to the Routine in claude.ai Routines settings.
+
+The eviction tracker is the one source that genuinely changes daily, and it is
+the reason a weekday cadence earns its keep. If the export stops landing, the
+in-eviction bucket silently drains into needs-action, so `build.py` raises a
+flag once the tracker's as-of date is more than two days old rather than
+reporting a quietly wrong split.
 
 The warehouse is a monthly snapshot, so a weekday cadence is not about the
 closed-month figures changing daily. It keeps the open-month reading current,
@@ -94,8 +101,13 @@ directory both return 403. Reading mail and SharePoint works.
 ## Running it by hand
 
 ```bash
-# 1. refresh pipeline/raw/*.json  (warehouse connector + the PDS roster from
-#    SharePoint; both are specified in pipeline/queries.json)
+# 1. refresh pipeline/raw/*.json  (warehouse connector, the PDS roster and the
+#    eviction tracker from SharePoint; all specified in pipeline/queries.json)
+
+# 1b. the tracker is a CSV and must go through the staging script, which strips
+#     resident names and case numbers. Never hand-write pipeline/raw/eviction_tracker.json.
+python3 pipeline/stage_eviction.py <the-downloaded-csv>
+
 # 2. build the payload
 python3 pipeline/build.py
 
@@ -207,12 +219,14 @@ falls to "vacant lot" and is named in a flag.
 |---|---|---|
 | Vacancy aging | Yes, for 30% of vacant units | `MoveInMoveOut` (77) — days since last move-out |
 | Move-ins/outs and net occupancy by property | Yes | Warehouse moves, already held |
-| 90+ AR split by eviction / former / plan / action | Partly | Court fees and payment-plan charges only |
+| 90+ AR split by eviction / former / plan / action | Yes, three of four | Eviction Tracker `CurrentStage` |
 | Utility metered vs flat and by type | Yes | PDS utility columns |
-| Ready to Market / rehab visibility | Partly | `AssetListing` (244) asset status |
+| Ready to Market / rehab visibility | Yes, no punch stage | `AssetListing` (244) status + `udf_551` |
 
-Two of these are honestly incomplete, and the page says so rather than
-implying otherwise.
+Austin closed the two open ones on 2026-09-04: Ready to Market is a UDF on the
+Asset Listing, and the Eviction Tracker is a scripted report that also lands in
+SharePoint daily. Both are now wired in. What remains incomplete is narrower
+and named below.
 
 **Vacancy aging** is anchored on a unit's last move-out, because an asset's
 service start date is when it entered the fleet, not when it went empty. The
@@ -221,21 +235,51 @@ anchor and shows as Unknown — 1,269 of 1,820 named units. The 551 that do
 resolve tell a sharp story: 322 empty more than 90 days, 113 more than a year.
 Pulling move history further back closes the gap.
 
-**AR segmentation** is the weaker one. Rent Manager carries no eviction flag on
-the receivable itself, and the `Eviction Filed` asset status covers 2 assets
-portfolio-wide, so it cannot be the real population. What the ledger does expose
-is court fees posted (18 accounts) and payment-plan charges (4). Former-resident
-status resolves for only 40% of accounts because it comes from the same limited
-move history. The residual bucket is therefore labelled **"Not classified"**,
-not "Needs action" — calling it a work queue would be a claim the data does not
-support. The eviction tracker export is what turns this into a real split.
+**AR segmentation** now comes from the eviction tracker rather than from
+guessing at charge names, and the buckets are real:
 
-**Ready to Market** does not exist in Rent Manager. The asset status vocabulary
-runs Ordered, Delivered, Needs Rehab, For Sale, Rent to Own, Lease Option,
-Rental, In Use, Eviction Filed, To Be Demoed, TBD. That is a genuine pipeline
-view, but there is no separate Ready to Market or punch stage, so those need a
-new status or a user-defined field before they can be reported. The panel says
-this on the page.
+| Bucket | Accounts past due 30+ | Amount | How it is determined |
+|---|---|---|---|
+| In eviction | 50 | $169K | An open case on the unit in the tracker |
+| Former resident | 17 | $27K | Lease ended in the move history, or a closed case with money left |
+| On a payment plan | 0 | — | A payment plan charge type on the ledger |
+| Needs action | 176 | $258K | None of the above — somebody has to call |
+
+Note what the bar counts: accounts carrying something **30 days old**, not every
+account with a balance. Rent bills on the 1st, so on day four of a month all
+1,427 accounts with a balance would read as a portfolio in crisis. Only 243 are
+actually behind.
+
+Two caveats stay on the page. **Payment plans** are still detected by charge
+name, and one account portfolio-wide is almost certainly under the truth — most
+plans are agreed by email and never posted as a charge, so those read as needing
+action. **Former resident** needs a lease the move history shows ended, and that
+history only reaches back to January 2025; a closed eviction case recovers some,
+but an account that moved out earlier still reads as needing action.
+
+The tracker also surfaced something nobody was looking at: **15 cases have been
+open more than a year**, the oldest 1,156 days. Seven of them sit at Declaratory
+Judgement owing nothing, which reads like matters that resolved and were never
+closed out rather than three-year evictions. Either way they inflate the funnel
+until someone sets a close date, so that is a flag.
+
+**Ready to Market** is `udf_551` on the Asset Listing — a user-defined field,
+not a status, which is why a home can read For Sale and not-ready at the same
+time. The field was identified by profiling every Yes/No UDF against
+`AssetStatusesName`: `udf_551` Yes appears only against For Sale (111) and
+Delivered (2) and never against Ordered, Needs Rehab or Rental, which is exactly
+how an RTM flag behaves. `udf_325` looks similar at a glance and is **not** it —
+its Yes spreads across Rental, Needs Rehab and Rent to Own alike.
+
+That gives a real pipeline: 72 ordered, 99 awaiting setup, 147 in rehab, 110
+listed and ready, 2 ready but not listed, 63 to demo, 18 with no status set. And
+it exposes the gap the flag exists to find: **19 homes read For Sale without
+Ready to Market set** — either not actually showable, or nobody flipped the flag.
+
+**There is still no punch stage.** No punch status and no punch field exist on
+the Asset Listing, so the funnel runs rehab straight to Ready to Market with
+nothing in between. Someone has to add it before it can be reported. The panel
+says so.
 
 ### Utility recapture, reframed
 
@@ -257,6 +301,15 @@ unlike the other reports. `pipeline/raw/rm_moves_detail.json` is written with
 those and the street address removed before anything downstream reads it,
 because the standalone build of this dashboard gets emailed around. Unit number
 plus account id is the whole identity anywhere in the payload.
+
+The Eviction Tracker arrives with names too, and worse: a `FullName` column and
+a `CaseNumber`. `pipeline/stage_eviction.py` drops both before anything reads
+the file. The name is obvious; the case number is a public court filing, but
+printed next to a community and a unit it re-identifies the resident to anyone
+holding the emailed file. The dashboard only ever needs whether a case exists,
+so that is all that survives, as `has_case`. The script refuses to write a file
+with either column in it. `Name` on the tracker is the unit number, not a
+person, and is kept because it is the join key to the receivable.
 
 ## Controllable expense and utility recapture
 
@@ -403,9 +456,11 @@ can fill this week and one that needs a demo permit.
 
 | Path | What it is |
 |---|---|
-| `pipeline/queries.json` | The six warehouse queries, with row-limit warnings |
+| `pipeline/queries.json` | The six warehouse queries, the PDS roster and the eviction tracker, with row-limit warnings |
 | `pipeline/raw/pds_reportable.json` | The Reportable = Yes roster — the gate |
-| `pipeline/registry.json` | Sold overrides, roll-ups, segments, unit types, thresholds |
+| `pipeline/raw/eviction_tracker.json` | Case stages, de-identified — the AR work buckets |
+| `pipeline/registry.json` | Sold overrides, roll-ups, segments, unit types, thresholds, home pipeline, eviction stages |
+| `pipeline/stage_eviction.py` | Eviction Tracker CSV → de-identified JSON |
 | `pipeline/build.py` | Raw pulls → `data/dashboard.json` |
 | `pipeline/publish.py` | Payload + UI → one standalone HTML |
 | `pipeline/raw/` | Committed raw query results |

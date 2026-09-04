@@ -33,7 +33,7 @@ from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 7
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -146,6 +146,29 @@ def load_raw(raw_dir):
     return out
 
 
+def _median(values):
+    """Middle value, or None for an empty list. Used where one very old row
+    would drag a mean past anything a manager could act on."""
+    vals = sorted(values)
+    return vals[len(vals) // 2] if vals else None
+
+
+def load_envelope(raw_dir, fname):
+    """
+    Read a raw file whole, without unwrapping it to a row list.
+
+    `load_optional` returns blob["rows"] when it finds one, which is right for
+    the warehouse and Rent Manager pulls but wrong for a staged source whose
+    manifest matters as much as its rows.
+    """
+    path = os.path.join(raw_dir, fname)
+    if not os.path.exists(path):
+        log("NOTE  %s absent; the drill-in it feeds will be empty" % fname)
+        return None
+    with open(path) as f:
+        return json.load(f)
+
+
 def load_optional(raw_dir, fname):
     """Read a raw file that the build can survive without."""
     path = os.path.join(raw_dir, fname)
@@ -211,7 +234,65 @@ class Registry:
                 for n in names:
                     self.ut_class[n] = group
                     self.ut_rentable[n] = bucket
+        # Home lifecycle. `home_pipeline` is in display order; matching picks
+        # the most constrained rule that fits rather than the first, so the
+        # order here stays a presentation choice and never a correctness one.
+        self.rtm_field = cfg.get("_rtm_field", "udf_551")
+        self.home_pipeline = cfg.get("home_pipeline", {})
+        self.home_stage_order = list(self.home_pipeline.keys())
+
+        # Eviction stage -> funnel phase, keyed lowercase because the tracker's
+        # spelling drifts ("Court" and "Court: Complaint" both appear).
+        self.evict_phase = {}
+        self.evict_order = []
+        self.evict_label = {}
+        for key, spec in cfg.get("eviction_stages", {}).items():
+            self.evict_order.append(key)
+            self.evict_label[key] = spec["label"]
+            for st in spec.get("stages", []):
+                self.evict_phase[st.strip().lower()] = key
+        self.evict_label["other"] = "Stage not mapped"
+        self.unmapped_stages = set()
+
         self.audit = {}
+
+    def home_stage(self, status, rtm):
+        """
+        (key, label) for where a home sits in the pipeline, or (None, None) if
+        it is already earning or settled.
+
+        `rtm` is the Ready to Market flag. Only an explicit Yes counts; blank
+        is treated as not ready, because a home nobody has marked is a home
+        nobody has confirmed.
+        """
+        status = (status or "").strip()
+        best = None
+        for key, spec in self.home_pipeline.items():
+            constraints = 0
+            if "statuses" in spec:
+                if status not in spec["statuses"]:
+                    continue
+                constraints += 1
+            if "rtm" in spec:
+                if bool(spec["rtm"]) != bool(rtm):
+                    continue
+                constraints += 1
+            if not constraints:
+                continue
+            if best is None or constraints > best[0]:
+                best = (constraints, key, spec["label"])
+        if best is None:
+            return None, None
+        return best[1], best[2]
+
+    def eviction_phase(self, stage):
+        """(key, label) for a tracker stage; unmapped stages are recorded."""
+        key = self.evict_phase.get((stage or "").strip().lower())
+        if key is None:
+            if stage:
+                self.unmapped_stages.add(stage)
+            return "other", self.evict_label["other"]
+        return key, self.evict_label[key]
 
     def unit_type(self, name):
         """(group, bucket) for a unit type; unknown types count as rentable MH."""
@@ -671,7 +752,7 @@ def build(raw_dir, out_dir, registry_path):
         try:
             y, m, dd = (int(x) for x in iso.split("-")[:3])
             return (today_d - date(y, m, dd)).days
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, AttributeError):
             return None
 
     AGE_BANDS = [(30, "0-30 days"), (60, "31-60 days"), (90, "61-90 days"),
@@ -701,12 +782,23 @@ def build(raw_dir, out_dir, registry_path):
                      "Commercial Building"):
             continue
         start = (r.get("AssetsServiceStartDate") or "")[:10]
+        # Ready to Market lives in a user-defined field, not a status. Only an
+        # explicit "Yes" counts; see the registry note on how udf_551 was
+        # identified and why udf_325 is not it.
+        udf = r.get("AdditionalColumns") or {}
+        rtm = str(udf.get(reg.rtm_field) or "").strip().lower() == "yes"
+        stage, stage_label = reg.home_stage(status, rtm)
         asset_statuses[status] += 1
         assets_by_comm[cname].append({
             "tag": r.get("AssetsAssetTagID") or "",
             "unit": str(r.get("SubEntitiesName") or ""),
             "type": atype,
             "status": status,
+            "rtm": rtm,
+            # None for a home already earning or settled, so a caller can
+            # filter the pipeline out of the fleet without re-deriving it.
+            "stage": stage,
+            "stage_label": stage_label,
             "in_service": start,
             "age_days": days_since(start),
             "title": (r.get("AssetTitleStatusesName") or "").strip(),
@@ -714,6 +806,34 @@ def build(raw_dir, out_dir, registry_path):
         })
     for cname in assets_by_comm:
         assets_by_comm[cname].sort(key=lambda x: (x["status"], x["unit"]))
+
+    def home_pipeline_rows(homes):
+        """
+        The rehab-to-listed funnel for one community, in registry order.
+
+        Stages with nothing in them are dropped rather than shown as zero, so
+        a small community's panel does not read as eight empty rows. Age is
+        the median rather than the mean because one home ordered two years ago
+        and forgotten drags an average past anything useful.
+        """
+        by = defaultdict(list)
+        for h in homes:
+            if h["stage"]:
+                by[h["stage"]].append(h)
+        out = []
+        for key in reg.home_stage_order:
+            group = by.get(key)
+            if not group:
+                continue
+            ages = sorted(h["age_days"] for h in group if h["age_days"] is not None)
+            out.append({
+                "stage": key,
+                "label": reg.home_pipeline[key]["label"],
+                "homes": len(group),
+                "median_age_days": _median(ages),
+                "rtm": sum(1 for h in group if h["rtm"]),
+            })
+        return out
 
     rent_roll = defaultdict(list)
     vacancy_detail = defaultdict(list)
@@ -767,6 +887,77 @@ def build(raw_dir, out_dir, registry_path):
         rent_roll[cname].sort(key=lambda x: (not x["vacant"], x["unit"]))
         vacancy_detail[cname].sort(key=lambda x: (x["reason"], x["unit"]))
 
+    # ---- eviction tracker -------------------------------------------------
+    # A scripted Rent Manager report, exported daily to SharePoint and staged
+    # through pipeline/stage_eviction.py with resident names and case numbers
+    # removed. This is what turns the 90+ bucket from one number into the four
+    # work buckets Natalie asked for: in eviction, former resident, payment
+    # plan, and everything still untouched.
+    evict_raw = load_envelope(raw_dir, "eviction_tracker.json") or {}
+    if isinstance(evict_raw, dict):
+        evict_cases_raw = evict_raw.get("cases") or []
+        evict_as_of = evict_raw.get("as_of") or ""
+    else:
+        evict_cases_raw, evict_as_of = evict_raw, ""
+
+    def evict_community(case):
+        """
+        Which reportable community a tracker row belongs to, or None.
+
+        The tracker's ShortName carries suffixes the PDS roster does not --
+        WOLFPO, TCMHCPO, PSEPO -- so a direct hit is tried first, then the
+        community name, then the short name with the suffix trimmed. All 57
+        properties in the tracker resolve this way; the ones that then fall
+        out are the sold and non-reportable ones, which is correct.
+        """
+        sn = (case.get("short_name") or "").strip().upper()
+        cm = (case.get("community") or "").strip().upper()
+        for k in (sn, cm):
+            if k and k in rm_lookup:
+                return rm_lookup[k]
+        for suffix in ("MHCPO", "MHC", "PO"):
+            if sn.endswith(suffix) and sn[:-len(suffix)] in rm_lookup:
+                return rm_lookup[sn[:-len(suffix)]]
+        return None
+
+    # Keyed by (community, unit). A unit can carry more than one case over the
+    # years, so the open one wins and otherwise the most recent close.
+    evict_open = {}
+    evict_closed = {}
+    evict_by_comm = defaultdict(list)
+    evict_unresolved = set()
+    for case in evict_cases_raw:
+        cname = evict_community(case)
+        if not cname:
+            if case.get("community"):
+                evict_unresolved.add(case["community"])
+            continue
+        phase, phase_label = reg.eviction_phase(case.get("stage"))
+        unit = (case.get("unit") or "").strip()
+        row = {
+            "unit": unit,
+            "stage": case.get("stage") or "",
+            "phase": phase,
+            "phase_label": phase_label,
+            "start": case.get("start") or "",
+            "closed": case.get("closed") or "",
+            "days_open": days_since(case.get("start")) if not case.get("closed") else None,
+            "days_in_stage": days_since(case.get("stage_since")),
+            "with_attorney": bool(case.get("sent_to_attorney")),
+            "has_case": bool(case.get("has_case")),
+            "open_charges": rnd(num(case.get("open_charges")), 0),
+        }
+        key = (cname, unit)
+        if row["closed"]:
+            prev = evict_closed.get(key)
+            if not prev or row["closed"] > prev["closed"]:
+                evict_closed[key] = row
+        else:
+            evict_open[key] = row
+        evict_by_comm[cname].append(row)
+    for cname in evict_by_comm:
+        evict_by_comm[cname].sort(key=lambda x: (bool(x["closed"]), -(x["days_open"] or 0)))
+
     # AR detail collapses from charge rows to one row per tenant account, which
     # is the grain someone working collections actually calls.
     ar_accounts = defaultdict(dict)
@@ -780,6 +971,9 @@ def build(raw_dir, out_dir, registry_path):
             continue
         a = ar_accounts[cname].setdefault(acct, {
             "account": acct,
+            # Carried so ar_segment can key the tracker without a closure over
+            # the loop variable.
+            "community": cname,
             "unit": str(r.get("PrimaryLeaseUnitName") or r.get("SubEntitiesName") or ""),
             "customer": r.get("CustomersCustomerDisplayID"),
             "b0_30": 0.0, "b31_60": 0.0, "b61_90": 0.0, "b90p": 0.0, "total": 0.0,
@@ -793,28 +987,33 @@ def build(raw_dir, out_dir, registry_path):
         ct = (r.get("ChargeTypesDescription") or r.get("ChargeTypesName") or "Other").strip()
         a["charges"][ct] += num(r.get("TotalLeft"))
 
-    # Which bucket of work does this balance belong to? Rent Manager has no
-    # eviction flag on the receivable itself, so this is built from what the
-    # ledger does expose: a court fee means it is already with legal, a payment
-    # plan charge means terms are agreed, and a customer whose lease has ended
-    # is a former resident rather than a collection call. Everything else is
-    # genuinely unworked. The eviction tracker would replace the first of these
-    # with the real flag.
+    # Which bucket of work does this balance belong to? These are the four
+    # Natalie asked for, and they now come from the eviction tracker rather
+    # than from guessing at charge names.
+    #
+    # Order is deliberate. An open case outranks everything, because a resident
+    # in eviction is not a collections call regardless of what else is on the
+    # ledger. A payment plan outranks former-resident status, since terms
+    # agreed on the way out are still terms. Former resident comes from two
+    # signals: a lease the move history shows ended, or a closed eviction case
+    # on the unit with money still owed, which is the definition of a
+    # post-eviction remainder.
     def ar_segment(a):
-        names = set(a["charges"].keys())
-        low = {n.lower() for n in names}
-        if any("court" in n or "legal" in n or "evict" in n for n in low):
-            return "legal", "With legal, court fees posted"
+        key = (a["community"], a["unit"])
+        low = {n.lower() for n in a["charges"].keys()}
+        ev = evict_open.get(key)
+        if ev:
+            return "eviction", "In eviction: %s" % ev["phase_label"].lower()
         if any("payment plan" in n or "pmtpln" in n or "payls" in n for n in low):
             return "payment_plan", "On a payment plan"
-        st = cust_status.get(a["account"])
-        if st == "Past":
+        if cust_status.get(a["account"]) == "Past":
             return "former", "Former resident, lease ended"
-        # Deliberately not called "needs action". This is the residue of three
-        # tests, not a determination, and most of it is ordinary current-tenant
-        # balance. Calling it a work queue would be a claim the data does not
-        # support; the eviction tracker is what would turn it into one.
-        return "unclassified", "Not yet classified"
+        if key in evict_closed:
+            return "former", "Former resident, eviction closed %s" % evict_closed[key]["closed"]
+        # With the tracker in place this residue is a real work queue rather
+        # than a leftover: no open case, no plan, and nobody who has moved out.
+        # Someone has to call these.
+        return "needs_action", "No case, no plan -- needs action"
 
     ar_accounts_out = {}
     for cname, accts in ar_accounts.items():
@@ -824,9 +1023,13 @@ def build(raw_dir, out_dir, registry_path):
                 continue
             top = sorted(a["charges"].items(), key=lambda x: -x[1])[:3]
             seg, seg_label = ar_segment(a)
+            ev = evict_open.get((cname, a["unit"]))
             rows_out.append({
                 "segment": seg,
                 "segment_label": seg_label,
+                "eviction_phase": ev["phase"] if ev else None,
+                "eviction_stage": ev["stage"] if ev else "",
+                "eviction_days_open": ev["days_open"] if ev else None,
                 "account": a["account"],
                 "unit": a["unit"],
                 "customer": a["customer"],
@@ -943,6 +1146,19 @@ def build(raw_dir, out_dir, registry_path):
                                    for k in ("water_paid_by", "sewer_paid_by", "trash_paid_by")),
             },
             "homes": assets_by_comm.get(name, []),
+            "home_pipeline": home_pipeline_rows(assets_by_comm.get(name, [])),
+            "homes_earning": sum(1 for h in assets_by_comm.get(name, []) if not h["stage"]),
+            "evictions": evict_by_comm.get(name, []),
+            "eviction_phases": [
+                {"phase": ph, "label": reg.evict_label.get(ph, ph), "cases": n,
+                 "balance": rnd(sum(x["open_charges"] for x in evict_by_comm.get(name, [])
+                                    if not x["closed"] and x["phase"] == ph), 0)}
+                for ph, n in sorted(
+                    Counter(x["phase"] for x in evict_by_comm.get(name, [])
+                            if not x["closed"]).items(),
+                    key=lambda x: reg.evict_order.index(x[0])
+                    if x[0] in reg.evict_order else 99)
+            ],
             "home_status": [
                 {"status": st, "homes": n}
                 for st, n in sorted(Counter(a["status"] for a in assets_by_comm.get(name, [])).items(),
@@ -964,6 +1180,12 @@ def build(raw_dir, out_dir, registry_path):
                 {"segment": sg, "accounts": n,
                  "amount": rnd(sum(x["total"] for x in ar_accounts_out.get(name, [])
                                    if x["segment"] == sg), 0),
+                 # The queue that matters. Rent bills on the 1st, so on day 4 of
+                 # a month every occupied lot carries a balance and a raw
+                 # account count reads like a portfolio in crisis. Only the
+                 # accounts carrying something 30 days old are actually behind.
+                 "accounts_30plus": sum(1 for x in ar_accounts_out.get(name, [])
+                                        if x["segment"] == sg and x["past_due_30plus"] > 0.005),
                  "past_due_30plus": rnd(sum(x["past_due_30plus"] for x in ar_accounts_out.get(name, [])
                                             if x["segment"] == sg), 0)}
                 for sg, n in Counter(x["segment"] for x in ar_accounts_out.get(name, [])).most_common()
@@ -976,6 +1198,23 @@ def build(raw_dir, out_dir, registry_path):
                 len(vacancy_detail.get(name, [])) /
                 max(1, sum(v["units"] for v in vac_reasons)) * 100),
         })
+    # Eviction and work-bucket counts are point in time, not period figures,
+    # but the Communities and Collections tables read every cell through the
+    # closed/live accessor. Mirroring them into both blocks keeps that accessor
+    # uniform rather than special-casing two columns in the UI.
+    for c in communities:
+        ev_open = [x for x in c["evictions"] if not x["closed"]]
+        na = [g for g in c["ar_segments"] if g["segment"] == "needs_action"]
+        pit = {
+            "evictions_open": len(ev_open),
+            "eviction_balance": rnd(sum(x["open_charges"] for x in ev_open), 0),
+            "ar_needs_action": sum(g["accounts_30plus"] for g in na),
+            "ar_needs_action_amount": rnd(sum(g["past_due_30plus"] for g in na), 0),
+        }
+        for blk in ("closed", "live"):
+            if c[blk]:
+                c[blk].update(pit)
+
     communities.sort(key=lambda c: c["name"])
 
     # ---- portfolio trends (full history, partial month marked) -------------
@@ -1151,6 +1390,12 @@ def build(raw_dir, out_dir, registry_path):
         exp = [c["expenses"] for c in rows]
         util = sum(e.get("utilities") or 0 for e in exp)
         util_inc = sum(e.get("utility_reimbursements") or 0 for e in exp)
+        # Eviction and work-bucket counts are point-in-time, not period
+        # figures, so they are identical in the closed and live blocks. They
+        # live here anyway because the Collections table opens collapsed to
+        # vehicle level and a column with no vehicle total is a blank row.
+        ev_open = [x for c in rows for x in c["evictions"] if not x["closed"]]
+        na = [g for c in rows for g in c["ar_segments"] if g["segment"] == "needs_action"]
         return {
             "communities": len(rows),
             "units": units,
@@ -1171,6 +1416,10 @@ def build(raw_dir, out_dir, registry_path):
             "ar_per_unit": rnd(ar_total / units, 0) if units else 0,
             "move_ins": s_("move_ins"),
             "move_outs": s_("move_outs"),
+            "evictions_open": len(ev_open),
+            "eviction_balance": rnd(sum(x["open_charges"] for x in ev_open), 0),
+            "ar_needs_action": sum(g["accounts_30plus"] for g in na),
+            "ar_needs_action_amount": rnd(sum(g["past_due_30plus"] for g in na), 0),
             "revenue": rnd(rev, 0),
             "noi": rnd(noi, 0),
             "noi_budget": rnd(noi_bud, 0),
@@ -1232,6 +1481,86 @@ def build(raw_dir, out_dir, registry_path):
         v["rent_lost"] = rnd(v["rent_lost"], 0)
     log("vacant units by reason: %s"
         % ", ".join("%s %d" % (v["label"], v["units"]) for v in vacancy_reasons))
+
+    # ---- portfolio home pipeline and eviction funnel -----------------------
+    # Both are rolled up from the community rows rather than recomputed, so the
+    # headline and the drill-in can never disagree.
+    pipe_tot = {}
+    for c in communities:
+        for row in c["home_pipeline"]:
+            t = pipe_tot.setdefault(row["stage"], {
+                "stage": row["stage"], "label": row["label"],
+                "homes": 0, "rtm": 0, "communities": 0,
+            })
+            t["homes"] += row["homes"]
+            t["rtm"] += row["rtm"]
+            t["communities"] += 1
+    home_pipeline = [pipe_tot[k] for k in reg.home_stage_order if k in pipe_tot]
+    # Median across every pipeline home, not a median of medians.
+    all_ages = defaultdict(list)
+    for c in communities:
+        for h in c["homes"]:
+            if h["stage"] and h["age_days"] is not None:
+                all_ages[h["stage"]].append(h["age_days"])
+    for row in home_pipeline:
+        row["median_age_days"] = _median(all_ages.get(row["stage"], []))
+    portfolio["home_pipeline"] = home_pipeline
+    portfolio["homes_earning"] = sum(c["homes_earning"] for c in communities)
+    log("home pipeline: %s"
+        % ", ".join("%s %d" % (r["label"], r["homes"]) for r in home_pipeline))
+
+    seg_roll = {}
+    for c in communities:
+        for row in c["ar_segments"]:
+            t = seg_roll.setdefault(row["segment"], {
+                "segment": row["segment"], "accounts": 0, "accounts_30plus": 0,
+                "amount": 0.0, "past_due_30plus": 0.0,
+            })
+            t["accounts"] += row["accounts"]
+            t["accounts_30plus"] += row["accounts_30plus"]
+            t["amount"] += row["amount"]
+            t["past_due_30plus"] += row["past_due_30plus"]
+    SEG_ORDER = ["eviction", "payment_plan", "former", "needs_action"]
+    portfolio["ar_segments"] = [
+        {**seg_roll[k], "amount": rnd(seg_roll[k]["amount"], 0),
+         "past_due_30plus": rnd(seg_roll[k]["past_due_30plus"], 0)}
+        for k in SEG_ORDER if k in seg_roll
+    ]
+    log("AR work buckets: %s"
+        % ", ".join("%s %d accts / %d past due 30+ (%s)"
+                    % (r["segment"], r["accounts"], r["accounts_30plus"],
+                       money(r["past_due_30plus"]))
+                    for r in portfolio["ar_segments"]))
+
+    ev_tot = {}
+    for c in communities:
+        for row in c["eviction_phases"]:
+            t = ev_tot.setdefault(row["phase"], {
+                "phase": row["phase"], "label": row["label"],
+                "cases": 0, "balance": 0.0, "communities": 0,
+            })
+            t["cases"] += row["cases"]
+            t["balance"] += row["balance"]
+            t["communities"] += 1
+    eviction_phases = [ev_tot[k] for k in reg.evict_order + ["other"] if k in ev_tot]
+    for row in eviction_phases:
+        row["balance"] = rnd(row["balance"], 0)
+    open_cases = [x for c in communities for x in c["evictions"] if not x["closed"]]
+    portfolio["evictions"] = {
+        "as_of": evict_as_of,
+        "open_cases": len(open_cases),
+        "communities": sum(1 for c in communities if c["eviction_phases"]),
+        "balance": rnd(sum(x["open_charges"] for x in open_cases), 0),
+        "with_attorney": sum(1 for x in open_cases if x["with_attorney"]),
+        # Index into the filtered list, not the unfiltered one -- a case with
+        # no start date drops out and the lengths stop matching.
+        "median_days_open": _median([x["days_open"] for x in open_cases
+                                     if x["days_open"] is not None]),
+        "phases": eviction_phases,
+    }
+    log("evictions: %d open across %d communities, %s owed"
+        % (len(open_cases), portfolio["evictions"]["communities"],
+           money(portfolio["evictions"]["balance"])))
 
     # ---- flags -------------------------------------------------------------
 
@@ -1438,21 +1767,123 @@ def build(raw_dir, out_dir, registry_path):
         for sgg in c["ar_segments"]:
             seg_tot[sgg["segment"]][0] += sgg["accounts"]
             seg_tot[sgg["segment"]][1] += sgg["amount"]
-    unclass = seg_tot.get("unclassified", [0, 0.0])
     total_accts = sum(v[0] for v in seg_tot.values())
-    if total_accts and unclass[0] / total_accts > 0.5:
+
+    # The tracker is a daily export. If it stops running, the eviction bucket
+    # quietly drains into needs-action and nothing else says so.
+    if evict_as_of:
+        lag = days_since(evict_as_of)
+        if lag is not None and lag > 2:
+            flags.append({
+                "severity": "warn",
+                "title": "The eviction tracker export is %d days old" % lag,
+                "detail": ("Case stages and the in-eviction split below are as of %s. The "
+                           "scripted report lands daily in Data Analytics / Rent Manager / "
+                           "Eviction Tracker.csv, so a gap this size means the job did not "
+                           "run. Until it does, cases that have moved show their old stage "
+                           "and newly filed ones read as needing action." % evict_as_of),
+            })
+
+    stale_ev = [x for c in communities for x in c["evictions"]
+                if not x["closed"] and (x["days_open"] or 0) > 365]
+    if stale_ev:
+        settled = [x for x in stale_ev if x["open_charges"] <= 0.005]
         flags.append({
             "severity": "warn",
-            "title": "%d of %d balances are not classified into a work bucket"
-                     % (unclass[0], total_accts),
-            "detail": ("Rent Manager carries no eviction flag on the receivable itself, so the "
-                       "split below is built from court fees posted (%d accounts) and payment "
-                       "plan charges (%d). Former-resident status resolves for only 40%% of "
-                       "accounts because the move history does not reach back far enough. To "
-                       "separate in-eviction, uncollectible and payment-plan properly this "
-                       "needs the eviction tracker export as a source."
-                       % (seg_tot.get("legal", [0])[0], seg_tot.get("payment_plan", [0])[0])),
+            "title": "%d eviction %s been open more than a year"
+                     % (len(stale_ev), "case has" if len(stale_ev) == 1 else "cases have"),
+            "detail": ("The oldest has been open %d days. %d of the %d owe nothing at all, "
+                       "which usually means the matter resolved and nobody closed it in the "
+                       "tracker rather than a resident sitting in eviction for years. Either "
+                       "way they inflate the funnel and the in-eviction bucket until someone "
+                       "sets a close date. The %d still owing carry %s."
+                       % (max(x["days_open"] for x in stale_ev), len(settled), len(stale_ev),
+                          len(stale_ev) - len(settled),
+                          money(sum(x["open_charges"] for x in stale_ev
+                                    if x["open_charges"] > 0.005)))),
         })
+
+    if evict_unresolved:
+        flags.append({
+            "severity": "info",
+            "title": "%d eviction %s outside the reportable roster"
+                     % (len(evict_unresolved),
+                        "community is" if len(evict_unresolved) == 1 else "communities are"),
+            "detail": ("The tracker carries open cases at these, but they are sold or not "
+                       "marked Reportable, so their cases are excluded along with the rest "
+                       "of their numbers: %s." % ", ".join(sorted(evict_unresolved))),
+        })
+
+    if reg.unmapped_stages:
+        flags.append({
+            "severity": "warn",
+            "title": "%d eviction stage %s not mapped to a phase"
+                     % (len(reg.unmapped_stages),
+                        "is" if len(reg.unmapped_stages) == 1 else "are"),
+            "detail": ("These show as Stage not mapped in the funnel. Add them to "
+                       "eviction_stages in registry.json: %s."
+                       % ", ".join(sorted(reg.unmapped_stages))),
+        })
+
+    # Former-resident status is the one bucket the tracker cannot fully settle.
+    if total_accts and cust_status:
+        resolved = sum(1 for c in communities for a in c["ar_accounts"]
+                       if a["account"] in cust_status)
+        if resolved / total_accts < 0.6:
+            flags.append({
+                "severity": "info",
+                "title": "Former-resident status is known for %d of %d balances"
+                         % (resolved, total_accts),
+                "detail": ("In eviction and payment plan now come from the tracker and are "
+                           "solid. Former resident does not: it needs a lease that the move "
+                           "history shows ended, and that history only reaches back to %s, "
+                           "so an account that moved out earlier reads as needing action. "
+                           "A closed eviction case recovers %d of them. Pulling move history "
+                           "further back closes the rest."
+                           % (months[0], sum(1 for c in communities for a in c["ar_accounts"]
+                                             if a["segment_label"].startswith(
+                                                 "Former resident, eviction")))),
+            })
+
+    plan = next((r for r in portfolio["ar_segments"] if r["segment"] == "payment_plan"), None)
+    if not plan or plan["accounts"] < 10:
+        flags.append({
+            "severity": "info",
+            "title": "Payment plans are still detected by charge name, not by a field",
+            "detail": ("The tracker settles in-eviction and closed cases, but it carries "
+                       "nothing about plans. This looks for a payment plan charge type on "
+                       "the ledger and finds %d account%s, which is almost certainly under "
+                       "the truth -- most plans are agreed by email and never posted as a "
+                       "charge. Any account on a plan without one reads as needing action."
+                       % (plan["accounts"] if plan else 0,
+                          "" if plan and plan["accounts"] == 1 else "s")),
+        })
+
+    # Listed but not actually ready to show is the gap the RTM flag exposes.
+    pipe = {r["stage"]: r for r in portfolio.get("home_pipeline", [])}
+    not_ready = pipe.get("for_sale_prep", {}).get("homes", 0)
+    if not_ready:
+        flags.append({
+            "severity": "warn",
+            "title": "%d %s for sale but not marked Ready to Market"
+                     % (not_ready, "home is" if not_ready == 1 else "homes are"),
+            "detail": ("Their status says For Sale, so they are counted as sellable stock, "
+                       "but the Ready to Market flag on the Asset Listing is not set. Either "
+                       "the home is not actually showable yet or nobody flipped the flag. "
+                       "%d of the %d homes in the pipeline carry the flag."
+                       % (sum(r["rtm"] for r in portfolio.get("home_pipeline", [])),
+                          sum(r["homes"] for r in portfolio.get("home_pipeline", [])))),
+        })
+
+    flags.append({
+        "severity": "info",
+        "title": "There is no punch stage in Rent Manager",
+        "detail": ("The home pipeline runs rehab straight to Ready to Market because no "
+                   "punch status and no punch field exist on the Asset Listing. Ready to "
+                   "Market itself is a user-defined field, not a status, which is why a "
+                   "home can read For Sale and not-ready at the same time. Adding a punch "
+                   "status is the only way that step becomes reportable."),
+    })
 
     rr_missing = [c["name"] for c in communities if not c["rent_roll"]]
     if rr_missing:

@@ -575,6 +575,9 @@
       { id: "rentroll", label: "Rent roll (" + (c.rent_roll || []).length + ")" },
       { id: "vacancy", label: "Vacant (" + (c.vacancy_detail || []).length + ")" },
       { id: "accounts", label: "Accounts owing (" + (c.ar_accounts || []).length + ")" },
+      { id: "homes", label: "Homes (" + (c.homes || []).length + ")" },
+      { id: "evictions", label: "Evictions (" +
+          (c.evictions || []).filter(function (x) { return !x.closed; }).length + ")" },
       { id: "pl", label: "P&L vs budget" }
     ];
 
@@ -654,9 +657,20 @@
               { key: "account", label: "Account", render: function (r) { return "#" + r.account; } },
               { key: "segment", label: "Standing", render: function (r) {
                   return h("span", {
-                    className: "chip " + (r.segment === "legal" ? "critical"
-                      : r.segment === "payment_plan" ? "good" : "watch")
+                    className: "chip " + (r.segment === "eviction" ? "critical"
+                      : r.segment === "payment_plan" ? "good"
+                      : r.segment === "former" ? "" : "watch"),
+                    title: r.segment_label
                   }, SEG_LABEL[r.segment] || r.segment); } },
+              { key: "eviction_stage", label: "Case stage",
+                title: "Current stage from the eviction tracker, and days since the case opened",
+                render: function (r) {
+                  return r.eviction_stage
+                    ? h("span", null, r.eviction_stage,
+                        r.eviction_days_open != null
+                          ? h("span", { className: "rl-sub" }, "  " + r.eviction_days_open + "d")
+                          : null)
+                    : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
               { key: "b0_30", label: "0–30", numeric: true, render: function (r) { return money(r.b0_30); } },
               { key: "b31_60", label: "31–60", numeric: true, render: function (r) { return money(r.b31_60); } },
               { key: "b61_90", label: "61–90", numeric: true, render: function (r) { return money(r.b61_90); } },
@@ -668,7 +682,7 @@
               { key: "charges", label: "What it is" }
             ],
             rows: aa, initialSort: { key: "past_due_30plus", dir: -1 },
-            footer: [aa.length + " accounts", "", "",
+            footer: [aa.length + " accounts", "", "", "",
               money(aa.reduce(function (a, r) { return a + r.b0_30; }, 0)),
               money(aa.reduce(function (a, r) { return a + r.b31_60; }, 0)),
               money(aa.reduce(function (a, r) { return a + r.b61_90; }, 0)),
@@ -676,6 +690,91 @@
               money(aa.reduce(function (a, r) { return a + r.total; }, 0)), ""]
           })
         : h("div", { className: "loading" }, "No outstanding accounts, or no unit detail available.");
+    } else if (view === "homes") {
+      var hs = c.homes || [];
+      var pipeHomes = hs.filter(function (x) { return x.stage; });
+      body = hs.length
+        ? h("div", null,
+            h("div", { className: "panel-body" },
+              h(BandBar, { rows: pipeRows(c.home_pipeline || []),
+                           label: "Homes by pipeline stage",
+                           empty: "Every home here is already earning." }),
+              h("div", { className: "note",
+                         style: { marginTop: "12px", fontSize: "12px", color: "var(--text-muted)" } },
+                count(c.homes_earning || 0) + " of " + count(hs.length) + " homes are earning; " +
+                count(pipeHomes.length) + " sit somewhere in the pipeline. Days held counts from " +
+                "the home's in-service date, so a long-held rental is not a problem and a long-held " +
+                "rehab is.")),
+            h(SortableTable, {
+              cols: [
+                { key: "unit", label: "Unit", render: function (r) { return r.unit || "—"; } },
+                { key: "tag", label: "Tag", render: function (r) { return r.tag || "—"; } },
+                { key: "type", label: "Type" },
+                { key: "status", label: "Asset status", render: function (r) {
+                    return h("span", { className: "chip",
+                                       style: { background: (STATUS_COLORS[r.status] || "#8FA3B2") + "33",
+                                                color: "var(--text)" } }, r.status); } },
+                { key: "stage_label", label: "Pipeline stage", render: function (r) {
+                    return r.stage
+                      ? h("span", { className: "chip",
+                                    style: { background: PIPE_COLORS[r.stage] + "33",
+                                             color: "var(--text)" } }, r.stage_label)
+                      : h("span", { style: { color: "var(--text-muted)" } }, "earning"); } },
+                { key: "rtm", label: "Ready to market", render: function (r) {
+                    return r.rtm
+                      ? h("span", { className: "chip good" }, "Yes")
+                      : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
+                { key: "age_days", label: "Days held", numeric: true,
+                  render: function (r) { return r.age_days == null ? "—" : count(r.age_days); } },
+                { key: "market_rent", label: "Market rent", numeric: true,
+                  render: function (r) { return r.market_rent ? money(r.market_rent) : "—"; } },
+                { key: "title", label: "Title", render: function (r) { return r.title || "—"; } }
+              ],
+              rows: hs, initialSort: { key: "age_days", dir: -1 }
+            }))
+        : h("div", { className: "loading" }, "No park-owned homes on the asset listing here.");
+    } else if (view === "evictions") {
+      var ev = (c.evictions || []);
+      var evOpen = ev.filter(function (x) { return !x.closed; });
+      body = ev.length
+        ? h("div", null,
+            h("div", { className: "panel-body" },
+              h(BandBar, { rows: phaseRows(c.eviction_phases || []),
+                           label: "Open cases by phase",
+                           empty: "No open cases here." }),
+              h("div", { className: "note",
+                         style: { marginTop: "12px", fontSize: "12px", color: "var(--text-muted)" } },
+                count(evOpen.length) + " open of " + count(ev.length) + " on record. Balances are " +
+                "the tracker's own figure as of " + (((d.portfolio || {}).evictions || {}).as_of || "the last export") +
+                ", so they lag the live ledger by a day.")),
+            h(SortableTable, {
+              cols: [
+                { key: "unit", label: "Unit" },
+                { key: "stage", label: "Current stage" },
+                { key: "phase_label", label: "Phase", render: function (r) {
+                    return h("span", { className: "chip",
+                                       style: { background: PHASE_COLORS[r.phase] + "33",
+                                                color: "var(--text)" } }, r.phase_label); } },
+                { key: "start", label: "Opened", render: function (r) { return r.start || "—"; } },
+                { key: "days_open", label: "Days open", numeric: true, render: function (r) {
+                    return r.closed
+                      ? h("span", { style: { color: "var(--text-muted)" } }, "closed " + r.closed)
+                      : h("span", { className: (r.days_open || 0) > 120 ? "down" : "" },
+                          count(r.days_open)); } },
+                { key: "days_in_stage", label: "Days in stage", numeric: true, render: function (r) {
+                    return r.days_in_stage == null ? "—" : count(r.days_in_stage); } },
+                { key: "with_attorney", label: "With attorney", render: function (r) {
+                    return r.with_attorney
+                      ? h("span", { className: "chip watch" }, "Yes")
+                      : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
+                { key: "open_charges", label: "Owed", numeric: true,
+                  render: function (r) { return r.open_charges ? money(r.open_charges) : "—"; } }
+              ],
+              rows: ev, initialSort: { key: "days_open", dir: -1 },
+              footer: [evOpen.length + " open", "", "", "", "", "", "",
+                money(evOpen.reduce(function (a, r) { return a + r.open_charges; }, 0))]
+            }))
+        : h("div", { className: "loading" }, "No eviction cases on record for this community.");
     } else {
       body = h(PLTable, { community: c, data: d });
     }
@@ -816,10 +915,9 @@
   };
   var AGE_ORDER = ['0-30 days','31-60 days','61-90 days','91-180 days','181-365 days','Over a year','Unknown'];
 
-  /* The home lifecycle, ordered the way a home actually moves through it. */
-  var STATUS_ORDER = ["Ordered", "Delivered", "Needs Rehab", "For Sale",
-                      "Rent to Own Agreement", "Lease Option (LOP)", "Rental",
-                      "In Use", "Eviction Filed", "To Be Demoed", "TBD", "Unknown"];
+  /* Raw Rent Manager asset statuses. The pipeline funnel is built from these
+     plus the Ready to Market field; this palette is what the Homes drill-in
+     uses to show the underlying status behind each stage. */
   var STATUS_COLORS = {
     "Ordered": "#C7D3DA", "Delivered": "#8FA3B2", "Needs Rehab": "#FFCC3B",
     "For Sale": "#4ABA81", "Rent to Own Agreement": "#2F4E65",
@@ -828,13 +926,36 @@
     "Unknown": "#E0E6EA"
   };
 
+  /* The four work buckets Natalie asked for. These come from the eviction
+     tracker now, not from guessing at charge names. */
+  var SEG_ORDER = ["eviction", "payment_plan", "former", "needs_action"];
   var SEG_LABEL = {
-    legal: "With legal", payment_plan: "On a payment plan",
-    former: "Former resident", unclassified: "Not classified"
+    eviction: "In eviction", payment_plan: "On a payment plan",
+    former: "Former resident", needs_action: "Needs action"
   };
   var SEG_COLORS = {
-    legal: "#F16262", payment_plan: "#4ABA81",
-    former: "#8FA3B2", unclassified: "#C7D3DA"
+    eviction: "#F16262", payment_plan: "#4ABA81",
+    former: "#8FA3B2", needs_action: "#FFCC3B"
+  };
+
+  /* The eviction funnel, in the order a case actually moves through it.
+     Title and resale is deliberately its own colour: it is not a resident
+     eviction at all, it is recovering and reselling an abandoned home. */
+  var PHASE_ORDER = ["intake", "notice", "filed", "judgment", "possession",
+                     "title", "done", "other"];
+  var PHASE_COLORS = {
+    intake: "#C7D3DA", notice: "#FFCC3B", filed: "#F0A33B",
+    judgment: "#F16262", possession: "#B23B3B", title: "#2F4E65",
+    done: "#A8D5BD", other: "#8FA3B2"
+  };
+
+  /* The home pipeline: arriving on site through listed and showable. Green is
+     reserved for the two stages that mean ready; red for the gap the Ready to
+     Market flag exposes -- listed for sale without being ready to show. */
+  var PIPE_COLORS = {
+    ordered: "#C7D3DA", delivered: "#5C7C93", rehab: "#FFCC3B",
+    for_sale_prep: "#F16262", rtm: "#A8D5BD", listed: "#4ABA81",
+    demo: "#B23B3B", tbd: "#E0E6EA"
   };
 
   /* One proportional bar plus a legend. Used for vacancy reasons, vacancy
@@ -877,14 +998,31 @@
     });
   }
 
-  function statusRows(list) {
-    var by = {};
-    (list || []).forEach(function (r) { by[r.status] = (by[r.status] || 0) + r.homes; });
-    var known = STATUS_ORDER.filter(function (k) { return by[k]; });
-    Object.keys(by).forEach(function (k) { if (known.indexOf(k) === -1) known.push(k); });
-    return known.map(function (k) {
-      return { key: k, label: k, n: by[k], color: STATUS_COLORS[k] || "#8FA3B2" };
+  /* Roll a list of per-community pipeline or funnel rows into BandBar shape.
+     Order comes from the payload, which is already in registry order, so the
+     bar always reads left to right in the sequence things actually happen. */
+  function orderedRows(list, order, colors, keyField, countField) {
+    var by = {}, label = {}, extra = {};
+    (list || []).forEach(function (r) {
+      var k = r[keyField];
+      by[k] = (by[k] || 0) + r[countField];
+      label[k] = r.label;
+      if (r.balance) extra[k] = (extra[k] || 0) + r.balance;
     });
+    var keys = order.filter(function (k) { return by[k]; });
+    Object.keys(by).forEach(function (k) { if (keys.indexOf(k) === -1) keys.push(k); });
+    return keys.map(function (k) {
+      return { key: k, label: label[k] || k, n: by[k], money: extra[k],
+               color: colors[k] || "#8FA3B2" };
+    });
+  }
+
+  function pipeRows(list) {
+    return orderedRows(list, Object.keys(PIPE_COLORS), PIPE_COLORS, "stage", "homes");
+  }
+
+  function phaseRows(list) {
+    return orderedRows(list, PHASE_ORDER, PHASE_COLORS, "phase", "cases");
   }
 
   var REASON_COLORS = {
@@ -1464,39 +1602,105 @@
       { key: "ar_accounts", label: "Accounts", numeric: true,
         sortValue: function (r) { return V(r).ar_accounts; },
         render: function (r) { return count(V(r).ar_accounts); },
-        group: function (t) { return count(t.ar_accounts); } }
+        group: function (t) { return count(t.ar_accounts); } },
+      // Point in time, not period, so these read the same in either mode.
+      { key: "evictions_open", label: "In eviction", numeric: true,
+        title: "Open eviction cases from the tracker, and what those accounts owe",
+        sortValue: function (r) { return V(r).evictions_open; },
+        render: function (r) {
+          return V(r).evictions_open
+            ? h("span", { className: "linkish", onClick: function () {
+                  ctx.open(r, "evictions"); } }, count(V(r).evictions_open))
+            : h("span", { style: { color: "var(--text-muted)" } }, "—"); },
+        group: function (t) { return count(t.evictions_open); } },
+      { key: "ar_needs_action", label: "Needs action", numeric: true,
+        title: "Accounts past due 30+ with no open case, no payment plan and nobody moved out",
+        sortValue: function (r) { return V(r).ar_needs_action; },
+        render: function (r) {
+          var x = V(r).ar_needs_action;
+          return x
+            ? h("span", { className: x >= 10 ? "down" : "" }, count(x))
+            : h("span", { style: { color: "var(--text-muted)" } }, "—"); },
+        group: function (t) {
+          return h("span", { className: t.ar_needs_action >= 30 ? "down" : "" },
+            count(t.ar_needs_action)); } }
     ];
 
     var groups = groupByVehicle(d, filtered, mode);
     var sum = function (k) { return filtered.reduce(function (s, c) { return s + (V(c)[k] || 0); }, 0); };
     var charged = sum("charged"), paid = sum("paid");
 
-    var segRows = (function () {
-      var by = {}, amt = {};
+    /* The bar counts accounts carrying something 30 days old, not every account
+       with a balance. Rent bills on the 1st, so on day four of a month every
+       occupied lot owes money and a raw count reads like a portfolio in
+       crisis. */
+    var seg = (function () {
+      var by = {}, late = {}, amt = {};
       filtered.forEach(function (c) {
         (c.ar_segments || []).forEach(function (g) {
           by[g.segment] = (by[g.segment] || 0) + g.accounts;
+          late[g.segment] = (late[g.segment] || 0) + (g.accounts_30plus || 0);
           amt[g.segment] = (amt[g.segment] || 0) + g.past_due_30plus;
         });
       });
-      return ["legal", "payment_plan", "former", "unclassified"]
-        .filter(function (k) { return by[k]; })
-        .map(function (k) {
-          return { key: k, label: SEG_LABEL[k], n: by[k], money: amt[k], color: SEG_COLORS[k] };
+      return {
+        rows: SEG_ORDER.filter(function (k) { return late[k]; }).map(function (k) {
+          return { key: k, label: SEG_LABEL[k], n: late[k], money: amt[k], color: SEG_COLORS[k] };
+        }),
+        allAccounts: SEG_ORDER.reduce(function (a, k) { return a + (by[k] || 0); }, 0),
+        lateAccounts: SEG_ORDER.reduce(function (a, k) { return a + (late[k] || 0); }, 0),
+        needsAction: late.needs_action || 0,
+        needsMoney: amt.needs_action || 0
+      };
+    })();
+
+    var ev = (function () {
+      var open = 0, bal = 0, attorney = 0, comms = 0, longest = 0;
+      var phases = [];
+      filtered.forEach(function (c) {
+        var o = (c.evictions || []).filter(function (x) { return !x.closed; });
+        if (!o.length) return;
+        comms += 1;
+        open += o.length;
+        o.forEach(function (x) {
+          bal += x.open_charges;
+          if (x.with_attorney) attorney += 1;
+          if ((x.days_open || 0) > longest) longest = x.days_open;
         });
+        phases = phases.concat(c.eviction_phases || []);
+      });
+      return { open: open, bal: bal, attorney: attorney, comms: comms,
+               longest: longest, rows: phaseRows(phases) };
     })();
 
     return h("div", null,
-      h(Panel, {
-        title: "What is behind the balances",
-        note: "Accounts owing, by where the balance already sits · amounts are past due 30+"
-      }, h(BandBar, {
-        rows: segRows, label: "Accounts owing by work bucket",
-        note: "Rent Manager holds no eviction flag on the receivable, so this is built " +
-              "from court fees posted and payment plan charges. In eviction, uncollectible " +
-              "and former resident cannot be split properly without the eviction tracker " +
-              "as a source, which is why most of this reads as not classified."
-      })),
+      h("div", { className: "grid-2" },
+        h(Panel, {
+          title: "What is behind the balances",
+          note: "Accounts past due 30+ days, by what is already being done about them"
+        }, h(BandBar, {
+          rows: seg.rows, label: "Accounts past due by work bucket",
+          empty: "Nothing past due 30 days.",
+          note: count(seg.lateAccounts) + " of " + count(seg.allAccounts) +
+                " accounts with a balance are actually 30 days behind; the rest is this " +
+                "month's rent, billed on the 1st and not late until the " +
+                d.period.grace_day + "th. In eviction and case stage come from the " +
+                "eviction tracker. Needs action means no open case, no payment plan and " +
+                "nobody who has moved out: " + count(seg.needsAction) + " accounts, " +
+                money(seg.needsMoney) + ", that somebody has to call."
+        })),
+        h(Panel, {
+          title: "Eviction funnel",
+          note: "Open cases by how far along they are"
+        }, h(BandBar, {
+          rows: ev.rows, label: "Open eviction cases by phase",
+          empty: "No open eviction cases.",
+          note: count(ev.open) + " open cases across " + count(ev.comms) + " communities, " +
+                money(ev.bal) + " owed, " + count(ev.attorney) + " already with the attorney" +
+                (ev.longest ? ", oldest open " + count(ev.longest) + " days" : "") +
+                ". Title and resale is not a resident eviction: it is recovering and " +
+                "reselling an abandoned home."
+        }))),
 
       h("section", { className: "panel" },
       h(GroupedTable, {
@@ -1514,7 +1718,8 @@
           money(sum("ar_0_30")), money(sum("ar_31_60")),
           money(sum("ar_61_90")), money(sum("ar_90_plus")),
           money(sum("ar_past_due_30plus")),
-          money(sum("ar_total")), count(sum("ar_accounts"))
+          money(sum("ar_total")), count(sum("ar_accounts")),
+          count(sum("evictions_open")), count(sum("ar_needs_action"))
         ]
       })));
   }
@@ -1599,15 +1804,31 @@
           label: "Vacant units by age"
         })),
         h(Panel, {
-          title: "Home pipeline",
-          note: "Park-owned homes by Rent Manager asset status"
-        }, h(BandBar, {
-          rows: statusRows([].concat.apply([], filtered.map(function (c) { return c.home_status || []; }))),
-          label: "Homes by status",
-          note: "Rent Manager tracks Ordered through Rental. There is no separate " +
-                "Ready to Market or punch stage, so those would need a new status or a " +
-                "user-defined field before they can be reported."
-        }))),
+          title: "Ready to Market pipeline",
+          note: "Where each park-owned home sits between arriving and earning"
+        }, (function () {
+          var pipe = [].concat.apply([], filtered.map(function (c) { return c.home_pipeline || []; }));
+          var rows = pipeRows(pipe);
+          var earning = filtered.reduce(function (a, c) { return a + (c.homes_earning || 0); }, 0);
+          var byStage = {};
+          pipe.forEach(function (r) {
+            var t = byStage[r.stage] || (byStage[r.stage] = { homes: 0, rtm: 0, ages: [] });
+            t.homes += r.homes; t.rtm += r.rtm;
+            if (r.median_age_days != null) t.ages.push(r.median_age_days);
+          });
+          var ready = (byStage.rtm ? byStage.rtm.homes : 0) + (byStage.listed ? byStage.listed.homes : 0);
+          var notReady = byStage.for_sale_prep ? byStage.for_sale_prep.homes : 0;
+          return h("div", null,
+            h(BandBar, { rows: rows, label: "Homes by pipeline stage" }),
+            h("div", { className: "note", style: { marginTop: "10px", fontSize: "12px",
+                                                   color: "var(--text-muted)" } },
+              count(ready) + " ready to market, " + count(earning) + " already earning" +
+              (notReady ? ", " + count(notReady) + " listed for sale without the Ready to " +
+                          "Market flag set" : "") +
+              ". Ready to Market is a user-defined field on the Asset Listing, not a status, " +
+              "which is why a home can read For Sale and not-ready at once. There is no punch " +
+              "stage in Rent Manager, so rehab runs straight to ready."));
+        })())),
 
       h(Panel, {
         title: "Vacancy by community",
@@ -1668,6 +1889,82 @@
           money(sumR("rent_lost"))
         ]
       })),
+
+      h(Panel, {
+        title: "Ready to Market pipeline by community",
+        note: "Click a community to see every home, its status and how long it has been held",
+        flush: true
+      }, (function () {
+        var rows = filtered.map(function (c) {
+          var by = {};
+          (c.home_pipeline || []).forEach(function (r) { by[r.stage] = r.homes; });
+          var g = function (k) { return by[k] || 0; };
+          return {
+            name: c.name, community: c, vehicle: c.vehicle,
+            homes: (c.homes || []).length,
+            earning: c.homes_earning || 0,
+            ordered: g("ordered"), delivered: g("delivered"), rehab: g("rehab"),
+            not_ready: g("for_sale_prep"), rtm: g("rtm") + g("listed"),
+            demo: g("demo"),
+            pipeline: (c.home_pipeline || []).reduce(function (a, r) { return a + r.homes; }, 0),
+            oldest: (function () {
+              var ages = (c.homes || []).filter(function (x) { return x.stage && x.age_days != null; })
+                .map(function (x) { return x.age_days; });
+              return ages.length ? Math.max.apply(null, ages) : 0;
+            })()
+          };
+        }).filter(function (r) { return r.homes; });
+        var sumH = function (k) { return rows.reduce(function (a, r) { return a + r[k]; }, 0); };
+        var dash = function (n) {
+          return n ? count(n) : h("span", { style: { color: "var(--text-muted)" } }, "—");
+        };
+        return h(SortableTable, {
+          cols: [
+            { key: "name", label: "Community", render: function (r) {
+                return h("span", null,
+                  h("button", { className: "linkish",
+                                onClick: function () { ctx.open(r.community, "homes"); },
+                                title: "Every home at " + r.name },
+                    r.name), " ", h("span", { className: "tag" }, r.vehicle)); } },
+            { key: "homes", label: "Homes", numeric: true, render: function (r) { return count(r.homes); } },
+            { key: "earning", label: "Earning", numeric: true,
+              title: "Rented, rent to own, lease option or otherwise in use",
+              render: function (r) { return dash(r.earning); } },
+            { key: "pipeline", label: "In pipeline", numeric: true,
+              render: function (r) { return dash(r.pipeline); } },
+            { key: "ordered", label: "Ordered", numeric: true,
+              render: function (r) { return dash(r.ordered); } },
+            { key: "delivered", label: "Awaiting setup", numeric: true,
+              render: function (r) { return dash(r.delivered); } },
+            { key: "rehab", label: "In rehab", numeric: true,
+              render: function (r) { return dash(r.rehab); } },
+            { key: "not_ready", label: "Listed, not ready", numeric: true,
+              title: "Status says For Sale but the Ready to Market flag is not set",
+              render: function (r) {
+                return r.not_ready
+                  ? h("span", { className: "down" }, count(r.not_ready))
+                  : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
+            { key: "rtm", label: "Ready to market", numeric: true,
+              render: function (r) {
+                return r.rtm
+                  ? h("span", { className: "up" }, count(r.rtm))
+                  : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
+            { key: "demo", label: "To demo", numeric: true,
+              render: function (r) { return dash(r.demo); } },
+            { key: "oldest", label: "Longest held", numeric: true,
+              title: "Days since the in-service date of the oldest home still in the pipeline",
+              render: function (r) {
+                return r.oldest
+                  ? h("span", { className: r.oldest > 730 ? "down" : "" }, count(r.oldest) + "d")
+                  : h("span", { style: { color: "var(--text-muted)" } }, "—"); } }
+          ],
+          rows: rows, initialSort: { key: "pipeline", dir: -1 },
+          footer: [rows.length + " communities with homes", count(sumH("homes")),
+            count(sumH("earning")), count(sumH("pipeline")), count(sumH("ordered")),
+            count(sumH("delivered")), count(sumH("rehab")), count(sumH("not_ready")),
+            count(sumH("rtm")), count(sumH("demo")), ""]
+        });
+      })()),
 
       h(Panel, {
         title: "Vacancy composition by unit type",

@@ -337,5 +337,156 @@
       "target_pct": 80,
       "_comment": "Utility income over utility expense. Below target means the community is eating the spread."
     }
+  },
+  "_home_pipeline_comment": [
+    "Where a home sits between arriving on site and earning rent, which is the",
+    "question Natalie asked as 'rehab, punch, Ready to Market, listed'.",
+    "",
+    "Two Rent Manager fields build it: AssetStatusesName for the lifecycle, and",
+    "udf_551 on the Asset Listing for Ready to Market. udf_551 was identified by",
+    "profiling every Yes/No UDF against status -- Yes appears only against For",
+    "Sale (111) and Delivered (2) and never against Ordered, Needs Rehab or",
+    "Rental, which is exactly how an RTM flag behaves. udf_325 looked similar at",
+    "a glance and is not it: its Yes spreads across Rental, Needs Rehab and Rent",
+    "to Own alike.",
+    "",
+    "PUNCH DOES NOT EXIST. There is no punch status and no punch UDF in Rent",
+    "Manager, so the funnel goes rehab straight to Ready to Market with nothing",
+    "in between. Someone has to add it before it can be reported.",
+    "",
+    "Statuses not listed here are homes already earning or already settled",
+    "(Rental, Rent to Own Agreement, In Use, Lease Option, Eviction Filed) and",
+    "are counted as such rather than as pipeline."
+  ],
+  "home_pipeline": {
+    "ordered": {
+      "label": "Ordered, not on site",
+      "statuses": [
+        "Ordered"
+      ],
+      "earning": false
+    },
+    "delivered": {
+      "label": "Delivered, awaiting setup",
+      "statuses": [
+        "Delivered"
+      ],
+      "rtm": false,
+      "earning": false
+    },
+    "rehab": {
+      "label": "Needs rehab",
+      "statuses": [
+        "Needs Rehab"
+      ],
+      "earning": false
+    },
+    "for_sale_prep": {
+      "label": "For sale, not yet ready to market",
+      "statuses": [
+        "For Sale"
+      ],
+      "rtm": false,
+      "earning": false
+    },
+    "rtm": {
+      "label": "Ready to market, not yet listed",
+      "rtm": true,
+      "earning": false
+    },
+    "listed": {
+      "label": "Listed and ready to market",
+      "statuses": [
+        "For Sale"
+      ],
+      "rtm": true,
+      "earning": false
+    },
+    "demo": {
+      "label": "To be demoed",
+      "statuses": [
+        "To Be Demoed"
+      ],
+      "earning": false
+    },
+    "tbd": {
+      "label": "Status not set",
+      "statuses": [
+        "TBD",
+        "Unknown",
+        ""
+      ],
+      "earning": false
+    }
+  },
+  "_rtm_field": "udf_551",
+  "_eviction_stages_comment": [
+    "The Eviction Tracker's CurrentStage collapsed into a funnel, so the AR panel",
+    "can say how far along a case is rather than listing twenty stage names.",
+    "",
+    "Order matters: the list below is the sequence a case moves through, and the",
+    "dashboard renders it in that order. A stage the tracker starts using that is",
+    "not listed here lands in `other` and is reported as unmapped.",
+    "",
+    "The title/sale phase is not a resident eviction at all -- it is recovering",
+    "and reselling an abandoned home -- so it is kept separate rather than",
+    "folded into possession."
+  ],
+  "eviction_stages": {
+    "intake": {
+      "label": "Intake packet",
+      "stages": [
+        "Intake Packet"
+      ]
+    },
+    "notice": {
+      "label": "Notice served",
+      "stages": [
+        "Demand Notice",
+        "Notice to Quit",
+        "Notice of Service",
+        "Notice of Order"
+      ]
+    },
+    "filed": {
+      "label": "Filed with the court",
+      "stages": [
+        "Court: Complaint",
+        "Court",
+        "Dispossessory",
+        "Application for Default"
+      ]
+    },
+    "judgment": {
+      "label": "Judgment entered",
+      "stages": [
+        "Court: Final Judgement",
+        "Declaratory Judgement"
+      ]
+    },
+    "possession": {
+      "label": "Possession ordered",
+      "stages": [
+        "Writ of Possession",
+        "Writ of Ejectment",
+        "Rule to Vacate"
+      ]
+    },
+    "title": {
+      "label": "Title and resale",
+      "stages": [
+        "Title Package",
+        "Title Pending",
+        "Auction Request",
+        "Public Sale",
+        "Post Auction"
+      ]
+    },
+    "done": {
+      "label": "Case closed",
+      "stages": [
+        "Case Closed"
+      ]
+    }
   }
 }
