@@ -1,0 +1,773 @@
+{
+ "generated_at": "2026-09-04T13:51:56+00:00",
+ "current_month": "2026-09",
+ "counts": {
+  "names_seen": 152,
+  "communities": 81,
+  "dropped": 49,
+  "rolled_up": 11,
+  "aliased": 10
+ },
+ "names": {
+  "A2Z Community Partners": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "A2Z Fund I LPs": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "A2Z Fund I, LLC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "A2Z ND Portfolio Partners": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "A2Z Prop Mgmt": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Management company"
+  },
+  "A2Z Wolf Bay Partners": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "American": {
+   "disposition": "keep",
+   "canonical": "American",
+   "reason": ""
+  },
+  "Apple Creek": {
+   "disposition": "keep",
+   "canonical": "Apple Creek",
+   "reason": ""
+  },
+  "Applegate MHC": {
+   "disposition": "keep",
+   "canonical": "Applegate MHC",
+   "reason": ""
+  },
+  "Applegate Water": {
+   "disposition": "roll_up",
+   "canonical": "Applegate MHC",
+   "reason": "utility sub-ledger"
+  },
+  "Auburn Ridge": {
+   "disposition": "keep",
+   "canonical": "Auburn Ridge",
+   "reason": ""
+  },
+  "BEDROCK I GROUP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "BEDROCK MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Placeholder ledger, 1 unit"
+  },
+  "BEDROCK MHC FUND II GP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund GP"
+  },
+  "BEDROCK MHC Fund II LP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund LP"
+  },
+  "Bay Oaks Village I": {
+   "disposition": "keep",
+   "canonical": "Bay Oaks Village I",
+   "reason": ""
+  },
+  "Bay Oaks Village II": {
+   "disposition": "keep",
+   "canonical": "Bay Oaks Village II",
+   "reason": ""
+  },
+  "Belle Haven": {
+   "disposition": "keep",
+   "canonical": "Belle Haven",
+   "reason": ""
+  },
+  "Brunswick Estates": {
+   "disposition": "keep",
+   "canonical": "Brunswick Estates",
+   "reason": ""
+  },
+  "Cambridge Homes": {
+   "disposition": "roll_up",
+   "canonical": "Cambridge MHC",
+   "reason": "home_sales sub-ledger"
+  },
+  "Cambridge MHC": {
+   "disposition": "keep",
+   "canonical": "Cambridge MHC",
+   "reason": ""
+  },
+  "Cambridge MHP Investment": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Investment entity"
+  },
+  "Carley's Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Carley's Mobile Home Park",
+   "reason": ""
+  },
+  "Cedar Grove Homes": {
+   "disposition": "roll_up",
+   "canonical": "Cedar Grove Manufactured Housing Community",
+   "reason": "home_sales sub-ledger"
+  },
+  "Cedar Grove MHC": {
+   "disposition": "alias",
+   "canonical": "Cedar Grove Manufactured Housing Community",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Cedar Grove Manufactured Housing Community": {
+   "disposition": "keep",
+   "canonical": "Cedar Grove Manufactured Housing Community",
+   "reason": ""
+  },
+  "Central Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Central Mobile Home Park",
+   "reason": ""
+  },
+  "Colonial Homes": {
+   "disposition": "roll_up",
+   "canonical": "Colonial Manufactured Housing Community",
+   "reason": "home_sales sub-ledger"
+  },
+  "Colonial MHC": {
+   "disposition": "alias",
+   "canonical": "Colonial Manufactured Housing Community",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Colonial Manufactured Housing Community": {
+   "disposition": "keep",
+   "canonical": "Colonial Manufactured Housing Community",
+   "reason": ""
+  },
+  "Congress Mobile Home Park": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Sold: Sold July 2026"
+  },
+  "Countryside MHC": {
+   "disposition": "keep",
+   "canonical": "Countryside MHC",
+   "reason": ""
+  },
+  "Crystal Acres": {
+   "disposition": "keep",
+   "canonical": "Crystal Acres",
+   "reason": ""
+  },
+  "Druid Oaks MHC": {
+   "disposition": "keep",
+   "canonical": "Druid Oaks MHC",
+   "reason": ""
+  },
+  "Everglades Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Everglades Mobile Home Park",
+   "reason": ""
+  },
+  "Fox Creek": {
+   "disposition": "keep",
+   "canonical": "Fox Creek",
+   "reason": ""
+  },
+  "Geiger Key Fish Camp Opco": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Operating company, not lots"
+  },
+  "Geiger Key RV Resort": {
+   "disposition": "keep",
+   "canonical": "Geiger Key RV Resort",
+   "reason": ""
+  },
+  "Geiger Key Resort Propco": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Property company, not lots"
+  },
+  "Geiger RV": {
+   "disposition": "keep",
+   "canonical": "Geiger RV",
+   "reason": ""
+  },
+  "Great Oak RV Resort": {
+   "disposition": "keep",
+   "canonical": "Great Oak RV Resort",
+   "reason": ""
+  },
+  "Greene Pointe": {
+   "disposition": "keep",
+   "canonical": "Greene Pointe",
+   "reason": ""
+  },
+  "Grove Banyan": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "Grove Banyan Holdings": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "Grove Banyan Holdings - B": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund entity"
+  },
+  "Gulf Breeze MHC": {
+   "disposition": "keep",
+   "canonical": "Gulf Breeze MHC",
+   "reason": ""
+  },
+  "Gulf Breeze MHP": {
+   "disposition": "alias",
+   "canonical": "Gulf Breeze MHC",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Harbour Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Harbour Mobile Home Park",
+   "reason": ""
+  },
+  "Hendersons MHC": {
+   "disposition": "keep",
+   "canonical": "Hendersons MHC",
+   "reason": ""
+  },
+  "Hershey Park": {
+   "disposition": "keep",
+   "canonical": "Hershey Park",
+   "reason": ""
+  },
+  "Highlands": {
+   "disposition": "keep",
+   "canonical": "Highlands",
+   "reason": ""
+  },
+  "Hunter Springs MHC": {
+   "disposition": "alias",
+   "canonical": "Hunter Springs MHP",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Hunter Springs MHP": {
+   "disposition": "keep",
+   "canonical": "Hunter Springs MHP",
+   "reason": ""
+  },
+  "J Bar J Estates": {
+   "disposition": "keep",
+   "canonical": "J Bar J Estates",
+   "reason": ""
+  },
+  "Lake Saunders": {
+   "disposition": "keep",
+   "canonical": "Lake Saunders",
+   "reason": ""
+  },
+  "Lake Toho": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+  },
+  "Lake Wales MHC": {
+   "disposition": "keep",
+   "canonical": "Lake Wales MHC",
+   "reason": ""
+  },
+  "Lamberton Lake Homes": {
+   "disposition": "roll_up",
+   "canonical": "Lamberton Lake MHC",
+   "reason": "home_sales sub-ledger"
+  },
+  "Lamberton Lake MHC": {
+   "disposition": "keep",
+   "canonical": "Lamberton Lake MHC",
+   "reason": ""
+  },
+  "Lambeth MHC": {
+   "disposition": "alias",
+   "canonical": "Lambeth Manufactured Housing Community",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Lambeth Manufactured Housing Community": {
+   "disposition": "keep",
+   "canonical": "Lambeth Manufactured Housing Community",
+   "reason": ""
+  },
+  "Lucky Clover": {
+   "disposition": "keep",
+   "canonical": "Lucky Clover",
+   "reason": ""
+  },
+  "Lucky Clover RV": {
+   "disposition": "keep",
+   "canonical": "Lucky Clover RV",
+   "reason": ""
+  },
+  "Mayflower Hills": {
+   "disposition": "keep",
+   "canonical": "Mayflower Hills",
+   "reason": ""
+  },
+  "McGregor Downs": {
+   "disposition": "keep",
+   "canonical": "McGregor Downs",
+   "reason": ""
+  },
+  "Meadow Woods Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Meadow Woods Mobile Home Park",
+   "reason": ""
+  },
+  "Medallion": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+  },
+  "Mobile Manor": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+  },
+  "Mobile Manor Homes": {
+   "disposition": "roll_up",
+   "canonical": "Mobile Manor",
+   "reason": "home_sales sub-ledger"
+  },
+  "Monson": {
+   "disposition": "keep",
+   "canonical": "Monson",
+   "reason": ""
+  },
+  "ND Communities": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Portfolio entity"
+  },
+  "Nalls Court MHC": {
+   "disposition": "keep",
+   "canonical": "Nalls Court MHC",
+   "reason": ""
+  },
+  "Northgate MH": {
+   "disposition": "keep",
+   "canonical": "Northgate MH",
+   "reason": ""
+  },
+  "Northgate MHP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Parent ledger; lots live on Northgate MH / Northgate RV"
+  },
+  "Northgate RV": {
+   "disposition": "keep",
+   "canonical": "Northgate RV",
+   "reason": ""
+  },
+  "Northgate Utility": {
+   "disposition": "roll_up",
+   "canonical": "Northgate MH",
+   "reason": "utility sub-ledger"
+  },
+  "Oakside MHP": {
+   "disposition": "keep",
+   "canonical": "Oakside MHP",
+   "reason": ""
+  },
+  "Oceanaire MHC": {
+   "disposition": "keep",
+   "canonical": "Oceanaire MHC",
+   "reason": ""
+  },
+  "Ormond Beach Oasis": {
+   "disposition": "keep",
+   "canonical": "Ormond Beach Oasis",
+   "reason": ""
+  },
+  "Palm Haven Estates": {
+   "disposition": "keep",
+   "canonical": "Palm Haven Estates",
+   "reason": ""
+  },
+  "Palm Spring Estates": {
+   "disposition": "keep",
+   "canonical": "Palm Spring Estates",
+   "reason": ""
+  },
+  "Paradise Lakes": {
+   "disposition": "keep",
+   "canonical": "Paradise Lakes",
+   "reason": ""
+  },
+  "Paradise Lakes RV": {
+   "disposition": "keep",
+   "canonical": "Paradise Lakes RV",
+   "reason": ""
+  },
+  "Paradise Palms": {
+   "disposition": "keep",
+   "canonical": "Paradise Palms",
+   "reason": ""
+  },
+  "Parakeet Communities": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Corporate entity"
+  },
+  "Parakeet Founders Group": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Corporate entity"
+  },
+  "Parakeet Home Sales": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Home sales entity"
+  },
+  "Parakeet Home Sales SC, LLC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Home sales entity"
+  },
+  "Parakeet Homes": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Home sales entity"
+  },
+  "Parakeet MHC Hold Co I": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Holding company"
+  },
+  "Parakeet MHC Hold Co II": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Holding company"
+  },
+  "Parakeet MHC Senior": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Debt entity"
+  },
+  "Parakeet Origins I GP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund GP"
+  },
+  "Parakeet Origins Portfolio I": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Fund"
+  },
+  "Parktown MHC": {
+   "disposition": "keep",
+   "canonical": "Parktown MHC",
+   "reason": ""
+  },
+  "Parkwood MHC": {
+   "disposition": "alias",
+   "canonical": "Parkwood Mobile Home Park",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Parkwood Manufactured Housing Community": {
+   "disposition": "alias",
+   "canonical": "Parkwood Mobile Home Park",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Parkwood Mobile Home Park": {
+   "disposition": "keep",
+   "canonical": "Parkwood Mobile Home Park",
+   "reason": ""
+  },
+  "Redlands": {
+   "disposition": "keep",
+   "canonical": "Redlands",
+   "reason": ""
+  },
+  "Regency I & II": {
+   "disposition": "keep",
+   "canonical": "Regency I & II",
+   "reason": ""
+  },
+  "River Oaks RV Resort": {
+   "disposition": "keep",
+   "canonical": "River Oaks RV Resort",
+   "reason": ""
+  },
+  "Riverwalk": {
+   "disposition": "keep",
+   "canonical": "Riverwalk",
+   "reason": ""
+  },
+  "Riviera": {
+   "disposition": "keep",
+   "canonical": "Riviera",
+   "reason": ""
+  },
+  "Royal Oaks MHC": {
+   "disposition": "keep",
+   "canonical": "Royal Oaks MHC",
+   "reason": ""
+  },
+  "Royal Palm Trailer Park": {
+   "disposition": "keep",
+   "canonical": "Royal Palm Trailer Park",
+   "reason": ""
+  },
+  "Sea Shells Manufactured Housing Community": {
+   "disposition": "keep",
+   "canonical": "Sea Shells Manufactured Housing Community",
+   "reason": ""
+  },
+  "Shady Acres MHC": {
+   "disposition": "keep",
+   "canonical": "Shady Acres MHC",
+   "reason": ""
+  },
+  "Shady Oaks MHP": {
+   "disposition": "keep",
+   "canonical": "Shady Oaks MHP",
+   "reason": ""
+  },
+  "Shell Pointe MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Sold: Sold July 2026"
+  },
+  "Shirleys Trailer Park I": {
+   "disposition": "keep",
+   "canonical": "Shirleys Trailer Park I",
+   "reason": ""
+  },
+  "Shirleys Trailer Park II": {
+   "disposition": "keep",
+   "canonical": "Shirleys Trailer Park II",
+   "reason": ""
+  },
+  "Silver Breeze": {
+   "disposition": "keep",
+   "canonical": "Silver Breeze",
+   "reason": ""
+  },
+  "Silver Hill MHC": {
+   "disposition": "keep",
+   "canonical": "Silver Hill MHC",
+   "reason": ""
+  },
+  "Southgate": {
+   "disposition": "keep",
+   "canonical": "Southgate",
+   "reason": ""
+  },
+  "Su-Rene": {
+   "disposition": "keep",
+   "canonical": "Su-Rene",
+   "reason": ""
+  },
+  "Tarheel MHC Investment": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Investment entity"
+  },
+  "Terrace Crossings": {
+   "disposition": "keep",
+   "canonical": "Terrace Crossings",
+   "reason": ""
+  },
+  "The Oaks": {
+   "disposition": "keep",
+   "canonical": "The Oaks",
+   "reason": ""
+  },
+  "Town & Country MHC": {
+   "disposition": "keep",
+   "canonical": "Town & Country MHC",
+   "reason": ""
+  },
+  "Tradewinds MHC": {
+   "disposition": "keep",
+   "canonical": "Tradewinds MHC",
+   "reason": ""
+  },
+  "Trailerama MHP": {
+   "disposition": "keep",
+   "canonical": "Trailerama MHP",
+   "reason": ""
+  },
+  "Triple S Marina": {
+   "disposition": "keep",
+   "canonical": "Triple S Marina",
+   "reason": ""
+  },
+  "Valley View Homes": {
+   "disposition": "roll_up",
+   "canonical": "Valley View MHC",
+   "reason": "home_sales sub-ledger"
+  },
+  "Valley View MHC": {
+   "disposition": "keep",
+   "canonical": "Valley View MHC",
+   "reason": ""
+  },
+  "Vandemere Homes": {
+   "disposition": "roll_up",
+   "canonical": "Vandemere Manufactured Housing Community",
+   "reason": "home_sales sub-ledger"
+  },
+  "Vandemere MHC": {
+   "disposition": "alias",
+   "canonical": "Vandemere Manufactured Housing Community",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Vandemere Manufactured Housing Community": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "No snapshot since 2025-08 (13 periods stale); disposed or renamed"
+  },
+  "Vantage Oaks": {
+   "disposition": "keep",
+   "canonical": "Vantage Oaks",
+   "reason": ""
+  },
+  "Vantage Oaks Utility": {
+   "disposition": "roll_up",
+   "canonical": "Vantage Oaks",
+   "reason": "utility sub-ledger"
+  },
+  "Westwood MHC": {
+   "disposition": "keep",
+   "canonical": "Westwood MHC",
+   "reason": ""
+  },
+  "Westwood MHP": {
+   "disposition": "alias",
+   "canonical": "Westwood MHC",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "Whispering Pines MA": {
+   "disposition": "keep",
+   "canonical": "Whispering Pines MA",
+   "reason": ""
+  },
+  "Whispering Pines MH FL": {
+   "disposition": "keep",
+   "canonical": "Whispering Pines MH FL",
+   "reason": ""
+  },
+  "Whispering Pines RV FL": {
+   "disposition": "keep",
+   "canonical": "Whispering Pines RV FL",
+   "reason": ""
+  },
+  "Windward Knoll": {
+   "disposition": "keep",
+   "canonical": "Windward Knoll",
+   "reason": ""
+  },
+  "Wolf Bay Homes": {
+   "disposition": "roll_up",
+   "canonical": "Wolf Bay MHC",
+   "reason": "home_sales sub-ledger"
+  },
+  "Wolf Bay MHC": {
+   "disposition": "keep",
+   "canonical": "Wolf Bay MHC",
+   "reason": ""
+  },
+  "Wolf Bay Manufactured Housing Community": {
+   "disposition": "alias",
+   "canonical": "Wolf Bay MHC",
+   "reason": "Duplicate ledger for the same asset"
+  },
+  "XRiver Oaks": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xBay Oaks Village I": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xBay Oaks Village II": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xGulf Breeze MHP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xLake Saunders RV": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xLake Wales MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xOceanaire MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xOrmond Beach Oasis": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xPalm Spring Estates": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xParkwood MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xParkwood Manufactured Housing Community": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xTown & Country MHC": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xWestwood MHP": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  },
+  "xWolf Bay Manufactured Housing Community": {
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "RM retired-record convention: renamed or superseded ledger"
+  }
+ }
+}

@@ -1,0 +1,393 @@
+{
+  "_comment": [
+    "Property registry for the Parakeet ops dashboard.",
+    "Rent Manager carries several parallel record types under propertyName. This file decides",
+    "which ones are real communities, which roll up into a parent, and which are dropped.",
+    "",
+    "MAINTENANCE: when a property is sold, add it to `sold`. When RM renames a property,",
+    "the old record usually gains an 'x' prefix and is dropped automatically by rule.",
+    "Every name the pipeline sees is written to data/registry_audit.json with its disposition,",
+    "so anything new and unclassified shows up there instead of silently landing in the numbers."
+  ],
+  "rules": {
+    "retired_prefix": {
+      "patterns": [
+        "^x[A-Z]",
+        "^X[A-Z]"
+      ],
+      "reason": "RM retired-record convention: renamed or superseded ledger"
+    },
+    "drop_zero_occupancy_twin": {
+      "enabled": true,
+      "reason": "Duplicate ledger for a community that already has a live record; 0% occupancy means the lots moved to the twin",
+      "exempt_declared_segments": true
+    },
+    "drop_stale_months": {
+      "threshold": 4,
+      "reason": "No snapshot in the last N periods; disposed or renamed"
+    }
+  },
+  "sold": [
+    {
+      "match": [
+        "Congress Mobile Home Park",
+        "Congress",
+        "CONG"
+      ],
+      "reason": "Sold July 2026",
+      "effective": "2026-07-27"
+    },
+    {
+      "match": [
+        "Shell Pointe MHC",
+        "Shelle Pointe",
+        "Shell Pointe",
+        "SP"
+      ],
+      "reason": "Sold July 2026",
+      "effective": "2026-07-27"
+    }
+  ],
+  "non_community": [
+    {
+      "match": "Parakeet Communities",
+      "reason": "Corporate entity"
+    },
+    {
+      "match": "Parakeet Founders Group",
+      "reason": "Corporate entity"
+    },
+    {
+      "match": "Parakeet Home Sales",
+      "reason": "Home sales entity"
+    },
+    {
+      "match": "Parakeet Home Sales SC, LLC",
+      "reason": "Home sales entity"
+    },
+    {
+      "match": "Parakeet Homes",
+      "reason": "Home sales entity"
+    },
+    {
+      "match": "Parakeet MHC Hold Co I",
+      "reason": "Holding company"
+    },
+    {
+      "match": "Parakeet MHC Hold Co II",
+      "reason": "Holding company"
+    },
+    {
+      "match": "Parakeet MHC Senior",
+      "reason": "Debt entity"
+    },
+    {
+      "match": "Parakeet Origins I GP",
+      "reason": "Fund GP"
+    },
+    {
+      "match": "Parakeet Origins Portfolio I",
+      "reason": "Fund"
+    },
+    {
+      "match": "A2Z Community Partners",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "A2Z Fund I LPs",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "A2Z Fund I, LLC",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "A2Z ND Portfolio Partners",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "A2Z Prop Mgmt",
+      "reason": "Management company"
+    },
+    {
+      "match": "A2Z Wolf Bay Partners",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "BEDROCK I GROUP",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "BEDROCK MHC FUND II GP",
+      "reason": "Fund GP"
+    },
+    {
+      "match": "BEDROCK MHC Fund II LP",
+      "reason": "Fund LP"
+    },
+    {
+      "match": "BEDROCK MHC",
+      "reason": "Placeholder ledger, 1 unit"
+    },
+    {
+      "match": "Cambridge MHP Investment",
+      "reason": "Investment entity"
+    },
+    {
+      "match": "Geiger Key Fish Camp Opco",
+      "reason": "Operating company, not lots"
+    },
+    {
+      "match": "Geiger Key Resort Propco",
+      "reason": "Property company, not lots"
+    },
+    {
+      "match": "Grove Banyan",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "Grove Banyan Holdings",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "Grove Banyan Holdings - B",
+      "reason": "Fund entity"
+    },
+    {
+      "match": "ND Communities",
+      "reason": "Portfolio entity"
+    },
+    {
+      "match": "Tarheel MHC Investment",
+      "reason": "Investment entity"
+    },
+    {
+      "match": "Northgate MHP",
+      "reason": "Parent ledger; lots live on Northgate MH / Northgate RV"
+    }
+  ],
+  "_roll_up_comment": [
+    "Sub-ledgers that carry real AR and GL activity but no rentable lots of their own.",
+    "Their money is attributed to the parent community; their unit counts are ignored."
+  ],
+  "roll_up": [
+    {
+      "match": "Northgate Utility",
+      "parent": "Northgate MH",
+      "kind": "utility"
+    },
+    {
+      "match": "Vantage Oaks Utility",
+      "parent": "Vantage Oaks",
+      "kind": "utility"
+    },
+    {
+      "match": "Applegate Water",
+      "parent": "Applegate MHC",
+      "kind": "utility"
+    },
+    {
+      "match": "Cedar Grove Homes",
+      "parent": "Cedar Grove Manufactured Housing Community",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Colonial Homes",
+      "parent": "Colonial Manufactured Housing Community",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Lamberton Lake Homes",
+      "parent": "Lamberton Lake MHC",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Valley View Homes",
+      "parent": "Valley View MHC",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Vandemere Homes",
+      "parent": "Vandemere Manufactured Housing Community",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Wolf Bay Homes",
+      "parent": "Wolf Bay MHC",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Mobile Manor Homes",
+      "parent": "Mobile Manor",
+      "kind": "home_sales"
+    },
+    {
+      "match": "Cambridge Homes",
+      "parent": "Cambridge MHC",
+      "kind": "home_sales"
+    }
+  ],
+  "_aliases_comment": [
+    "Two live RM records that are the same physical community. The canonical name wins;",
+    "figures are summed. Only list pairs that are genuinely one asset."
+  ],
+  "aliases": {
+    "Cedar Grove MHC": "Cedar Grove Manufactured Housing Community",
+    "Colonial MHC": "Colonial Manufactured Housing Community",
+    "Lambeth MHC": "Lambeth Manufactured Housing Community",
+    "Vandemere MHC": "Vandemere Manufactured Housing Community",
+    "Parkwood MHC": "Parkwood Mobile Home Park",
+    "Hunter Springs MHC": "Hunter Springs MHP",
+    "Gulf Breeze MHP": "Gulf Breeze MHC",
+    "Westwood MHP": "Westwood MHC",
+    "Wolf Bay Manufactured Housing Community": "Wolf Bay MHC",
+    "Parkwood Manufactured Housing Community": "Parkwood Mobile Home Park"
+  },
+  "_segments_comment": [
+    "Physical parks split across MH and RV ledgers in RM. Both records are real and stay",
+    "separate rows on the dashboard, but they share a `park` so portfolio views can group them."
+  ],
+  "segments": {
+    "Northgate MH": {
+      "park": "Northgate",
+      "type": "MH"
+    },
+    "Northgate RV": {
+      "park": "Northgate",
+      "type": "RV"
+    },
+    "Geiger Key RV Resort": {
+      "park": "Geiger Key",
+      "type": "RV"
+    },
+    "Geiger RV": {
+      "park": "Geiger Key",
+      "type": "RV"
+    },
+    "Lucky Clover": {
+      "park": "Lucky Clover",
+      "type": "MH"
+    },
+    "Lucky Clover RV": {
+      "park": "Lucky Clover",
+      "type": "RV"
+    },
+    "Paradise Lakes": {
+      "park": "Paradise Lakes",
+      "type": "MH"
+    },
+    "Paradise Lakes RV": {
+      "park": "Paradise Lakes",
+      "type": "RV"
+    },
+    "Whispering Pines MH FL": {
+      "park": "Whispering Pines FL",
+      "type": "MH"
+    },
+    "Whispering Pines RV FL": {
+      "park": "Whispering Pines FL",
+      "type": "RV"
+    },
+    "Bay Oaks Village I": {
+      "park": "Bay Oaks Village",
+      "type": "MH"
+    },
+    "Bay Oaks Village II": {
+      "park": "Bay Oaks Village",
+      "type": "MH"
+    },
+    "Shirleys Trailer Park I": {
+      "park": "Shirleys",
+      "type": "MH"
+    },
+    "Shirleys Trailer Park II": {
+      "park": "Shirleys",
+      "type": "MH"
+    }
+  },
+  "_unit_types_comment": [
+    "Vacancy composition. `rentable` decides whether a lot belongs in the occupancy denominator:",
+    "an unusable or demo lot is not a leasing failure, it is inventory that does not exist yet.",
+    "The dashboard reports occupancy both ways so the distinction stays visible."
+  ],
+  "unit_types": {
+    "MH": {
+      "rentable": [
+        "Lot",
+        "Lot-Rental",
+        "Lot-LTP",
+        "Lot-Avail(POH)",
+        "Lot-Pending(POH)",
+        "SFH",
+        "APT",
+        "Trailer-Rental",
+        "TBD"
+      ],
+      "rentable_impaired": [
+        "Lot-Not Ready",
+        "Lot-Need Rehab",
+        "Lot-In Rehab",
+        "POH-Need Rehab",
+        "POH-In Rehab",
+        "POH-Rehab",
+        "Lot-Evicted",
+        "Lot-Evicted (Rental)",
+        "Lot-Abandoned"
+      ],
+      "not_rentable": [
+        "Lot-Unusable",
+        "Lot-Demo"
+      ]
+    },
+    "RV": {
+      "rentable": [
+        "Lot-RV",
+        "Lot-RV(Transient)",
+        "Lot-RV(Seasonal)",
+        "RV-Standard",
+        "RV-Deluxe",
+        "RV-Long Term"
+      ],
+      "rentable_impaired": [],
+      "not_rentable": []
+    },
+    "MARINA": {
+      "rentable": [
+        "Boat Slip",
+        "Boat Lift",
+        "Boat Tie"
+      ],
+      "rentable_impaired": [],
+      "not_rentable": []
+    },
+    "NON_REVENUE": {
+      "rentable": [],
+      "rentable_impaired": [],
+      "not_rentable": [
+        "Office",
+        "COMM",
+        "Offsite Water",
+        "Offsite Sewer",
+        "Park Owned Struct"
+      ]
+    }
+  },
+  "thresholds": {
+    "occupancy": {
+      "red": 80,
+      "yellow": 90
+    },
+    "collections": {
+      "red": 85,
+      "yellow": 95
+    },
+    "over90_share": {
+      "red": 25,
+      "yellow": 10
+    },
+    "noi_margin": {
+      "red": 35,
+      "yellow": 50
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "_comment": [
+    "Warehouse queries that feed the ops dashboard, in the order they should run.",
+    "",
+    "These are executed against the RentViewer data warehouse MCP tool",
+    "(mcp__RentViewer_Data_Warehouse__run_query). The warehouse is reachable only",
+    "through an authenticated MCP connector, so a plain HTTP job cannot run them --",
+    "the refresh is driven by a scheduled Claude session. See docs/ARCHITECTURE.md.",
+    "",
+    "Each entry's `out` is the filename build.py expects under pipeline/raw/.",
+    "",
+    "TWO RULES THAT MATTER:",
+    "  1. Keep `limit` comfortably above the real row count. A pull that hits its",
+    "     limit is silently truncated -- an early build read $588K of portfolio AR",
+    "     when the true figure was $1.41M, purely from a 2000-row cap.",
+    "  2. Never group a snapshot model by both reportMonth and a wide dimension",
+    "     at once unless you raise the limit to match; the row count multiplies.",
+    "",
+    "If a query times out at 60s, drop a measure or narrow the time range and",
+    "re-run rather than lowering the limit."
+  ],
+
+  "queries": [
+    {
+      "out": "occupancy_by_property_month.json",
+      "expect_rows_min": 1500,
+      "spec": {
+        "measures": [
+          "VW_Rental_Unit_Listing.unitCount",
+          "VW_Rental_Unit_Listing.occupancyRate",
+          "VW_Rental_Unit_Listing.daysVacant",
+          "VW_Rental_Unit_Listing.daysAvailable",
+          "VW_Rental_Unit_Listing.totalActualRent",
+          "VW_Rental_Unit_Listing.totalMarketRent"
+        ],
+        "dimensions": [
+          "VW_Rental_Unit_Listing.propertyName",
+          "VW_Rental_Unit_Listing.reportMonth"
+        ],
+        "limit": 5000,
+        "question": "Occupancy rate and unit count by community by month for the occupancy trend chart"
+      }
+    },
+    {
+      "out": "unit_listing_by_type.json",
+      "expect_rows_min": 300,
+      "spec": {
+        "measures": [
+          "VW_Rental_Unit_Listing.unitCount",
+          "VW_Rental_Unit_Listing.occupancyRate",
+          "VW_Rental_Unit_Listing.daysVacant",
+          "VW_Rental_Unit_Listing.daysAvailable"
+        ],
+        "dimensions": [
+          "VW_Rental_Unit_Listing.propertyName",
+          "VW_Rental_Unit_Listing.unitTypeName"
+        ],
+        "limit": 2000,
+        "question": "Current unit count and occupancy by community and unit type, for vacancy composition"
+      }
+    },
+    {
+      "out": "ar_by_property_month.json",
+      "expect_rows_min": 1200,
+      "spec": {
+        "measures": [
+          "VW_Aged_Receivables.agedReceivablesTotal",
+          "VW_Aged_Receivables.current0to30",
+          "VW_Aged_Receivables.days31to60",
+          "VW_Aged_Receivables.days61to90",
+          "VW_Aged_Receivables.over90Days",
+          "VW_Aged_Receivables.customersWithBalance"
+        ],
+        "dimensions": [
+          "VW_Aged_Receivables.propertyName",
+          "VW_Aged_Receivables.reportMonth"
+        ],
+        "limit": 5000,
+        "question": "Aged receivables aging buckets by community by month, full history, for the AR trend chart"
+      }
+    },
+    {
+      "out": "rentroll_by_property_month.json",
+      "expect_rows_min": 1500,
+      "spec": {
+        "measures": [
+          "VW_Summary_Rent_Roll.totalCharged",
+          "VW_Summary_Rent_Roll.totalPaid",
+          "VW_Summary_Rent_Roll.collectionRate",
+          "VW_Summary_Rent_Roll.rentCharges",
+          "VW_Summary_Rent_Roll.vacancyLoss",
+          "VW_Summary_Rent_Roll.lossToLease",
+          "VW_Summary_Rent_Roll.debitBalances"
+        ],
+        "dimensions": [
+          "VW_Summary_Rent_Roll.propertyName",
+          "VW_Summary_Rent_Roll.reportMonth"
+        ],
+        "limit": 5000,
+        "question": "Collections, charges, payments, vacancy loss and loss to lease by community by month"
+      }
+    },
+    {
+      "out": "moves_by_property_month.json",
+      "expect_rows_min": 500,
+      "spec": {
+        "measures": [
+          "VW_MoveIns_MoveOuts.moveIns",
+          "VW_MoveIns_MoveOuts.moveOuts",
+          "VW_MoveIns_MoveOuts.netMovement"
+        ],
+        "dimensions": [
+          "VW_MoveIns_MoveOuts.propertyName",
+          "VW_MoveIns_MoveOuts.month"
+        ],
+        "timeRange": {
+          "dimension": "VW_MoveIns_MoveOuts.month",
+          "from": "{{START_OF_PRIOR_YEAR}}",
+          "to": "{{TODAY}}"
+        },
+        "limit": 5000,
+        "question": "Move ins and move outs by community by month for turnover tracking"
+      }
+    },
+    {
+      "out": "financials_by_property_month.json",
+      "expect_rows_min": 1500,
+      "spec": {
+        "measures": [
+          "VW_Budget_Comparison.totalRevenue",
+          "VW_Budget_Comparison.totalRevenueBudget",
+          "VW_Budget_Comparison.totalOperatingExpenses",
+          "VW_Budget_Comparison.totalOperatingExpensesBudget",
+          "VW_Budget_Comparison.noi",
+          "VW_Budget_Comparison.noiBudget",
+          "VW_Budget_Comparison.noiMargin"
+        ],
+        "dimensions": [
+          "VW_Budget_Comparison.propertyName",
+          "VW_Budget_Comparison.endDate"
+        ],
+        "timeRange": {
+          "dimension": "VW_Budget_Comparison.endDate",
+          "from": "{{START_OF_PRIOR_YEAR}}",
+          "to": "{{TODAY}}"
+        },
+        "limit": 5000,
+        "question": "Revenue, operating expenses, NOI and budget by community by month for the financials tab"
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+<div id="root"><div class="loading">Loading portfolio data…</div></div>
+
+<!-- Dev shell: fetches the built payload from the repo. The published artifact
+     inlines the same data instead, via pipeline/publish.py. -->
+<script src="app.js"></script>
+<script>
+(function () {
+  var REFRESH_MS = 15 * 60 * 1000;
+  var url = "../data/dashboard.json";
+
+  function load(first) {
+    fetch(url + "?t=" + Date.now())
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        window.__DASHBOARD_DATA__ = data;
+        window.__PK_MOUNT__(data);
+      })
+      .catch(function (err) {
+        if (first) {
+          document.getElementById("root").innerHTML =
+            '<div class="errorbox">Could not load ' + url + ' (' + err.message +
+            ').<br>Run <code>python3 pipeline/build.py</code>, then serve the repo root ' +
+            'over HTTP rather than opening this file directly.</div>';
+        }
+      });
+  }
+
+  load(true);
+  setInterval(function () { load(false); }, REFRESH_MS);
+})();
+</script>
+</body>
+</html>
