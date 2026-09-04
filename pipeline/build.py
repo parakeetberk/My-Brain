@@ -30,10 +30,10 @@ import os
 import re
 import sys
 from calendar import monthrange
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -54,6 +54,13 @@ REPORTABLE_FILE = "pds_reportable.json"
 RM_SOURCES = {
     "rm_rent_roll": "rm_rent_roll.json",
     "rm_ar_detail": "rm_ar_detail.json",
+    # Move history carries LeasesMoveOutDate, which is the only true anchor for
+    # "how long has this been sitting", and CustomerStatus, which separates a
+    # former resident's balance from a current one's.
+    "rm_moves_detail": "rm_moves_detail.json",
+    # Asset listing carries AssetStatusesName: the home lifecycle from Ordered
+    # through Needs Rehab, For Sale and Rental.
+    "rm_asset_listing": "rm_asset_listing.json",
 }
 
 # Extra warehouse pulls carrying the GL category measures. Same grain as the
@@ -637,6 +644,77 @@ def build(raw_dir, out_dir, registry_path):
         for t in spec["types"]:
             reason_of[t] = rk
 
+    # ---- vacancy aging, from the last move-out on each unit ----------------
+    # An asset's service start date says when it entered the fleet, not when it
+    # went empty, so aging has to come from the lease history. A unit's most
+    # recent move-out is the day it became available.
+    today_d = date.today()
+    last_out = {}
+    cust_status = {}
+    moves_rows = load_optional(raw_dir, RM_SOURCES["rm_moves_detail"]) or []
+    for r in moves_rows:
+        cname = rm_community(r)
+        if not cname:
+            continue
+        acct = r.get("AccountsAccountID")
+        if acct is not None and r.get("CustomerStatus"):
+            cust_status[acct] = r["CustomerStatus"]
+        mo_out = (r.get("LeasesMoveOutDate") or "")[:10]
+        unit = str(r.get("SubEntitiesName") or "")
+        if not mo_out or not unit:
+            continue
+        key = (cname, unit)
+        if key not in last_out or mo_out > last_out[key]:
+            last_out[key] = mo_out
+
+    def days_since(iso):
+        try:
+            y, m, dd = (int(x) for x in iso.split("-")[:3])
+            return (today_d - date(y, m, dd)).days
+        except (ValueError, TypeError):
+            return None
+
+    AGE_BANDS = [(30, "0-30 days"), (60, "31-60 days"), (90, "61-90 days"),
+                 (180, "91-180 days"), (365, "181-365 days"), (10**6, "Over a year")]
+
+    def age_band(days):
+        if days is None:
+            return "Unknown"
+        for limit, label in AGE_BANDS:
+            if days <= limit:
+                return label
+        return "Over a year"
+
+    # ---- home lifecycle status, from the asset listing ---------------------
+    asset_rows = load_optional(raw_dir, RM_SOURCES["rm_asset_listing"]) or []
+    assets_by_comm = defaultdict(list)
+    asset_statuses = Counter()
+    for r in asset_rows:
+        cname = rm_community(r)
+        if not cname:
+            continue
+        status = (r.get("AssetStatusesName") or "Unknown").strip()
+        atype = (r.get("AssetTypesName") or "").strip()
+        # Structures are not homes; the pipeline view is about sellable and
+        # rentable housing stock.
+        if atype in ("Other Perm Structure", "Office", "Laundry Facility",
+                     "Commercial Building"):
+            continue
+        start = (r.get("AssetsServiceStartDate") or "")[:10]
+        asset_statuses[status] += 1
+        assets_by_comm[cname].append({
+            "tag": r.get("AssetsAssetTagID") or "",
+            "unit": str(r.get("SubEntitiesName") or ""),
+            "type": atype,
+            "status": status,
+            "in_service": start,
+            "age_days": days_since(start),
+            "title": (r.get("AssetTitleStatusesName") or "").strip(),
+            "market_rent": rnd(num(r.get("MarketRentAmount")), 0),
+        })
+    for cname in assets_by_comm:
+        assets_by_comm[cname].sort(key=lambda x: (x["status"], x["unit"]))
+
     rent_roll = defaultdict(list)
     vacancy_detail = defaultdict(list)
     unmapped_types = set()
@@ -673,11 +751,16 @@ def build(raw_dir, out_dir, registry_path):
         }
         rent_roll[cname].append(entry)
         if vacant:
+            out_date = last_out.get((cname, entry["unit"]))
+            dv = days_since(out_date) if out_date else None
             vacancy_detail[cname].append({
                 "unit": entry["unit"],
                 "type": utype,
                 "reason": reason_of.get(utype, "vacant_lot"),
                 "rent_lost": rnd(vac_loss, 0),
+                "vacant_since": out_date,
+                "days_vacant": dv,
+                "age_band": age_band(dv),
             })
 
     for cname in rent_roll:
@@ -710,6 +793,29 @@ def build(raw_dir, out_dir, registry_path):
         ct = (r.get("ChargeTypesDescription") or r.get("ChargeTypesName") or "Other").strip()
         a["charges"][ct] += num(r.get("TotalLeft"))
 
+    # Which bucket of work does this balance belong to? Rent Manager has no
+    # eviction flag on the receivable itself, so this is built from what the
+    # ledger does expose: a court fee means it is already with legal, a payment
+    # plan charge means terms are agreed, and a customer whose lease has ended
+    # is a former resident rather than a collection call. Everything else is
+    # genuinely unworked. The eviction tracker would replace the first of these
+    # with the real flag.
+    def ar_segment(a):
+        names = set(a["charges"].keys())
+        low = {n.lower() for n in names}
+        if any("court" in n or "legal" in n or "evict" in n for n in low):
+            return "legal", "With legal, court fees posted"
+        if any("payment plan" in n or "pmtpln" in n or "payls" in n for n in low):
+            return "payment_plan", "On a payment plan"
+        st = cust_status.get(a["account"])
+        if st == "Past":
+            return "former", "Former resident, lease ended"
+        # Deliberately not called "needs action". This is the residue of three
+        # tests, not a determination, and most of it is ordinary current-tenant
+        # balance. Calling it a work queue would be a claim the data does not
+        # support; the eviction tracker is what would turn it into one.
+        return "unclassified", "Not yet classified"
+
     ar_accounts_out = {}
     for cname, accts in ar_accounts.items():
         rows_out = []
@@ -717,7 +823,10 @@ def build(raw_dir, out_dir, registry_path):
             if a["total"] <= 0.005:
                 continue
             top = sorted(a["charges"].items(), key=lambda x: -x[1])[:3]
+            seg, seg_label = ar_segment(a)
             rows_out.append({
+                "segment": seg,
+                "segment_label": seg_label,
                 "account": a["account"],
                 "unit": a["unit"],
                 "customer": a["customer"],
@@ -822,9 +931,43 @@ def build(raw_dir, out_dir, registry_path):
             "expenses": expense_split(name, closed_month),
             "expenses_ytd": expense_split_ytd(name, closed_month),
             "rent_roll": rent_roll.get(name, []),
+            "utilities_service": {
+                "water_service": pds.get("water_service") or "",
+                "water_paid_by": pds.get("water_paid_by") or "",
+                "sewer_service": pds.get("sewer_service") or "",
+                "sewer_paid_by": pds.get("sewer_paid_by") or "",
+                "trash_paid_by": pds.get("trash_paid_by") or "",
+                # If the community pays, there is nothing to bill back and a low
+                # recapture rate is the design rather than a billing failure.
+                "recoverable": any((pds.get(k) or "").strip().lower().startswith("resident")
+                                   for k in ("water_paid_by", "sewer_paid_by", "trash_paid_by")),
+            },
+            "homes": assets_by_comm.get(name, []),
+            "home_status": [
+                {"status": st, "homes": n}
+                for st, n in sorted(Counter(a["status"] for a in assets_by_comm.get(name, [])).items(),
+                                    key=lambda x: -x[1])
+            ],
             "vacancy_detail": vacancy_detail.get(name, []),
             "ar_accounts": ar_accounts_out.get(name, []),
             "vacancy_by_reason": vac_reasons,
+            "vacancy_aging": [
+                {"band": b, "units": n,
+                 "rent_lost": rnd(sum(x["rent_lost"] for x in vacancy_detail.get(name, [])
+                                      if x["age_band"] == b), 0)}
+                for b, n in sorted(
+                    Counter(x["age_band"] for x in vacancy_detail.get(name, [])).items(),
+                    key=lambda x: [lbl for _, lbl in AGE_BANDS].index(x[0])
+                    if x[0] in [lbl for _, lbl in AGE_BANDS] else 99)
+            ],
+            "ar_segments": [
+                {"segment": sg, "accounts": n,
+                 "amount": rnd(sum(x["total"] for x in ar_accounts_out.get(name, [])
+                                   if x["segment"] == sg), 0),
+                 "past_due_30plus": rnd(sum(x["past_due_30plus"] for x in ar_accounts_out.get(name, [])
+                                            if x["segment"] == sg), 0)}
+                for sg, n in Counter(x["segment"] for x in ar_accounts_out.get(name, [])).most_common()
+            ],
             # How much of the counted vacancy the RM unit list can actually
             # name. Below 100% means the drill-in list is shorter than the
             # count above it, and the panel says so rather than implying the
@@ -1275,6 +1418,40 @@ def build(raw_dir, out_dir, registry_path):
                        "drill-in list names %s units with no active lease as of today. Both "
                        "are right for what they measure, which is why they do not tie."
                        % (count_str(counted_vac), count_str(named_vac))),
+        })
+
+    aged_n = sum(1 for c in communities for v in c["vacancy_detail"]
+                 if v.get("days_vacant") is not None)
+    named_n = sum(len(c["vacancy_detail"]) for c in communities)
+    if named_n and aged_n / named_n < 0.8:
+        flags.append({
+            "severity": "info",
+            "title": "Vacancy aging covers %d of %d vacant units" % (aged_n, named_n),
+            "detail": ("Days vacant is measured from the unit's last move-out, and the move "
+                       "history pulled starts %s, so a lot that has been empty longer than "
+                       "that has no anchor and shows as Unknown. Pulling move history further "
+                       "back would close the gap." % months[0]),
+        })
+
+    seg_tot = defaultdict(lambda: [0, 0.0])
+    for c in communities:
+        for sgg in c["ar_segments"]:
+            seg_tot[sgg["segment"]][0] += sgg["accounts"]
+            seg_tot[sgg["segment"]][1] += sgg["amount"]
+    unclass = seg_tot.get("unclassified", [0, 0.0])
+    total_accts = sum(v[0] for v in seg_tot.values())
+    if total_accts and unclass[0] / total_accts > 0.5:
+        flags.append({
+            "severity": "warn",
+            "title": "%d of %d balances are not classified into a work bucket"
+                     % (unclass[0], total_accts),
+            "detail": ("Rent Manager carries no eviction flag on the receivable itself, so the "
+                       "split below is built from court fees posted (%d accounts) and payment "
+                       "plan charges (%d). Former-resident status resolves for only 40%% of "
+                       "accounts because the move history does not reach back far enough. To "
+                       "separate in-eviction, uncollectible and payment-plan properly this "
+                       "needs the eviction tracker export as a source."
+                       % (seg_tot.get("legal", [0])[0], seg_tot.get("payment_plan", [0])[0])),
         })
 
     rr_missing = [c["name"] for c in communities if not c["rent_roll"]]

@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-09-04T15:52:34+00:00",
+ "generated_at": "2026-09-04T17:40:18+00:00",
  "reportable_source": "pds_reportable.json",
  "counts": {
   "names_seen": 152,
-  "reportable_in_pds": 68,
-  "communities": 66,
-  "dropped": 80,
-  "rolled_up": 6,
+  "reportable_in_pds": 66,
+  "communities": 64,
+  "dropped": 83,
+  "rolled_up": 5,
   "reportable_without_data": 0
  },
  "reportable_without_warehouse_data": [],
@@ -107,14 +107,14 @@
    "reason": ""
   },
   "Cambridge Homes": {
-   "disposition": "roll_up",
-   "canonical": "Cambridge MHC",
-   "reason": "home_sales sub-ledger"
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "home_sales sub-ledger whose parent Cambridge MHC is not Reportable"
   },
   "Cambridge MHC": {
-   "disposition": "keep",
-   "canonical": "Cambridge MHC",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Cambridge MHP Investment": {
    "disposition": "drop",
@@ -197,9 +197,9 @@
    "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Geiger Key RV Resort": {
-   "disposition": "keep",
-   "canonical": "Geiger Key RV Resort",
-   "reason": ""
+   "disposition": "drop",
+   "canonical": null,
+   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Geiger Key Resort Propco": {
    "disposition": "drop",

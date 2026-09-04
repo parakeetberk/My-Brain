@@ -652,6 +652,11 @@
             cols: [
               { key: "unit", label: "Unit" },
               { key: "account", label: "Account", render: function (r) { return "#" + r.account; } },
+              { key: "segment", label: "Standing", render: function (r) {
+                  return h("span", {
+                    className: "chip " + (r.segment === "legal" ? "critical"
+                      : r.segment === "payment_plan" ? "good" : "watch")
+                  }, SEG_LABEL[r.segment] || r.segment); } },
               { key: "b0_30", label: "0–30", numeric: true, render: function (r) { return money(r.b0_30); } },
               { key: "b31_60", label: "31–60", numeric: true, render: function (r) { return money(r.b31_60); } },
               { key: "b61_90", label: "61–90", numeric: true, render: function (r) { return money(r.b61_90); } },
@@ -663,7 +668,7 @@
               { key: "charges", label: "What it is" }
             ],
             rows: aa, initialSort: { key: "past_due_30plus", dir: -1 },
-            footer: [aa.length + " accounts", "",
+            footer: [aa.length + " accounts", "", "",
               money(aa.reduce(function (a, r) { return a + r.b0_30; }, 0)),
               money(aa.reduce(function (a, r) { return a + r.b31_60; }, 0)),
               money(aa.reduce(function (a, r) { return a + r.b61_90; }, 0)),
@@ -803,6 +808,85 @@
   /* Vacancy composition as one stacked bar. A list of unit types answers "what
      types", but the question is "how much of my vacancy can I actually lease",
      and proportion carries that far better than rows of numbers. */
+  /* Aging reads as a ramp: fresh is fine, old is money burning. */
+  var AGE_COLORS = {
+    "0-30 days": "#4ABA81", "31-60 days": "#A8D5BD", "61-90 days": "#FFCC3B",
+    "91-180 days": "#F1A462", "181-365 days": "#F16262", "Over a year": "#B23B3B",
+    "Unknown": "#C7D3DA"
+  };
+  var AGE_ORDER = ['0-30 days','31-60 days','61-90 days','91-180 days','181-365 days','Over a year','Unknown'];
+
+  /* The home lifecycle, ordered the way a home actually moves through it. */
+  var STATUS_ORDER = ["Ordered", "Delivered", "Needs Rehab", "For Sale",
+                      "Rent to Own Agreement", "Lease Option (LOP)", "Rental",
+                      "In Use", "Eviction Filed", "To Be Demoed", "TBD", "Unknown"];
+  var STATUS_COLORS = {
+    "Ordered": "#C7D3DA", "Delivered": "#8FA3B2", "Needs Rehab": "#FFCC3B",
+    "For Sale": "#4ABA81", "Rent to Own Agreement": "#2F4E65",
+    "Lease Option (LOP)": "#5C7C93", "Rental": "#A8D5BD", "In Use": "#A8D5BD",
+    "Eviction Filed": "#F16262", "To Be Demoed": "#B23B3B", "TBD": "#E0E6EA",
+    "Unknown": "#E0E6EA"
+  };
+
+  var SEG_LABEL = {
+    legal: "With legal", payment_plan: "On a payment plan",
+    former: "Former resident", unclassified: "Not classified"
+  };
+  var SEG_COLORS = {
+    legal: "#F16262", payment_plan: "#4ABA81",
+    former: "#8FA3B2", unclassified: "#C7D3DA"
+  };
+
+  /* One proportional bar plus a legend. Used for vacancy reasons, vacancy
+     aging, home status and AR segments: same shape, different dimension. */
+  function BandBar(props) {
+    var rows = (props.rows || []).filter(function (r) { return r.n > 0; });
+    if (!rows.length) return h("div", { className: "loading" }, props.empty || "Nothing to show.");
+    var total = rows.reduce(function (a, r) { return a + r.n; }, 0);
+    return h("div", null,
+      h("div", { className: "reasonbar", role: "img", "aria-label": props.label },
+        rows.map(function (r) {
+          return h("span", {
+            key: r.key,
+            style: { width: (r.n / total * 100) + "%", background: r.color },
+            title: r.label + ": " + count(r.n) + (r.money ? " (" + money(r.money) + ")" : "")
+          });
+        })),
+      h("div", { className: "reason-legend" }, rows.map(function (r) {
+        return h("div", { className: "rl", key: r.key },
+          h("span", { className: "swatch", style: { background: r.color } }),
+          h("span", null,
+            h("span", { className: "rl-n" }, count(r.n)), " ", r.label,
+            h("span", { className: "rl-sub" },
+              "  " + pct(r.n / total * 100, 0) +
+              (r.money ? "  ·  " + money(r.money, { compact: true }) : ""))));
+      })),
+      props.note ? h("div", { className: "note",
+                              style: { marginTop: "10px", fontSize: "12px",
+                                       color: "var(--text-muted)" } }, props.note) : null);
+  }
+
+  function agingRows(list) {
+    var by = {}, lost = {};
+    (list || []).forEach(function (r) {
+      by[r.band] = (by[r.band] || 0) + r.units;
+      lost[r.band] = (lost[r.band] || 0) + (r.rent_lost || 0);
+    });
+    return AGE_ORDER.filter(function (b) { return by[b]; }).map(function (b) {
+      return { key: b, label: b, n: by[b], money: lost[b], color: AGE_COLORS[b] };
+    });
+  }
+
+  function statusRows(list) {
+    var by = {};
+    (list || []).forEach(function (r) { by[r.status] = (by[r.status] || 0) + r.homes; });
+    var known = STATUS_ORDER.filter(function (k) { return by[k]; });
+    Object.keys(by).forEach(function (k) { if (known.indexOf(k) === -1) known.push(k); });
+    return known.map(function (k) {
+      return { key: k, label: k, n: by[k], color: STATUS_COLORS[k] || "#8FA3B2" };
+    });
+  }
+
   var REASON_COLORS = {
     home_available: GREEN,
     in_rehab: YELLOW,
@@ -1233,6 +1317,68 @@
         note: "Unit-day weighted from the warehouse · click through on the Vacancy tab for units"
       }, h(ReasonBar, { rows: reasons, meta: d.reason_meta })),
 
+      h(Panel, {
+        title: "How long has it been sitting",
+        note: "Days since the unit's last move-out"
+      }, h(BandBar, {
+        rows: agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; }))),
+        label: "Vacant units by how long they have been empty",
+        note: (function () {
+          var rs = agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; })));
+          var old_ = rs.filter(function (r) {
+            return ["91-180 days", "181-365 days", "Over a year"].indexOf(r.key) >= 0;
+          });
+          var n = old_.reduce(function (a, r) { return a + r.n; }, 0);
+          var m = old_.reduce(function (a, r) { return a + (r.money || 0); }, 0);
+          var unk = rs.filter(function (r) { return r.key === "Unknown"; })[0];
+          return (n ? count(n) + " units have been empty more than 90 days, " +
+                      money(m) + " of rent a month. " : "") +
+                 (unk ? count(unk.n) + " have no move-out on record and show as Unknown." : "");
+        })()
+      })),
+
+      h(Panel, {
+        title: "Move-ins and move-outs by community",
+        note: periodLabel + " · net is the change in occupied lots",
+        flush: true
+      }, h(SortableTable, {
+        cols: [
+          { key: "name", label: "Community", render: function (r) {
+              return h("span", null,
+                h("button", { className: "linkish", onClick: function () { ctx.open(r.community); } },
+                  r.name), " ", h("span", { className: "tag" }, r.vehicle)); } },
+          { key: "units", label: "Lots", numeric: true, render: function (r) { return count(r.units); } },
+          { key: "occupancy", label: "Occupancy", numeric: true,
+            render: function (r) {
+              return h(Chip, { band: band(r.occupancy, th.occupancy) }, pct(r.occupancy)); } },
+          { key: "ins", label: "Move-ins", numeric: true, render: function (r) { return r.ins || "—"; } },
+          { key: "outs", label: "Move-outs", numeric: true, render: function (r) { return r.outs || "—"; } },
+          { key: "net", label: "Net", numeric: true, render: function (r) {
+              if (!r.net) return h("span", { style: { color: "var(--text-muted)" } }, "0");
+              return h("span", { className: r.net > 0 ? "up" : "down" },
+                (r.net > 0 ? "+" : "") + r.net); } }
+        ],
+        rows: filtered.map(function (c) {
+          var v = V(c);
+          return { name: c.name, community: c, vehicle: c.vehicle, units: v.units,
+                   occupancy: v.occupancy, ins: v.move_ins, outs: v.move_outs,
+                   net: (v.move_ins || 0) - (v.move_outs || 0) };
+        }),
+        initialSort: { key: "net", dir: 1 },
+        footer: ["Portfolio",
+          count(filtered.reduce(function (a, c) { return a + V(c).units; }, 0)),
+          pct((function () {
+            var u = filtered.reduce(function (a, c) { return a + V(c).units; }, 0);
+            return u ? filtered.reduce(function (a, c) { return a + V(c).occupied; }, 0) / u * 100 : 0;
+          })()),
+          filtered.reduce(function (a, c) { return a + V(c).move_ins; }, 0),
+          filtered.reduce(function (a, c) { return a + V(c).move_outs; }, 0),
+          (function () {
+            var n = filtered.reduce(function (a, c) { return a + V(c).move_ins - V(c).move_outs; }, 0);
+            return (n > 0 ? "+" : "") + n;
+          })()]
+      })),
+
       h(Panel, { title: "Move-in / move-out history", note: "Net resident movement · ○ open month" },
         h(LineChart, {
           series: d.trends.moves, zeroBase: true, height: 230,
@@ -1325,7 +1471,34 @@
     var sum = function (k) { return filtered.reduce(function (s, c) { return s + (V(c)[k] || 0); }, 0); };
     var charged = sum("charged"), paid = sum("paid");
 
-    return h("section", { className: "panel" },
+    var segRows = (function () {
+      var by = {}, amt = {};
+      filtered.forEach(function (c) {
+        (c.ar_segments || []).forEach(function (g) {
+          by[g.segment] = (by[g.segment] || 0) + g.accounts;
+          amt[g.segment] = (amt[g.segment] || 0) + g.past_due_30plus;
+        });
+      });
+      return ["legal", "payment_plan", "former", "unclassified"]
+        .filter(function (k) { return by[k]; })
+        .map(function (k) {
+          return { key: k, label: SEG_LABEL[k], n: by[k], money: amt[k], color: SEG_COLORS[k] };
+        });
+    })();
+
+    return h("div", null,
+      h(Panel, {
+        title: "What is behind the balances",
+        note: "Accounts owing, by where the balance already sits · amounts are past due 30+"
+      }, h(BandBar, {
+        rows: segRows, label: "Accounts owing by work bucket",
+        note: "Rent Manager holds no eviction flag on the receivable, so this is built " +
+              "from court fees posted and payment plan charges. In eviction, uncollectible " +
+              "and former resident cannot be split properly without the eviction tracker " +
+              "as a source, which is why most of this reads as not classified."
+      })),
+
+      h("section", { className: "panel" },
       h(GroupedTable, {
         title: "Aging by vehicle",
         note: (live
@@ -1343,7 +1516,7 @@
           money(sum("ar_past_due_30plus")),
           money(sum("ar_total")), count(sum("ar_accounts"))
         ]
-      }));
+      })));
   }
   function VacancyTab(d, filtered, mode, ctx) {
     // Unit-type composition across the filtered set. The reason bar answers
@@ -1394,6 +1567,11 @@
         vac_pct: pv(c, mode).units
           ? (c.vacancy_by_reason || []).reduce(function (a, r) { return a + r.units; }, 0)
             / pv(c, mode).units * 100 : 0,
+        over90: (c.vacancy_aging || []).filter(function (a) {
+          return ["91-180 days", "181-365 days", "Over a year"].indexOf(a.band) >= 0;
+        }).reduce(function (a, x) { return a + x.units; }, 0),
+        over365: (c.vacancy_aging || []).filter(function (a) { return a.band === "Over a year"; })
+          .reduce(function (a, x) { return a + x.units; }, 0),
         home_available: byR.home_available || 0,
         in_rehab: byR.in_rehab || 0,
         pending_setup: byR.pending_setup || 0,
@@ -1411,6 +1589,25 @@
         title: "Where the vacancy actually is",
         note: "Proportion of vacant units by reason · unit-day weighted"
       }, h(ReasonBar, { rows: reasons, meta: d.reason_meta })),
+
+      h("div", { className: "grid-2" },
+        h(Panel, {
+          title: "Vacancy aging",
+          note: "Days since the unit's last move-out"
+        }, h(BandBar, {
+          rows: agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; }))),
+          label: "Vacant units by age"
+        })),
+        h(Panel, {
+          title: "Home pipeline",
+          note: "Park-owned homes by Rent Manager asset status"
+        }, h(BandBar, {
+          rows: statusRows([].concat.apply([], filtered.map(function (c) { return c.home_status || []; }))),
+          label: "Homes by status",
+          note: "Rent Manager tracks Ordered through Rental. There is no separate " +
+                "Ready to Market or punch stage, so those would need a new status or a " +
+                "user-defined field before they can be reported."
+        }))),
 
       h(Panel, {
         title: "Vacancy by community",
@@ -1437,6 +1634,12 @@
                 ? h("span", { style: r.named < r.vacant ? { color: "var(--text-muted)" } : null },
                     count(r.named))
                 : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
+          { key: "over90", label: "Empty 90+ days", numeric: true,
+            title: "Vacant more than 90 days, where a move-out date is on record",
+            render: function (r) {
+              return r.over90
+                ? h("span", { className: r.over90 >= 10 ? "down" : "" }, count(r.over90))
+                : h("span", { style: { color: "var(--text-muted)" } }, "—"); } },
           { key: "home_available", label: "Homes avail", numeric: true,
             render: function (r) { return r.home_available || "—"; } },
           { key: "in_rehab", label: "In rehab", numeric: true,
@@ -1458,6 +1661,7 @@
           count(sumR("units")), count(sumR("vacant")),
           sumR("units") ? pct(sumR("vacant") / sumR("units") * 100, 0) : "—",
           count(sumR("named")),
+          count(sumR("over90")),
           count(sumR("home_available")), count(sumR("in_rehab")),
           count(sumR("pending_setup")), count(sumR("rv_seasonal")),
           count(sumR("vacant_lot")), count(sumR("not_leasable")),
@@ -1623,7 +1827,70 @@
                 h("span", { className: "rl-n" }, money(util - utilInc)),
                 " absorbed by the portfolio each month",
                 h("span", { className: "rl-sub" },
-                  "  a metering and pricing question, not a controllable expense")))))),
+                  "  a metering and pricing question, not a controllable expense"))),
+            (function () {
+              var recov = filtered.filter(function (c) {
+                return (c.utilities_service || {}).recoverable;
+              });
+              var rs = recov.reduce(function (a, c) { return a + (E(c).utilities || 0); }, 0);
+              var ri = recov.reduce(function (a, c) { return a + (E(c).utility_reimbursements || 0); }, 0);
+              return h("div", { className: "rl" },
+                h("span", { className: "swatch", style: { background: GREEN } }),
+                h("span", null,
+                  h("span", { className: "rl-n" }, rs ? pct(ri / rs * 100, 0) : "—"),
+                  " across the " + recov.length + " communities that bill residents",
+                  h("span", { className: "rl-sub" },
+                    "  " + (filtered.length - recov.length) + " pay their own utilities, so they " +
+                    "have nothing to recover")));
+            })()))),
+
+      h(Panel, {
+        title: "Why recapture is where it is",
+        note: "A community that pays its own utilities has nothing to bill back, so a low rate there is the design and not a failure",
+        flush: true
+      }, h(SortableTable, {
+        cols: [
+          { key: "name", label: "Community", render: function (r) {
+              return h("button", { className: "linkish",
+                                   onClick: function () { ctx.open(r.community, "pl"); } }, r.name); } },
+          { key: "recoverable", label: "Billable back", numeric: false,
+            title: "Whether any of water, sewer or trash is paid by the resident",
+            sortValue: function (r) { return r.recoverable ? 1 : 0; },
+            render: function (r) {
+              return h("span", { className: "chip " + (r.recoverable ? "good" : "watch") },
+                r.recoverable ? "Yes" : "Community pays"); } },
+          { key: "water", label: "Water", render: function (r) {
+              return r.u.water_service + (r.u.water_paid_by ? " · " + r.u.water_paid_by : ""); } },
+          { key: "sewer", label: "Sewer", render: function (r) {
+              return r.u.sewer_service + (r.u.sewer_paid_by ? " · " + r.u.sewer_paid_by : ""); } },
+          { key: "trash", label: "Trash", render: function (r) { return r.u.trash_paid_by || "—"; } },
+          { key: "spend", label: "Utility spend", numeric: true,
+            render: function (r) { return money(r.spend); } },
+          { key: "recovered", label: "Billed back", numeric: true,
+            render: function (r) { return money(r.recovered); } },
+          { key: "rate", label: "Recapture", numeric: true,
+            sortValue: function (r) { return r.rate == null ? -1 : r.rate; },
+            render: function (r) {
+              if (r.rate == null) return "—";
+              // Only band a community that is supposed to be recovering.
+              if (!r.recoverable) {
+                return h("span", { style: { color: "var(--text-muted)" } }, pct(r.rate, 0));
+              }
+              return h(Chip, { band: r.rate >= target ? "good" : r.rate >= 50 ? "watch" : "critical" },
+                pct(r.rate, 0)); } },
+          { key: "net", label: "Absorbed", numeric: true,
+            title: "Utility income minus utility spend",
+            render: function (r) {
+              return h("span", { className: r.net < 0 ? "down" : "up" }, money(r.net)); } }
+        ],
+        rows: filtered.map(function (c) {
+          var e = E(c), u = c.utilities_service || {};
+          return { name: c.name, community: c, u: u, recoverable: !!u.recoverable,
+                   spend: e.utilities || 0, recovered: e.utility_reimbursements || 0,
+                   rate: e.utility_recapture_pct, net: e.utility_net || 0 };
+        }).filter(function (r) { return r.spend || r.recovered; }),
+        initialSort: { key: "net", dir: 1 }
+      })),
 
       h("div", { className: "grid-2" },
         h(Panel, { title: "Revenue against budget",

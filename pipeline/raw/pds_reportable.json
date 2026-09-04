@@ -10,7 +10,12 @@
   "other_units": "0",
   "total_units": "40",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "APPLE",
@@ -23,7 +28,12 @@
   "other_units": "1",
   "total_units": "88",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Resident",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "ARD",
@@ -36,7 +46,12 @@
   "other_units": "24",
   "total_units": "157",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "BOVIPO",
@@ -49,7 +64,12 @@
   "other_units": "0",
   "total_units": "87",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "BOVIIPO",
@@ -62,7 +82,12 @@
   "other_units": "0",
   "total_units": "34",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "BELL",
@@ -75,7 +100,12 @@
   "other_units": "0",
   "total_units": "93",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "BRUN",
@@ -88,20 +118,12 @@
   "other_units": "5",
   "total_units": "62",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
- },
- {
-  "short_name": "CAMMHC",
-  "property_name": "Cambridge MHC",
-  "community": "Cambridge",
-  "vehicle": "Single Asset",
-  "state": "WV",
-  "mh_lots": "92",
-  "rv_lots": "0",
-  "other_units": "0",
-  "total_units": "92",
-  "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "CARL",
@@ -114,7 +136,12 @@
   "other_units": "1",
   "total_units": "75",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "CENT",
@@ -127,7 +154,12 @@
   "other_units": "0",
   "total_units": "64",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "CONG",
@@ -140,7 +172,12 @@
   "other_units": "1",
   "total_units": "31",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "CA",
@@ -153,7 +190,12 @@
   "other_units": "0",
   "total_units": "48",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Resident",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "DO",
@@ -166,7 +208,12 @@
   "other_units": "0",
   "total_units": "127",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "EG",
@@ -179,7 +226,12 @@
   "other_units": "0",
   "total_units": "55",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "FOX",
@@ -192,20 +244,12 @@
   "other_units": "0",
   "total_units": "129",
   "sale_date": "",
-  "property_type": ""
- },
- {
-  "short_name": "GEIGRV",
-  "property_name": "Geiger Key RV Resort",
-  "community": "Geiger Key",
-  "vehicle": "JREFI",
-  "state": "FL",
-  "mh_lots": "0",
-  "rv_lots": "36",
-  "other_units": "22",
-  "total_units": "58",
-  "sale_date": "",
-  "property_type": "RVCampground"
+  "property_type": "",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "GO",
@@ -218,7 +262,12 @@
   "other_units": "0",
   "total_units": "198",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "GPT",
@@ -231,7 +280,12 @@
   "other_units": "0",
   "total_units": "95",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "GULFPO",
@@ -244,7 +298,12 @@
   "other_units": "0",
   "total_units": "39",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "HARB",
@@ -257,7 +316,12 @@
   "other_units": "0",
   "total_units": "46",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "HENDS",
@@ -270,7 +334,12 @@
   "other_units": "5",
   "total_units": "62",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "HP",
@@ -283,7 +352,12 @@
   "other_units": "1",
   "total_units": "76",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "HSMHC",
@@ -296,7 +370,12 @@
   "other_units": "0",
   "total_units": "25",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "JBJ",
@@ -309,7 +388,12 @@
   "other_units": "2",
   "total_units": "99",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "LS",
@@ -322,7 +406,12 @@
   "other_units": "2",
   "total_units": "47",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "LWPO",
@@ -335,7 +424,12 @@
   "other_units": "0",
   "total_units": "47",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "LLMHC",
@@ -348,7 +442,12 @@
   "other_units": "0",
   "total_units": "53",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "LUCK",
@@ -361,7 +460,12 @@
   "other_units": "2",
   "total_units": "121",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "MAY",
@@ -374,7 +478,12 @@
   "other_units": "0",
   "total_units": "50",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "MCG",
@@ -387,7 +496,12 @@
   "other_units": "0",
   "total_units": "232",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "MWMHP",
@@ -400,7 +514,12 @@
   "other_units": "0",
   "total_units": "69",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "MON",
@@ -413,7 +532,12 @@
   "other_units": "0",
   "total_units": "61",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "NALLS",
@@ -426,7 +550,12 @@
   "other_units": "0",
   "total_units": "19",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "NGMH",
@@ -439,7 +568,12 @@
   "other_units": "1",
   "total_units": "173",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "MH (Resident) / RV (Community)",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "MH (Resident) / RV (Community)",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "OAK",
@@ -452,7 +586,12 @@
   "other_units": "0",
   "total_units": "93",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "OCEANPO",
@@ -465,7 +604,12 @@
   "other_units": "0",
   "total_units": "50",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "OBOPO",
@@ -478,7 +622,12 @@
   "other_units": "1",
   "total_units": "62",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "PPH",
@@ -491,7 +640,12 @@
   "other_units": "0",
   "total_units": "60",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "PSEPO",
@@ -504,7 +658,12 @@
   "other_units": "0",
   "total_units": "44",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "PL",
@@ -517,7 +676,12 @@
   "other_units": "3",
   "total_units": "178",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Resident",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "PP",
@@ -530,7 +694,12 @@
   "other_units": "0",
   "total_units": "50",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "PARK",
@@ -543,7 +712,12 @@
   "other_units": "1",
   "total_units": "90",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "RED",
@@ -556,7 +730,12 @@
   "other_units": "0",
   "total_units": "81",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "REG",
@@ -569,7 +748,12 @@
   "other_units": "0",
   "total_units": "424",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "RO",
@@ -582,7 +766,12 @@
   "other_units": "0",
   "total_units": "110",
   "sale_date": "",
-  "property_type": "RVCampground"
+  "property_type": "RVCampground",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "RW",
@@ -595,7 +784,12 @@
   "other_units": "1",
   "total_units": "181",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "RIV",
@@ -608,7 +802,12 @@
   "other_units": "0",
   "total_units": "162",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "ROYAL",
@@ -621,7 +820,12 @@
   "other_units": "2",
   "total_units": "39",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "RP",
@@ -634,7 +838,12 @@
   "other_units": "0",
   "total_units": "51",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "SS",
@@ -647,7 +856,12 @@
   "other_units": "0",
   "total_units": "100",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SA",
@@ -660,7 +874,12 @@
   "other_units": "1",
   "total_units": "213",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "Lagoon",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SO",
@@ -673,7 +892,12 @@
   "other_units": "0",
   "total_units": "37",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SP",
@@ -686,7 +910,12 @@
   "other_units": "2",
   "total_units": "65",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SILVER",
@@ -699,7 +928,12 @@
   "other_units": "0",
   "total_units": "56",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SH",
@@ -712,7 +946,12 @@
   "other_units": "2",
   "total_units": "126",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "SOUTH",
@@ -725,7 +964,12 @@
   "other_units": "2",
   "total_units": "102",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "SUR",
@@ -738,7 +982,12 @@
   "other_units": "0",
   "total_units": "79",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "TC",
@@ -751,7 +1000,12 @@
   "other_units": "0",
   "total_units": "65",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "TO",
@@ -764,7 +1018,12 @@
   "other_units": "0",
   "total_units": "190",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "TCMHCPO",
@@ -777,7 +1036,12 @@
   "other_units": "0",
   "total_units": "36",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "TRADE",
@@ -790,7 +1054,12 @@
   "other_units": "4",
   "total_units": "73",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "SSS",
@@ -803,7 +1072,12 @@
   "other_units": "55",
   "total_units": "234",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "VO",
@@ -816,7 +1090,12 @@
   "other_units": "0",
   "total_units": "233",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "WWPO",
@@ -829,7 +1108,12 @@
   "other_units": "0",
   "total_units": "44",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Septic",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "WPMA",
@@ -842,7 +1126,12 @@
   "other_units": "0",
   "total_units": "53",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "WPMH",
@@ -855,7 +1144,12 @@
   "other_units": "0",
   "total_units": "201",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Resident",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Resident",
+  "trash_paid_by": "Resident"
  },
  {
   "short_name": "WIND",
@@ -868,7 +1162,12 @@
   "other_units": "0",
   "total_units": "154",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Well",
+  "water_paid_by": "Community",
+  "sewer_service": "WWTP",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  },
  {
   "short_name": "WOLFPO",
@@ -881,6 +1180,11 @@
   "other_units": "0",
   "total_units": "45",
   "sale_date": "",
-  "property_type": "ManufacturedHousing"
+  "property_type": "ManufacturedHousing",
+  "water_service": "Public",
+  "water_paid_by": "Community",
+  "sewer_service": "Public",
+  "sewer_paid_by": "Community",
+  "trash_paid_by": "Community"
  }
 ]

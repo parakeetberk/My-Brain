@@ -201,6 +201,63 @@ Vacancy reasons are mapped in `registry.json` under `vacancy_reasons`, across
 RM rent roll uses `Single Wide`, `Double Wide`, `Park Model`. Anything unmapped
 falls to "vacant lot" and is named in a flag.
 
+## Natalie's review, and what each ask needed
+
+| Ask | Delivered | Source |
+|---|---|---|
+| Vacancy aging | Yes, for 30% of vacant units | `MoveInMoveOut` (77) — days since last move-out |
+| Move-ins/outs and net occupancy by property | Yes | Warehouse moves, already held |
+| 90+ AR split by eviction / former / plan / action | Partly | Court fees and payment-plan charges only |
+| Utility metered vs flat and by type | Yes | PDS utility columns |
+| Ready to Market / rehab visibility | Partly | `AssetListing` (244) asset status |
+
+Two of these are honestly incomplete, and the page says so rather than
+implying otherwise.
+
+**Vacancy aging** is anchored on a unit's last move-out, because an asset's
+service start date is when it entered the fleet, not when it went empty. The
+move history pulled starts January 2025, so a lot empty longer than that has no
+anchor and shows as Unknown — 1,269 of 1,820 named units. The 551 that do
+resolve tell a sharp story: 322 empty more than 90 days, 113 more than a year.
+Pulling move history further back closes the gap.
+
+**AR segmentation** is the weaker one. Rent Manager carries no eviction flag on
+the receivable itself, and the `Eviction Filed` asset status covers 2 assets
+portfolio-wide, so it cannot be the real population. What the ledger does expose
+is court fees posted (18 accounts) and payment-plan charges (4). Former-resident
+status resolves for only 40% of accounts because it comes from the same limited
+move history. The residual bucket is therefore labelled **"Not classified"**,
+not "Needs action" — calling it a work queue would be a claim the data does not
+support. The eviction tracker export is what turns this into a real split.
+
+**Ready to Market** does not exist in Rent Manager. The asset status vocabulary
+runs Ordered, Delivered, Needs Rehab, For Sale, Rent to Own, Lease Option,
+Rental, In Use, Eviction Filed, To Be Demoed, TBD. That is a genuine pipeline
+view, but there is no separate Ready to Market or punch stage, so those need a
+new status or a user-defined field before they can be reported. The panel says
+this on the page.
+
+### Utility recapture, reframed
+
+The headline rate alone was the wrong question. The PDS carries Water Service,
+Water Paid By, Sewer Service, Sewer Paid By and Trash Paid By, and **16 of 64
+communities pay their own utilities** — a low rate there is the design, not a
+failure. Banding them red was misleading.
+
+The Financials tab now separates the two. Across the 48 communities that do bill
+residents the rate is 51%, and the table sorts by dollars absorbed so the
+genuine failures surface: River Oaks, Paradise Lakes and Fox Creek each bill a
+resident-paid utility and recover **$0** against $10K to $16K of monthly spend.
+Communities that pay their own are shown greyed and unbanded.
+
+### Resident names are stripped at ingest
+
+`MoveInMoveOut` returns `AccountsFirstName` and `AccountsLastName` unredacted,
+unlike the other reports. `pipeline/raw/rm_moves_detail.json` is written with
+those and the street address removed before anything downstream reads it,
+because the standalone build of this dashboard gets emailed around. Unit number
+plus account id is the whole identity anywhere in the payload.
+
 ## Controllable expense and utility recapture
 
 Austin's split: **utilities, taxes and insurance are not controllable** by a
