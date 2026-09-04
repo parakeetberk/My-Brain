@@ -65,6 +65,32 @@ are already fresh at the Friday 2pm EOS call and the Monday Jon catch-up.
 Every run reports what moved and re-reads the flags. A run that cannot reach the
 warehouse stops rather than republishing a stale payload to the live URL.
 
+## Sending it to someone who is not in this session
+
+Two routes, and they answer different questions.
+
+**A file, for anyone.** `python3 pipeline/publish.py --standalone` writes
+`build/Parakeet_Ops_Dashboard.html`, a complete document with React inlined from
+`dashboard/vendor/` and the web font dropped in favour of the brand's Calibri
+fallback. It opens by double-click in any browser with **no account, no login
+and no network at all** — verified with every external request blocked. About
+2MB, so it emails fine. This is the route to use when you are not sure what the
+recipient has.
+
+The published Artifact deliberately keeps the pinned cdnjs script tags instead:
+cdnjs is on the Artifact CSP allowlist, and leaving React external keeps the
+page smaller. Both builds come from the same `app.js` and the same payload.
+
+**The Artifact URL,** for anyone inside the Claude workspace. Private by
+default; sharing is done from the share menu on the page itself, which is a UI
+action rather than something the pipeline can do. It has the advantage of
+updating itself every weekday refresh, where a mailed file is a snapshot.
+
+Note that this session cannot mail it for you. The Microsoft 365 connector is
+read-only here: `Mail.ReadWrite` and `People.Read` are not admin-consented on
+the app registration, so drafting an email or looking someone up in the
+directory both return 403. Reading mail and SharePoint works.
+
 ## Running it by hand
 
 ```bash
@@ -73,8 +99,11 @@ warehouse stops rather than republishing a stale payload to the live URL.
 # 2. build the payload
 python3 pipeline/build.py
 
-# 3. assemble the standalone page
+# 3. assemble the page for the Artifact
 python3 pipeline/publish.py
+
+# 3b. or a self-contained file to send to someone
+python3 pipeline/publish.py --standalone
 
 # 4. local preview — must be served over HTTP, not opened as a file://
 python3 -m http.server 8000    # then open http://localhost:8000/dashboard/
@@ -328,6 +357,7 @@ can fill this week and one that needs a demo permit.
 | `dashboard/app.js` | The UI (plain-JS React, no build step) |
 | `dashboard/styles.css` | Parakeet brand tokens, light and dark |
 | `dashboard/index.html` | Local dev shell, fetches the payload over HTTP |
+| `dashboard/vendor/` | React 18.2.0 UMD, inlined only into the standalone file |
 | `scripts/refresh.sh` | Build + publish in one step |
 
 ## UI notes

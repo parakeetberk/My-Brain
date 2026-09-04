@@ -7,8 +7,16 @@ single self-contained HTML file, ready to hand to the Artifact tool.
 
     python3 pipeline/publish.py [--out build/parakeet_ops_dashboard.html]
 
-The artifact runtime wraps the file in its own <head>, so this writes page
-content only: <title>, <style>, the pinned React UMD scripts, then the app.
+Two outputs from the same source:
+
+  default        page content only -- <title>, <style>, pinned React UMD script
+                 tags, then the app. The Artifact runtime supplies the <head>
+                 and <body> skeleton, and cdnjs is on its CSP allowlist.
+
+  --standalone   a complete .html document with React inlined from
+                 dashboard/vendor/ and the font dropped. Opens by double-click
+                 with no network at all, which is what a file sent by email
+                 needs; the CDN version renders blank if the script is blocked.
 """
 import argparse
 import base64
@@ -56,8 +64,14 @@ def logo_uri():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default=os.path.join(HERE, "data", "dashboard.json"))
-    ap.add_argument("--out", default=os.path.join(HERE, "build", "parakeet_ops_dashboard.html"))
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--standalone", action="store_true",
+                    help="emit a complete document with React inlined, for sending as a file")
     args = ap.parse_args()
+    if not args.out:
+        args.out = os.path.join(
+            HERE, "build",
+            "Parakeet_Ops_Dashboard.html" if args.standalone else "parakeet_ops_dashboard.html")
 
     payload = json.loads(read(args.data))
     css = read(os.path.join(HERE, "dashboard", "styles.css"))
@@ -73,14 +87,49 @@ def main():
     period = "%s closed, %s live" % (payload["period"]["closed"], payload["period"]["live"])
     title = "Property Operations"
 
-    html = """<title>{title}</title>
+    if args.standalone:
+        react_js = read(os.path.join(HERE, "dashboard", "vendor", "react.production.min.js"))
+        react_dom_js = read(os.path.join(HERE, "dashboard", "vendor", "react-dom.production.min.js"))
+        # A complete document, no external requests. Red Hat Display is dropped
+        # rather than linked, so the brand's Calibri fallback carries it offline.
+        html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title} - Parakeet Communities</title>
+<style>
+{css}
+</style>
+</head>
+<body>
+<div id="root"><div class="loading">Loading portfolio data\u2026</div></div>
+<script>
+{react}
+</script>
+<script>
+{react_dom}
+</script>
+<script>
+window.__PK_LOGO__ = "{logo}";
+window.__DASHBOARD_DATA__ = {data};
+</script>
+<script>
+{app}
+</script>
+</body>
+</html>
+""".format(title=title, css=css, react=react_js, react_dom=react_dom_js,
+           logo=logo_uri(), data=data_js, app=app)
+    else:
+        html = """<title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="{font}">
 <style>
 {css}
 </style>
-<div id="root"><div class="loading">Loading portfolio data…</div></div>
+<div id="root"><div class="loading">Loading portfolio data\u2026</div></div>
 <script src="{react}"></script>
 <script src="{react_dom}"></script>
 <script>
@@ -111,10 +160,19 @@ window.__DASHBOARD_DATA__ = {data};
     ]:
         if needle not in html:
             die("assembled page is missing its %s" % what)
-    for tag in ("<!DOCTYPE", "<html", "<head>", "<body>"):
-        if tag.lower() in html.lower():
-            die("page contains %s; the artifact runtime supplies the skeleton" % tag)
-    print("[publish] structure OK")
+    if args.standalone:
+        for tag in ("<!DOCTYPE html>", "<html", "</html>", "<head>", "<body>"):
+            if tag.lower() not in html.lower():
+                die("standalone file is missing %s" % tag)
+        if "cdnjs" in html or "fonts.googleapis" in html:
+            die("standalone file still references a CDN; it must open with no network")
+        if "React" not in html:
+            die("standalone file has no React inlined")
+    else:
+        for tag in ("<!DOCTYPE", "<html", "<head>", "<body>"):
+            if tag.lower() in html.lower():
+                die("page contains %s; the artifact runtime supplies the skeleton" % tag)
+    print("[publish] structure OK%s" % (" (standalone)" if args.standalone else ""))
 
 
 if __name__ == "__main__":
