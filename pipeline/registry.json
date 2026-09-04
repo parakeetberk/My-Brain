@@ -211,5 +211,131 @@
       "red": 35,
       "yellow": 50
     }
+  },
+  "_vacancy_reasons_comment": [
+    "Why a vacant lot or home is empty, keyed by Rent Manager unit type.",
+    "",
+    "Two vocabularies land here. The warehouse uses codes like POH-Need Rehab and",
+    "SFH; the Rent Manager rent roll uses Single Wide, Double Wide, Park Model.",
+    "Both are mapped, because a vacancy is only actionable once you know whether it",
+    "is a home to sell, a home to fix, a lot waiting on a set, or a lot that cannot",
+    "be leased at all.",
+    "",
+    "Anything unmapped falls to `vacant_lot` and is named in a data-quality flag."
+  ],
+  "vacancy_reasons": {
+    "home_available": {
+      "label": "Home available to sell or rent",
+      "actionable": true,
+      "types": [
+        "Single Wide",
+        "Double Wide",
+        "Park Model (HUD)",
+        "Park Model (ANSI)",
+        "Tiny Home",
+        "Single Family Home",
+        "SFH",
+        "Apartment",
+        "APT",
+        "RV",
+        "Lot-Avail(POH)"
+      ]
+    },
+    "in_rehab": {
+      "label": "In rehab",
+      "actionable": true,
+      "types": [
+        "POH-Need Rehab",
+        "POH-In Rehab",
+        "POH-Rehab",
+        "Lot-Need Rehab",
+        "Lot-In Rehab"
+      ]
+    },
+    "pending_setup": {
+      "label": "Pending home setup",
+      "actionable": true,
+      "types": [
+        "Lot-Pending(POH)",
+        "Lot-Not Ready",
+        "Pending Home"
+      ]
+    },
+    "rv_seasonal": {
+      "label": "RV site, seasonal or transient",
+      "actionable": true,
+      "types": [
+        "Lot-RV",
+        "Lot-RV(Seasonal)",
+        "Lot-RV(Transient)",
+        "RV-Standard",
+        "RV-Deluxe",
+        "RV-Long Term"
+      ]
+    },
+    "vacant_lot": {
+      "label": "Vacant lot, ready to lease",
+      "actionable": true,
+      "types": [
+        "Lot",
+        "Lot-Rental",
+        "Lot-LTP",
+        "Lot-Evicted",
+        "Lot-Evicted (Rental)",
+        "TBD",
+        "Trailer-Rental",
+        "Boat Slip",
+        "Boat Lift",
+        "Boat Tie"
+      ]
+    },
+    "not_leasable": {
+      "label": "Not leasable",
+      "actionable": false,
+      "types": [
+        "Lot-Unusable",
+        "Lot-Demo",
+        "Lot-Abandoned"
+      ]
+    },
+    "non_revenue": {
+      "label": "Not a rentable site",
+      "actionable": false,
+      "types": [
+        "Office",
+        "COMM",
+        "Offsite Water",
+        "Offsite Sewer",
+        "Park Owned Struct"
+      ]
+    }
+  },
+  "_expense_buckets_comment": [
+    "Austin's split: utilities, taxes and insurance are not controllable by a",
+    "community manager. Everything else in operating expense is.",
+    "",
+    "Controllable is computed as total operating expense MINUS the three",
+    "non-controllable categories, rather than by summing named categories. That way",
+    "it always reconciles to total opex even when a category measure is missing, and",
+    "`other_controllable` absorbs admin, travel and bad debt without needing a",
+    "separate warehouse measure for each."
+  ],
+  "expense_buckets": {
+    "non_controllable": [
+      "utilities",
+      "taxes",
+      "insurance"
+    ],
+    "controllable_named": [
+      "repairs_maintenance",
+      "payroll_management",
+      "legal_professional"
+    ],
+    "utility_recapture": {
+      "expense": "utilities",
+      "income": "utility_reimbursements",
+      "target_pct": 80,
+      "_comment": "Utility income over utility expense. Below target means the community is eating the spread."
+    }
   }
 }

@@ -122,6 +122,92 @@ Consequences that are wired in rather than left to the reader:
 - Live collection rates are **not colour-banded** against the full-month
   threshold. A 44% month-to-date rate on day 4 is not a red flag.
 
+## Two data sources, and why
+
+The warehouse tops out at **property grain**. Adding `unitName` or
+`glAccountName` as a dimension times out at 60 seconds even scoped to a single
+property, so unit-level and account-level detail cannot come from there.
+
+Rent Manager report exports fill that gap:
+
+| Need | Source | Why |
+|---|---|---|
+| Portfolio and per-community aggregates, all trends | Warehouse, 6 queries | Fast and consistent at property grain |
+| Expense and income categories | Warehouse, 2 queries | Pre-aggregated measures, property grain |
+| Per-unit rent roll and vacant unit names | RM `SummaryRentRoll` (69) | The only source with unit rows |
+| Accounts owing, by aging bucket | RM `AgedReceivables` (78) detail | Charge-level, collapsed to one row per account |
+
+Resident names come back **redacted** by the RM connector, so a unit number
+plus an account id is the whole identity in the drill-ins.
+
+Several RM reports are simply broken server-side and return HTTP 500 for every
+parameter combination, including with no parameters and scoped to one property:
+`Vacancy` (74), `RentRoll` (67), `UnitAvailability` (10), `UnitTypeVacancy` (75)
+and `UnitList` (6). Do not spend time on them; `SummaryRentRoll` carries the
+same fields.
+
+The two systems also name properties differently. The rent roll carries
+`EntitiesName` plus `EntitiesEntityID`; aged receivables carries
+`EntitiesShortName`. `rm_community()` resolves on any of the three rather than
+betting on one.
+
+### Vacancy: counts from one source, names from the other
+
+**The warehouse owns the vacant counts. Rent Manager only supplies the names.**
+
+This is not arbitrary. RM computes vacancy loss only where a market rent is set,
+so Great Oak — an RV resort that bills transient stays rather than recurring lot
+rent — reported 2 vacant sites against an actual 74. The warehouse computes
+vacancy from unit-days and reconciles to portfolio occupancy, so it counts;
+RM names.
+
+The two will never tie exactly, and the page says so rather than implying
+otherwise. The count is unit-day weighted, so a lot empty for half the month
+counts as half. The named list is units with no active lease **today**. Roughly
+1,313 counted against 1,820 named, and the Vacancy tab carries a `Units listed`
+column so a community where RM can name few of them is visible.
+
+Vacancy reasons are mapped in `registry.json` under `vacancy_reasons`, across
+**both** vocabularies: the warehouse uses `POH-Need Rehab` and `SFH`, while the
+RM rent roll uses `Single Wide`, `Double Wide`, `Park Model`. Anything unmapped
+falls to "vacant lot" and is named in a flag.
+
+## Controllable expense and utility recapture
+
+Austin's split: **utilities, taxes and insurance are not controllable** by a
+community manager; everything else in operating expense is.
+
+Controllable is computed as total opex **minus** those three, not by summing
+named categories. That way it reconciles to opex exactly and
+`other_controllable` absorbs admin, travel and bad debt without needing a
+warehouse measure for each.
+
+Utility recapture is utility reimbursement income over utility expense, target
+80%. The portfolio runs 45%, absorbing about $242K a month, and it varies
+sharply by vehicle (JREFI 34%, JREFII 54%). It sits on its own rather than
+inside controllable expense because it is a metering and pricing question, not
+something a manager spends their way out of.
+
+## Vehicle grouping
+
+Both the Communities and Collections tabs, and the Financials P&L, open
+**collapsed to vehicle level** across the 8 vehicles in the PDS roster. A
+66-park flat list is unreadable, and the vehicle is how ownership asks the
+question.
+
+Vehicle totals are pre-computed in the build so a collapsed row is a real
+weighted figure, never an average of averages. When a filter narrows the set,
+`groupByVehicle` recomputes rather than showing a vehicle's untouched totals
+next to a partial list of its communities.
+
+## Budgets are loaded per fiscal year
+
+2025 budgets sit at 42–65% of actual because only some properties had one
+loaded; 2026 runs 94–107%. Plotting them drew a budget line that looked like a
+huge miss rather than an absent plan, so the build finds the first month from
+which *every* later month clears 85% coverage and nulls everything before it.
+`period.budget_from` records where the series starts, and the chart says so.
+
 ## The reportable gate
 
 **A community appears only if the Property Data Sheet marks it Reportable = Yes.**
