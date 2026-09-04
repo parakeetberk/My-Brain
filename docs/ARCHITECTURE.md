@@ -439,6 +439,47 @@ above the numbers they qualify. On the reportable roster the standing ones are:
 - **Receivables rolled in from sub-ledgers** are reported as a total with the
   ledgers named, so the attribution is visible.
 
+## The move candlestick, and why two months are drawn off scale
+
+Direction is encoded three ways and never by hue alone: the body sits above or
+below the zero line, a gaining month is drawn hollow and a losing month filled
+(the standard candlestick convention), and the net is labelled directly.
+
+That is not decoration. Brand green against brand red measures **ΔE 4.6 under
+deuteranopia** — a red-green reader sees one color — and the pair fails the
+palette validator outright. The loss pole therefore moves to rust, which clears
+the CVD floor in both themes (ΔE 15.4 light, 8.0 dark) while still reading as
+the warm side. Each theme carries its own step as `--gain` / `--loss`, because a
+color that clears contrast on white does not on deep navy:
+
+| | Gain | Loss |
+|---|---|---|
+| Light | `#4ABA81` | `#B4551F` |
+| Dark | `#38A874` | `#C9622F` |
+
+**Onboarding is not leasing.** Bringing a community into Rent Manager posts its
+whole sitting resident base as move-ins that month. Parkwood booked 88 move-ins
+against 90 lots; Hershey Park 76 against 76; Riverwalk 169 against 201. Six of
+twenty months carry a load like that, and August 2025 alone carries 514.
+
+Left unmarked, two such months set the chart's ceiling and flatten the eighteen
+real ones into a line — which is exactly what the first build did. So the test
+runs **per property, not portfolio-wide**: move-ins above a quarter of a
+community's lots in one month is a load, not a leasing season. Those months are
+marked in the payload, not dropped. The chart scales from the clean months,
+draws the loaded ones dashed with their true net labelled and an ↑ when they run
+off the axis, and excludes them from the trailing-twelve figure. A flag names
+them. Occupancy itself is measured from unit-days rather than from moves, so it
+is unaffected either way.
+
+The scale is symmetric about zero, so a bar of gains and a bar of losses the
+same length mean the same number of residents.
+
+What the chart then shows, with the loads set aside: **eight consecutive losing
+months through 2026**, 1,400 moves netting −168 over the ten clean months to
+July. August 2026 reads +26 and is not real either — its move-outs have not
+posted, which is its own flag.
+
 ## Occupancy, reported two ways
 
 A lot marked `Lot-Unusable` or `Lot-Demo` is not a leasing failure — it is
@@ -482,6 +523,20 @@ can fill this week and one that needs a demo permit.
   which stretched labels horizontally and rendered 2.5px type at 35px in a
   full-width panel. `useWidth` measures the container so type, padding and
   stroke weight hold their stated sizes at any width.
+- **Vacancy bands drill in.** On both Occupancy and Vacancy, every segment of
+  the reason bar and the aging bar is clickable, and opens the units behind it
+  across the whole filtered set — community, unit, type, days empty, rent lost —
+  with a link through to that community's own drill-in. Both tabs behave the
+  same way on purpose; one tab's bands being inert is how people learn to stop
+  trying. The modal states that the bar is counted unit-day weighted while the
+  list names units with no active lease today, so a 335-unit band opening a
+  338-row list is expected rather than a bug.
+- **Move-in / move-out is a candlestick.** Each month is one candle centred on
+  zero: wick from minus the move-outs up to plus the move-ins, body from zero
+  to the net. Wick length is the churn it took, body is what the churn bought,
+  and the two reconcile by construction — a candle built from occupied-lot
+  counts would not, because occupancy is unit-day weighted and lot counts move
+  when a property joins or leaves. Details in the section below.
 - Palette and type are fixed by the `parakeet-brand` skill: four brand colors,
   `#8FA3B2` as the one muted neutral, Red Hat Display with a Calibri fallback.
   The dark theme's grounds are deeper tints of brand navy rather than a fifth hue.

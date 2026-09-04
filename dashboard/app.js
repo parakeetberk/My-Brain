@@ -371,6 +371,172 @@
       }, kids));
   }
 
+  /* Candlestick for net resident movement.
+     
+     Each month is one candle centred on zero: the wick runs from minus the
+     gross move-outs up to plus the gross move-ins, and the body spans zero to
+     the net. So the wick length is the churn it took and the body is what the
+     churn actually bought. Everything reconciles by construction -- body =
+     high + low -- which a candle drawn from occupied-lot counts would not,
+     because occupancy is unit-day weighted and lot counts change when a
+     property joins or leaves the portfolio.
+
+     Direction is encoded three ways, never by hue alone: the body sits above or
+     below the zero line, a gaining month is drawn hollow and a losing month
+     filled (the standard candlestick convention), and the net is labelled
+     directly on the notable months. */
+  function CandleChart(props) {
+    var mw = useWidth(700);
+    var ref = mw[0], W = mw[1];
+    var series = props.series || [];
+    var H = props.height || 260;
+    var padL = 48, padR = 16, padT = 26, padB = 30;
+
+    if (!series.length) return h("div", { ref: ref, className: "loading" }, "No move history.");
+
+    /* Scale from real resident movement only. A month where a whole community
+       was loaded into Rent Manager posts its entire sitting resident base as
+       move-ins -- Riverwalk booked 169 against 201 lots -- and two such months
+       set the ceiling for the whole chart and flatten the rest into a line.
+       Those candles are drawn off-scale with a break marker and their true net
+       labelled, so nothing is hidden and the readable months stay readable. */
+    var scaleFrom = series.filter(function (p) { return !p.onboarding; });
+    if (!scaleFrom.length) scaleFrom = series;
+    var hi = 0, lo = 0;
+    scaleFrom.forEach(function (p) {
+      if (p.ins > hi) hi = p.ins;
+      if (-p.outs < lo) lo = -p.outs;
+    });
+    /* Symmetric about zero, so a bar of gains and a bar of losses the same
+       length mean the same number of residents. An asymmetric scale on a
+       zero-centred chart quietly flatters whichever side got less room. */
+    var bound = Math.max(hi, -lo) * 1.1;
+    if (!(bound > 0)) bound = 1;
+    hi = bound; lo = -bound;
+    var clampY = function (v) { return Math.min(hi, Math.max(lo, v)); };
+
+    var innerW = Math.max(60, W - padL - padR);
+    var bandW = innerW / series.length;
+    var bw = Math.min(bandW * 0.56, 22);
+    var y = function (v) { return padT + (hi - v) / (hi - lo) * (H - padT - padB); };
+    var y0 = y(0);
+
+    var kids = [];
+    // Asking for 8 rather than 4: niceStep's ladder jumps 5 to 10, so a span of
+    // 250 residents resolved to a step of 100 and the chart drew one gridline.
+    niceTicks(lo, hi, 8).forEach(function (t, i) {
+      if (t === 0) return;
+      kids.push(h("line", { key: "g" + i, className: "grid-line",
+                            x1: padL, x2: W - padR, y1: y(t), y2: y(t) }));
+      kids.push(h("text", {
+        key: "gt" + i, x: padL - 8, y: y(t) + FS_AXIS * 0.35, textAnchor: "end",
+        style: { fontSize: FS_AXIS + "px" }
+      }, (t > 0 ? "+" : "") + Math.round(t)));
+    });
+
+    /* Which months get a direct label: the best and worst of the months that
+       are actually on scale, the newest, and every off-scale month -- an
+       off-scale candle without its number is just a mystery. */
+    var best = null, worst = null;
+    var labelled = {};
+    series.forEach(function (p, i) {
+      if (p.onboarding) { labelled[i] = true; return; }
+      if (best === null || p.net > series[best].net) best = i;
+      if (worst === null || p.net < series[worst].net) worst = i;
+    });
+    if (best !== null) labelled[best] = true;
+    if (worst !== null) labelled[worst] = true;
+    labelled[series.length - 1] = true;
+
+    series.forEach(function (p, i) {
+      var cx = padL + bandW * i + bandW / 2;
+      var up = p.net >= 0;
+      var color = up ? "var(--gain)" : "var(--loss)";
+      var faint = p.partial ? 0.55 : 1;
+
+      var yIn = clampY(p.ins), yOut = clampY(-p.outs), yNet = clampY(p.net);
+      var clipped = p.ins > hi || -p.outs < lo || p.net > hi || p.net < lo;
+
+      kids.push(h("line", {
+        key: "w" + i, className: "candle-wick",
+        x1: cx, x2: cx, y1: y(yIn), y2: y(yOut),
+        stroke: color, strokeOpacity: faint,
+        strokeDasharray: p.partial ? "3 2" : null
+      }));
+      // Caps make the gross figures readable where a wick is short. A capped
+      // end is an axis break instead, so the eye does not read it as the value.
+      [[p.ins, yIn, "i"], [-p.outs, yOut, "o"]].forEach(function (cap) {
+        if (!cap[0]) return;
+        if (cap[0] !== cap[1]) return;
+        kids.push(h("line", {
+          key: "c" + cap[2] + i, x1: cx - bw * 0.28, x2: cx + bw * 0.28,
+          y1: y(cap[1]), y2: y(cap[1]), stroke: color, strokeOpacity: faint, strokeWidth: 1.6
+        }));
+      });
+
+      var top = Math.min(y0, y(yNet)), bot = Math.max(y0, y(yNet));
+      kids.push(h("rect", {
+        key: "b" + i, x: cx - bw / 2, y: top, width: bw,
+        height: Math.max(2, bot - top), rx: 2,
+        // Hollow up, filled down -- the candlestick convention, and the
+        // encoding a red-green reader actually uses.
+        fill: up ? "var(--ground)" : color,
+        fillOpacity: up ? 1 : faint,
+        stroke: color, strokeWidth: 1.8, strokeOpacity: faint,
+        // Dashed means "do not read this as leasing": an onboarding month, or
+        // one drawn off scale. Jan 25's +90 fits on the axis and is still 88
+        // residents inherited with Parkwood, so the dash cannot key off
+        // clipping alone.
+        strokeDasharray: (p.onboarding || clipped) ? "4 2" : null
+      }));
+
+      /* Off-scale candles are marked by their dashed outline and the arrow on
+         the label, not by a break glyph: the usual two slashes are drawn in the
+         ground colour to erase a solid bar, and against a dashed hollow body
+         they erase nothing and read as nothing. */
+
+      if (labelled[i] && (p.net || i === series.length - 1)) {
+        var above = p.net >= 0;
+        kids.push(h("text", {
+          key: "nl" + i, x: cx,
+          y: above ? Math.max(FS_VAL, y(yIn) - 6) : y(yOut) + FS_VAL + 2,
+          textAnchor: "middle",
+          style: { fontSize: FS_VAL + "px", fontWeight: 700 },
+          fill: p.onboarding ? "var(--text-muted)" : "var(--text)"
+        }, (p.net > 0 ? "+" : "") + p.net + (clipped ? " \u2191" : "")));
+      }
+
+      kids.push(h("title", { key: "t" + i },
+        monthLabel(p.month) + (p.partial ? " (open month, partial)" : "") + ": " +
+        p.ins + " in, " + p.outs + " out, net " + (p.net > 0 ? "+" : "") + p.net +
+        (p.onboarding
+          ? " \u2014 includes " + p.onboarding_ins + " onboarding move-ins (" +
+            p.onboarding_detail + "), not leasing"
+          : "")));
+    });
+
+    kids.push(h("line", { key: "zero", className: "candle-zero",
+                          x1: padL, x2: W - padR, y1: y0, y2: y0 }));
+    kids.push(h("text", { key: "zl", x: padL - 8, y: y0 + FS_AXIS * 0.35,
+                          textAnchor: "end", style: { fontSize: FS_AXIS + "px" } }, "0"));
+
+    var step = Math.max(1, Math.ceil((FS_AXIS * 3.4) / bandW));
+    series.forEach(function (p, i) {
+      if (i % step !== 0 && i !== series.length - 1) return;
+      kids.push(h("text", {
+        key: "xl" + i, x: padL + bandW * i + bandW / 2, y: H - padB + FS_AXIS + 8,
+        textAnchor: "middle", style: { fontSize: FS_AXIS + "px" }
+      }, monthShort(p.month) + (p.partial ? " \u25CB" : "")));
+    });
+
+    return h("div", { ref: ref, style: { width: "100%" } },
+      h("svg", {
+        className: "chart", viewBox: "0 0 " + W + " " + H,
+        width: W, height: H, role: "img",
+        "aria-label": props.ariaLabel || "candlestick chart of net resident movement by month"
+      }, kids));
+  }
+
   function BarList(props) {
     var rows = props.rows || [];
     if (!rows.length) return h("div", { className: "loading" }, "Nothing to show.");
@@ -964,17 +1130,30 @@
     var rows = (props.rows || []).filter(function (r) { return r.n > 0; });
     if (!rows.length) return h("div", { className: "loading" }, props.empty || "Nothing to show.");
     var total = rows.reduce(function (a, r) { return a + r.n; }, 0);
+    var pick = props.onPick;
     return h("div", null,
-      h("div", { className: "reasonbar", role: "img", "aria-label": props.label },
+      h("div", { className: "reasonbar", role: pick ? "group" : "img",
+                 "aria-label": props.label },
         rows.map(function (r) {
           return h("span", {
-            key: r.key,
+            key: r.key, className: pick ? "pick" : null,
+            role: pick ? "button" : null, tabIndex: pick ? 0 : null,
             style: { width: (r.n / total * 100) + "%", background: r.color },
-            title: r.label + ": " + count(r.n) + (r.money ? " (" + money(r.money) + ")" : "")
+            onClick: pick ? function () { pick(r); } : null,
+            onKeyDown: pick ? function (e) {
+              if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(r); }
+            } : null,
+            title: r.label + ": " + count(r.n) + (r.money ? " (" + money(r.money) + ")" : "") +
+                   (pick ? " \u00b7 click to list them" : "")
           });
         })),
       h("div", { className: "reason-legend" }, rows.map(function (r) {
-        return h("div", { className: "rl", key: r.key },
+        return h(pick ? "button" : "div", {
+          className: "rl" + (pick ? " pick" : ""), key: r.key,
+          type: pick ? "button" : null,
+          onClick: pick ? function () { pick(r); } : null,
+          title: pick ? "List the " + count(r.n) + " units in " + r.label : null
+        },
           h("span", { className: "swatch", style: { background: r.color } }),
           h("span", null,
             h("span", { className: "rl-n" }, count(r.n)), " ", r.label,
@@ -1040,19 +1219,31 @@
     if (!rows.length) return h("div", { className: "loading" }, "Nothing vacant.");
     var total = rows.reduce(function (a, r) { return a + r.units; }, 0);
     var lost = rows.reduce(function (a, r) { return a + (r.rent_lost || 0); }, 0);
+    var pick = props.onPick;
     return h("div", null,
-      h("div", { className: "reasonbar", role: "img",
+      h("div", { className: "reasonbar", role: pick ? "group" : "img",
                  "aria-label": "Vacant units by reason" },
         rows.map(function (r) {
           return h("span", {
-            key: r.reason,
+            key: r.reason, className: pick ? "pick" : null,
+            role: pick ? "button" : null, tabIndex: pick ? 0 : null,
             style: { width: (r.units / total * 100) + "%",
                      background: REASON_COLORS[r.reason] || "#8FA3B2" },
-            title: r.label + ": " + r.units + " units"
+            onClick: pick ? function () { pick(r); } : null,
+            onKeyDown: pick ? function (e) {
+              if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(r); }
+            } : null,
+            title: r.label + ": " + r.units + " units" +
+                   (pick ? " \u00b7 click to list them" : "")
           });
         })),
       h("div", { className: "reason-legend" }, rows.map(function (r) {
-        return h("div", { className: "rl", key: r.reason },
+        return h(pick ? "button" : "div", {
+          className: "rl" + (pick ? " pick" : ""), key: r.reason,
+          type: pick ? "button" : null,
+          onClick: pick ? function () { pick(r); } : null,
+          title: pick ? "List the units in " + r.label : null
+        },
           h("span", { className: "swatch",
                       style: { background: REASON_COLORS[r.reason] || "#8FA3B2" } }),
           h("span", null,
@@ -1064,6 +1255,97 @@
       h("div", { className: "note", style: { marginTop: "10px", fontSize: "12px",
                                              color: "var(--text-muted)" } },
         count(total) + " vacant units" + (lost ? ", " + money(lost) + " of rent not being billed" : "")));
+  }
+
+  /* Flatten every named vacant unit across a set of communities into one list,
+     carrying the community down with it. The bars above these lists are counted
+     unit-day weighted by the warehouse, while this names units with no active
+     lease today -- two different measures, so a drill-in will not tie to the
+     segment that opened it, and the modal says so rather than implying it will. */
+  function flattenVacant(rows) {
+    var out = [];
+    rows.forEach(function (c) {
+      (c.vacancy_detail || []).forEach(function (v) {
+        out.push({
+          community: c.name, vehicle: c.vehicle, comm: c,
+          unit: v.unit, type: v.type, reason: v.reason,
+          days_vacant: v.days_vacant, age_band: v.age_band,
+          vacant_since: v.vacant_since, rent_lost: v.rent_lost
+        });
+      });
+    });
+    return out;
+  }
+
+  /* A proportional bar whose segments open a list of the units behind them.
+     Owns its own selection state, so a tab function can drop it in without
+     needing hooks of its own -- tab bodies are plain functions and mount and
+     unmount as the user switches, which would break hook order. */
+  function VacancyPicker(props) {
+    var st = useState(null);
+    var pick = st[0], setPick = st[1];
+    var d = props.data;
+    var all = props.units || [];
+    var field = props.field;                 // "reason" or "age_band"
+    var keyOf = props.keyOf;                 // bar row -> the value to match
+
+    var listed = pick ? all.filter(function (u) { return u[field] === keyOf(pick); }) : [];
+    var counted = pick ? (pick.units != null ? pick.units : pick.n) : 0;
+
+    return h("div", null,
+      props.children(function (row) { setPick(row); }),
+      pick ? h(Modal, {
+        title: pick.label,
+        subtitle: count(listed.length) + " units named" +
+          (counted ? " \u00b7 " + count(counted) + " counted in the bar" : "") +
+          (props.scope ? " \u00b7 " + props.scope : ""),
+        onClose: function () { setPick(null); }
+      },
+        h("div", { className: "note",
+                   style: { marginBottom: "12px", fontSize: "12px", color: "var(--text-muted)" } },
+          counted && listed.length !== counted
+            ? "The bar counts " + count(counted) + " on a unit-day basis; this list names " +
+              count(listed.length) + " units with no active lease today. Different measures, " +
+              "so they do not tie."
+            : "Units with no active lease today, from the Rent Manager unit list."),
+        listed.length
+          ? h(SortableTable, {
+              cols: [
+                { key: "community", label: "Community", render: function (r) {
+                    return h("span", null,
+                      h("button", { className: "linkish",
+                                    onClick: function () { setPick(null); props.open(r.comm, "vacancy"); },
+                                    title: "Open " + r.community }, r.community),
+                      " ", h("span", { className: "tag" }, r.vehicle)); } },
+                { key: "unit", label: "Unit" },
+                { key: "type", label: "Unit type" },
+                field === "reason"
+                  ? { key: "age_band", label: "How long empty", render: function (r) {
+                        return r.days_vacant != null
+                          ? h("span", { className: (r.days_vacant > 180 ? "down" : "") },
+                              count(r.days_vacant) + "d")
+                          : h("span", { style: { color: "var(--text-muted)" } }, "unknown"); } }
+                  : { key: "reason", label: "Why it is empty", render: function (r) {
+                        var m = (d.reason_meta || {})[r.reason] || {};
+                        return h("span", {
+                          className: "chip " + (m.actionable === false ? "critical" : "watch")
+                        }, m.label || r.reason); } },
+                { key: "vacant_since", label: "Vacant since", render: function (r) {
+                    return r.vacant_since ||
+                      h("span", { style: { color: "var(--text-muted)" } }, "no move-out on record"); } },
+                { key: "rent_lost", label: "Rent lost", numeric: true,
+                  render: function (r) { return r.rent_lost ? money(r.rent_lost) : "—"; } }
+              ],
+              rows: listed,
+              initialSort: field === "reason"
+                ? { key: "days_vacant", dir: -1 }
+                : { key: "rent_lost", dir: -1 },
+              footer: [count(listed.length) + " units", "", "", "", "",
+                money(listed.reduce(function (a, r) { return a + (r.rent_lost || 0); }, 0))]
+            })
+          : h("div", { className: "loading" },
+              "The Rent Manager unit list cannot name any of these. See the data notes.")
+      ) : null);
   }
 
   /* A table that opens at vehicle level. Each vehicle row carries its own
@@ -1403,6 +1685,13 @@
     function reasonUnits(k) { return (reasonTotals[k] || {}).units || 0; }
     function reasonLost(k) { return (reasonTotals[k] || {}).rent_lost || 0; }
 
+    // Every named vacant unit across the filtered set, so a click on either bar
+    // has a list to open. Built once here rather than inside each picker.
+    var vacantUnits = flattenVacant(filtered);
+    var scopeLabel = filtered.length === d.communities.length
+      ? "whole portfolio"
+      : filtered.length + " of " + d.communities.length + " communities in view";
+
     var byPark = {};
     filtered.forEach(function (c) {
       var p = byPark[c.park] || (byPark[c.park] = { park: c.park, units: 0, occupied: 0, members: [] });
@@ -1452,15 +1741,27 @@
 
       h(Panel, {
         title: "Vacancy by reason",
-        note: "Unit-day weighted from the warehouse · click through on the Vacancy tab for units"
-      }, h(ReasonBar, { rows: reasons, meta: d.reason_meta })),
+        note: "Unit-day weighted from the warehouse · click any band to list the units"
+      }, h(VacancyPicker, {
+        data: d, units: vacantUnits, field: "reason",
+        keyOf: function (r) { return r.reason; },
+        scope: scopeLabel, open: ctx.open
+      }, function (onPick) {
+        return h(ReasonBar, { rows: reasons, meta: d.reason_meta, onPick: onPick });
+      })),
 
       h(Panel, {
         title: "How long has it been sitting",
-        note: "Days since the unit's last move-out"
-      }, h(BandBar, {
+        note: "Days since the unit's last move-out · click any band to list the units"
+      }, h(VacancyPicker, {
+        data: d, units: vacantUnits, field: "age_band",
+        keyOf: function (r) { return r.key; },
+        scope: scopeLabel, open: ctx.open
+      }, function (onPick) {
+        return h(BandBar, {
         rows: agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; }))),
         label: "Vacant units by how long they have been empty",
+        onPick: onPick,
         note: (function () {
           var rs = agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; })));
           var old_ = rs.filter(function (r) {
@@ -1473,6 +1774,7 @@
                       money(m) + " of rent a month. " : "") +
                  (unk ? count(unk.n) + " have no move-out on record and show as Unknown." : "");
         })()
+        });
       })),
 
       h(Panel, {
@@ -1517,17 +1819,55 @@
           })()]
       })),
 
-      h(Panel, { title: "Move-in / move-out history", note: "Net resident movement · ○ open month" },
-        h(LineChart, {
-          series: d.trends.moves, zeroBase: true, height: 230,
-          lines: [{ key: "ins", color: GREEN }, { key: "outs", color: RED }],
-          fmtTick: function (v) { return Math.round(v); },
-          ariaLabel: "Move-ins and move-outs by month"
+      h(Panel, {
+        title: "Move-in / move-out history",
+        note: "One candle a month · wick is the churn, body is what it bought · ○ open month"
+      },
+        h(CandleChart, {
+          series: d.trends.moves, height: 260,
+          ariaLabel: "Net resident movement by month, as candlesticks"
         }),
         h("div", { className: "legend" },
-          h("span", null, h("i", { style: { background: GREEN } }), "Move-ins"),
-          h("span", null, h("i", { style: { background: RED } }), "Move-outs"),
-          h("span", null, "○ open month, partial"))),
+          h("span", null,
+            h("i", { style: { background: "transparent",
+                              border: "2px solid var(--gain)" } }),
+            "Gained residents (hollow, above zero)"),
+          h("span", null, h("i", { style: { background: "var(--loss)" } }),
+            "Lost residents (filled, below zero)"),
+          h("span", null, "Wick top = move-ins, wick bottom = move-outs"),
+          h("span", null, "⇈ off scale, onboarding load"),
+          h("span", null, "○ open month, partial")),
+        h("div", { className: "note", style: { marginTop: "10px", fontSize: "12px",
+                                               color: "var(--text-muted)" } },
+          (function () {
+            var ms = d.trends.moves || [];
+            var closed = ms.filter(function (m) { return !m.partial; });
+            var last = closed[closed.length - 1];
+            var trail = closed.slice(-13, -1);
+            // Onboarding months are excluded from the trailing figure. Left in,
+            // 514 residents inherited with Riverwalk and The Oaks read as a
+            // year of leasing wins that never happened.
+            var real = trail.filter(function (m) { return !m.onboarding; });
+            var load = trail.filter(function (m) { return m.onboarding; });
+            var churn = real.reduce(function (a, m) { return a + m.ins + m.outs; }, 0);
+            var net = real.reduce(function (a, m) { return a + m.net; }, 0);
+            return "Body spans zero to the month's net, wick from minus the move-outs to " +
+              "plus the move-ins, so the two always reconcile. " +
+              (last ? "Last closed month " + monthLabel(last.month) + ": " + last.ins +
+                      " in, " + last.outs + " out. " : "") +
+              (real.length
+                ? "Over the " + real.length + " clean months before it, " + count(churn) +
+                  " moves netted " + (net > 0 ? "+" : "") + net + ". "
+                : "") +
+              (load.length
+                ? load.length + " of the last twelve months are excluded from that: " +
+                  load.map(function (m) { return monthShort(m.month); }).join(", ") +
+                  " carried " +
+                  count(load.reduce(function (a, m) { return a + m.onboarding_ins; }, 0)) +
+                  " move-ins from communities being loaded into Rent Manager, which is " +
+                  "inherited occupancy, not leasing."
+                : "");
+          })())),
 
       h(Panel, {
         title: "Occupancy by park",
@@ -1789,19 +2129,39 @@
 
     var sumR = function (k) { return commRows.reduce(function (a, r) { return a + r[k]; }, 0); };
 
+    // Both bars drill the same way they do on Occupancy. Leaving one tab's
+    // bands clickable and the other's inert is the kind of inconsistency that
+    // makes people stop trying.
+    var vacantUnits = flattenVacant(filtered);
+    var scopeLabel = filtered.length === d.communities.length
+      ? "whole portfolio"
+      : filtered.length + " of " + d.communities.length + " communities in view";
+
     return h("div", null,
       h(Panel, {
         title: "Where the vacancy actually is",
-        note: "Proportion of vacant units by reason · unit-day weighted"
-      }, h(ReasonBar, { rows: reasons, meta: d.reason_meta })),
+        note: "Proportion of vacant units by reason · click any band to list the units"
+      }, h(VacancyPicker, {
+        data: d, units: vacantUnits, field: "reason",
+        keyOf: function (r) { return r.reason; },
+        scope: scopeLabel, open: ctx.open
+      }, function (onPick) {
+        return h(ReasonBar, { rows: reasons, meta: d.reason_meta, onPick: onPick });
+      })),
 
       h("div", { className: "grid-2" },
         h(Panel, {
           title: "Vacancy aging",
-          note: "Days since the unit's last move-out"
-        }, h(BandBar, {
-          rows: agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; }))),
-          label: "Vacant units by age"
+          note: "Days since the last move-out · click any band to list the units"
+        }, h(VacancyPicker, {
+          data: d, units: vacantUnits, field: "age_band",
+          keyOf: function (r) { return r.key; },
+          scope: scopeLabel, open: ctx.open
+        }, function (onPick) {
+          return h(BandBar, {
+            rows: agingRows([].concat.apply([], filtered.map(function (c) { return c.vacancy_aging || []; }))),
+            label: "Vacant units by age", onPick: onPick
+          });
         })),
         h(Panel, {
           title: "Ready to Market pipeline",

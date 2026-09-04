@@ -1248,6 +1248,34 @@ def build(raw_dir, out_dir, registry_path):
     })
     move_series = series(mv, lambda a: {
         "ins": int(a["ins"]), "outs": int(a["outs"]), "net": int(a["ins"] - a["outs"])})
+
+    # Onboarding is not leasing. When a property is brought into Rent Manager
+    # its whole sitting resident base posts as move-ins that month -- Riverwalk
+    # booked 169 in August 2025, The Oaks 145, Windward Knoll 139, against a
+    # portfolio that normally runs 120 a month in total. Left unmarked, two such
+    # months set the scale on the move chart and flatten the eighteen real ones
+    # into a flat line, and a trailing-twelve net reads as growth that never
+    # happened.
+    #
+    # The test is per property, not portfolio-wide: move-ins above a quarter of
+    # a community's lots in one month is a load, not a leasing season. Months
+    # are marked rather than dropped, and the chart draws them off-scale with
+    # their true value labelled.
+    ONBOARD_SHARE = 0.25
+    for p_ in move_series:
+        heavy = []
+        for name in kept:
+            dd = mv.get(name, {}).get(p_["month"])
+            if not dd:
+                continue
+            lots = (occ.get(name, {}).get(p_["month"], {}) or {}).get("units") or 0
+            if lots and dd["ins"] >= lots * ONBOARD_SHARE and dd["ins"] >= 25:
+                heavy.append((name, int(dd["ins"]), int(lots)))
+        heavy.sort(key=lambda x: -x[1])
+        p_["onboarding"] = bool(heavy)
+        p_["onboarding_ins"] = sum(x[1] for x in heavy)
+        p_["onboarding_detail"] = ", ".join("%s %d of %d lots" % x for x in heavy[:4])
+    onboarding_months = [p_ for p_ in move_series if p_["onboarding"]]
     fin_series = series(fin, lambda a: {
         "revenue": rnd(a["rev"], 0), "revenue_budget": rnd(a["rev_bud"], 0),
         "opex": rnd(a["opex"], 0), "opex_budget": rnd(a["opex_bud"], 0),
@@ -1782,6 +1810,46 @@ def build(raw_dir, out_dir, registry_path):
                            "Eviction Tracker.csv, so a gap this size means the job did not "
                            "run. Until it does, cases that have moved show their old stage "
                            "and newly filed ones read as needing action." % evict_as_of),
+            })
+
+    # A candlestick makes an incomplete month look like a triumph: August shows
+    # 27 in against 1 out, which is not a leasing win, it is move-outs that have
+    # not posted. Catch it before someone reads the chart.
+    if onboarding_months:
+        biggest = max(onboarding_months, key=lambda m: m["onboarding_ins"])
+        flags.append({
+            "severity": "info",
+            "title": "%d %s carry onboarding move-ins, not leasing"
+                     % (len(onboarding_months),
+                        "month" if len(onboarding_months) == 1 else "months"),
+            "detail": ("Bringing a community into Rent Manager posts its whole sitting "
+                       "resident base as move-ins that month. %s is the largest: %d of its "
+                       "%d move-ins are loads (%s). Those months are drawn off scale on the "
+                       "move chart with their true net labelled, and excluded from the "
+                       "trailing-twelve net, because %s residents inherited with an "
+                       "acquisition would otherwise read as a year of leasing wins. "
+                       "Occupancy is measured from unit-days and is unaffected."
+                       % (biggest["month"], biggest["onboarding_ins"], biggest["ins"],
+                          biggest["onboarding_detail"],
+                          "{:,}".format(sum(m["onboarding_ins"] for m in onboarding_months)))),
+        })
+
+    closed_mv = [m for m in move_series if not m.get("partial")]
+    if len(closed_mv) >= 7:
+        last_mv = closed_mv[-1]
+        prior_outs = [m["outs"] for m in closed_mv[-13:-1]]
+        med_outs = _median(prior_outs)
+        if med_outs and last_mv["outs"] < med_outs * 0.35:
+            flags.append({
+                "severity": "warn",
+                "title": "%s move-outs look unposted: %d against a %d-month median of %d"
+                         % (last_mv["month"], last_mv["outs"], len(prior_outs), med_outs),
+                "detail": ("The move-in / move-out candle for %s shows a large net gain and it "
+                           "is almost certainly not real -- move-ins posted and move-outs did "
+                           "not. Net movement for that month, and the net column on the move "
+                           "table, are both overstated until the rest post. Occupancy itself "
+                           "is measured from unit-days rather than from moves, so it is "
+                           "unaffected." % last_mv["month"]),
             })
 
     stale_ev = [x for c in communities for x in c["evictions"]

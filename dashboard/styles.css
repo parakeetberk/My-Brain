@@ -22,6 +22,18 @@
   --good: #4aba81;
   --watch: #ffcc3b;
   --critical: #f16262;
+
+  /* Candlestick poles. Gain/loss is the one place the dashboard cannot lean on
+     brand green against brand red: at ΔE 4.6 under deuteranopia a red-green
+     reader sees one colour, and the pair fails the palette validator outright.
+     Loss moves to rust, which clears the CVD floor in both themes (ΔE 15.4
+     light, 8.0 dark) while still reading as the warm pole. Each theme carries
+     its own step rather than reusing one hex, because a colour that clears
+     contrast on white does not on deep navy. Direct labels on every body carry
+     the relief the green's sub-3:1 contrast requires -- the chart never asks
+     hue to do the work alone: the body also sits above or below zero. */
+  --gain: #4aba81;
+  --loss: #b4551f;
   --good-wash: rgba(74, 186, 129, 0.12);
   --watch-wash: rgba(255, 204, 59, 0.16);
   --critical-wash: rgba(241, 98, 98, 0.12);
@@ -49,6 +61,8 @@
     --line-soft: #263d4e;
     --text: #e8eff3;
     --text-muted: #9db2c1;
+    --gain: #38a874;
+    --loss: #c9622f;
     --good-wash: rgba(74, 186, 129, 0.18);
     --watch-wash: rgba(255, 204, 59, 0.2);
     --critical-wash: rgba(241, 98, 98, 0.18);
@@ -66,6 +80,8 @@
   --line-soft: #263d4e;
   --text: #e8eff3;
   --text-muted: #9db2c1;
+  --gain: #38a874;
+  --loss: #c9622f;
   --good-wash: rgba(74, 186, 129, 0.18);
   --watch-wash: rgba(255, 204, 59, 0.2);
   --critical-wash: rgba(241, 98, 98, 0.18);
@@ -732,3 +748,32 @@ tr.child-row td:first-child { padding-left: 28px; }
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap;
 }
+
+/* Clickable chart segments. The reason bar and the aging bar both drill into a
+   unit list, so the bar itself has to advertise that -- a coloured block that
+   does something on click and looks identical to one that does not is a trap. */
+.reasonbar span.pick { cursor: pointer; }
+.reasonbar span.pick:hover,
+.reasonbar span.pick:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+.rl.pick {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+}
+.rl.pick:hover, .rl.pick:focus-visible { background: var(--surface-2); }
+.rl.pick .rl-n { text-decoration: underline dotted; text-underline-offset: 2px; }
+
+/* Candlestick. The zero line is the axis of meaning here, not decoration, so
+   it reads heavier than the grid. */
+.candle-zero { stroke: var(--text-muted); stroke-width: 1.4; }
+.candle-wick { stroke-width: 1.6; }

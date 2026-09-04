@@ -1,6 +1,6 @@
 {
  "schema_version": 7,
- "generated_at": "2026-09-04T18:07:48+00:00",
+ "generated_at": "2026-09-04T18:29:57+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -174326,140 +174326,200 @@
     "partial": false,
     "ins": 145,
     "outs": 55,
-    "net": 90
+    "net": 90,
+    "onboarding": true,
+    "onboarding_ins": 88,
+    "onboarding_detail": "Parkwood Mobile Home Park 88 of 90 lots"
    },
    {
     "month": "2025-02",
     "partial": false,
     "ins": 73,
     "outs": 51,
-    "net": 22
+    "net": 22,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-03",
     "partial": false,
     "ins": 190,
     "outs": 93,
-    "net": 97
+    "net": 97,
+    "onboarding": true,
+    "onboarding_ins": 120,
+    "onboarding_detail": "Oakside MHP 90 of 93 lots, Paradise Palms 30 of 50 lots"
    },
    {
     "month": "2025-04",
     "partial": false,
     "ins": 133,
     "outs": 71,
-    "net": 62
+    "net": 62,
+    "onboarding": true,
+    "onboarding_ins": 76,
+    "onboarding_detail": "Hershey Park 76 of 76 lots"
    },
    {
     "month": "2025-05",
     "partial": false,
     "ins": 269,
     "outs": 76,
-    "net": 193
+    "net": 193,
+    "onboarding": true,
+    "onboarding_ins": 180,
+    "onboarding_detail": "Great Oak RV Resort 180 of 231 lots"
    },
    {
     "month": "2025-06",
     "partial": false,
     "ins": 72,
     "outs": 80,
-    "net": -8
+    "net": -8,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-07",
     "partial": false,
     "ins": 64,
     "outs": 76,
-    "net": -12
+    "net": -12,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-08",
     "partial": false,
     "ins": 588,
     "outs": 76,
-    "net": 512
+    "net": 512,
+    "onboarding": true,
+    "onboarding_ins": 514,
+    "onboarding_detail": "Riverwalk 169 of 201 lots, The Oaks 145 of 190 lots, Windward Knoll 139 of 155 lots, Terrace Crossings 61 of 65 lots"
    },
    {
     "month": "2025-09",
     "partial": false,
     "ins": 76,
     "outs": 78,
-    "net": -2
+    "net": -2,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-10",
     "partial": false,
     "ins": 58,
     "outs": 52,
-    "net": 6
+    "net": 6,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-11",
     "partial": false,
     "ins": 69,
     "outs": 44,
-    "net": 25
+    "net": 25,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2025-12",
     "partial": false,
     "ins": 416,
     "outs": 70,
-    "net": 346
+    "net": 346,
+    "onboarding": true,
+    "onboarding_ins": 353,
+    "onboarding_detail": "Bay Oaks Village I 50 of 87 lots, Oceanaire MHC 47 of 50 lots, Ormond Beach Oasis 45 of 62 lots, Wolf Bay MHC 43 of 45 lots"
    },
    {
     "month": "2026-01",
     "partial": false,
     "ins": 78,
     "outs": 119,
-    "net": -41
+    "net": -41,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-02",
     "partial": false,
     "ins": 64,
     "outs": 73,
-    "net": -9
+    "net": -9,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-03",
     "partial": false,
     "ins": 67,
     "outs": 132,
-    "net": -65
+    "net": -65,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-04",
     "partial": false,
     "ins": 54,
     "outs": 96,
-    "net": -42
+    "net": -42,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-05",
     "partial": false,
     "ins": 65,
     "outs": 67,
-    "net": -2
+    "net": -2,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-06",
     "partial": false,
     "ins": 42,
     "outs": 60,
-    "net": -18
+    "net": -18,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-07",
     "partial": false,
     "ins": 43,
     "outs": 63,
-    "net": -20
+    "net": -20,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    },
    {
     "month": "2026-08",
     "partial": false,
     "ins": 27,
     "outs": 1,
-    "net": 26
+    "net": 26,
+    "onboarding": false,
+    "onboarding_ins": 0,
+    "onboarding_detail": ""
    }
   ],
   "financials": [
@@ -174705,6 +174765,16 @@
    "severity": "info",
    "title": "Vacancy aging covers 551 of 1820 vacant units",
    "detail": "Days vacant is measured from the unit's last move-out, and the move history pulled starts 2025-01, so a lot that has been empty longer than that has no anchor and shows as Unknown. Pulling move history further back would close the gap."
+  },
+  {
+   "severity": "info",
+   "title": "6 months carry onboarding move-ins, not leasing",
+   "detail": "Bringing a community into Rent Manager posts its whole sitting resident base as move-ins that month. 2025-08 is the largest: 514 of its 588 move-ins are loads (Riverwalk 169 of 201 lots, The Oaks 145 of 190 lots, Windward Knoll 139 of 155 lots, Terrace Crossings 61 of 65 lots). Those months are drawn off scale on the move chart with their true net labelled, and excluded from the trailing-twelve net, because 1,331 residents inherited with an acquisition would otherwise read as a year of leasing wins. Occupancy is measured from unit-days and is unaffected."
+  },
+  {
+   "severity": "warn",
+   "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73",
+   "detail": "The move-in / move-out candle for 2026-08 shows a large net gain and it is almost certainly not real -- move-ins posted and move-outs did not. Net movement for that month, and the net column on the move table, are both overstated until the rest post. Occupancy itself is measured from unit-days rather than from moves, so it is unaffected."
   },
   {
    "severity": "warn",
