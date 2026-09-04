@@ -33,7 +33,7 @@ from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 7
+SCHEMA_VERSION = 8
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -1215,6 +1215,29 @@ def build(raw_dir, out_dir, registry_path):
             if c[blk]:
                 c[blk].update(pit)
 
+    # ---- hot sheet, carried rather than computed ---------------------------
+    # Another session built the per-community hot sheet and published it to the
+    # live artifact without committing the pipeline step behind it. The
+    # component was recovered from the published page; these are its numbers,
+    # recovered the same way and attached here so the view keeps working.
+    #
+    # They do not refresh. Three of the fields could not be recomputed here even
+    # if the rest were, because pds_poh, acquired_date and acquired_price come
+    # from Property Data Sheet columns queries.json does not extract. See the
+    # note in pipeline/raw/hot_sheet_carried.json and the flag below.
+    hot_blob = load_envelope(raw_dir, "hot_sheet_carried.json") or {}
+    hot_carried = hot_blob.get("hot") or {}
+    hot_as_of = hot_blob.get("as_of") or ""
+    hot_hits = 0
+    for c in communities:
+        blk = hot_carried.get(c["name"])
+        if blk:
+            c["hot"] = blk
+            hot_hits += 1
+    if hot_carried:
+        log("hot sheet: carried %d of %d communities from %s"
+            % (hot_hits, len(communities), hot_as_of[:10]))
+
     communities.sort(key=lambda c: c["name"])
 
     # ---- portfolio trends (full history, partial month marked) -------------
@@ -1815,6 +1838,26 @@ def build(raw_dir, out_dir, registry_path):
     # A candlestick makes an incomplete month look like a triumph: August shows
     # 27 in against 1 out, which is not a leasing win, it is move-outs that have
     # not posted. Catch it before someone reads the chart.
+    if hot_carried:
+        lag = days_since(hot_as_of[:10])
+        missing = [c["name"] for c in communities if not c.get("hot")]
+        flags.append({
+            "severity": "warn" if (lag or 0) > 2 else "info",
+            "title": "Hot sheet figures are carried from %s, not rebuilt" % (hot_as_of[:10] or "an earlier build"),
+            "detail": ("The hot sheet was built and published by another session that never "
+                       "committed its pipeline step, so its occupancy, rent, park-owned home "
+                       "and acquisition figures were recovered from the published page and are "
+                       "replayed here unchanged%s. Every other number on this dashboard "
+                       "rebuilt today; these did not, and will not until that step is pushed. "
+                       "Three of them cannot be rebuilt here at all -- the Property Data Sheet "
+                       "columns for park-owned homes, acquisition date and price are not "
+                       "extracted.%s"
+                       % (" (%d days old)" % lag if lag else "",
+                          " %d communities have no carried figures and show an empty hot "
+                          "sheet: %s." % (len(missing), ", ".join(sorted(missing)[:6]))
+                          if missing else "")),
+        })
+
     if onboarding_months:
         biggest = max(onboarding_months, key=lambda m: m["onboarding_ins"])
         flags.append({
