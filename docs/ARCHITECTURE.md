@@ -44,6 +44,27 @@ If Parakeet later provisions direct REST credentials for the warehouse, the only
 piece that changes is how `pipeline/raw/*.json` gets written — `build.py` and
 everything downstream stays as is.
 
+## The scheduled refresh
+
+A Claude Routine, `Ops dashboard refresh (weekday 7am ET)`
+(`trig_01CAF7XT9fnnH67xFe2JBS1D`), fires weekdays at 11:00 UTC / 7am ET, ahead
+of Austin's 9am meeting floor. It re-runs the six queries, rebuilds, republishes
+to the same artifact URL, and pushes to this branch.
+
+It is bound to the session that built the dashboard rather than spawning a fresh
+one, because the warehouse connector lives on that session. The trigger record
+itself stores no connector grant, so if a run ever reports the
+`mcp__RentViewer_Data_Warehouse__run_query` tool as missing, attach the
+RentViewer connector to the Routine in claude.ai Routines settings.
+
+The warehouse is a monthly snapshot, so a weekday cadence is not about the
+closed-month figures changing daily. It keeps the open-month reading current,
+catches newly onboarded properties in the registry audit, and means the numbers
+are already fresh at the Friday 2pm EOS call and the Monday Jon catch-up.
+
+Every run reports what moved and re-reads the flags. A run that cannot reach the
+warehouse stops rather than republishing a stale payload to the live URL.
+
 ## Running it by hand
 
 ```bash
