@@ -1,0 +1,309 @@
+{
+ "_comment": [
+  "When each data note first appeared, and what has changed since.",
+  "",
+  "COMMIT THIS FILE. Flags are recomputed every build, so this ledger is the",
+  "only record of how long one has been open; the build container is reclaimed",
+  "between runs, so an uncommitted ledger means every note reads as new.",
+  "",
+  "Keyed by the flag's id, never its title -- titles carry live counts and",
+  "change constantly. Written by flag_ledger() in pipeline/build.py."
+ ],
+ "flags": {
+  "ar-90-plus-growth": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "The 90+ bucket is up 30% in seven months"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "The 90+ bucket is up 30% in seven months"
+  },
+  "closed-month-expenses-part-posted": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "2026-08 expenses look only partly posted"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "2026-08 expenses look only partly posted"
+  },
+  "eviction-communities-off-roster": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "2 eviction communities are outside the reportable roster"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "2 eviction communities are outside the reportable roster"
+  },
+  "evictions-open-over-a-year": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "15 eviction cases have been open more than a year"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "15 eviction cases have been open more than a year"
+  },
+  "for-sale-without-rtm-flag": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "19 homes are for sale but not marked Ready to Market"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "19 homes are for sale but not marked Ready to Market"
+  },
+  "former-resident-coverage": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "Former-resident status is known for 570 of 1427 balances"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "Former-resident status is known for 570 of 1427 balances"
+  },
+  "live-ar-above-closed-month": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "Live receivables run $1.15M above the closed month by design"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "Live receivables run $1.15M above the closed month by design"
+  },
+  "lots-exceed-pds-core": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "2 communities carry more lots in Rent Manager than the PDS counts"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "2 communities carry more lots in Rent Manager than the PDS counts"
+  },
+  "move-outs-unposted": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73"
+  },
+  "no-punch-stage-in-rm": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "There is no punch stage in Rent Manager"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "There is no punch stage in Rent Manager"
+  },
+  "occupied-lots-not-billing": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "150 occupied lots across 33 communities bill no recurring rent"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "150 occupied lots across 33 communities bill no recurring rent"
+  },
+  "onboarding-move-ins": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "6 months carry onboarding move-ins, not leasing"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "6 months carry onboarding move-ins, not leasing"
+  },
+  "open-month-financials-unposted": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "2026-09 financials are not posted yet"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "2026-09 financials are not posted yet"
+  },
+  "payment-plans-by-charge-name": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "Payment plans are still detected by charge name, not by a field"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "Payment plans are still detected by charge name, not by a field"
+  },
+  "poh-count-vs-pds": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "43 communities disagree on how many park-owned homes they have"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "43 communities disagree on how many park-owned homes they have"
+  },
+  "revenue-without-budget": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "5 communities post revenue with no budget loaded"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "5 communities post revenue with no budget loaded"
+  },
+  "sold-excluded-by-override": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "2 sold properties are excluded by override, not by the PDS"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "2 sold properties are excluded by override, not by the PDS"
+  },
+  "subledger-receivables-rolled-up": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "$12K of receivables rolled in from sub-ledgers"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "$12K of receivables rolled in from sub-ledgers"
+  },
+  "utility-recapture-below-target": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "warn",
+     "title": "Utility recapture is 46% against a 80% target"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "warn",
+   "title": "Utility recapture is 46% against a 80% target"
+  },
+  "vacancy-aging-coverage": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "Vacancy aging covers 551 of 1820 vacant units"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "Vacancy aging covers 551 of 1820 vacant units"
+  },
+  "vacancy-count-vs-named-list": {
+   "first_seen": "2026-09-05",
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "severity": "info",
+     "title": "Vacant unit counts and the named unit list use different definitions"
+    }
+   ],
+   "last_seen": "2026-09-05",
+   "severity": "info",
+   "title": "Vacant unit counts and the named unit list use different definitions"
+  }
+ },
+ "updated": "2026-09-05"
+}

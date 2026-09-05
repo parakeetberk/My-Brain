@@ -526,6 +526,52 @@ What the panel makes visible in one look: where the **community** pays, recaptur
 runs 37–40%; where **residents** pay, 52–56%. That gap is the whole recapture
 story, and the table never showed it.
 
+## Data notes: cards, and the ledger that ages them
+
+Notes are summary cards carrying the headline only. The qualification and the
+history sit behind a click. They were a stacked list of title-plus-paragraph,
+which read as a wall nobody finished; the headline is what decides whether you
+care, the paragraph is what you read once you do.
+
+Filter by severity or by word; sort by priority, newest, oldest, most changed,
+or A–Z. **Priority means severity first, then age** — a warning open three
+months outranks one that appeared this morning.
+
+Aging needs memory, and flags have none: they are recomputed from scratch every
+build, so a note true since January looks identical to one that appeared this
+morning. `data/flag_history.json` is the only thing separating them, which is
+why it is **committed to the repo** — the build container is reclaimed between
+runs, so an uncommitted ledger means every note reads as new forever.
+
+**Identity is the flag's `id`, never its title.** Every emit site in `build.py`
+carries one (`utility-recapture-below-target`, `poh-count-vs-pds`, and so on).
+Titles carry live counts — "43 communities disagree…" — and change on nearly
+every build; keying on them would reset the age of every note the moment a
+count moved by one.
+
+`flag_ledger()` handles four lifecycle events, each recorded in the note's
+history with the title as it read at the time:
+
+| Event | When |
+|---|---|
+| `opened` | the id fires for the first time |
+| `changed` | its title or severity moved |
+| `resolved` | it did not fire this build |
+| `reopened` | it fired again after clearing — the original `first_seen` is kept, because the honest answer to "how long have we had this" is since the first time |
+
+Cleared notes stay in the payload for 30 days behind a Cleared filter, then drop
+out of the page but stay in the ledger so a reappearance is still recognised as
+a reopen rather than a fresh note. History is capped at 40 entries per flag so a
+figure that moves daily cannot grow without bound.
+
+One honesty caveat the panel states itself: **age counts from the first build
+that recorded a note, not from when the problem started.** The ledger began
+2026-09-05, so everything older than that reads as first seen then.
+
+All four lifecycle paths are covered by a test that backdates and doctors the
+ledger, rebuilds, and asserts on the payload — the behaviour otherwise would not
+surface until the day after a change.
+
 ## Occupancy, reported two ways
 
 A lot marked `Lot-Unusable` or `Lot-Demo` is not a leasing failure — it is
@@ -553,6 +599,7 @@ can fill this week and one that needs a demo permit.
 | `pipeline/raw/` | Committed raw query results |
 | `data/dashboard.json` | The payload the UI reads |
 | `data/registry_audit.json` | Every property name and its disposition |
+| `data/flag_history.json` | When each data note first appeared and what changed — **commit it** |
 | `dashboard/app.js` | The UI (plain-JS React, no build step) |
 | `dashboard/styles.css` | Parakeet brand tokens, light and dark |
 | `dashboard/index.html` | Local dev shell, fetches the payload over HTTP |

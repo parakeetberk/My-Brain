@@ -33,7 +33,7 @@ from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 8
+SCHEMA_VERSION = 9
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -151,6 +151,136 @@ def _median(values):
     would drag a mean past anything a manager could act on."""
     vals = sorted(values)
     return vals[len(vals) // 2] if vals else None
+
+
+LEDGER = "flag_history.json"
+# How many change entries to keep per flag. A note whose count moves every day
+# would otherwise grow without bound and the card only ever shows a timeline.
+LEDGER_MAX_HISTORY = 40
+
+
+def flag_ledger(flags, out_dir):
+    """
+    Stamp each flag with when it first appeared, how long it has been open and
+    what has changed since, and carry recently-resolved flags alongside.
+
+    Returns the enriched list: open flags first in their original order, then
+    anything the ledger knows about that did not fire today, marked resolved.
+    Resolved notes are kept because "this cleared" is worth seeing for a while,
+    and because a flag that flickers on and off is itself a finding.
+    """
+    path = os.path.join(out_dir, LEDGER)
+    book = {}
+    if os.path.exists(path):
+        with open(path) as f:
+            book = (json.load(f) or {}).get("flags") or {}
+
+    today = date.today().isoformat()
+
+    def age(iso):
+        try:
+            y, m, d = (int(x) for x in iso.split("-")[:3])
+            return (date.today() - date(y, m, d)).days
+        except (ValueError, TypeError, AttributeError):
+            return None
+
+    seen = set()
+    out = []
+    for f in flags:
+        fid = f.get("id")
+        if not fid:
+            # Better a stable-ish fallback than dropping the flag entirely.
+            fid = "unkeyed-" + str(abs(hash(f.get("title", ""))) % 10 ** 8)
+            f["id"] = fid
+        seen.add(fid)
+        rec = book.get(fid)
+        if rec is None:
+            rec = {"first_seen": today, "history": [
+                {"date": today, "event": "opened",
+                 "title": f["title"], "severity": f["severity"]}]}
+            book[fid] = rec
+        else:
+            was_resolved = bool(rec.get("resolved_on"))
+            if was_resolved:
+                # Back again. The original first_seen is kept -- the honest
+                # answer to "how long have we had this" is since the first time.
+                rec["history"].append({"date": today, "event": "reopened",
+                                       "title": f["title"], "severity": f["severity"]})
+                rec.pop("resolved_on", None)
+            elif (rec.get("title") != f["title"]
+                  or rec.get("severity") != f["severity"]):
+                rec["history"].append({"date": today, "event": "changed",
+                                       "title": f["title"], "severity": f["severity"]})
+            rec["history"] = rec["history"][-LEDGER_MAX_HISTORY:]
+        rec["title"] = f["title"]
+        rec["severity"] = f["severity"]
+        rec["last_seen"] = today
+
+        f["first_seen"] = rec["first_seen"]
+        f["last_seen"] = today
+        f["days_open"] = age(rec["first_seen"])
+        f["resolved"] = False
+        f["changes"] = len([h for h in rec["history"] if h["event"] != "opened"])
+        f["history"] = list(reversed(rec["history"]))
+        out.append(f)
+
+    # Anything in the book that did not fire today has cleared.
+    resolved = []
+    for fid, rec in book.items():
+        if fid in seen:
+            continue
+        if not rec.get("resolved_on"):
+            rec["resolved_on"] = today
+            rec["history"] = (rec.get("history", []) + [
+                {"date": today, "event": "resolved",
+                 "title": rec.get("title", ""), "severity": rec.get("severity", "info")}
+            ])[-LEDGER_MAX_HISTORY:]
+        gone = age(rec["resolved_on"])
+        # Drop it from the payload once nobody is going to care, but leave it in
+        # the ledger so a reappearance is still recognised as a reopen.
+        if gone is not None and gone > 30:
+            continue
+        resolved.append({
+            "id": fid,
+            "severity": rec.get("severity", "info"),
+            "title": rec.get("title", ""),
+            "detail": "Cleared on %s. It had been open since %s.%s"
+                      % (rec["resolved_on"], rec.get("first_seen", "an earlier build"),
+                         "" if not rec.get("history") else
+                         " The history below is what it said while it was open."),
+            "first_seen": rec.get("first_seen", rec["resolved_on"]),
+            "last_seen": rec.get("last_seen", rec["resolved_on"]),
+            "resolved": True,
+            "resolved_on": rec["resolved_on"],
+            "days_open": age(rec.get("first_seen") or rec["resolved_on"]),
+            "changes": len([h for h in rec.get("history", []) if h["event"] != "opened"]),
+            "history": list(reversed(rec.get("history", []))),
+        })
+
+    os.makedirs(out_dir, exist_ok=True)
+    with open(path, "w") as f_:
+        json.dump({
+            "_comment": [
+                "When each data note first appeared, and what has changed since.",
+                "",
+                "COMMIT THIS FILE. Flags are recomputed every build, so this ledger is the",
+                "only record of how long one has been open; the build container is reclaimed",
+                "between runs, so an uncommitted ledger means every note reads as new.",
+                "",
+                "Keyed by the flag's id, never its title -- titles carry live counts and",
+                "change constantly. Written by flag_ledger() in pipeline/build.py.",
+            ],
+            "updated": today,
+            "flags": book,
+        }, f_, indent=1, sort_keys=True)
+
+    # The earliest first_seen in the book. Every note predating the ledger reads
+    # as first seen on the day it started, and the page says so rather than
+    # implying the problem began then.
+    starts = [r.get("first_seen") for r in book.values() if r.get("first_seen")]
+    log("flags: %d open, %d resolved in the last 30 days, ledger holds %d since %s"
+        % (len(out), len(resolved), len(book), min(starts) if starts else "today"))
+    return out + resolved, (min(starts) if starts else today)
 
 
 def load_envelope(raw_dir, fname):
@@ -1713,6 +1843,7 @@ def build(raw_dir, out_dir, registry_path):
     if poh_gap:
         poh_gap.sort(key=lambda x: -abs(x[1] - x[2]))
         flags.append({
+            "id": "poh-count-vs-pds",
             "severity": "warn",
             "title": "%d communities disagree on how many park-owned homes they have"
                      % len(poh_gap),
@@ -1739,6 +1870,7 @@ def build(raw_dir, out_dir, registry_path):
     if silent:
         silent.sort(key=lambda x: -x[1])
         flags.append({
+            "id": "occupied-lots-not-billing",
             "severity": "warn",
             "title": "%d occupied lots across %d communities bill no recurring rent"
                      % (sum(s[1] for s in silent), len(silent)),
@@ -1756,6 +1888,7 @@ def build(raw_dir, out_dir, registry_path):
     core_gap = [(s, a, b) for s, a, b in core_gap if abs(b - a) > 2]
     if core_gap:
         flags.append({
+            "id": "lots-exceed-pds-core",
             "severity": "info",
             "title": "%d communities carry more lots in Rent Manager than the PDS counts"
                      % len(core_gap),
@@ -1768,6 +1901,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if unknown_types:
         flags.append({
+            "id": "unclassified-unit-types",
             "severity": "warn",
             "title": "Unclassified unit types",
             "detail": ("Not in registry.json, counted as rentable MH: %s"
@@ -1776,6 +1910,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if absent:
         flags.append({
+            "id": "reportable-without-warehouse-data",
             "severity": "warn",
             "title": "%d reportable %s no warehouse data"
                      % (len(absent), "community has" if len(absent) == 1 else "communities have"),
@@ -1788,6 +1923,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if rolled_ar:
         flags.append({
+            "id": "subledger-receivables-rolled-up",
             "severity": "info",
             "title": "%s of receivables rolled in from sub-ledgers" % money(sum(rolled_ar.values())),
             "detail": ("These ledgers are not reportable communities themselves, so their "
@@ -1801,6 +1937,7 @@ def build(raw_dir, out_dir, registry_path):
                  if e["match"][0].strip().lower() in reportable]
     if stale_pds:
         flags.append({
+            "id": "sold-excluded-by-override",
             "severity": "info",
             "title": "%d sold %s excluded by override, not by the PDS"
                      % (len(stale_pds), "property is" if len(stale_pds) == 1 else "properties are"),
@@ -1814,6 +1951,7 @@ def build(raw_dir, out_dir, registry_path):
     cl, lv = portfolio["closed"], portfolio["live"]
     if lv["ar_total"] and cl["ar_total"]:
         flags.append({
+            "id": "live-ar-above-closed-month",
             "severity": "info",
             "title": "Live receivables run %s above the closed month by design"
                      % money(lv["ar_total"] - cl["ar_total"]),
@@ -1829,6 +1967,7 @@ def build(raw_dir, out_dir, registry_path):
         yoy = (ar_closed[-1]["total"] - ar_closed[-13]["total"]) / ar_closed[-13]["total"] * 100
         if abs(yoy) > 15:
             flags.append({
+                "id": "ar-year-over-year",
                 "severity": "warn" if yoy > 0 else "info",
                 "title": "Receivables are %.0f%% against a year ago" % yoy,
                 "detail": "%s in %s against %s in %s."
@@ -1839,6 +1978,7 @@ def build(raw_dir, out_dir, registry_path):
         g = (ar_closed[-1]["b90p"] - ar_closed[-8]["b90p"]) / ar_closed[-8]["b90p"] * 100
         if g > 25:
             flags.append({
+                "id": "ar-90-plus-growth",
                 "severity": "warn",
                 "title": "The 90+ bucket is up %.0f%% in seven months" % g,
                 "detail": ("%s to %s while the monthly collection rate still reads %s. "
@@ -1853,6 +1993,7 @@ def build(raw_dir, out_dir, registry_path):
               and c["closed"].get("ar_over90_share", 0) >= 99.5]
     if frozen:
         flags.append({
+            "id": "all-ar-in-90-plus",
             "severity": "warn",
             "title": "%d %s all receivables in the 90+ bucket"
                      % (len(frozen), "community holds" if len(frozen) == 1 else "communities hold"),
@@ -1879,6 +2020,7 @@ def build(raw_dir, out_dir, registry_path):
             lot_gaps.append((c["name"], expected, actual))
     if lot_gaps:
         flags.append({
+            "id": "lot-count-vs-pds",
             "severity": "warn",
             "title": ("%d %s lot count disagrees with the Property Data Sheet" % (len(lot_gaps), "community's")
                       if len(lot_gaps) == 1 else
@@ -1895,6 +2037,7 @@ def build(raw_dir, out_dir, registry_path):
     # reading. Say so rather than letting a zero look like a collapse.
     if not portfolio["live"].get("revenue") and portfolio["closed"].get("revenue"):
         flags.append({
+            "id": "open-month-financials-unposted",
             "severity": "info",
             "title": "%s financials are not posted yet" % live_month,
             "detail": ("Revenue, expenses and NOI have no live figure this early in the "
@@ -1917,6 +2060,7 @@ def build(raw_dir, out_dir, registry_path):
             if cur < median - 4:
                 shortfall = (median - cur) / 100 * closed_fin[-1]["revenue"]
                 flags.append({
+                    "id": "closed-month-expenses-part-posted",
                     "severity": "warn",
                     "title": "%s expenses look only partly posted" % closed_fin[-1]["month"],
                     "detail": ("Operating expense is %.0f%% of revenue against a %.0f%% median "
@@ -1930,6 +2074,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if unmapped_types:
         flags.append({
+            "id": "unmapped-vacancy-reasons",
             "severity": "info",
             "title": "%d unit types have no vacancy reason mapped" % len(unmapped_types),
             "detail": ("Counted as a plain vacant lot until classified in registry.json "
@@ -1940,6 +2085,7 @@ def build(raw_dir, out_dir, registry_path):
     named_vac = sum(len(c["vacancy_detail"]) for c in communities)
     if counted_vac and abs(named_vac - counted_vac) / counted_vac > 0.1:
         flags.append({
+            "id": "vacancy-count-vs-named-list",
             "severity": "info",
             "title": "Vacant unit counts and the named unit list use different definitions",
             "detail": ("The headline count of %s vacant is unit-day weighted from the "
@@ -1954,6 +2100,7 @@ def build(raw_dir, out_dir, registry_path):
     named_n = sum(len(c["vacancy_detail"]) for c in communities)
     if named_n and aged_n / named_n < 0.8:
         flags.append({
+            "id": "vacancy-aging-coverage",
             "severity": "info",
             "title": "Vacancy aging covers %d of %d vacant units" % (aged_n, named_n),
             "detail": ("Days vacant is measured from the unit's last move-out, and the move "
@@ -1975,6 +2122,7 @@ def build(raw_dir, out_dir, registry_path):
         lag = days_since(evict_as_of)
         if lag is not None and lag > 2:
             flags.append({
+                "id": "eviction-tracker-stale",
                 "severity": "warn",
                 "title": "The eviction tracker export is %d days old" % lag,
                 "detail": ("Case stages and the in-eviction split below are as of %s. The "
@@ -1990,6 +2138,7 @@ def build(raw_dir, out_dir, registry_path):
     if onboarding_months:
         biggest = max(onboarding_months, key=lambda m: m["onboarding_ins"])
         flags.append({
+            "id": "onboarding-move-ins",
             "severity": "info",
             "title": "%d %s carry onboarding move-ins, not leasing"
                      % (len(onboarding_months),
@@ -2013,6 +2162,7 @@ def build(raw_dir, out_dir, registry_path):
         med_outs = _median(prior_outs)
         if med_outs and last_mv["outs"] < med_outs * 0.35:
             flags.append({
+                "id": "move-outs-unposted",
                 "severity": "warn",
                 "title": "%s move-outs look unposted: %d against a %d-month median of %d"
                          % (last_mv["month"], last_mv["outs"], len(prior_outs), med_outs),
@@ -2029,6 +2179,7 @@ def build(raw_dir, out_dir, registry_path):
     if stale_ev:
         settled = [x for x in stale_ev if x["open_charges"] <= 0.005]
         flags.append({
+            "id": "evictions-open-over-a-year",
             "severity": "warn",
             "title": "%d eviction %s been open more than a year"
                      % (len(stale_ev), "case has" if len(stale_ev) == 1 else "cases have"),
@@ -2045,6 +2196,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if evict_unresolved:
         flags.append({
+            "id": "eviction-communities-off-roster",
             "severity": "info",
             "title": "%d eviction %s outside the reportable roster"
                      % (len(evict_unresolved),
@@ -2056,6 +2208,7 @@ def build(raw_dir, out_dir, registry_path):
 
     if reg.unmapped_stages:
         flags.append({
+            "id": "unmapped-eviction-stages",
             "severity": "warn",
             "title": "%d eviction stage %s not mapped to a phase"
                      % (len(reg.unmapped_stages),
@@ -2071,6 +2224,7 @@ def build(raw_dir, out_dir, registry_path):
                        if a["account"] in cust_status)
         if resolved / total_accts < 0.6:
             flags.append({
+                "id": "former-resident-coverage",
                 "severity": "info",
                 "title": "Former-resident status is known for %d of %d balances"
                          % (resolved, total_accts),
@@ -2088,6 +2242,7 @@ def build(raw_dir, out_dir, registry_path):
     plan = next((r for r in portfolio["ar_segments"] if r["segment"] == "payment_plan"), None)
     if not plan or plan["accounts"] < 10:
         flags.append({
+            "id": "payment-plans-by-charge-name",
             "severity": "info",
             "title": "Payment plans are still detected by charge name, not by a field",
             "detail": ("The tracker settles in-eviction and closed cases, but it carries "
@@ -2104,6 +2259,7 @@ def build(raw_dir, out_dir, registry_path):
     not_ready = pipe.get("for_sale_prep", {}).get("homes", 0)
     if not_ready:
         flags.append({
+            "id": "for-sale-without-rtm-flag",
             "severity": "warn",
             "title": "%d %s for sale but not marked Ready to Market"
                      % (not_ready, "home is" if not_ready == 1 else "homes are"),
@@ -2116,6 +2272,7 @@ def build(raw_dir, out_dir, registry_path):
         })
 
     flags.append({
+        "id": "no-punch-stage-in-rm",
         "severity": "info",
         "title": "There is no punch stage in Rent Manager",
         "detail": ("The home pipeline runs rehab straight to Ready to Market because no "
@@ -2128,6 +2285,7 @@ def build(raw_dir, out_dir, registry_path):
     rr_missing = [c["name"] for c in communities if not c["rent_roll"]]
     if rr_missing:
         flags.append({
+            "id": "communities-without-rm-detail",
             "severity": "info",
             "title": "%d %s no Rent Manager unit detail"
                      % (len(rr_missing), "community has" if len(rr_missing) == 1 else "communities have"),
@@ -2141,6 +2299,7 @@ def build(raw_dir, out_dir, registry_path):
     if rec is not None and target and rec < target:
         e = portfolio["expenses"]
         flags.append({
+            "id": "utility-recapture-below-target",
             "severity": "warn",
             "title": "Utility recapture is %.0f%% against a %d%% target" % (rec, target),
             "detail": ("%s billed back against %s of utility spend in %s, so the portfolio "
@@ -2154,6 +2313,7 @@ def build(raw_dir, out_dir, registry_path):
                  if c["closed"].get("revenue") and not c["closed"].get("revenue_budget")]
     if no_budget:
         flags.append({
+            "id": "revenue-without-budget",
             "severity": "info",
             "title": "%d %s revenue with no budget loaded"
                      % (len(no_budget), "community posts" if len(no_budget) == 1 else "communities post"),
@@ -2164,6 +2324,7 @@ def build(raw_dir, out_dir, registry_path):
                 if c["closed"].get("units", 0) >= 10 and c["closed"].get("occupancy") == 0.0]
     if zero_occ:
         flags.append({
+            "id": "zero-occupancy-communities",
             "severity": "warn",
             "title": "%d %s 0%% occupancy on %d lots"
                      % (len(zero_occ), "community reports" if len(zero_occ) == 1 else "communities report",
@@ -2171,6 +2332,19 @@ def build(raw_dir, out_dir, registry_path):
             "detail": ("Either genuinely empty or the ledger is not tracking occupancy: %s."
                        % ", ".join("%s (%d lots)" % (n, u) for n, u in sorted(zero_occ))),
         })
+
+    # ---- flag ledger: created date, aging and history ---------------------
+    # Flags are recomputed from scratch every build, so on their own they have
+    # no age and no memory: a note that has been true since January looks
+    # exactly like one that appeared this morning. The ledger is the only thing
+    # that separates them, which is why it is committed to the repo rather than
+    # written to the container -- the container is reclaimed between runs.
+    #
+    # Identity is the flag's `id`, assigned at each emit site, never its title.
+    # Titles carry live numbers ("43 communities disagree...") and change on
+    # nearly every build; keying on them would reset the age of every note the
+    # moment a count moved by one.
+    flags, ledger_from = flag_ledger(flags, out_dir)
 
     payload = {
         "schema_version": SCHEMA_VERSION,
@@ -2200,6 +2374,7 @@ def build(raw_dir, out_dir, registry_path):
             "financials": fin_series,
         },
         "flags": flags,
+        "ledger_from": ledger_from,
     }
 
     os.makedirs(out_dir, exist_ok=True)

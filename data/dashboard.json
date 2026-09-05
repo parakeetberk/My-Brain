@@ -1,6 +1,6 @@
 {
- "schema_version": 8,
- "generated_at": "2026-09-05T22:14:05+00:00",
+ "schema_version": 9,
+ "generated_at": "2026-09-05T23:02:34+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -194101,109 +194101,404 @@
  },
  "flags": [
   {
+   "id": "poh-count-vs-pds",
    "severity": "warn",
    "title": "43 communities disagree on how many park-owned homes they have",
-   "detail": "The Property Data Sheet's POH column and the Rent Manager asset listing return different counts. The listing is the live system and the PDS is typed by hand, so the PDS is the one to fix. Widest gaps: VO (PDS 8, listing 57), PARK (PDS 33, listing 72), TO (PDS 30, listing 69), ARD (PDS 45, listing 81), PP (PDS 5, listing 23), PL (PDS 1, listing 15)."
+   "detail": "The Property Data Sheet's POH column and the Rent Manager asset listing return different counts. The listing is the live system and the PDS is typed by hand, so the PDS is the one to fix. Widest gaps: VO (PDS 8, listing 57), PARK (PDS 33, listing 72), TO (PDS 30, listing 69), ARD (PDS 45, listing 81), PP (PDS 5, listing 23), PL (PDS 1, listing 15).",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "43 communities disagree on how many park-owned homes they have",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "occupied-lots-not-billing",
    "severity": "warn",
    "title": "150 occupied lots across 33 communities bill no recurring rent",
-   "detail": "Residential lots with a resident on the ledger and no recurring charge, worth $55K a month at market rent. RV, seasonal and transient sites are excluded, because those bill per stay and would otherwise inflate this sixfold. Largest: SSS (47 lots), ARD (28 lots), NALLS (19 lots), AMER (7 lots), HENDS (4 lots), HP (3 lots)."
+   "detail": "Residential lots with a resident on the ledger and no recurring charge, worth $55K a month at market rent. RV, seasonal and transient sites are excluded, because those bill per stay and would otherwise inflate this sixfold. Largest: SSS (47 lots), ARD (28 lots), NALLS (19 lots), AMER (7 lots), HENDS (4 lots), HP (3 lots).",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "150 occupied lots across 33 communities bill no recurring rent",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "lots-exceed-pds-core",
    "severity": "info",
    "title": "2 communities carry more lots in Rent Manager than the PDS counts",
-   "detail": "Total Core Units on the Property Data Sheet is the occupancy denominator, so where the rent roll holds more lots than that, occupancy sits on the wrong base: ARD (PDS 157, rent roll 161), CA (PDS 48, rent roll 51)."
+   "detail": "Total Core Units on the Property Data Sheet is the occupancy denominator, so where the rent roll holds more lots than that, occupancy sits on the wrong base: ARD (PDS 157, rent roll 161), CA (PDS 48, rent roll 51).",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2 communities carry more lots in Rent Manager than the PDS counts",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "subledger-receivables-rolled-up",
    "severity": "info",
    "title": "$12K of receivables rolled in from sub-ledgers",
-   "detail": "These ledgers are not reportable communities themselves, so their balances are attributed to the parent community rather than shown as their own row: Applegate Water $9K, Vantage Oaks Utility $2K, Northgate Utility $11."
+   "detail": "These ledgers are not reportable communities themselves, so their balances are attributed to the parent community rather than shown as their own row: Applegate Water $9K, Vantage Oaks Utility $2K, Northgate Utility $11.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "$12K of receivables rolled in from sub-ledgers",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "sold-excluded-by-override",
    "severity": "info",
    "title": "2 sold properties are excluded by override, not by the PDS",
-   "detail": "Congress Mobile Home Park, Shell Pointe MHC. Correctly out of every figure, but the Property Data Sheet still reads Reportable = Yes with no Sale Date, so the exclusion rests on registry.json rather than the roster. Flipping Reportable to No and filling the Sale Date lets the override be retired."
+   "detail": "Congress Mobile Home Park, Shell Pointe MHC. Correctly out of every figure, but the Property Data Sheet still reads Reportable = Yes with no Sale Date, so the exclusion rests on registry.json rather than the roster. Flipping Reportable to No and filling the Sale Date lets the override be retired.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2 sold properties are excluded by override, not by the PDS",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "live-ar-above-closed-month",
    "severity": "info",
    "title": "Live receivables run $1.15M above the closed month by design",
-   "detail": "Rent bills on the 1st, so day 5 of 2026-09 carries a full month of new charges against 5 days of collection. Past the 5th that money is late, which is why the live view exists. Use the Closed toggle to compare like with like."
+   "detail": "Rent bills on the 1st, so day 5 of 2026-09 carries a full month of new charges against 5 days of collection. Past the 5th that money is late, which is why the live view exists. Use the Closed toggle to compare like with like.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Live receivables run $1.15M above the closed month by design",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "ar-90-plus-growth",
    "severity": "warn",
    "title": "The 90+ bucket is up 30% in seven months",
-   "detail": "$243K to $316K while the monthly collection rate still reads 99.6%. Collections is a flow and receivables are a stock, so a few points of monthly leakage compounds here."
+   "detail": "$243K to $316K while the monthly collection rate still reads 99.6%. Collections is a flow and receivables are a stock, so a few points of monthly leakage compounds here.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "The 90+ bucket is up 30% in seven months",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "open-month-financials-unposted",
    "severity": "info",
    "title": "2026-09 financials are not posted yet",
-   "detail": "Revenue, expenses and NOI have no live figure this early in the month, so the Financials tab and the NOI tile always report closed 2026-08 regardless of the period toggle."
+   "detail": "Revenue, expenses and NOI have no live figure this early in the month, so the Financials tab and the NOI tile always report closed 2026-08 regardless of the period toggle.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2026-09 financials are not posted yet",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "closed-month-expenses-part-posted",
    "severity": "warn",
    "title": "2026-08 expenses look only partly posted",
-   "detail": "Operating expense is 29% of revenue against a 37% median for the trailing year, a gap worth about $323K. NOI of $2.67M for the month is flattered by roughly that much and should not be read as performance until the ledger is closed out. 2026-07 is the last month with a full expense picture."
+   "detail": "Operating expense is 29% of revenue against a 37% median for the trailing year, a gap worth about $323K. NOI of $2.67M for the month is flattered by roughly that much and should not be read as performance until the ledger is closed out. 2026-07 is the last month with a full expense picture.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2026-08 expenses look only partly posted",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "vacancy-count-vs-named-list",
    "severity": "info",
    "title": "Vacant unit counts and the named unit list use different definitions",
-   "detail": "The headline count of 1,236 vacant is unit-day weighted from the warehouse, so a lot empty for half the month counts as half. The drill-in list names 1,820 units with no active lease as of today. Both are right for what they measure, which is why they do not tie."
+   "detail": "The headline count of 1,236 vacant is unit-day weighted from the warehouse, so a lot empty for half the month counts as half. The drill-in list names 1,820 units with no active lease as of today. Both are right for what they measure, which is why they do not tie.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Vacant unit counts and the named unit list use different definitions",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "vacancy-aging-coverage",
    "severity": "info",
    "title": "Vacancy aging covers 551 of 1820 vacant units",
-   "detail": "Days vacant is measured from the unit's last move-out, and the move history pulled starts 2025-01, so a lot that has been empty longer than that has no anchor and shows as Unknown. Pulling move history further back would close the gap."
+   "detail": "Days vacant is measured from the unit's last move-out, and the move history pulled starts 2025-01, so a lot that has been empty longer than that has no anchor and shows as Unknown. Pulling move history further back would close the gap.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Vacancy aging covers 551 of 1820 vacant units",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "onboarding-move-ins",
    "severity": "info",
    "title": "6 months carry onboarding move-ins, not leasing",
-   "detail": "Bringing a community into Rent Manager posts its whole sitting resident base as move-ins that month. 2025-08 is the largest: 514 of its 588 move-ins are loads (Riverwalk 169 of 201 lots, The Oaks 145 of 190 lots, Windward Knoll 139 of 155 lots, Terrace Crossings 61 of 65 lots). Those months are drawn off scale on the move chart with their true net labelled, and excluded from the trailing-twelve net, because 1,331 residents inherited with an acquisition would otherwise read as a year of leasing wins. Occupancy is measured from unit-days and is unaffected."
+   "detail": "Bringing a community into Rent Manager posts its whole sitting resident base as move-ins that month. 2025-08 is the largest: 514 of its 588 move-ins are loads (Riverwalk 169 of 201 lots, The Oaks 145 of 190 lots, Windward Knoll 139 of 155 lots, Terrace Crossings 61 of 65 lots). Those months are drawn off scale on the move chart with their true net labelled, and excluded from the trailing-twelve net, because 1,331 residents inherited with an acquisition would otherwise read as a year of leasing wins. Occupancy is measured from unit-days and is unaffected.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "6 months carry onboarding move-ins, not leasing",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "move-outs-unposted",
    "severity": "warn",
    "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73",
-   "detail": "The move-in / move-out candle for 2026-08 shows a large net gain and it is almost certainly not real -- move-ins posted and move-outs did not. Net movement for that month, and the net column on the move table, are both overstated until the rest post. Occupancy itself is measured from unit-days rather than from moves, so it is unaffected."
+   "detail": "The move-in / move-out candle for 2026-08 shows a large net gain and it is almost certainly not real -- move-ins posted and move-outs did not. Net movement for that month, and the net column on the move table, are both overstated until the rest post. Occupancy itself is measured from unit-days rather than from moves, so it is unaffected.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "evictions-open-over-a-year",
    "severity": "warn",
    "title": "15 eviction cases have been open more than a year",
-   "detail": "The oldest has been open 1157 days. 12 of the 15 owe nothing at all, which usually means the matter resolved and nobody closed it in the tracker rather than a resident sitting in eviction for years. Either way they inflate the funnel and the in-eviction bucket until someone sets a close date. The 3 still owing carry $21K."
+   "detail": "The oldest has been open 1157 days. 12 of the 15 owe nothing at all, which usually means the matter resolved and nobody closed it in the tracker rather than a resident sitting in eviction for years. Either way they inflate the funnel and the in-eviction bucket until someone sets a close date. The 3 still owing carry $21K.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "15 eviction cases have been open more than a year",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "eviction-communities-off-roster",
    "severity": "info",
    "title": "2 eviction communities are outside the reportable roster",
-   "detail": "The tracker carries open cases at these, but they are sold or not marked Reportable, so their cases are excluded along with the rest of their numbers: Congress, Shelle Pointe MHC."
+   "detail": "The tracker carries open cases at these, but they are sold or not marked Reportable, so their cases are excluded along with the rest of their numbers: Congress, Shelle Pointe MHC.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "2 eviction communities are outside the reportable roster",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "former-resident-coverage",
    "severity": "info",
    "title": "Former-resident status is known for 570 of 1427 balances",
-   "detail": "In eviction and payment plan now come from the tracker and are solid. Former resident does not: it needs a lease that the move history shows ended, and that history only reaches back to 2025-01, so an account that moved out earlier reads as needing action. A closed eviction case recovers 58 of them. Pulling move history further back closes the rest."
+   "detail": "In eviction and payment plan now come from the tracker and are solid. Former resident does not: it needs a lease that the move history shows ended, and that history only reaches back to 2025-01, so an account that moved out earlier reads as needing action. A closed eviction case recovers 58 of them. Pulling move history further back closes the rest.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Former-resident status is known for 570 of 1427 balances",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "payment-plans-by-charge-name",
    "severity": "info",
    "title": "Payment plans are still detected by charge name, not by a field",
-   "detail": "The tracker settles in-eviction and closed cases, but it carries nothing about plans. This looks for a payment plan charge type on the ledger and finds 1 account, which is almost certainly under the truth -- most plans are agreed by email and never posted as a charge. Any account on a plan without one reads as needing action."
+   "detail": "The tracker settles in-eviction and closed cases, but it carries nothing about plans. This looks for a payment plan charge type on the ledger and finds 1 account, which is almost certainly under the truth -- most plans are agreed by email and never posted as a charge. Any account on a plan without one reads as needing action.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Payment plans are still detected by charge name, not by a field",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "for-sale-without-rtm-flag",
    "severity": "warn",
    "title": "19 homes are for sale but not marked Ready to Market",
-   "detail": "Their status says For Sale, so they are counted as sellable stock, but the Ready to Market flag on the Asset Listing is not set. Either the home is not actually showable yet or nobody flipped the flag. 112 of the 530 homes in the pipeline carry the flag."
+   "detail": "Their status says For Sale, so they are counted as sellable stock, but the Ready to Market flag on the Asset Listing is not set. Either the home is not actually showable yet or nobody flipped the flag. 112 of the 530 homes in the pipeline carry the flag.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "19 homes are for sale but not marked Ready to Market",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "no-punch-stage-in-rm",
    "severity": "info",
    "title": "There is no punch stage in Rent Manager",
-   "detail": "The home pipeline runs rehab straight to Ready to Market because no punch status and no punch field exist on the Asset Listing. Ready to Market itself is a user-defined field, not a status, which is why a home can read For Sale and not-ready at the same time. Adding a punch status is the only way that step becomes reportable."
+   "detail": "The home pipeline runs rehab straight to Ready to Market because no punch status and no punch field exist on the Asset Listing. Ready to Market itself is a user-defined field, not a status, which is why a home can read For Sale and not-ready at the same time. Adding a punch status is the only way that step becomes reportable.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "There is no punch stage in Rent Manager",
+     "severity": "info"
+    }
+   ]
   },
   {
+   "id": "utility-recapture-below-target",
    "severity": "warn",
    "title": "Utility recapture is 46% against a 80% target",
-   "detail": "$196K billed back against $425K of utility spend in 2026-08, so the portfolio absorbed $229K. Recapture is a pricing and metering question, not a controllable expense, which is why it sits on its own."
+   "detail": "$196K billed back against $425K of utility spend in 2026-08, so the portfolio absorbed $229K. Recapture is a pricing and metering question, not a controllable expense, which is why it sits on its own.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "Utility recapture is 46% against a 80% target",
+     "severity": "warn"
+    }
+   ]
   },
   {
+   "id": "revenue-without-budget",
    "severity": "info",
    "title": "5 communities post revenue with no budget loaded",
-   "detail": "Budget variance is blank for: Hendersons MHC, Hunter Springs MHP, McGregor Downs, Parkwood Mobile Home Park, Regency I & II."
+   "detail": "Budget variance is blank for: Hendersons MHC, Hunter Springs MHP, McGregor Downs, Parkwood Mobile Home Park, Regency I & II.",
+   "first_seen": "2026-09-05",
+   "last_seen": "2026-09-05",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 0,
+   "history": [
+    {
+     "date": "2026-09-05",
+     "event": "opened",
+     "title": "5 communities post revenue with no budget loaded",
+     "severity": "info"
+    }
+   ]
   }
- ]
+ ],
+ "ledger_from": "2026-09-05"
 }

@@ -2911,13 +2911,122 @@
         initialSort: { key: "net", dir: 1 }
           }))));
   }
+  var NOTE_EVENT = {
+    opened: "Opened", changed: "Figure changed",
+    reopened: "Came back", resolved: "Cleared"
+  };
+
+  function noteAge(f) {
+    if (f.days_open == null) return "age unknown";
+    if (f.days_open === 0) return "first seen today";
+    return f.days_open + (f.days_open === 1 ? " day old" : " days old");
+  }
+
+  /* One data note, opened. The card carries the headline; everything that
+     qualifies it lives here, plus what the note has said over time -- a figure
+     that has moved four times since it appeared is a different problem from one
+     that has sat unchanged. */
+  function NoteDetail(props) {
+    var f = props.note;
+    return h(Modal, {
+      title: f.title,
+      subtitle: [
+        f.resolved ? "Cleared " + f.resolved_on : (f.severity === "warn" ? "Needs a look" : "For context"),
+        "first seen " + (f.first_seen || "unknown"),
+        // The date is already above; this is the duration, phrased as one.
+        f.days_open == null ? null
+          : f.days_open === 0 ? "open today"
+          : "open " + f.days_open + (f.days_open === 1 ? " day" : " days"),
+        f.changes
+          ? f.changes + (f.changes === 1 ? " change since" : " changes since")
+          : "unchanged since it opened"
+      ].filter(Boolean).join("  ·  "),
+      onClose: props.onClose
+    },
+      h("div", { className: "note-detail" }, f.detail),
+      (f.history || []).length
+        ? h("div", { className: "note-history" },
+            h("h4", null, "History"),
+            (f.history || []).map(function (hh, i) {
+              return h("div", { className: "nh-row", key: i },
+                h("div", { className: "nh-when" }, hh.date),
+                h("div", null,
+                  h("span", {
+                    className: "chip " + (hh.event === "resolved" ? "good"
+                      : hh.event === "reopened" ? "critical"
+                      : hh.severity === "warn" ? "watch" : "")
+                  }, NOTE_EVENT[hh.event] || hh.event),
+                  h("div", { className: "nh-title" }, hh.title)));
+            }))
+        : null);
+  }
+
+  /* Data notes as summary cards: the headline only, with the qualification and
+     the history one click away.
+
+     They used to be a stacked list of title-plus-paragraph, which read as a
+     wall nobody finished. The headline is the part that decides whether you
+     care; the paragraph is what you read once you do. */
   function Exceptions(props) {
-    var st = useState(false);
-    var open = st[0], setOpen = st[1];
-    var flags = props.flags || [];
-    if (!flags.length) return null;
-    var warns = flags.filter(function (f) { return f.severity === "warn"; }).length;
-    var infos = flags.length - warns;
+    var openSt = useState(false);
+    var open = openSt[0], setOpen = openSt[1];
+    var sevSt = useState("all");
+    var sev = sevSt[0], setSev = sevSt[1];
+    var sortSt = useState("priority");
+    var sort = sortSt[0], setSort = sortSt[1];
+    var qSt = useState("");
+    var q = qSt[0], setQ = qSt[1];
+    var pickSt = useState(null);
+    var pick = pickSt[0], setPick = pickSt[1];
+
+    var all = props.flags || [];
+    if (!all.length) return null;
+
+    var live = all.filter(function (f) { return !f.resolved; });
+    var warns = live.filter(function (f) { return f.severity === "warn"; }).length;
+    var infos = live.length - warns;
+    var cleared = all.length - live.length;
+
+    var FILTERS = [
+      { id: "all", label: "All", n: live.length },
+      { id: "warn", label: "Needs a look", n: warns },
+      { id: "info", label: "For context", n: infos },
+      { id: "resolved", label: "Cleared", n: cleared }
+    ].filter(function (x) { return x.n; });
+
+    var SORTS = [
+      { id: "priority", label: "Priority" },
+      { id: "newest", label: "Newest first" },
+      { id: "aging", label: "Oldest first" },
+      { id: "changed", label: "Most changed" },
+      { id: "az", label: "A to Z" }
+    ];
+
+    var rows = all.filter(function (f) {
+      if (sev === "resolved") { if (!f.resolved) return false; }
+      else if (f.resolved) return false;
+      if (sev === "warn" && f.severity !== "warn") return false;
+      if (sev === "info" && f.severity !== "info") return false;
+      if (q) {
+        var t = (f.title + " " + f.detail).toLowerCase();
+        if (t.indexOf(q.toLowerCase()) === -1) return false;
+      }
+      return true;
+    });
+
+    // Priority is severity first, then how long it has been sitting there. A
+    // warning open for three months outranks one that appeared this morning.
+    var byAge = function (a, b) { return (b.days_open || 0) - (a.days_open || 0); };
+    rows = rows.slice().sort(function (a, b) {
+      if (sort === "priority") {
+        var sa = a.severity === "warn" ? 0 : 1, sb = b.severity === "warn" ? 0 : 1;
+        return sa !== sb ? sa - sb : byAge(a, b);
+      }
+      if (sort === "newest") return String(b.first_seen || "").localeCompare(String(a.first_seen || ""));
+      if (sort === "aging") return String(a.first_seen || "").localeCompare(String(b.first_seen || ""));
+      if (sort === "changed") return (b.changes || 0) - (a.changes || 0) || byAge(a, b);
+      return a.title.localeCompare(b.title);
+    });
 
     return h("div", { className: "exceptions no-print" },
       h("button", {
@@ -2928,16 +3037,67 @@
         h("strong", null, "Data notes"),
         warns ? h("span", { className: "pill-count warn" }, warns + " needs a look") : null,
         infos ? h("span", { className: "pill-count info" }, infos + " for context") : null,
+        cleared ? h("span", { className: "pill-count" }, cleared + " cleared") : null,
         h("span", { className: "spacer" }),
         h("span", { style: { color: "var(--text-muted)", fontSize: "11.5px" } },
           open ? "Hide" : "Read before acting on these numbers")),
-      open ? h("div", { className: "exception-list" }, flags.map(function (f, i) {
-        return h("div", { className: "exception " + f.severity, key: i },
-          h("div", { className: "stripe" }),
-          h("div", { className: "body" },
-            h("div", { className: "etitle" }, f.title),
-            h("div", { className: "edetail" }, f.detail)));
-      })) : null);
+
+      open ? h("div", { className: "note-shell" },
+        h("div", { className: "note-controls" },
+          h("div", { className: "note-chips", role: "group", "aria-label": "Filter data notes" },
+            FILTERS.map(function (x) {
+              return h("button", {
+                key: x.id, type: "button",
+                className: "note-chip" + (sev === x.id ? " on" : ""),
+                "aria-pressed": sev === x.id ? "true" : "false",
+                onClick: function () { setSev(x.id); }
+              }, x.label, h("span", { className: "nc-n" }, x.n));
+            })),
+          h("span", { className: "spacer" }),
+          h("label", { className: "note-sort" }, "Sort",
+            h("select", {
+              value: sort,
+              onChange: function (e) { setSort(e.target.value); }
+            }, SORTS.map(function (o) {
+              return h("option", { key: o.id, value: o.id }, o.label);
+            }))),
+          h("input", {
+            className: "note-search", type: "search", value: q,
+            placeholder: "Filter by word",
+            "aria-label": "Filter data notes by word",
+            onChange: function (e) { setQ(e.target.value); }
+          })),
+
+        rows.length
+          ? h("div", { className: "note-cards" }, rows.map(function (f) {
+              return h("button", {
+                key: f.id, type: "button",
+                className: "note-card " + f.severity + (f.resolved ? " done" : ""),
+                onClick: function () { setPick(f); },
+                title: "Open the detail and history"
+              },
+                h("div", { className: "nc-top" },
+                  h("span", { className: "nc-dot" }),
+                  h("span", { className: "nc-age" },
+                    f.resolved ? "cleared " + f.resolved_on : noteAge(f))),
+                h("div", { className: "nc-title" }, f.title),
+                h("div", { className: "nc-foot" },
+                  // Only say something when there is something to say. On the
+                  // ledger's first day every note would otherwise carry the
+                  // same "no change" line, twenty-one times over.
+                  f.changes
+                    ? h("span", null, f.changes + (f.changes === 1 ? " change" : " changes"))
+                    : null,
+                  h("span", { className: "nc-open" }, "Details \u2192")));
+            }))
+          : h("div", { className: "loading" }, "No notes match that filter."),
+
+        h("div", { className: "note-foot" },
+          "Age counts from the first build that recorded a note, not from when the " +
+          "underlying problem started. The ledger began " + (props.ledgerFrom || "recently") +
+          ", so anything older than that reads as first seen then.")) : null,
+
+      pick ? h(NoteDetail, { note: pick, onClose: function () { setPick(null); } }) : null);
   }
 
   // -------------------------------------------------------------------- app ---
@@ -3021,7 +3181,7 @@
               (live ? " through day " + d.period.live_day : " closed")))),
         h(PeriodToggle, { data: d, mode: mode, onChange: setMode })),
 
-      h(Exceptions, { flags: d.flags }),
+      h(Exceptions, { flags: d.flags, ledgerFrom: d.ledger_from }),
 
       h("div", { className: "kpis" },
         h(Kpi, {
