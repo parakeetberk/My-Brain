@@ -838,11 +838,7 @@ tr.child-row td:first-child { padding-left: 28px; }
 .hs-row:last-child { border-bottom: 0; }
 .hs-head { display: flex; align-items: baseline; gap: 12px; }
 .hs-label { font-weight: 600; }
-.hs-value {
-  margin-left: auto;
-  font-weight: 700;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.hs-note { margin-top: 3px; font-size: 12px; line-height: 1.45; color: var(--text-muted); }
+.hs-value { margin-left: auto; font-weight: 700; text-align: right;
+            font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hs-note { margin-top: 3px; font-size: 12px; line-height: 1.45;
+           color: var(--text-muted); }
