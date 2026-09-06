@@ -526,6 +526,47 @@ What the panel makes visible in one look: where the **community** pays, recaptur
 runs 37–40%; where **residents** pay, 52–56%. That gap is the whole recapture
 story, and the table never showed it.
 
+## Scope: the two-step filter
+
+It sits above the tabs, so it governs every tab, every total, every drill-in and
+every chart on the page. Step one picks the dimension, step two multi-selects
+values from it. Two controls instead of a row of six selects — and 64
+communities do not fit in a visible list at all.
+
+**Semantics: OR inside a dimension, AND across them.** Two vehicles widens to
+six communities; a vehicle plus a community narrows to the overlap. That is the
+standard reading of a filter set, and it can land on nothing — a page of zeroes
+with no explanation is how people conclude a dashboard is broken. So when the
+overlap is empty the bar says exactly that, in those terms, with a one-click
+Clear all. Applied selections show as removable chips rather than hiding behind
+a closed menu.
+
+The old per-tab Vehicle select is gone; scope owns that dimension now, and two
+places to set the same thing is worse than one.
+
+### Regional manager has no source system
+
+The dimension is real but the data is not, and this is worth writing down
+because two plausible sources both fail:
+
+- **The Property Data Sheet** has 41 columns in `vwr VW_PDS_V2` and no manager
+  field. Community email and phone are the closest it comes.
+- **Rent Manager property groups** include person-named ones — `AG Properties`,
+  `LS Properties`, `SR Properties`, `Wendy Properties`, `Natalie Properties`,
+  `NM Properties`, `Jordan Young`. Tempting, and unusable. Membership can only
+  be read back through a report, and every report filters its own way:
+  `AgedReceivables` returns only properties that owe something, so an empty
+  result means no receivables rather than an empty group. `AG` came back with 23
+  of 64 communities and `Jordan Young` with 4, and nothing anywhere says whether
+  these groups mean management or ownership.
+
+So `pipeline/regional_managers.json` is the source of truth, maintained by hand,
+and it lists all 64 communities ready to assign. Until `managers` is filled in
+the dimension shows as unavailable in the dropdown — disabled with the reason on
+it — and a data note explains why. Communities left out of a populated file land
+under **Unassigned** rather than vanishing, so a new community that nobody
+assigned is visible instead of silently dropping out of portfolio totals.
+
 ## Data notes: cards, and the ledger that ages them
 
 Notes are summary cards carrying the headline only. The qualification and the
@@ -593,6 +634,7 @@ can fill this week and one that needs a demo permit.
 | `pipeline/raw/pds_reportable.json` | The Reportable = Yes roster — the gate |
 | `pipeline/raw/eviction_tracker.json` | Case stages, de-identified — the AR work buckets |
 | `pipeline/registry.json` | Sold overrides, roll-ups, segments, unit types, thresholds, home pipeline, eviction stages |
+| `pipeline/regional_managers.json` | Which regional covers which communities — hand-maintained, no source system has it |
 | `pipeline/stage_eviction.py` | Eviction Tracker CSV → de-identified JSON |
 | `pipeline/build.py` | Raw pulls → `data/dashboard.json` |
 | `pipeline/publish.py` | Payload + UI → one standalone HTML |

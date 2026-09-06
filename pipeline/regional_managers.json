@@ -1,0 +1,352 @@
+{
+ "_comment": [
+  "Which regional manager covers which communities. Fill in `managers` and the",
+  "Regional manager filter on the dashboard lights up; leave it empty and the",
+  "dimension shows as unavailable rather than silently missing.",
+  "",
+  "THIS FILE IS THE SOURCE OF TRUTH, because nothing else is. The Property Data",
+  "Sheet has 41 columns and no manager field. Rent Manager has property groups",
+  "named after people -- AG Properties, LS Properties, Wendy, Natalie, Jordan",
+  "Young -- but they cannot be used:",
+  "",
+  "  1. Membership can only be read back through a report, and every report",
+  "     filters its own way. AgedReceivables returns only properties that owe",
+  "     something, so an empty result means no receivables, not an empty group.",
+  "  2. Nothing says those groups mean management rather than ownership. AG came",
+  "     back with 23 of 64 communities, which is either a large book or a",
+  "     completely different kind of grouping.",
+  "",
+  "Guessing between those was not worth a wrong org chart on a dashboard the",
+  "regionals themselves read, so this file exists instead.",
+  "",
+  "FORMAT: manager name -> list of community short names. A community may appear",
+  "under only one manager. Names are matched against `short_name` first and then",
+  "the community name, both case-insensitively.",
+  "",
+  "Anything left out lands under 'Unassigned' in the filter, so a community that",
+  "is added to the portfolio and forgotten here is visible rather than hidden."
+ ],
+ "managers": {},
+ "_communities_to_assign": [
+  {
+   "short_name": "AMER",
+   "community": "American",
+   "vehicle": "Baker"
+  },
+  {
+   "short_name": "APPLE",
+   "community": "Applegate MHC",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "ARD",
+   "community": "Auburn Ridge",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "BELL",
+   "community": "Belle Haven",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "BOVIIPO",
+   "community": "Bay Oaks Village II",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "BOVIPO",
+   "community": "Bay Oaks Village I",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "BRUN",
+   "community": "Brunswick Estates",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "CA",
+   "community": "Crystal Acres",
+   "vehicle": "Kippy"
+  },
+  {
+   "short_name": "CARL",
+   "community": "Carley's Mobile Home Park",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "CENT",
+   "community": "Central Mobile Home Park",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "DO",
+   "community": "Druid Oaks MHC",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "EG",
+   "community": "Everglades Mobile Home Park",
+   "vehicle": "Harpreet"
+  },
+  {
+   "short_name": "FOX",
+   "community": "Fox Creek",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "GO",
+   "community": "Great Oak RV Resort",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "GPT",
+   "community": "Greene Pointe",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "GULFPO",
+   "community": "Gulf Breeze MHC",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "HARB",
+   "community": "Harbour Mobile Home Park",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "HENDS",
+   "community": "Hendersons MHC",
+   "vehicle": "Single Asset"
+  },
+  {
+   "short_name": "HP",
+   "community": "Hershey Park",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "HSMHC",
+   "community": "Hunter Springs MHP",
+   "vehicle": "Kippy"
+  },
+  {
+   "short_name": "JBJ",
+   "community": "J Bar J Estates",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "LLMHC",
+   "community": "Lamberton Lake MHC",
+   "vehicle": "Fund II"
+  },
+  {
+   "short_name": "LS",
+   "community": "Lake Saunders",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "LUCK",
+   "community": "Lucky Clover",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "LWPO",
+   "community": "Lake Wales MHC",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "MAY",
+   "community": "Mayflower Hills",
+   "vehicle": "Single Asset"
+  },
+  {
+   "short_name": "MCG",
+   "community": "McGregor Downs",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "MON",
+   "community": "Monson",
+   "vehicle": "Baker"
+  },
+  {
+   "short_name": "MWMHP",
+   "community": "Meadow Woods Mobile Home Park",
+   "vehicle": "Single Asset"
+  },
+  {
+   "short_name": "NALLS",
+   "community": "Nalls Court MHC",
+   "vehicle": "Single Asset"
+  },
+  {
+   "short_name": "NGMH",
+   "community": "Northgate MH",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "OAK",
+   "community": "Oakside MHP",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "OBOPO",
+   "community": "Ormond Beach Oasis",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "OCEANPO",
+   "community": "Oceanaire MHC",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "PARK",
+   "community": "Parkwood Mobile Home Park",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "PL",
+   "community": "Paradise Lakes",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "PP",
+   "community": "Paradise Palms",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "PPH",
+   "community": "Palm Haven Estates",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "PSEPO",
+   "community": "Palm Spring Estates",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "RED",
+   "community": "Redlands",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "REG",
+   "community": "Regency I & II",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "RIV",
+   "community": "Riviera",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "RO",
+   "community": "River Oaks RV Resort",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "ROYAL",
+   "community": "Royal Oaks MHC",
+   "vehicle": "Kippy"
+  },
+  {
+   "short_name": "RP",
+   "community": "Royal Palm Trailer Park",
+   "vehicle": "Harpreet"
+  },
+  {
+   "short_name": "RW",
+   "community": "Riverwalk",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "SA",
+   "community": "Shady Acres MHC",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "SH",
+   "community": "Silver Hill MHC",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "SILVER",
+   "community": "Silver Breeze",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "SO",
+   "community": "Shady Oaks MHP",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "SOUTH",
+   "community": "Southgate",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "SS",
+   "community": "Sea Shells Manufactured Housing Community",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "SSS",
+   "community": "Triple S Marina",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "SUR",
+   "community": "Su-Rene",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "TC",
+   "community": "Terrace Crossings",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "TCMHCPO",
+   "community": "Town & Country MHC",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "TO",
+   "community": "The Oaks",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "TRADE",
+   "community": "Tradewinds MHC",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "VO",
+   "community": "Vantage Oaks",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "WIND",
+   "community": "Windward Knoll",
+   "vehicle": "JREFII"
+  },
+  {
+   "short_name": "WOLFPO",
+   "community": "Wolf Bay MHC",
+   "vehicle": "Origins"
+  },
+  {
+   "short_name": "WPMA",
+   "community": "Whispering Pines MA",
+   "vehicle": "Baker"
+  },
+  {
+   "short_name": "WPMH",
+   "community": "Whispering Pines MH FL",
+   "vehicle": "JREFI"
+  },
+  {
+   "short_name": "WWPO",
+   "community": "Westwood MHC",
+   "vehicle": "Origins"
+  }
+ ]
+}

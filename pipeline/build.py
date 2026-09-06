@@ -33,7 +33,7 @@ from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 9
+SCHEMA_VERSION = 10
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -475,6 +475,9 @@ class Registry:
 def build(raw_dir, out_dir, registry_path):
     with open(registry_path) as f:
         cfg = json.load(f)
+    # Hand-maintained config sits beside the registry, not in raw/, because it
+    # is authored rather than pulled.
+    cfg_dir = os.path.dirname(os.path.abspath(registry_path))
     reportable, reportable_rows = load_reportable(raw_dir)
     reg = Registry(cfg, reportable)
 
@@ -1452,6 +1455,27 @@ def build(raw_dir, out_dir, registry_path):
             if c[blk]:
                 c[blk].update(pit)
 
+    # ---- regional manager ---------------------------------------------------
+    # No source system carries this. The PDS has 41 columns and no manager
+    # field; Rent Manager's person-named property groups cannot be read back
+    # reliably and do not say whether they mean management or ownership. So the
+    # mapping is maintained by hand in pipeline/regional_managers.json and the
+    # filter reports itself unavailable until it is filled in.
+    rm_book = load_envelope(cfg_dir, "regional_managers.json") or {}
+    regional_of = {}
+    for who, members in (rm_book.get("managers") or {}).items():
+        for m in members or []:
+            regional_of[str(m).strip().upper()] = who
+    for c in communities:
+        who = (regional_of.get(str(c.get("short_name") or "").strip().upper())
+               or regional_of.get(str(c["name"]).strip().upper()))
+        c["regional"] = who or ("Unassigned" if regional_of else None)
+    regionals = sorted({c["regional"] for c in communities if c["regional"]})
+    if regional_of:
+        log("regional managers: %s" % ", ".join(
+            "%s (%d)" % (r, sum(1 for c in communities if c["regional"] == r))
+            for r in regionals))
+
     communities.sort(key=lambda c: c["name"])
 
     # ---- portfolio trends (full history, partial month marked) -------------
@@ -2135,6 +2159,35 @@ def build(raw_dir, out_dir, registry_path):
     # A candlestick makes an incomplete month look like a triumph: August shows
     # 27 in against 1 out, which is not a leasing win, it is move-outs that have
     # not posted. Catch it before someone reads the chart.
+    if not regionals:
+        flags.append({
+            "id": "regional-managers-unmapped",
+            "severity": "info",
+            "title": "Regional manager assignments are not filled in",
+            "detail": ("The dashboard can filter by regional manager, but nothing in Rent "
+                       "Manager or the Property Data Sheet says who covers what. The Property "
+                       "Data Sheet has 41 columns and no manager field, and Rent Manager's "
+                       "person-named property groups cannot be read back reliably -- an empty "
+                       "result from one means no receivables, not an empty group -- nor do "
+                       "they say whether they mean management or ownership. Fill in "
+                       "pipeline/regional_managers.json, which lists all %d communities ready "
+                       "to assign, and the filter turns on." % len(communities)),
+        })
+    else:
+        stray = [c["short_name"] or c["name"] for c in communities
+                 if c["regional"] == "Unassigned"]
+        if stray:
+            flags.append({
+                "id": "communities-without-a-regional",
+                "severity": "warn",
+                "title": "%d %s no regional manager assigned"
+                         % (len(stray), "community has" if len(stray) == 1 else "communities have"),
+                "detail": ("They group under Unassigned in the filter rather than being "
+                           "hidden, so nothing drops out of a portfolio total silently. Add "
+                           "them to pipeline/regional_managers.json: %s."
+                           % ", ".join(sorted(stray))),
+            })
+
     if onboarding_months:
         biggest = max(onboarding_months, key=lambda m: m["onboarding_ins"])
         flags.append({
@@ -2363,6 +2416,7 @@ def build(raw_dir, out_dir, registry_path):
         "thresholds": reg.thresholds,
         "portfolio": portfolio,
         "vehicles": vehicles,
+        "regionals": regionals,
         "vacancy_reasons": vacancy_reasons,
         "reason_meta": reason_meta,
         "communities": communities,

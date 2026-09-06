@@ -2967,6 +2967,178 @@
      They used to be a stacked list of title-plus-paragraph, which read as a
      wall nobody finished. The headline is the part that decides whether you
      care; the paragraph is what you read once you do. */
+  /* Scope: a two-step filter that sits above everything and applies to every
+     tab, drill-in and total on the page.
+
+     Step one picks the dimension, step two picks values from it. That keeps the
+     header to two controls instead of a row of six selects, which is what the
+     dimensions would cost laid out flat -- 64 communities do not fit in a
+     visible list.
+
+     Semantics: OR inside a dimension, AND across them. Picking two vehicles
+     widens; picking a vehicle and a manager narrows to the overlap. Choices
+     show as removable chips so what is applied is never hidden behind a
+     closed menu. */
+  function ScopeBar(props) {
+    var d = props.data, scope = props.scope, setScope = props.setScope;
+    var dimSt = useState("vehicle");
+    var dim = dimSt[0], setDim = dimSt[1];
+    var openSt = useState(false);
+    var open = openSt[0], setOpen = openSt[1];
+    var qSt = useState("");
+    var q = qSt[0], setQ = qSt[1];
+
+    var regionals = d.regionals || [];
+    // Vehicles come pre-ordered biggest first, matching how the tables group
+    // them. The fallback matters: a filtered build could ship no vehicle
+    // rollups, and an empty dimension would look like a broken filter.
+    var vehicleOpts = (d.vehicles || []).map(function (v) { return v.vehicle; });
+    if (!vehicleOpts.length) {
+      var seen = {};
+      (d.communities || []).forEach(function (c) { seen[c.vehicle || "Unassigned"] = 1; });
+      vehicleOpts = Object.keys(seen).sort();
+    }
+    var DIMS = [
+      { id: "vehicle", label: "Portfolio / vehicle", values: vehicleOpts },
+      { id: "regional", label: "Regional manager", values: regionals,
+        // Nothing in Rent Manager or the PDS carries this; it comes from
+        // pipeline/regional_managers.json, and a flag says so when it is empty.
+        unavailable: regionals.length ? null
+          : "Not mapped yet — see the data note" },
+      { id: "community", label: "Community",
+        values: (d.communities || []).map(function (c) { return c.name; }) }
+    ];
+    var active = DIMS.filter(function (x) { return x.id === dim; })[0];
+
+    var picked = scope[dim] || [];
+    var shown = (active.values || []).filter(function (v) {
+      return !q || String(v).toLowerCase().indexOf(q.toLowerCase()) !== -1;
+    });
+
+    function toggle(v) {
+      setScope(function (sc) {
+        var cur = (sc[dim] || []).slice();
+        var i = cur.indexOf(v);
+        if (i === -1) cur.push(v); else cur.splice(i, 1);
+        var next = Object.assign({}, sc);
+        if (cur.length) next[dim] = cur; else delete next[dim];
+        return next;
+      });
+    }
+    function clearDim(which) {
+      setScope(function (sc) {
+        var next = Object.assign({}, sc);
+        delete next[which];
+        return next;
+      });
+    }
+
+    var chips = [];
+    DIMS.forEach(function (x) {
+      (scope[x.id] || []).forEach(function (v) {
+        chips.push({ dim: x.id, dimLabel: x.label, value: v });
+      });
+    });
+
+    return h("div", { className: "scope no-print" },
+      h("div", { className: "scope-row" },
+        h("span", { className: "scope-lead" }, "Scope"),
+        h("select", {
+          className: "scope-dim", value: dim,
+          "aria-label": "What to filter by",
+          onChange: function (e) { setDim(e.target.value); setQ(""); setOpen(true); }
+        }, DIMS.map(function (x) {
+          return h("option", { key: x.id, value: x.id, disabled: !!x.unavailable },
+            x.label + (x.unavailable ? " — " + x.unavailable : ""));
+        })),
+        h("button", {
+          type: "button", className: "scope-pick" + (open ? " on" : ""),
+          "aria-expanded": open ? "true" : "false",
+          disabled: !!active.unavailable,
+          onClick: function () { setOpen(!open); }
+        }, picked.length
+             ? picked.length + " selected"
+             : (active.unavailable ? "Unavailable" : "Select " + active.label.toLowerCase()),
+          h("span", { className: "caret" }, open ? "▲" : "▼")),
+        chips.length
+          ? h("button", { type: "button", className: "scope-clear",
+                          onClick: function () { setScope({}); setOpen(false); } },
+              "Clear all")
+          : null,
+        h("span", { className: "spacer" }),
+        h("span", { className: "scope-count" + (props.shownCount ? "" : " empty") },
+          props.shownCount === props.totalCount
+            ? "All " + props.totalCount + " communities"
+            : props.shownCount + " of " + props.totalCount + " communities")),
+
+      /* Dimensions narrow rather than widen -- two vehicles is a wider scope,
+         a vehicle plus a community is the overlap of the two. That is the
+         standard reading of a filter set and it is what "narrow" has to mean,
+         but it can land on nothing, and a page of zeroes with no explanation
+         is how people conclude a dashboard is broken. So say it. */
+      chips.length && !props.shownCount
+        ? h("div", { className: "scope-empty" },
+            h("strong", null, "Nothing matches all of these at once."),
+            " Selections within one heading widen the scope; selections across " +
+            "two headings narrow to the overlap, and here the overlap is empty. " +
+            "Drop a heading to get results back.",
+            h("button", { type: "button", className: "linkish",
+                          style: { marginLeft: "8px" },
+                          onClick: function () { setScope({}); setOpen(false); } },
+              "Clear all"))
+        : null,
+
+      open && !active.unavailable
+        ? h("div", { className: "scope-menu" },
+            h("div", { className: "scope-menu-head" },
+              h("input", {
+                className: "scope-search", type: "search", value: q,
+                placeholder: "Find in " + active.label.toLowerCase(),
+                "aria-label": "Find a value",
+                onChange: function (e) { setQ(e.target.value); }
+              }),
+              h("button", { type: "button", className: "linkish",
+                            onClick: function () {
+                              setScope(function (sc) {
+                                var next = Object.assign({}, sc);
+                                next[dim] = shown.slice();
+                                return next;
+                              });
+                            } }, "Select all" + (q ? " shown" : "")),
+              picked.length
+                ? h("button", { type: "button", className: "linkish",
+                                onClick: function () { clearDim(dim); } }, "None")
+                : null),
+            h("div", { className: "scope-opts" }, shown.length
+              ? shown.map(function (v) {
+                  var on = picked.indexOf(v) !== -1;
+                  return h("label", { className: "scope-opt" + (on ? " on" : ""), key: v },
+                    h("input", { type: "checkbox", checked: on,
+                                 onChange: function () { toggle(v); } }),
+                    h("span", null, v));
+                })
+              : h("div", { className: "loading" }, "Nothing matches.")))
+        : null,
+
+      chips.length
+        ? h("div", { className: "scope-chips" }, chips.map(function (c) {
+            return h("button", {
+              type: "button", className: "scope-chip", key: c.dim + "::" + c.value,
+              title: "Remove " + c.value,
+              onClick: function () {
+                setScope(function (sc) {
+                  var cur = (sc[c.dim] || []).filter(function (x) { return x !== c.value; });
+                  var next = Object.assign({}, sc);
+                  if (cur.length) next[c.dim] = cur; else delete next[c.dim];
+                  return next;
+                });
+              }
+            }, h("span", { className: "sc-dim" }, c.dimLabel), c.value,
+               h("span", { className: "sc-x" }, "×"));
+          }))
+        : null);
+  }
+
   function Exceptions(props) {
     var openSt = useState(false);
     var open = openSt[0], setOpen = openSt[1];
@@ -3119,8 +3291,12 @@
     // view, and it is what someone opening this mid-month wants to see.
     var ms = useState(d.period.live_day >= d.period.grace_day ? "live" : "closed");
     var mode = ms[0], setMode = ms[1];
-    var fs = useState({ kind: "all", search: "", size: "all", vehicle: "all" });
+    var fs = useState({ kind: "all", search: "", size: "all" });
     var filters = fs[0], setFilters = fs[1];
+    // Scope is separate from the tab filters: it sits above the tabs and applies
+    // to every tab, every total and every drill-in. Shape is {dimension: [values]}.
+    var sc = useState({});
+    var scope = sc[0], setScope = sc[1];
     // The open drill-in: which community, and which of its views.
     var ds = useState(null);
     var drill = ds[0], setDrill = ds[1];
@@ -3135,8 +3311,12 @@
 
     var filtered = useMemo(function () {
       return d.communities.filter(function (c) {
+        // Scope first: OR inside a dimension, AND across dimensions.
+        var sv = scope.vehicle, sr = scope.regional, scm = scope.community;
+        if (sv && sv.length && sv.indexOf(c.vehicle || "Unassigned") === -1) return false;
+        if (sr && sr.length && sr.indexOf(c.regional || "Unassigned") === -1) return false;
+        if (scm && scm.length && scm.indexOf(c.name) === -1) return false;
         if (filters.kind !== "all" && c.kind !== filters.kind) return false;
-        if (filters.vehicle !== "all" && (c.vehicle || "Unassigned") !== filters.vehicle) return false;
         var u = pv(c, mode).units || 0;
         if (filters.size === "large" && u < 100) return false;
         if (filters.size === "small" && u >= 100) return false;
@@ -3148,7 +3328,7 @@
         }
         return true;
       });
-    }, [d.communities, filters.kind, filters.search, filters.size, filters.vehicle, mode]);
+    }, [d.communities, filters.kind, filters.search, filters.size, mode, scope]);
 
     var p = d.portfolio[mode], th = d.thresholds;
     var closedP = d.portfolio.closed;
@@ -3158,14 +3338,6 @@
 
     var kinds = {};
     d.communities.forEach(function (c) { kinds[c.kind] = 1; });
-    // Vehicles ordered biggest first, matching how the tables group them.
-    var vehicleOpts = (d.vehicles || []).map(function (v) { return v.vehicle; });
-    if (!vehicleOpts.length) {
-      var seen = {};
-      d.communities.forEach(function (c) { seen[c.vehicle || "Unassigned"] = 1; });
-      vehicleOpts = Object.keys(seen).sort();
-    }
-
     return h("div", { className: "wrap" },
       h("header", { className: "masthead" },
         h("div", { className: "brand" },
@@ -3248,6 +3420,11 @@
                " demo or unusable"
         })),
 
+      h(ScopeBar, {
+        data: d, scope: scope, setScope: setScope,
+        shownCount: filtered.length, totalCount: d.communities.length
+      }),
+
       h("div", { className: "tabs", role: "tablist" }, TABS.map(function (t) {
         return h("button", {
           key: t.id, className: "tab", role: "tab", id: "tab-" + t.id,
@@ -3267,18 +3444,6 @@
               setFilters(function (f) { return Object.assign({}, f, { search: v }); });
             }
           })),
-        h("div", { className: "field" },
-          h("label", { htmlFor: "f-vehicle" }, "Vehicle"),
-          h("select", {
-            id: "f-vehicle", value: filters.vehicle,
-            onChange: function (e) {
-              var v = e.target.value;
-              setFilters(function (f) { return Object.assign({}, f, { vehicle: v }); });
-            }
-          }, [h("option", { key: "all", value: "all" }, "All vehicles")].concat(
-            vehicleOpts.map(function (k) {
-              return h("option", { key: k, value: k }, k);
-            })))),
         h("div", { className: "field" },
           h("label", { htmlFor: "f-kind" }, "Type"),
           h("select", {
