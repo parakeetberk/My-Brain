@@ -526,6 +526,45 @@ What the panel makes visible in one look: where the **community** pays, recaptur
 runs 37–40%; where **residents** pay, 52–56%. That gap is the whole recapture
 story, and the table never showed it.
 
+## RV sites live in Campspot, not Rent Manager
+
+Austin flagged this, and it explains a set of figures that read as operating
+disasters. Rent Manager holds the RV **lots** — 916 rows against the Property
+Data Sheet's 918, so inventory is right — but the **bookings and the money** are
+in Campspot. So the rent roll shows a site with a guest and no charge, or no
+guest at all.
+
+Three properties have no lot billing a recurring charge and revenue that is a
+rounding error against fully posted expenses:
+
+| | Revenue, closed Aug | NOI | RV lots |
+|---|---|---|---|
+| Great Oak RV Resort | $380 | −$74,362 | 181 of 215 |
+| River Oaks RV Resort | $213 | −$22,891 | 80 of 132 |
+| Paradise Lakes | $1,461 | −$21,116 | 167 of 187 |
+
+That is not an operating result, it is half a P&L. **Portfolio NOI is
+understated by about $118K, roughly 4%.** The income-category pull confirms it:
+Great Oak and River Oaks return no income rows at all for August, and Paradise
+Lakes only $1,461 of ancillary fees. Vantage Oaks is the mixed case — $100,625
+of lot rent from its MH side, 127 RV lots dark.
+
+The same boundary drives the vacancy numbers. **335 RV sites show no guest,
+which is 27% of all portfolio vacancy and $199K of the "rent lost" figure** —
+the largest single line on the Vacancy tab.
+
+The `rv-revenue-in-campspot` flag names all of it. Its test is revenue **per
+lot** below $50 with zero lots billing, not revenue as a share of opex: a
+share-of-opex test let Paradise Lakes through on $1,461, which is $8 a lot for
+the month, and no community of any kind operates there.
+
+**What connecting it needs.** A daily Campspot job already runs at
+`Asset Management & Finance / Claude Workflows / Campspot/`, dropping
+`marketplace_listing_YYYYMMDD.csv` into `Campspot Reports/`. That is **online
+marketplace reservations only** — its own dashboard says so — and is not the
+site roster. The rent roll equivalent is a different Campspot export and is not
+yet landing anywhere this pipeline can read.
+
 ## Scope: the two-step filter
 
 It sits above the tabs, so it governs every tab, every total, every drill-in and

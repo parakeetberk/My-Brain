@@ -1929,6 +1929,65 @@ def build(raw_dir, out_dir, registry_path):
                           ", ".join("%s (%d lots)" % (s[0], s[1]) for s in silent[:6]))),
         })
 
+    # ---- RV lots live in Campspot, not Rent Manager -----------------------
+    # Austin flagged this and it explains a set of numbers that looked like
+    # operating disasters. The lots exist as units in Rent Manager -- 916 rows
+    # against the PDS's 918, so inventory is right -- but the bookings and the
+    # money are in Campspot, so the rent roll shows a site with a guest on it
+    # and no charge, or no guest at all.
+    #
+    # The test is deliberately narrow: a community holding RV sites where not
+    # one lot bills a recurring charge, and whose revenue is a rounding error
+    # against its own operating expense. That is not a leasing problem, it is a
+    # system boundary, and until the Campspot rent roll is connected the P&L
+    # for these properties is expenses-only.
+    rv_dark = []
+    for c in communities:
+        rv = sum(1 for u in (c.get("rent_roll") or [])
+                 if reg.unit_type(u["type"])[0] == "RV")
+        if not rv or not c.get("hot"):
+            continue
+        rev = c["closed"].get("revenue") or 0
+        lots = c["closed"].get("units") or 0
+        # Revenue per lot, not revenue against opex. A share-of-opex test let
+        # Paradise Lakes through on $1,461 -- which is $8 a lot for the month.
+        # No community of any kind operates there, so the floor is absolute.
+        per_lot = (rev / lots) if lots else 0
+        if c["hot"]["lots_billing"] == 0 and lots and per_lot < 50:
+            rv_dark.append({
+                "name": c["short_name"] or c["name"],
+                "full": c["name"], "rv": rv, "revenue": rev,
+                "noi": c["closed"].get("noi") or 0,
+                "vacant_rv": sum(1 for u in (c.get("rent_roll") or [])
+                                 if reg.unit_type(u["type"])[0] == "RV"
+                                 and not u.get("occupied")),
+            })
+    if rv_dark:
+        rv_dark.sort(key=lambda x: x["noi"])
+        phantom = sum(x["noi"] for x in rv_dark)
+        port_noi = portfolio["closed"].get("noi") or 0
+        flags.append({
+            "id": "rv-revenue-in-campspot",
+            "severity": "warn",
+            "title": "%d RV %s show expenses but almost no revenue: the bookings are in Campspot"
+                     % (len(rv_dark), "resort" if len(rv_dark) == 1 else "resorts"),
+            "detail": ("RV sites are managed in Campspot, so Rent Manager holds the lots but "
+                       "not the stays. At %s not a single lot bills a recurring charge, and "
+                       "revenue totals %s against fully posted expenses, which reads as %s of "
+                       "NOI loss. That is not an operating result, it is half a P&L. Portfolio "
+                       "NOI of %s is understated by roughly that amount, about %.0f%%. The RV "
+                       "vacancy on the Vacancy tab has the same cause: %d RV sites show no "
+                       "guest because the booking is in the other system. Connecting the "
+                       "Campspot rent roll is what fixes both -- the marketplace listing "
+                       "already dropping daily is online reservations only, not the site "
+                       "roster."
+                       % (", ".join(x["name"] for x in rv_dark),
+                          money(sum(x["revenue"] for x in rv_dark)),
+                          money(abs(phantom)), money(port_noi),
+                          abs(phantom) / port_noi * 100 if port_noi else 0,
+                          sum(x["vacant_rv"] for x in rv_dark))),
+        })
+
     core_gap = [(c["short_name"] or c["name"], c["hot"]["core_units"],
                  c["hot"]["occupied"] + c["hot"]["vacant"])
                 for c in communities if c.get("hot")]

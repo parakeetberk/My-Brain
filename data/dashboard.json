@@ -1,6 +1,6 @@
 {
  "schema_version": 10,
- "generated_at": "2026-09-06T17:12:51+00:00",
+ "generated_at": "2026-09-06T17:20:42+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -194355,14 +194355,39 @@
     {
      "date": "2026-09-06",
      "event": "changed",
-     "title": "92 occupied lots across 32 communities bill no recurring rent",
-     "severity": "warn"
+     "severity": "warn",
+     "title": "92 occupied lots across 32 communities bill no recurring rent"
     },
     {
      "date": "2026-09-05",
      "event": "opened",
      "severity": "warn",
      "title": "150 occupied lots across 33 communities bill no recurring rent"
+    }
+   ]
+  },
+  {
+   "id": "rv-revenue-in-campspot",
+   "severity": "warn",
+   "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot",
+   "detail": "RV sites are managed in Campspot, so Rent Manager holds the lots but not the stays. At GO, RO, PL not a single lot bills a recurring charge, and revenue totals $2K against fully posted expenses, which reads as $118K of NOI loss. That is not an operating result, it is half a P&L. Portfolio NOI of $2.67M is understated by roughly that amount, about 4%. The RV vacancy on the Vacancy tab has the same cause: 139 RV sites show no guest because the booking is in the other system. Connecting the Campspot rent roll is what fixes both -- the marketplace listing already dropping daily is online reservations only, not the site roster.",
+   "first_seen": "2026-09-06",
+   "last_seen": "2026-09-06",
+   "days_open": 0,
+   "resolved": false,
+   "changes": 1,
+   "history": [
+    {
+     "date": "2026-09-06",
+     "event": "changed",
+     "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot",
+     "severity": "warn"
+    },
+    {
+     "date": "2026-09-06",
+     "event": "opened",
+     "severity": "warn",
+     "title": "2 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
     }
    ]
   },
