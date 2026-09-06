@@ -1,6 +1,6 @@
 {
  "schema_version": 10,
- "generated_at": "2026-09-06T02:06:39+00:00",
+ "generated_at": "2026-09-06T17:12:51+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -1144,19 +1144,25 @@
       "type": "Lot-Rental",
       "units": 3,
       "market": 4177.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-Evicted (Rental)",
       "units": 2,
       "market": 2748.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": true
      },
      {
       "type": "APT",
       "units": 2,
       "market": 2748.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 15086.0,
@@ -5793,25 +5799,33 @@
       "type": "APT",
       "units": 23,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Offsite Water",
       "units": 3,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      },
      {
       "type": "Lot-Rental",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -78865.0,
@@ -12078,7 +12092,9 @@
       "type": "Lot-RV",
       "units": 8,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -22440.0,
@@ -16064,7 +16080,9 @@
       "type": "Lot-RV",
       "units": 18,
       "market": 10800.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 29415.0,
@@ -20397,7 +20415,9 @@
       "type": "SFH",
       "units": 2,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -23275.0,
@@ -23177,7 +23197,9 @@
       "type": "APT",
       "units": 1,
       "market": 2400.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -815.0,
@@ -25074,7 +25096,9 @@
       "type": "Lot-RV",
       "units": 2,
       "market": 1100.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -5920.0,
@@ -27073,13 +27097,17 @@
       "type": "Lot-RV",
       "units": 6,
       "market": 2625.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "SFH",
       "units": 1,
       "market": 425.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 5820.0,
@@ -29048,13 +29076,17 @@
       "type": "Lot-RV",
       "units": 6,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -38565.0,
@@ -40422,25 +40454,33 @@
       "type": "Lot-RV",
       "units": 92,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Seasonal)",
       "units": 30,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-Rental",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Transient)",
       "units": 1,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 0.0,
@@ -47060,13 +47100,17 @@
       "type": "COMM",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -60090.0,
@@ -52308,25 +52352,33 @@
       "type": "Lot-RV",
       "units": 8,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "APT",
       "units": 2,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "COMM",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      },
      {
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -22795.0,
@@ -54181,13 +54233,17 @@
       "type": "Lot",
       "units": 2,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -40700.0,
@@ -57479,13 +57535,17 @@
       "type": "APT",
       "units": 2,
       "market": 2150.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 995.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -13370.0,
@@ -59932,13 +59992,17 @@
       "type": "Lot-RV",
       "units": 1,
       "market": 650.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "TBD",
       "units": 1,
       "market": 1080.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -1195.0,
@@ -65038,13 +65102,17 @@
       "type": "Lot-RV",
       "units": 36,
       "market": 46800.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "APT",
       "units": 1,
       "market": 1500.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 47930.0,
@@ -70597,7 +70665,9 @@
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -107515.0,
@@ -79726,7 +79796,9 @@
       "type": "Lot",
       "units": 19,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 0.0,
@@ -80270,7 +80342,9 @@
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -110470.0,
@@ -83823,7 +83897,9 @@
       "type": "Lot-RV",
       "units": 5,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -45725.0,
@@ -87781,13 +87857,17 @@
       "type": "COMM",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -24130.0,
@@ -90152,7 +90232,9 @@
       "type": "Lot-Rental",
       "units": 1,
       "market": 1300.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 7782.0,
@@ -94523,25 +94605,33 @@
       "type": "Lot-RV",
       "units": 109,
       "market": 81025.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Seasonal)",
       "units": 23,
       "market": 17090.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "SFH",
       "units": 3,
       "market": 7800.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Transient)",
       "units": 2,
       "market": 1490.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 107405.0,
@@ -100467,7 +100557,9 @@
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -37856.0,
@@ -105382,7 +105474,9 @@
       "type": "Lot-LTP",
       "units": 1,
       "market": 745.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -6560.0,
@@ -116299,19 +116393,25 @@
       "type": "Lot-RV",
       "units": 30,
       "market": 26250.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Transient)",
       "units": 1,
       "market": 875.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Seasonal)",
       "units": 1,
       "market": 875.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 28000.0,
@@ -119926,19 +120026,25 @@
       "type": "Lot-RV",
       "units": 6,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-Rental",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -131503.0,
@@ -129794,13 +129900,17 @@
       "type": "APT",
       "units": 1,
       "market": 645.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "COMM",
       "units": 1,
       "market": 1100.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      }
     ],
     "loss_to_lease": 765.0,
@@ -131431,7 +131541,9 @@
       "type": "Lot",
       "units": 1,
       "market": 410.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -2000.0,
@@ -132744,13 +132856,17 @@
       "type": "Lot-RV",
       "units": 19,
       "market": 18050.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 14839.0,
@@ -135556,13 +135672,17 @@
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-Rental",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -79485.0,
@@ -144783,7 +144903,9 @@
       "type": "COMM",
       "units": 2,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      }
     ],
     "loss_to_lease": -57200.0,
@@ -149679,7 +149801,9 @@
       "type": "APT",
       "units": 2,
       "market": 1480.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -3814.0,
@@ -165871,13 +165995,17 @@
       "type": "Lot-RV",
       "units": 5,
       "market": 3625.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "APT",
       "units": 3,
       "market": 2800.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 3471.0,
@@ -168387,37 +168515,49 @@
       "type": "Lot-RV",
       "units": 41,
       "market": 23493.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Boat Slip",
       "units": 36,
       "market": 14976.0,
-      "transient": false
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Boat Lift",
       "units": 9,
       "market": 3744.0,
-      "transient": false
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-RV(Transient)",
       "units": 2,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 990.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "COMM",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": true,
+      "evicting": false
      }
     ],
     "loss_to_lease": 25130.0,
@@ -172809,19 +172949,25 @@
       "type": "Lot-RV",
       "units": 117,
       "market": 63800.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot-Evicted",
       "units": 1,
       "market": 550.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": true
      },
      {
       "type": "Lot-Rental",
       "units": 1,
       "market": 550.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": 62214.0,
@@ -180353,7 +180499,9 @@
       "type": "SFH",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -24375.0,
@@ -188200,13 +188348,17 @@
       "type": "Lot-RV",
       "units": 12,
       "market": 0.0,
-      "transient": true
+      "transient": true,
+      "non_revenue": false,
+      "evicting": false
      },
      {
       "type": "Lot",
       "units": 1,
       "market": 0.0,
-      "transient": false
+      "transient": false,
+      "non_revenue": false,
+      "evicting": false
      }
     ],
     "loss_to_lease": -108732.0,
@@ -194192,14 +194344,20 @@
   {
    "id": "occupied-lots-not-billing",
    "severity": "warn",
-   "title": "150 occupied lots across 33 communities bill no recurring rent",
-   "detail": "Residential lots with a resident on the ledger and no recurring charge, worth $55K a month at market rent. RV, seasonal and transient sites are excluded, because those bill per stay and would otherwise inflate this sixfold. Largest: SSS (47 lots), ARD (28 lots), NALLS (19 lots), AMER (7 lots), HENDS (4 lots), HP (3 lots).",
+   "title": "92 occupied lots across 32 communities bill no recurring rent",
+   "detail": "Leasable residential lots with a resident on the ledger and no recurring rent charge, worth $32K a month at market. Four categories are excluded because an empty recurring charge is correct for them: RV and marina sites bill per stay or per season, non-revenue units (commercial, offsite water) are not lettable, and a lot mid-eviction is not one somebody forgot to bill. Counting all of them would read $354K across 731 lots, wrong by roughly a factor of four. These residents are real: every one has a move-in date, and most were charged and paid something this month -- under charge types other than recurring rent. Largest: ARD (25 lots), NALLS (19 lots), AMER (5 lots), HENDS (3 lots), HP (3 lots), JBJ (3 lots).",
    "first_seen": "2026-09-05",
    "last_seen": "2026-09-06",
    "days_open": 1,
    "resolved": false,
-   "changes": 0,
+   "changes": 1,
    "history": [
+    {
+     "date": "2026-09-06",
+     "event": "changed",
+     "title": "92 occupied lots across 32 communities bill no recurring rent",
+     "severity": "warn"
+    },
     {
      "date": "2026-09-05",
      "event": "opened",
@@ -194393,8 +194551,8 @@
     {
      "date": "2026-09-06",
      "event": "opened",
-     "title": "The eviction tracker export is 3 days old",
-     "severity": "warn"
+     "severity": "warn",
+     "title": "The eviction tracker export is 3 days old"
     }
    ]
   },
@@ -194412,8 +194570,8 @@
     {
      "date": "2026-09-06",
      "event": "opened",
-     "title": "Regional manager assignments are not filled in",
-     "severity": "info"
+     "severity": "info",
+     "title": "Regional manager assignments are not filled in"
     }
    ]
   },

@@ -1294,9 +1294,21 @@ def build(raw_dir, out_dir, registry_path):
                  "units": n,
                  "market": rnd(sum(u["market_rent"] for u in silent
                                    if u["type"] == t and u.get("market_rent")), 0),
-                 # RV and transient stays are billed per night or per season,
-                 # so an empty recurring charge is expected rather than missing.
-                 "transient": "RV" in t}
+                 # Whether an empty recurring charge is expected here.
+                 #
+                 # This used to test `"RV" in t`, which reads as thorough and
+                 # is not: it caught RV sites and missed marina entirely, so 45
+                 # boat slips and lifts worth $18.7K a month -- a third of the
+                 # reported gap -- were counted as a billing failure at a
+                 # marina that bills by the season exactly like an RV resort.
+                 # The registry already groups these; ask it rather than the
+                 # spelling of the type name.
+                 #
+                 # Mid-eviction lots go the same way. A resident being removed
+                 # is not a lot somebody forgot to bill.
+                 "transient": reg.unit_type(t)[0] in ("RV", "MARINA"),
+                 "non_revenue": reg.unit_type(t)[0] == "NON_REVENUE",
+                 "evicting": "Evicted" in t}
                 for t, n in Counter(u["type"] for u in silent).most_common()],
             "loss_to_lease": rnd(ltl, 0),
             "loss_to_lease_per_lot": rnd(ltl / occupied, 0) if occupied else None,
@@ -1886,7 +1898,8 @@ def build(raw_dir, out_dir, registry_path):
     for c in communities:
         if not c.get("hot"):
             continue
-        real = [x for x in c["hot"]["not_billing_by_type"] if not x["transient"]]
+        real = [x for x in c["hot"]["not_billing_by_type"]
+                if not x["transient"] and not x["non_revenue"] and not x["evicting"]]
         n = sum(x["units"] for x in real)
         if n:
             silent.append((c["short_name"] or c["name"], n,
@@ -1898,11 +1911,21 @@ def build(raw_dir, out_dir, registry_path):
             "severity": "warn",
             "title": "%d occupied lots across %d communities bill no recurring rent"
                      % (sum(s[1] for s in silent), len(silent)),
-            "detail": ("Residential lots with a resident on the ledger and no recurring "
-                       "charge, worth %s a month at market rent. RV, seasonal and "
-                       "transient sites are excluded, because those bill per stay and "
-                       "would otherwise inflate this sixfold. Largest: %s."
+            "detail": ("Leasable residential lots with a resident on the ledger and no "
+                       "recurring rent charge, worth %s a month at market. Four categories "
+                       "are excluded because an empty recurring charge is correct for them: "
+                       "RV and marina sites bill per stay or per season, non-revenue units "
+                       "(commercial, offsite water) are not lettable, and a lot mid-eviction "
+                       "is not one somebody forgot to bill. Counting all of them would read "
+                       "%s across %d lots, wrong by roughly a factor of four. "
+                       "These residents are real: every one has a move-in date, and most "
+                       "were charged and paid something this month -- under charge types "
+                       "other than recurring rent. Largest: %s."
                        % (money(sum(s[2] for s in silent)),
+                          money(sum(x["market"] for c in communities if c.get("hot")
+                                    for x in c["hot"]["not_billing_by_type"])),
+                          sum(x["units"] for c in communities if c.get("hot")
+                              for x in c["hot"]["not_billing_by_type"]),
                           ", ".join("%s (%d lots)" % (s[0], s[1]) for s in silent[:6]))),
         })
 

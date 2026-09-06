@@ -815,8 +815,14 @@
     // season, so an empty recurring charge there is the billing model, not a
     // miss. Rolling them together overstates the gap roughly sixfold.
     var nb = hs.not_billing_by_type || [];
-    var real = nb.filter(function (x) { return !x.transient; });
-    var tran = nb.filter(function (x) { return x.transient; });
+    // Four categories where no recurring charge is the right answer, not a
+    // miss: RV and marina bill per stay or season, non-revenue units are not
+    // lettable, and a lot mid-eviction is not one somebody forgot to bill.
+    // Same exclusions the portfolio flag uses, so this row and that note can
+    // never quote different figures for the same community.
+    var expected = function (x) { return x.transient || x.non_revenue || x.evicting; };
+    var real = nb.filter(function (x) { return !expected(x); });
+    var tran = nb.filter(expected);
     var realN = real.reduce(function (a, x) { return a + x.units; }, 0);
     var realM = real.reduce(function (a, x) { return a + x.market; }, 0);
     var tranN = tran.reduce(function (a, x) { return a + x.units; }, 0);
@@ -849,8 +855,10 @@
         list(real, function (x) { return x.units + " " + x.type; }), RED));
     }
     if (tranN) {
-      rows.push(row("Transient or seasonal", count(tranN) + (tranN === 1 ? " lot" : " lots"),
-        "billed per stay, so no recurring charge is expected · " +
+      rows.push(row("No recurring charge by design",
+        count(tranN) + (tranN === 1 ? " lot" : " lots"),
+        "RV and marina bill per stay, non-revenue units are not lettable, and " +
+        "mid-eviction lots are not a billing gap · " +
         list(tran, function (x) { return x.units + " " + x.type; })));
     }
 
