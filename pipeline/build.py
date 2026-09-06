@@ -209,8 +209,18 @@ def flag_ledger(flags, out_dir):
                 rec.pop("resolved_on", None)
             elif (rec.get("title") != f["title"]
                   or rec.get("severity") != f["severity"]):
-                rec["history"].append({"date": today, "event": "changed",
-                                       "title": f["title"], "severity": f["severity"]})
+                # One entry per flag per day. A morning spent correcting a
+                # figure produced four "changed" rows on the same date, which
+                # buries the one thing the history is for -- what it said
+                # yesterday. Rewrite today's entry instead of stacking another.
+                last = rec["history"][-1] if rec["history"] else None
+                if last and last["date"] == today and last["event"] == "changed":
+                    last["title"] = f["title"]
+                    last["severity"] = f["severity"]
+                else:
+                    rec["history"].append({"date": today, "event": "changed",
+                                           "title": f["title"],
+                                           "severity": f["severity"]})
             rec["history"] = rec["history"][-LEDGER_MAX_HISTORY:]
         rec["title"] = f["title"]
         rec["severity"] = f["severity"]
@@ -1258,7 +1268,17 @@ def build(raw_dir, out_dir, registry_path):
         rentable = max(core - dead, 0)
 
         billing = [u for u in lots if u["occupied"] and u["rent"] > 0]
-        silent = [u for u in lots if u["occupied"] and u["rent"] <= 0]
+        # Charged NOTHING, not merely charged no lot rent.
+        #
+        # RentCharges on the rent roll carries the Lot Rent charge type alone.
+        # Apartment Rent, SFH, Commercial Building Rent and RV Lot Rent are all
+        # their own charge types and land in MiscCharges, so a rent<=0 test
+        # flagged every apartment and single family home in the portfolio as
+        # unbilled while all 37 apartments and 9 of 12 homes were billing
+        # normally. Requiring silence across all three fields is the only test
+        # that means "nobody is charging this lot".
+        silent = [u for u in lots if u["occupied"] and u["rent"] <= 0
+                  and u["misc"] <= 0 and u["charged"] <= 0]
         rents = sorted(u["rent"] for u in billing)
 
         homes = [hm for hm in assets_by_comm.get(name, []) if hm["type"] in home_types]
@@ -1909,24 +1929,25 @@ def build(raw_dir, out_dir, registry_path):
         flags.append({
             "id": "occupied-lots-not-billing",
             "severity": "warn",
-            "title": "%d occupied lots across %d communities bill no recurring rent"
+            "title": "%d occupied lots across %d communities are not billed at all"
                      % (sum(s[1] for s in silent), len(silent)),
             "detail": ("Leasable residential lots with a resident on the ledger and no "
-                       "recurring rent charge, worth %s a month at market. Four categories "
-                       "are excluded because an empty recurring charge is correct for them: "
-                       "RV and marina sites bill per stay or per season, non-revenue units "
-                       "(commercial, offsite water) are not lettable, and a lot mid-eviction "
-                       "is not one somebody forgot to bill. Counting all of them would read "
-                       "%s across %d lots, wrong by roughly a factor of four. "
-                       "These residents are real: every one has a move-in date, and most "
-                       "were charged and paid something this month -- under charge types "
-                       "other than recurring rent. Largest: %s."
+                       "charge of any kind against them -- no rent, no misc, nothing billed "
+                       "at all -- worth %s a month at market. The test is deliberately that "
+                       "strict: the rent roll's rent field carries only the Lot Rent charge "
+                       "type, while Apartment Rent, SFH, Commercial and RV Lot Rent are each "
+                       "their own type and land in misc, so testing rent alone flagged every "
+                       "apartment and home in the portfolio as unbilled when they were "
+                       "billing normally. RV and marina sites, non-revenue units and lots "
+                       "mid-eviction are excluded too; counting everything would read %s "
+                       "across %d lots. Largest: %s."
                        % (money(sum(s[2] for s in silent)),
                           money(sum(x["market"] for c in communities if c.get("hot")
                                     for x in c["hot"]["not_billing_by_type"])),
                           sum(x["units"] for c in communities if c.get("hot")
                               for x in c["hot"]["not_billing_by_type"]),
-                          ", ".join("%s (%d lots)" % (s[0], s[1]) for s in silent[:6]))),
+                          ", ".join("%s (%d %s)" % (s[0], s[1], "lot" if s[1] == 1 else "lots")
+                                    for s in silent[:6]))),
         })
 
     # ---- RV lots live in Campspot, not Rent Manager -----------------------

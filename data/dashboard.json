@@ -1,6 +1,6 @@
 {
  "schema_version": 10,
- "generated_at": "2026-09-06T17:20:42+00:00",
+ "generated_at": "2026-09-06T17:24:00+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -1137,34 +1137,9 @@
     "lot_rent_avg": 571.0,
     "lot_rent_median": 575.0,
     "lots_billing": 32,
-    "occupied_not_billing": 7,
-    "not_billing_market": 9673.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-Rental",
-      "units": 3,
-      "market": 4177.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot-Evicted (Rental)",
-      "units": 2,
-      "market": 2748.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": true
-     },
-     {
-      "type": "APT",
-      "units": 2,
-      "market": 2748.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 15086.0,
     "loss_to_lease_per_lot": 387.0,
     "poh_total": 11,
@@ -5792,35 +5767,11 @@
     "lot_rent_avg": 663.0,
     "lot_rent_median": 675.0,
     "lots_billing": 119,
-    "occupied_not_billing": 28,
+    "occupied_not_billing": 1,
     "not_billing_market": 0.0,
     "not_billing_by_type": [
      {
-      "type": "APT",
-      "units": 23,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Offsite Water",
-      "units": 3,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": true,
-      "evicting": false
-     },
-     {
       "type": "Lot-Rental",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
       "units": 1,
       "market": 0.0,
       "transient": false,
@@ -12085,18 +12036,9 @@
     "lot_rent_avg": 591.0,
     "lot_rent_median": 590.0,
     "lots_billing": 38,
-    "occupied_not_billing": 8,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 8,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -22440.0,
     "loss_to_lease_per_lot": -488.0,
     "poh_total": 5,
@@ -16073,18 +16015,9 @@
     "lot_rent_avg": 568.0,
     "lot_rent_median": 570.0,
     "lots_billing": 37,
-    "occupied_not_billing": 18,
-    "not_billing_market": 10800.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 18,
-      "market": 10800.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 29415.0,
     "loss_to_lease_per_lot": 535.0,
     "poh_total": 50,
@@ -20408,18 +20341,9 @@
     "lot_rent_avg": 506.0,
     "lot_rent_median": 505.0,
     "lots_billing": 46,
-    "occupied_not_billing": 2,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "SFH",
-      "units": 2,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -23275.0,
     "loss_to_lease_per_lot": -485.0,
     "poh_total": 32,
@@ -23190,18 +23114,9 @@
     "lot_rent_avg": 1153.0,
     "lot_rent_median": 1145.0,
     "lots_billing": 74,
-    "occupied_not_billing": 1,
-    "not_billing_market": 2400.0,
-    "not_billing_by_type": [
-     {
-      "type": "APT",
-      "units": 1,
-      "market": 2400.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -815.0,
     "loss_to_lease_per_lot": -11.0,
     "poh_total": 1,
@@ -25089,18 +25004,9 @@
     "lot_rent_avg": 680.0,
     "lot_rent_median": 680.0,
     "lots_billing": 54,
-    "occupied_not_billing": 2,
-    "not_billing_market": 1100.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 2,
-      "market": 1100.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -5920.0,
     "loss_to_lease_per_lot": -106.0,
     "poh_total": 2,
@@ -27090,22 +26996,14 @@
     "lot_rent_avg": 494.0,
     "lot_rent_median": 480.0,
     "lots_billing": 16,
-    "occupied_not_billing": 7,
-    "not_billing_market": 3050.0,
+    "occupied_not_billing": 1,
+    "not_billing_market": 425.0,
     "not_billing_by_type": [
      {
       "type": "Lot-RV",
-      "units": 6,
-      "market": 2625.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "SFH",
       "units": 1,
       "market": 425.0,
-      "transient": false,
+      "transient": true,
       "non_revenue": false,
       "evicting": false
      }
@@ -29069,26 +28967,9 @@
     "lot_rent_avg": 428.0,
     "lot_rent_median": 410.0,
     "lots_billing": 90,
-    "occupied_not_billing": 7,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 6,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -38565.0,
     "loss_to_lease_per_lot": -398.0,
     "poh_total": 16,
@@ -47093,7 +46974,7 @@
     "lot_rent_avg": 682.0,
     "lot_rent_median": 690.0,
     "lots_billing": 89,
-    "occupied_not_billing": 2,
+    "occupied_not_billing": 1,
     "not_billing_market": 0.0,
     "not_billing_by_type": [
      {
@@ -47102,14 +46983,6 @@
       "market": 0.0,
       "transient": false,
       "non_revenue": true,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
       "evicting": false
      }
     ],
@@ -52345,42 +52218,9 @@
     "lot_rent_avg": 485.0,
     "lot_rent_median": 485.0,
     "lots_billing": 47,
-    "occupied_not_billing": 12,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 8,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "APT",
-      "units": 2,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "COMM",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": true,
-      "evicting": false
-     },
-     {
-      "type": "SFH",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -22795.0,
     "loss_to_lease_per_lot": -386.0,
     "poh_total": 4,
@@ -54226,26 +54066,9 @@
     "lot_rent_avg": 550.0,
     "lot_rent_median": 550.0,
     "lots_billing": 74,
-    "occupied_not_billing": 3,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot",
-      "units": 2,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "SFH",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -40700.0,
     "loss_to_lease_per_lot": -529.0,
     "poh_total": 1,
@@ -57528,26 +57351,9 @@
     "lot_rent_avg": 1155.0,
     "lot_rent_median": 1155.0,
     "lots_billing": 97,
-    "occupied_not_billing": 3,
-    "not_billing_market": 3145.0,
-    "not_billing_by_type": [
-     {
-      "type": "APT",
-      "units": 2,
-      "market": 2150.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 995.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -13370.0,
     "loss_to_lease_per_lot": -134.0,
     "poh_total": 2,
@@ -59985,26 +59791,9 @@
     "lot_rent_avg": 620.0,
     "lot_rent_median": 620.0,
     "lots_billing": 39,
-    "occupied_not_billing": 2,
-    "not_billing_market": 1730.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 1,
-      "market": 650.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "TBD",
-      "units": 1,
-      "market": 1080.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -1195.0,
     "loss_to_lease_per_lot": -29.0,
     "poh_total": 2,
@@ -65095,26 +64884,9 @@
     "lot_rent_avg": 950.0,
     "lot_rent_median": 970.0,
     "lots_billing": 43,
-    "occupied_not_billing": 37,
-    "not_billing_market": 48300.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 36,
-      "market": 46800.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "APT",
-      "units": 1,
-      "market": 1500.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 47930.0,
     "loss_to_lease_per_lot": 599.0,
     "poh_total": 25,
@@ -80335,18 +80107,9 @@
     "lot_rent_avg": 674.0,
     "lot_rent_median": 665.0,
     "lots_billing": 164,
-    "occupied_not_billing": 1,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -110470.0,
     "loss_to_lease_per_lot": -670.0,
     "poh_total": 6,
@@ -83890,18 +83653,9 @@
     "lot_rent_avg": 558.0,
     "lot_rent_median": 540.0,
     "lots_billing": 82,
-    "occupied_not_billing": 5,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 5,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -45725.0,
     "loss_to_lease_per_lot": -526.0,
     "poh_total": 11,
@@ -87850,7 +87604,7 @@
     "lot_rent_avg": 635.0,
     "lot_rent_median": 635.0,
     "lots_billing": 38,
-    "occupied_not_billing": 2,
+    "occupied_not_billing": 1,
     "not_billing_market": 0.0,
     "not_billing_by_type": [
      {
@@ -87859,14 +87613,6 @@
       "market": 0.0,
       "transient": false,
       "non_revenue": true,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
       "evicting": false
      }
     ],
@@ -90225,18 +89971,9 @@
     "lot_rent_avg": 557.0,
     "lot_rent_median": 555.0,
     "lots_billing": 40,
-    "occupied_not_billing": 1,
-    "not_billing_market": 1300.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-Rental",
-      "units": 1,
-      "market": 1300.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 7782.0,
     "loss_to_lease_per_lot": 190.0,
     "poh_total": 23,
@@ -94598,8 +94335,8 @@
     "lot_rent_avg": null,
     "lot_rent_median": null,
     "lots_billing": 0,
-    "occupied_not_billing": 137,
-    "not_billing_market": 107405.0,
+    "occupied_not_billing": 136,
+    "not_billing_market": 106660.0,
     "not_billing_by_type": [
      {
       "type": "Lot-RV",
@@ -94627,8 +94364,8 @@
      },
      {
       "type": "Lot-RV(Transient)",
-      "units": 2,
-      "market": 1490.0,
+      "units": 1,
+      "market": 745.0,
       "transient": true,
       "non_revenue": false,
       "evicting": false
@@ -100550,18 +100287,9 @@
     "lot_rent_avg": 631.0,
     "lot_rent_median": 655.0,
     "lots_billing": 60,
-    "occupied_not_billing": 1,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "SFH",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -37856.0,
     "loss_to_lease_per_lot": -621.0,
     "poh_total": 72,
@@ -120019,27 +119747,11 @@
     "lot_rent_avg": 877.0,
     "lot_rent_median": 883.0,
     "lots_billing": 150,
-    "occupied_not_billing": 8,
+    "occupied_not_billing": 1,
     "not_billing_market": 0.0,
     "not_billing_by_type": [
      {
-      "type": "Lot-RV",
-      "units": 6,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
       "type": "Lot-Rental",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "SFH",
       "units": 1,
       "market": 0.0,
       "transient": false,
@@ -129893,26 +129605,9 @@
     "lot_rent_avg": 615.0,
     "lot_rent_median": 615.0,
     "lots_billing": 28,
-    "occupied_not_billing": 2,
-    "not_billing_market": 1745.0,
-    "not_billing_by_type": [
-     {
-      "type": "APT",
-      "units": 1,
-      "market": 645.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "COMM",
-      "units": 1,
-      "market": 1100.0,
-      "transient": false,
-      "non_revenue": true,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 765.0,
     "loss_to_lease_per_lot": 26.0,
     "poh_total": 13,
@@ -131534,18 +131229,9 @@
     "lot_rent_avg": 450.0,
     "lot_rent_median": 450.0,
     "lots_billing": 50,
-    "occupied_not_billing": 1,
-    "not_billing_market": 410.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 410.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -2000.0,
     "loss_to_lease_per_lot": -39.0,
     "poh_total": 1,
@@ -132849,17 +132535,9 @@
     "lot_rent_avg": 795.0,
     "lot_rent_median": 795.0,
     "lots_billing": 66,
-    "occupied_not_billing": 20,
-    "not_billing_market": 18050.0,
+    "occupied_not_billing": 1,
+    "not_billing_market": 0.0,
     "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 19,
-      "market": 18050.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
      {
       "type": "Lot",
       "units": 1,
@@ -135665,17 +135343,9 @@
     "lot_rent_avg": 510.0,
     "lot_rent_median": 510.0,
     "lots_billing": 156,
-    "occupied_not_billing": 2,
+    "occupied_not_billing": 1,
     "not_billing_market": 0.0,
     "not_billing_by_type": [
-     {
-      "type": "SFH",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
      {
       "type": "Lot-Rental",
       "units": 1,
@@ -144896,18 +144566,9 @@
     "lot_rent_avg": 550.0,
     "lot_rent_median": 550.0,
     "lots_billing": 104,
-    "occupied_not_billing": 2,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "COMM",
-      "units": 2,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": true,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -57200.0,
     "loss_to_lease_per_lot": -540.0,
     "poh_total": 45,
@@ -149794,18 +149455,9 @@
     "lot_rent_avg": 673.0,
     "lot_rent_median": 680.0,
     "lots_billing": 74,
-    "occupied_not_billing": 2,
-    "not_billing_market": 1480.0,
-    "not_billing_by_type": [
-     {
-      "type": "APT",
-      "units": 2,
-      "market": 1480.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": -3814.0,
     "loss_to_lease_per_lot": -50.0,
     "poh_total": 20,
@@ -165988,22 +165640,14 @@
     "lot_rent_avg": 665.0,
     "lot_rent_median": 665.0,
     "lots_billing": 48,
-    "occupied_not_billing": 8,
-    "not_billing_market": 6425.0,
+    "occupied_not_billing": 1,
+    "not_billing_market": 725.0,
     "not_billing_by_type": [
      {
       "type": "Lot-RV",
-      "units": 5,
-      "market": 3625.0,
+      "units": 1,
+      "market": 725.0,
       "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "APT",
-      "units": 3,
-      "market": 2800.0,
-      "transient": false,
       "non_revenue": false,
       "evicting": false
      }
@@ -168508,58 +168152,9 @@
     "lot_rent_avg": 1139.0,
     "lot_rent_median": 1188.0,
     "lots_billing": 121,
-    "occupied_not_billing": 90,
-    "not_billing_market": 43203.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 41,
-      "market": 23493.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Boat Slip",
-      "units": 36,
-      "market": 14976.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Boat Lift",
-      "units": 9,
-      "market": 3744.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot-RV(Transient)",
-      "units": 2,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 990.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "COMM",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": true,
-      "evicting": false
-     }
-    ],
+    "occupied_not_billing": 0,
+    "not_billing_market": 0.0,
+    "not_billing_by_type": [],
     "loss_to_lease": 25130.0,
     "loss_to_lease_per_lot": 119.0,
     "poh_total": 0,
@@ -172942,13 +172537,13 @@
     "lot_rent_avg": 555.0,
     "lot_rent_median": 550.0,
     "lots_billing": 48,
-    "occupied_not_billing": 119,
-    "not_billing_market": 64900.0,
+    "occupied_not_billing": 3,
+    "not_billing_market": 1100.0,
     "not_billing_by_type": [
      {
       "type": "Lot-RV",
-      "units": 117,
-      "market": 63800.0,
+      "units": 1,
+      "market": 0.0,
       "transient": true,
       "non_revenue": false,
       "evicting": false
@@ -180492,18 +180087,9 @@
     "lot_rent_avg": 625.0,
     "lot_rent_median": 625.0,
     "lots_billing": 39,
-    "occupied_not_billing": 1,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "SFH",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -24375.0,
     "loss_to_lease_per_lot": -609.0,
     "poh_total": 3,
@@ -188341,26 +187927,9 @@
     "lot_rent_avg": 884.0,
     "lot_rent_median": 884.0,
     "lots_billing": 123,
-    "occupied_not_billing": 13,
+    "occupied_not_billing": 0,
     "not_billing_market": 0.0,
-    "not_billing_by_type": [
-     {
-      "type": "Lot-RV",
-      "units": 12,
-      "market": 0.0,
-      "transient": true,
-      "non_revenue": false,
-      "evicting": false
-     },
-     {
-      "type": "Lot",
-      "units": 1,
-      "market": 0.0,
-      "transient": false,
-      "non_revenue": false,
-      "evicting": false
-     }
-    ],
+    "not_billing_by_type": [],
     "loss_to_lease": -108732.0,
     "loss_to_lease_per_lot": -800.0,
     "poh_total": 9,
@@ -194344,8 +193913,8 @@
   {
    "id": "occupied-lots-not-billing",
    "severity": "warn",
-   "title": "92 occupied lots across 32 communities bill no recurring rent",
-   "detail": "Leasable residential lots with a resident on the ledger and no recurring rent charge, worth $32K a month at market. Four categories are excluded because an empty recurring charge is correct for them: RV and marina sites bill per stay or per season, non-revenue units (commercial, offsite water) are not lettable, and a lot mid-eviction is not one somebody forgot to bill. Counting all of them would read $354K across 731 lots, wrong by roughly a factor of four. These residents are real: every one has a move-in date, and most were charged and paid something this month -- under charge types other than recurring rent. Largest: ARD (25 lots), NALLS (19 lots), AMER (5 lots), HENDS (3 lots), HP (3 lots), JBJ (3 lots).",
+   "title": "30 occupied lots across 10 communities are not billed at all",
+   "detail": "Leasable residential lots with a resident on the ledger and no charge of any kind against them -- no rent, no misc, nothing billed at all -- worth $9K a month at market. The test is deliberately that strict: the rent roll's rent field carries only the Lot Rent charge type, while Apartment Rent, SFH, Commercial and RV Lot Rent are each their own type and land in misc, so testing rent alone flagged every apartment and home in the portfolio as unbilled when they were billing normally. RV and marina sites, non-revenue units and lots mid-eviction are excluded too; counting everything would read $138K across 324 lots. Largest: NALLS (19 lots), PL (3 lots), ARD (1 lot), GO (1 lot), MCG (1 lot), RED (1 lot).",
    "first_seen": "2026-09-05",
    "last_seen": "2026-09-06",
    "days_open": 1,
@@ -194356,7 +193925,7 @@
      "date": "2026-09-06",
      "event": "changed",
      "severity": "warn",
-     "title": "92 occupied lots across 32 communities bill no recurring rent"
+     "title": "30 occupied lots across 10 communities are not billed at all"
     },
     {
      "date": "2026-09-05",
@@ -194380,8 +193949,8 @@
     {
      "date": "2026-09-06",
      "event": "changed",
-     "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot",
-     "severity": "warn"
+     "severity": "warn",
+     "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
     },
     {
      "date": "2026-09-06",

@@ -177,12 +177,12 @@
      "date": "2026-09-06",
      "event": "changed",
      "severity": "warn",
-     "title": "92 occupied lots across 32 communities bill no recurring rent"
+     "title": "30 occupied lots across 10 communities are not billed at all"
     }
    ],
    "last_seen": "2026-09-06",
    "severity": "warn",
-   "title": "92 occupied lots across 32 communities bill no recurring rent"
+   "title": "30 occupied lots across 10 communities are not billed at all"
   },
   "onboarding-move-ins": {
    "first_seen": "2026-09-05",

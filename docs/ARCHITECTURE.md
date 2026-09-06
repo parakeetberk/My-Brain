@@ -526,6 +526,39 @@ What the panel makes visible in one look: where the **community** pays, recaptur
 runs 37–40%; where **residents** pay, 52–56%. That gap is the whole recapture
 story, and the table never showed it.
 
+## The rent field is Lot Rent only
+
+`RentCharges` on the Rent Manager rent roll carries the **Lot Rent** charge type
+and nothing else. Austin flagged it for single family homes and it generalises:
+Apartment Rent, SFH, Commercial Building Rent and RV Lot Rent are each their own
+charge type and land in `MiscCharges`.
+
+So a `rent <= 0` test does not mean "nobody is billing this lot". Measured
+across the portfolio, that test claimed:
+
+| Unit type | Occupied | Billing lot rent | Actually billing something |
+|---|---|---|---|
+| APT | 37 | 0 | 37 |
+| SFH | 12 | 0 | 9 |
+| Boat Slip | 36 | 0 | 36 |
+| Boat Lift | 9 | 0 | 9 |
+| COMM | 7 | 0 | 5 |
+
+Every apartment in the portfolio was being reported as unbilled while every one
+of them was billing normally.
+
+The billing-gap test is therefore **charged nothing at all** — rent, misc and
+total charged all zero — on top of the RV, marina, non-revenue and mid-eviction
+exclusions. That figure went 150 lots and $55K, to 92 and $32K, to **30 lots and
+$9,095**, and only 5 of those 30 carry a market rent at all. Each correction
+came from a real signal rather than a re-estimate, but the lesson is the one
+worth keeping: a field named `RentCharges` in a system with sixteen charge types
+is a subset, not a total.
+
+What survives the filtering is worth someone's time: **Paradise Lakes SFH-1, -2
+and -3**, occupied since 2022, 2023 and 2025, market rent $2,600 each, no charge
+and no receivable in Rent Manager at all.
+
 ## RV sites live in Campspot, not Rent Manager
 
 Austin flagged this, and it explains a set of figures that read as operating
