@@ -20,7 +20,21 @@
     "     at once unless you raise the limit to match; the row count multiplies.",
     "",
     "If a query times out at 60s, drop a measure or narrow the time range and",
-    "re-run rather than lowering the limit."
+    "re-run rather than lowering the limit.",
+    "",
+    "SPLIT A QUERY THAT TIMES OUT, DO NOT SHRINK IT. Every query here now times",
+    "out at 60s with its full measure list -- the warehouse got slower, or the",
+    "history got longer. Send the measures in batches of two or three against the",
+    "same dimensions and time range, then join the parts on those dimensions.",
+    "The parts must agree on row count and key set before they are merged; a",
+    "silent mismatch would file a measure against the wrong property-month and",
+    "nothing downstream would catch it.",
+    "",
+    "There are eight files here, not six. expense_categories and income_categories",
+    "were pulled by hand when the Financials tab was built and never written down,",
+    "so refreshes updated financials_by_property_month.json and left the two",
+    "category files behind -- they sat at 2,028 rows while financials moved to",
+    "2,132. All three share a model and a grain, so their row counts must match."
   ],
   "queries": [
     {
@@ -149,6 +163,67 @@
         "limit": 5000,
         "question": "Revenue, operating expenses, NOI and budget by community by month for the financials tab"
       }
+    },
+    {
+      "out": "expense_categories_by_property_month.json",
+      "expect_rows_min": 1500,
+      "_comment": [
+        "Expense line items behind the controllable / non-controllable split and",
+        "utility recapture. Same model and grain as the financials query, so its",
+        "row count must match that file; if it does not, one of the two is partial."
+      ],
+      "spec": {
+        "measures": [
+          "VW_Budget_Comparison.repairsMaintenanceExpense",
+          "VW_Budget_Comparison.repairsMaintenanceBudget",
+          "VW_Budget_Comparison.payrollManagementExpense",
+          "VW_Budget_Comparison.utilitiesExpense",
+          "VW_Budget_Comparison.utilitiesExpenseBudget",
+          "VW_Budget_Comparison.utilityReimbursements",
+          "VW_Budget_Comparison.taxesExpense",
+          "VW_Budget_Comparison.insuranceExpense"
+        ],
+        "dimensions": [
+          "VW_Budget_Comparison.propertyName",
+          "VW_Budget_Comparison.endDate"
+        ],
+        "timeRange": {
+          "dimension": "VW_Budget_Comparison.endDate",
+          "from": "{{START_OF_PRIOR_YEAR}}",
+          "to": "{{TODAY}}"
+        },
+        "limit": 5000,
+        "question": "Expense line items by community by month for the controllable buckets and utility recapture"
+      }
+    },
+    {
+      "out": "income_categories_by_property_month.json",
+      "expect_rows_min": 1500,
+      "_comment": [
+        "Revenue line items plus the below-the-line rows. Same grain as the",
+        "financials query; row counts must match."
+      ],
+      "spec": {
+        "measures": [
+          "VW_Budget_Comparison.lotRentRentalIncome",
+          "VW_Budget_Comparison.ancillaryFeeIncome",
+          "VW_Budget_Comparison.nonOperatingIncome",
+          "VW_Budget_Comparison.legalProfessionalExpense",
+          "VW_Budget_Comparison.capexExpense",
+          "VW_Budget_Comparison.debtServiceExpense"
+        ],
+        "dimensions": [
+          "VW_Budget_Comparison.propertyName",
+          "VW_Budget_Comparison.endDate"
+        ],
+        "timeRange": {
+          "dimension": "VW_Budget_Comparison.endDate",
+          "from": "{{START_OF_PRIOR_YEAR}}",
+          "to": "{{TODAY}}"
+        },
+        "limit": 5000,
+        "question": "Revenue line items and below the line rows by community by month"
+      }
     }
   ],
   "reportable_roster": {
@@ -168,7 +243,24 @@
       "",
       "Refuse to build if this file is missing or empty rather than falling back to a",
       "heuristic roster: guessing which of ~150 propertyName values are real communities",
-      "is exactly what this file exists to prevent."
+      "is exactly what this file exists to prevent.",
+      "",
+      "READER TRUNCATION WILL SILENTLY DROP COMMUNITIES. The workbook has six",
+      "worksheets and the resource reader caps at roughly 200KB, so a read of",
+      "`vwr VW_PDS_V2` came back with 203 of its 237 rows and the note '[Output",
+      "truncated -- 32 more rows in this sheet ... not shown]' buried mid-file.",
+      "Parsed as if complete it yielded 46 Reportable = Yes instead of 66, dropped",
+      "22 live communities including Great Oak, Riverwalk, The Oaks and Windward",
+      "Knoll, and resurrected Cambridge and Geiger which Austin had removed by hand.",
+      "",
+      "So: after any read, CHECK FOR THE TRUNCATION NOTE and check the row count",
+      "against the `NNN rows x NN columns` figure in the sheet heading. If they",
+      "disagree, the read is partial and must not be written. Same failure mode as",
+      "the row-limit warning on the queries below, different mechanism.",
+      "",
+      "When a read is partial and the workbook's lastModifiedDateTime is unchanged",
+      "since the roster was last built, the roster is already current and the right",
+      "move is to leave it alone and say so, not to rewrite it from the fragment."
     ],
     "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/main/Shared Documents/Asset Management & Finance/Property Data Sheet/",
     "sheet": "vwr VW_PDS_V2",
@@ -183,10 +275,22 @@
       "rv_lots",
       "other_units",
       "total_units",
+      "core_units",
       "sale_date",
-      "property_type"
+      "property_type",
+      "water_service",
+      "water_paid_by",
+      "sewer_service",
+      "sewer_paid_by",
+      "trash_paid_by",
+      "acquired_date",
+      "acquired_price",
+      "poh_pds",
+      "mh_lot_rent_2026",
+      "rv_lot_rent_2026"
     ],
-    "expect_rows_min": 50
+    "expect_rows_min": 50,
+    "_fields_note": "Extended past the original eleven when the hot sheet landed: it needs Total Core Units as its occupancy denominator, Purchase Date and Price, POH for the PDS-vs-asset-listing check, and the two lot rents. Total Core Units lives on the PDS Clean sheet rather than VW_PDS_V2."
   },
   "eviction_tracker": {
     "out": "eviction_tracker.json",

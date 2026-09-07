@@ -1,6 +1,6 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-03",
+ "as_of": "2026-09-07",
  "case_count": 349,
  "open_cases": 94,
  "dropped_columns": [
@@ -17,7 +17,7 @@
    "closed": "",
    "stage_since": "2026-06-04",
    "sent_to_attorney": "2026-06-01",
-   "open_charges": 3486.28,
+   "open_charges": 3511.28,
    "has_case": true
   },
   {
@@ -29,7 +29,7 @@
    "closed": "",
    "stage_since": "2026-06-18",
    "sent_to_attorney": "",
-   "open_charges": 13003.87,
+   "open_charges": 13028.87,
    "has_case": true
   },
   {
@@ -89,7 +89,7 @@
    "closed": "2025-12-02",
    "stage_since": "2025-12-01",
    "sent_to_attorney": "2025-12-01",
-   "open_charges": 768.65,
+   "open_charges": 843.65,
    "has_case": false
   },
   {
@@ -101,7 +101,7 @@
    "closed": "2026-05-20",
    "stage_since": "2026-05-08",
    "sent_to_attorney": "2026-05-01",
-   "open_charges": 780.17,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -149,7 +149,7 @@
    "closed": "2026-05-08",
    "stage_since": "2026-01-14",
    "sent_to_attorney": "2026-01-05",
-   "open_charges": 695.86,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -161,7 +161,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1547.4,
+   "open_charges": 1622.4,
    "has_case": true
   },
   {
@@ -233,7 +233,7 @@
    "closed": "",
    "stage_since": "2026-08-10",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 2705.21,
+   "open_charges": 2755.21,
    "has_case": true
   },
   {
@@ -305,7 +305,7 @@
    "closed": "",
    "stage_since": "2026-08-27",
    "sent_to_attorney": "2026-05-29",
-   "open_charges": 4376.68,
+   "open_charges": 4451.68,
    "has_case": true
   },
   {
@@ -317,7 +317,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1480.59,
+   "open_charges": 1555.59,
    "has_case": true
   },
   {
@@ -329,7 +329,7 @@
    "closed": "",
    "stage_since": "2026-08-19",
    "sent_to_attorney": "2026-07-01",
-   "open_charges": 3119.42,
+   "open_charges": 3194.42,
    "has_case": true
   },
   {
@@ -365,7 +365,7 @@
    "closed": "",
    "stage_since": "2026-08-28",
    "sent_to_attorney": "2026-08-17",
-   "open_charges": 3005.14,
+   "open_charges": 3080.14,
    "has_case": true
   },
   {
@@ -377,7 +377,7 @@
    "closed": "",
    "stage_since": "2026-08-28",
    "sent_to_attorney": "2026-08-17",
-   "open_charges": 3825.0,
+   "open_charges": 3900.0,
    "has_case": true
   },
   {
@@ -521,7 +521,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2682.5,
+   "open_charges": 2950.75,
    "has_case": true
   },
   {
@@ -557,7 +557,7 @@
    "closed": "",
    "stage_since": "2026-08-10",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 3083.95,
+   "open_charges": 3158.95,
    "has_case": true
   },
   {
@@ -569,7 +569,7 @@
    "closed": "",
    "stage_since": "2026-08-31",
    "sent_to_attorney": "2026-07-01",
-   "open_charges": 3098.34,
+   "open_charges": 3173.34,
    "has_case": true
   },
   {
@@ -617,7 +617,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1658.75,
+   "open_charges": 1733.75,
    "has_case": true
   },
   {
@@ -641,7 +641,7 @@
    "closed": "",
    "stage_since": "2026-07-14",
    "sent_to_attorney": "2026-07-06",
-   "open_charges": 1166.33,
+   "open_charges": 1241.33,
    "has_case": true
   },
   {
@@ -773,7 +773,7 @@
    "closed": "2026-01-23",
    "stage_since": "2025-11-30",
    "sent_to_attorney": "2025-11-26",
-   "open_charges": 813.82,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -797,7 +797,7 @@
    "closed": "2025-10-31",
    "stage_since": "2025-09-24",
    "sent_to_attorney": "2025-09-24",
-   "open_charges": 810.88,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -869,7 +869,7 @@
    "closed": "",
    "stage_since": "2026-08-19",
    "sent_to_attorney": "2026-07-01",
-   "open_charges": 3270.81,
+   "open_charges": 3345.81,
    "has_case": true
   },
   {
@@ -929,7 +929,7 @@
    "closed": "2026-08-24",
    "stage_since": "2026-08-06",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 619.39,
+   "open_charges": 694.39,
    "has_case": true
   },
   {
@@ -941,7 +941,7 @@
    "closed": "",
    "stage_since": "2026-08-13",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 2433.07,
+   "open_charges": 2508.07,
    "has_case": true
   },
   {
@@ -1001,7 +1001,7 @@
    "closed": "2026-06-12",
    "stage_since": "2026-06-09",
    "sent_to_attorney": "2026-05-29",
-   "open_charges": 685.52,
+   "open_charges": 735.52,
    "has_case": true
   },
   {
@@ -1061,7 +1061,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1564.18,
+   "open_charges": 1639.18,
    "has_case": true
   },
   {
@@ -1433,7 +1433,7 @@
    "closed": "2025-09-26",
    "stage_since": "2025-08-18",
    "sent_to_attorney": "2025-08-05",
-   "open_charges": 1502.8,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -1445,7 +1445,7 @@
    "closed": "2026-03-23",
    "stage_since": "2026-03-11",
    "sent_to_attorney": "2026-03-02",
-   "open_charges": 1542.8,
+   "open_charges": 1557.8,
    "has_case": true
   },
   {
@@ -1589,7 +1589,7 @@
    "closed": "2025-08-15",
    "stage_since": "2025-06-20",
    "sent_to_attorney": "2025-06-30",
-   "open_charges": 1105.78,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -1613,7 +1613,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2529.53,
+   "open_charges": 2604.53,
    "has_case": true
   },
   {
@@ -1649,7 +1649,7 @@
    "closed": "",
    "stage_since": "2026-08-27",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 2441.26,
+   "open_charges": 2516.26,
    "has_case": false
   },
   {
@@ -1745,7 +1745,7 @@
    "closed": "2026-08-26",
    "stage_since": "2026-08-26",
    "sent_to_attorney": "",
-   "open_charges": 2585.96,
+   "open_charges": 2660.96,
    "has_case": false
   },
   {
@@ -1769,7 +1769,7 @@
    "closed": "",
    "stage_since": "2026-08-31",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2675.0,
+   "open_charges": 2750.0,
    "has_case": false
   },
   {
@@ -1793,7 +1793,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1426.8,
+   "open_charges": 1501.8,
    "has_case": true
   },
   {
@@ -1853,7 +1853,7 @@
    "closed": "",
    "stage_since": "2026-08-28",
    "sent_to_attorney": "2026-08-17",
-   "open_charges": 2295.14,
+   "open_charges": 2370.14,
    "has_case": true
   },
   {
@@ -1889,7 +1889,7 @@
    "closed": "2025-12-03",
    "stage_since": "2025-11-26",
    "sent_to_attorney": "2025-11-26",
-   "open_charges": 685.52,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -2129,7 +2129,7 @@
    "closed": "",
    "stage_since": "2026-07-14",
    "sent_to_attorney": "2026-07-01",
-   "open_charges": 2031.25,
+   "open_charges": 2106.25,
    "has_case": true
   },
   {
@@ -2153,7 +2153,7 @@
    "closed": "",
    "stage_since": "2026-08-10",
    "sent_to_attorney": "2026-06-18",
-   "open_charges": 6628.65,
+   "open_charges": 6678.65,
    "has_case": true
   },
   {
@@ -2225,7 +2225,7 @@
    "closed": "2025-08-14",
    "stage_since": "2025-08-06",
    "sent_to_attorney": "",
-   "open_charges": 925.0,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -2237,7 +2237,7 @@
    "closed": "2025-10-02",
    "stage_since": "2025-08-20",
    "sent_to_attorney": "",
-   "open_charges": 495.0,
+   "open_charges": 570.0,
    "has_case": true
   },
   {
@@ -2261,7 +2261,7 @@
    "closed": "2025-10-02",
    "stage_since": "2025-09-24",
    "sent_to_attorney": "",
-   "open_charges": 505.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -2292,13 +2292,13 @@
    "community": "Su-Rene",
    "short_name": "SUR",
    "unit": "46",
-   "stage": "Intake Packet",
+   "stage": "Court: Complaint",
    "start": "2026-08-27",
    "closed": "",
-   "stage_since": "2026-08-27",
+   "stage_since": "2026-09-04",
    "sent_to_attorney": "2026-08-27",
-   "open_charges": 1485.0,
-   "has_case": false
+   "open_charges": 1560.0,
+   "has_case": true
   },
   {
    "community": "Su-Rene",
@@ -2333,7 +2333,7 @@
    "closed": "",
    "stage_since": "2026-07-31",
    "sent_to_attorney": "",
-   "open_charges": 4450.0,
+   "open_charges": 4500.0,
    "has_case": true
   },
   {
@@ -2369,7 +2369,7 @@
    "closed": "2025-08-14",
    "stage_since": "2025-08-06",
    "sent_to_attorney": "",
-   "open_charges": 542.48,
+   "open_charges": 582.48,
    "has_case": false
   },
   {
@@ -2381,7 +2381,7 @@
    "closed": "2025-08-14",
    "stage_since": "2025-08-06",
    "sent_to_attorney": "",
-   "open_charges": 522.82,
+   "open_charges": 562.82,
    "has_case": false
   },
   {
@@ -2393,7 +2393,7 @@
    "closed": "2026-06-10",
    "stage_since": "2026-05-27",
    "sent_to_attorney": "",
-   "open_charges": 2313.58,
+   "open_charges": 2353.58,
    "has_case": false
   },
   {
@@ -2405,7 +2405,7 @@
    "closed": "",
    "stage_since": "2026-02-20",
    "sent_to_attorney": "",
-   "open_charges": 7129.93,
+   "open_charges": 7169.93,
    "has_case": true
   },
   {
@@ -2417,7 +2417,7 @@
    "closed": "2025-07-30",
    "stage_since": "2025-07-15",
    "sent_to_attorney": "",
-   "open_charges": 532.69,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -2429,7 +2429,7 @@
    "closed": "",
    "stage_since": "2026-03-20",
    "sent_to_attorney": "",
-   "open_charges": 3986.41,
+   "open_charges": 4026.41,
    "has_case": false
   },
   {
@@ -2441,7 +2441,7 @@
    "closed": "2025-08-14",
    "stage_since": "2025-07-15",
    "sent_to_attorney": "",
-   "open_charges": 529.18,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -2477,7 +2477,7 @@
    "closed": "",
    "stage_since": "2025-09-24",
    "sent_to_attorney": "",
-   "open_charges": 6733.56,
+   "open_charges": 6773.56,
    "has_case": true
   },
   {
@@ -2585,7 +2585,7 @@
    "closed": "2026-01-20",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1158.29,
+   "open_charges": 1308.29,
    "has_case": false
   },
   {
@@ -2621,7 +2621,7 @@
    "closed": "2025-12-18",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 644.56,
+   "open_charges": 719.56,
    "has_case": false
   },
   {
@@ -2669,7 +2669,7 @@
    "closed": "2026-01-06",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 3553.16,
+   "open_charges": 3703.16,
    "has_case": false
   },
   {
@@ -2693,7 +2693,7 @@
    "closed": "2026-06-29",
    "stage_since": "2026-06-17",
    "sent_to_attorney": "",
-   "open_charges": 690.0,
+   "open_charges": 765.0,
    "has_case": true
   },
   {
@@ -2717,7 +2717,7 @@
    "closed": "",
    "stage_since": "2025-10-10",
    "sent_to_attorney": "",
-   "open_charges": 11865.0,
+   "open_charges": 11940.0,
    "has_case": true
   },
   {
@@ -2813,7 +2813,7 @@
    "closed": "2026-03-04",
    "stage_since": "2026-03-02",
    "sent_to_attorney": "2026-03-02",
-   "open_charges": 1130.78,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -2849,7 +2849,7 @@
    "closed": "",
    "stage_since": "2026-05-08",
    "sent_to_attorney": "",
-   "open_charges": 3867.0,
+   "open_charges": 3942.0,
    "has_case": true
   },
   {
@@ -2861,7 +2861,7 @@
    "closed": "2026-04-14",
    "stage_since": "2026-03-26",
    "sent_to_attorney": "",
-   "open_charges": 1250.0,
+   "open_charges": 1325.0,
    "has_case": true
   },
   {
@@ -2885,7 +2885,7 @@
    "closed": "2026-04-14",
    "stage_since": "2026-03-26",
    "sent_to_attorney": "",
-   "open_charges": 550.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -3245,7 +3245,7 @@
    "closed": "2025-10-15",
    "stage_since": "2025-10-07",
    "sent_to_attorney": "",
-   "open_charges": 2146.0,
+   "open_charges": 2296.0,
    "has_case": false
   },
   {
@@ -3257,7 +3257,7 @@
    "closed": "2025-12-05",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1371.0,
+   "open_charges": 1521.0,
    "has_case": false
   },
   {
@@ -3269,7 +3269,7 @@
    "closed": "2026-06-12",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 576.0,
+   "open_charges": 651.0,
    "has_case": false
   },
   {
@@ -3281,7 +3281,7 @@
    "closed": "",
    "stage_since": "2025-11-10",
    "sent_to_attorney": "",
-   "open_charges": 7339.0,
+   "open_charges": 7414.0,
    "has_case": false
   },
   {
@@ -3305,7 +3305,7 @@
    "closed": "",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1371.0,
+   "open_charges": 1521.0,
    "has_case": false
   },
   {
@@ -3341,7 +3341,7 @@
    "closed": "2026-05-21",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 576.0,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -3401,7 +3401,7 @@
    "closed": "",
    "stage_since": "2026-07-07",
    "sent_to_attorney": "2026-07-01",
-   "open_charges": 3750.76,
+   "open_charges": 3825.76,
    "has_case": true
   },
   {
@@ -3485,7 +3485,7 @@
    "closed": "",
    "stage_since": "2026-09-02",
    "sent_to_attorney": "",
-   "open_charges": 12051.0,
+   "open_charges": 12086.0,
    "has_case": true
   },
   {
@@ -3497,7 +3497,7 @@
    "closed": "2026-08-31",
    "stage_since": "2026-08-25",
    "sent_to_attorney": "2026-08-25",
-   "open_charges": 2208.75,
+   "open_charges": 2253.75,
    "has_case": false
   },
   {
@@ -3509,7 +3509,7 @@
    "closed": "2026-09-01",
    "stage_since": "2026-08-25",
    "sent_to_attorney": "2026-08-25",
-   "open_charges": 3586.79,
+   "open_charges": 3631.79,
    "has_case": false
   },
   {
@@ -3533,7 +3533,7 @@
    "closed": "",
    "stage_since": "2026-08-13",
    "sent_to_attorney": "2026-06-02",
-   "open_charges": 6217.76,
+   "open_charges": 6262.76,
    "has_case": true
   },
   {
@@ -3545,7 +3545,7 @@
    "closed": "",
    "stage_since": "2026-08-06",
    "sent_to_attorney": "2026-06-01",
-   "open_charges": 5446.89,
+   "open_charges": 5491.89,
    "has_case": true
   },
   {
@@ -3905,7 +3905,7 @@
    "closed": "",
    "stage_since": "2026-08-31",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2533.41,
+   "open_charges": 2608.41,
    "has_case": false
   },
   {
@@ -3941,7 +3941,7 @@
    "closed": "2026-08-31",
    "stage_since": "2026-08-10",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 3352.99,
+   "open_charges": 3397.99,
    "has_case": true
   },
   {
@@ -4001,7 +4001,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-07-02",
-   "open_charges": 5646.12,
+   "open_charges": 5691.12,
    "has_case": true
   },
   {
@@ -4013,7 +4013,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-17",
-   "open_charges": 3190.7,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -4073,7 +4073,7 @@
    "closed": "2026-04-21",
    "stage_since": "2026-04-03",
    "sent_to_attorney": "2026-03-30",
-   "open_charges": 718.03,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -4097,7 +4097,7 @@
    "closed": "2026-03-17",
    "stage_since": "2026-03-10",
    "sent_to_attorney": "2026-03-02",
-   "open_charges": 1057.85,
+   "open_charges": 1132.85,
    "has_case": true
   },
   {
@@ -4109,7 +4109,7 @@
    "closed": "",
    "stage_since": "2026-08-31",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2675.0,
+   "open_charges": 2750.0,
    "has_case": false
   },
   {
@@ -4121,7 +4121,7 @@
    "closed": "2026-04-13",
    "stage_since": "2026-04-02",
    "sent_to_attorney": "2026-04-02",
-   "open_charges": 960.0,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -4157,7 +4157,7 @@
    "closed": "",
    "stage_since": "2026-08-28",
    "sent_to_attorney": "2026-07-02",
-   "open_charges": 4845.95,
+   "open_charges": 4890.95,
    "has_case": true
   },
   {
@@ -4169,7 +4169,7 @@
    "closed": "",
    "stage_since": "2026-08-28",
    "sent_to_attorney": "2026-08-17",
-   "open_charges": 2340.14,
+   "open_charges": 2415.14,
    "has_case": true
   },
   {
@@ -4193,7 +4193,7 @@
    "closed": "",
    "stage_since": "2026-08-26",
    "sent_to_attorney": "2026-08-26",
-   "open_charges": 1150.91,
+   "open_charges": 1225.91,
    "has_case": false
   }
  ]

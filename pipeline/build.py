@@ -2564,7 +2564,11 @@ def build(raw_dir, out_dir, registry_path):
         % (live_month, live_day, lv["occupancy"], money(lv["ar_total"]),
            money(lv["ar_past_due_30plus"]), money(lv["outstanding"]), money(lv["charged"])))
     for fl in flags:
-        log("  [%s] %s" % (fl["severity"].upper(), fl["title"]))
+        # Resolved notes ride along in the same list so the page can show them
+        # behind a Cleared filter. Label them here, or the log reads as if a
+        # flag that just cleared is still firing.
+        log("  [%s] %s" % ("CLEARED" if fl.get("resolved") else fl["severity"].upper(),
+                           fl["title"]))
     return payload
 
 
