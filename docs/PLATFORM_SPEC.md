@@ -180,10 +180,22 @@ Two consequences.
 Rent Manager, so the home pipeline jumps from rehab straight to ready. There is
 a punch stage. `UDF: Punch Out Date` was simply never in the API pull.
 
-**Time-in-stage for homes is answerable now.** Fifteen dated stages across
-months of daily files means we can compute how long each home sat at each step,
-and what normal looks like, without waiting for a baseline to accumulate. That
-is the analysis Austin wanted for prospects, available immediately for homes.
+**Time-in-stage for homes is answerable now, but not from these columns.** I
+overclaimed this on first reading and the correction matters. The stage columns
+are free text, not dates: of 1,745 assets on 2026-09-06 only 96 carry a
+punch-out value, and of those 80 read `TBD`, 3 read `N/A`, 3 read
+`WE 07/07/26` and 9 are an actual date. So the field is a hand-typed planning
+cell with mixed conventions, not an event log, and durations cannot be computed
+from it.
+
+The route that does work is better anyway: **diff `status` across the 387 daily
+snapshots** and observe when each home actually moved. That measures what
+happened rather than what someone typed, and it needs no change in data-entry
+habits to start working.
+
+Worth keeping the columns regardless. They are the team's forward-looking target
+dates, which is a different and useful thing — and `TBD` on 83% of the homes
+that have any value at all is itself a finding for whoever owns home setup.
 
 Two hazards before trusting the archive. The schema is **not stable across
 dates** — files around 2026-08-13 to 08-17 and 08-31 carry a different header

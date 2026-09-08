@@ -8,3 +8,4 @@ node_modules/
 # the conclusions live in docs/SOURCE_CONSOLIDATION.md. Not committed because
 # nothing in the build reads them and they would double the repo.
 pipeline/raw/candidate/
+pipeline/incoming/

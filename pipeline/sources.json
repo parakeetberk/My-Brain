@@ -1,0 +1,209 @@
+{
+ "_comment": [
+  "Every dataset the build needs, and every way it can be obtained.",
+  "",
+  "WHY THIS EXISTS. Not all connectors are live yet, and the ones that are can be",
+  "stale without saying so. Austin's requirement: build the whole thing now",
+  "against files we can refresh by hand, and when a connector comes online flip a",
+  "switch rather than rebuild. So each dataset declares an ordered list of",
+  "providers. sources.py walks them, takes the first that yields data, normalises",
+  "to the dataset's canonical fields and records which provider served it.",
+  "",
+  "THE SWITCH is the `enabled` flag and the provider order. No code changes.",
+  "",
+  "ONE LANDING ZONE. Neither the automated path nor the manual path talks to",
+  "SharePoint from Python -- the container has no credentials. The routine fetches",
+  "through the MCP connector and writes into pipeline/incoming/<dataset>/, and a",
+  "human dropping a file by hand writes to the same place. Identical downstream,",
+  "so the fallback cannot drift from the primary. See pipeline/manual/README.md.",
+  "",
+  "AS-OF, ALWAYS. Every provider must yield an as_of date. The capture keys on it",
+  "rather than on the run date, so an unrefreshed source costs a day of history",
+  "instead of fabricating one. See docs/PLATFORM_SPEC.md."
+ ],
+ "datasets": {
+  "asset_listing": {
+   "canonical": [
+    "community",
+    "unit",
+    "asset_name",
+    "asset_type",
+    "status",
+    "manufacturer",
+    "model",
+    "serial",
+    "market_rent",
+    "occupant",
+    "purchase_date",
+    "purchase_price",
+    "listing_status",
+    "listing_date",
+    "rtm",
+    "est_rehab_cost"
+   ],
+   "stage_dates": {
+    "permit_submitted": "UDF: Permit Submitted Date",
+    "permit_received": "UDF: Permit Received Date",
+    "demo": "UDF: Demo Date",
+    "footers_pads": "UDF: Footers / Pads Date",
+    "spot_units": "UDF: Spot Units Date",
+    "set_side_tie": "UDF: Set, Side & Tie Down",
+    "trim_out": "UDF: Interior Trim Out Date",
+    "water": "UDF: Water Connection Date",
+    "sewer": "UDF: Sewer Connection Date'",
+    "electrical": "UDF: Electrical Connection Date",
+    "ac": "UDF: AC Connection Date",
+    "skirting_gutter": "UDF: Skirting / Gutter Date",
+    "steps_deck": "UDF: Steps/Deck Date",
+    "punch_out": "UDF: Punch Out Date",
+    "cert_occupancy": "UDF: Cert of Occupancy Date"
+   },
+   "providers": [
+    {
+     "name": "sharepoint_daily",
+     "kind": "dated_csv",
+     "enabled": true,
+     "_note": "Primary. Lands ~08:05 ET, 387 files of history. 125 columns.",
+     "source": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Rent Manager/Historical Asset Listing/",
+     "pattern": "Asset Listing_YYMMDD.csv",
+     "as_of_from": "filename",
+     "map": {
+      "community": "Property",
+      "unit": "Unit",
+      "asset_name": "Asset Name",
+      "asset_type": "Asset Type",
+      "status": "Current Status",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "serial": "Serial Number",
+      "market_rent": "Market Rent",
+      "occupant": "Occupant",
+      "purchase_date": "Purchase Date",
+      "purchase_price": "Purchase Price",
+      "listing_status": "UDF: Listing Status",
+      "listing_date": "UDF: Listing Date",
+      "rtm": "UDF: To Be Listed Live",
+      "est_rehab_cost": "UDF: Est. Rehab Cost/Demo"
+     }
+    },
+    {
+     "name": "rm_api",
+     "kind": "rm_report",
+     "enabled": false,
+     "_note": "Fallback. Only 30 columns -- no stage dates, no punch out. Do not promote above sharepoint_daily.",
+     "report_id": "244",
+     "as_of_from": "run_date",
+     "map": {
+      "community": "EntitiesName",
+      "unit": "SubEntitiesName",
+      "asset_name": "AssetsAssetTagID",
+      "asset_type": "AssetTypesName",
+      "status": "AssetStatusesName",
+      "manufacturer": "AssetManufacturersName",
+      "model": "AssetsModelNumber",
+      "serial": "AssetsSerialNumber",
+      "purchase_price": "AssetsPurchasePrice",
+      "rtm": "udf_551"
+     }
+    },
+    {
+     "name": "manual",
+     "kind": "dated_csv",
+     "enabled": true,
+     "_note": "Last resort. Same shape as sharepoint_daily; drop it in pipeline/manual/.",
+     "source": "pipeline/manual/",
+     "pattern": "asset_listing_YYYY-MM-DD.csv",
+     "as_of_from": "filename",
+     "map": "same_as:sharepoint_daily"
+    }
+   ],
+   "_stage_date_caveat": [
+    "THE STAGE COLUMNS ARE FREE TEXT, NOT DATES. Checked 2026-09-06: of 1,745",
+    "assets only 96 carry any punch-out value at all, and of those 80 read 'TBD',",
+    "3 read 'N/A', 3 read 'WE 07/07/26' (a week-ending convention) and 9 are a",
+    "real date. Every stage column behaves the same way.",
+    "",
+    "So the punch stage EXISTS in Rent Manager -- which corrects the dashboard note",
+    "saying it does not -- but the field is a hand-typed planning cell with mixed",
+    "conventions, not an event log. Durations cannot be computed from it today.",
+    "",
+    "DERIVE DURATIONS FROM THE DAILY SNAPSHOTS INSTEAD. With 387 dated files we can",
+    "diff `status` across consecutive days and observe when a home actually moved",
+    "between stages. That measures what happened rather than trusting what someone",
+    "typed, and it needs no data-entry change to start working.",
+    "",
+    "Keep reading these columns anyway: they are the team's forward-looking target",
+    "dates, which is a different and useful thing, and 'TBD' at 83% is itself a",
+    "finding worth putting in front of whoever owns home setup."
+   ]
+  },
+  "prospects": {
+   "canonical": [
+    "community",
+    "unit",
+    "stage",
+    "stage_date",
+    "first_contact",
+    "last_contact",
+    "days_in_system",
+    "application_date",
+    "application_days",
+    "source"
+   ],
+   "pii_strip": [
+    "Name",
+    "Primary Account",
+    "FullNumber",
+    "Email",
+    "Phone",
+    "First Name",
+    "Last Name",
+    "Prospect Name"
+   ],
+   "providers": [
+    {
+     "name": "warehouse_dw_prospects",
+     "kind": "warehouse",
+     "enabled": false,
+     "_note": "NOT EXPOSED as of 2026-09-08 -- get_schema returns 11 models, none for prospects. Enable once RentViewer publishes it. Live query, so read its as-of and never assume.",
+     "model": "dw_prospects",
+     "as_of_from": "snapshot_dimension"
+    },
+    {
+     "name": "sharepoint_dw_export",
+     "kind": "dated_csv",
+     "enabled": true,
+     "_note": "Working fallback. A DW_ prefixed export already carries ProspectStage plus Days In System and Application Days. Currently one-off, not daily.",
+     "source": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Claude Cowork/Sales-Marketing/SAM Umbrella/initial info/",
+     "pattern": "DW_Prospect Status Report_*.csv",
+     "as_of_from": "filename",
+     "map": {
+      "community": "Property",
+      "unit": "UnitTypeName",
+      "stage": "ProspectStage",
+      "stage_date": "Date Created",
+      "days_in_system": "Days In System",
+      "application_date": "Application Date",
+      "application_days": "Application Days"
+     }
+    },
+    {
+     "name": "rm_stage_listing",
+     "kind": "dated_csv",
+     "enabled": true,
+     "_note": "Second fallback, RM report 676. Carries Stage Date. Names must be stripped.",
+     "pattern": "*Prospect Stage Listing.csv",
+     "as_of_from": "filename",
+     "map": {
+      "community": "Property",
+      "unit": "Unit",
+      "stage": "Stage",
+      "stage_date": "Stage Date",
+      "first_contact": "First Contact",
+      "last_contact": "Last Contact"
+     }
+    }
+   ]
+  }
+ }
+}
