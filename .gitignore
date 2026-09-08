@@ -2,3 +2,9 @@ __pycache__/
 *.pyc
 .DS_Store
 node_modules/
+
+# Candidate warehouse pulls for the source-consolidation comparison. Raw
+# evidence, 10MB and reproducible from queries.json `candidate_unit_grain`;
+# the conclusions live in docs/SOURCE_CONSOLIDATION.md. Not committed because
+# nothing in the build reads them and they would double the repo.
+pipeline/raw/candidate/

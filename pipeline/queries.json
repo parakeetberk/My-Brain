@@ -1,330 +1,421 @@
 {
-  "_comment": [
-    "Warehouse queries that feed the ops dashboard, in the order they should run.",
-    "",
-    "These run against the RentViewer data warehouse MCP tool",
-    "(mcp__RentViewer_Data_Warehouse__run_query). The warehouse is reachable only",
-    "through an authenticated MCP connector, so a plain HTTP job cannot run them --",
-    "the refresh is driven by a scheduled Claude session. See docs/ARCHITECTURE.md.",
-    "",
-    "Each entry's `out` is the filename build.py expects under pipeline/raw/.",
-    "",
-    "THE ROSTER IS NOT IN THESE QUERIES. Which communities are reportable comes from",
-    "the Property Data Sheet, not the warehouse -- see `reportable_roster` below.",
-    "",
-    "TWO RULES THAT MATTER:",
-    "  1. Keep `limit` comfortably above the real row count. A pull that hits its",
-    "     limit is silently truncated -- an early build read $588K of portfolio AR",
-    "     when the true figure was $1.41M, purely from a 2000-row cap.",
-    "  2. Never group a snapshot model by both reportMonth and a wide dimension",
-    "     at once unless you raise the limit to match; the row count multiplies.",
-    "",
-    "If a query times out at 60s, drop a measure or narrow the time range and",
-    "re-run rather than lowering the limit.",
-    "",
-    "SPLIT A QUERY THAT TIMES OUT, DO NOT SHRINK IT. Every query here now times",
-    "out at 60s with its full measure list -- the warehouse got slower, or the",
-    "history got longer. Send the measures in batches of two or three against the",
-    "same dimensions and time range, then join the parts on those dimensions.",
-    "The parts must agree on row count and key set before they are merged; a",
-    "silent mismatch would file a measure against the wrong property-month and",
-    "nothing downstream would catch it.",
-    "",
-    "There are eight files here, not six. expense_categories and income_categories",
-    "were pulled by hand when the Financials tab was built and never written down,",
-    "so refreshes updated financials_by_property_month.json and left the two",
-    "category files behind -- they sat at 2,028 rows while financials moved to",
-    "2,132. All three share a model and a grain, so their row counts must match."
-  ],
-  "queries": [
-    {
-      "out": "occupancy_by_property_month.json",
-      "expect_rows_min": 1500,
-      "spec": {
-        "measures": [
-          "VW_Rental_Unit_Listing.unitCount",
-          "VW_Rental_Unit_Listing.occupancyRate",
-          "VW_Rental_Unit_Listing.daysVacant",
-          "VW_Rental_Unit_Listing.daysAvailable",
-          "VW_Rental_Unit_Listing.totalActualRent",
-          "VW_Rental_Unit_Listing.totalMarketRent"
-        ],
-        "dimensions": [
-          "VW_Rental_Unit_Listing.propertyName",
-          "VW_Rental_Unit_Listing.reportMonth"
-        ],
-        "limit": 5000,
-        "question": "Occupancy rate and unit count by community by month for the occupancy trend chart"
-      }
-    },
-    {
-      "out": "unit_listing_by_type.json",
-      "expect_rows_min": 300,
-      "spec": {
-        "measures": [
-          "VW_Rental_Unit_Listing.unitCount",
-          "VW_Rental_Unit_Listing.occupancyRate",
-          "VW_Rental_Unit_Listing.daysVacant",
-          "VW_Rental_Unit_Listing.daysAvailable"
-        ],
-        "dimensions": [
-          "VW_Rental_Unit_Listing.propertyName",
-          "VW_Rental_Unit_Listing.unitTypeName"
-        ],
-        "limit": 2000,
-        "question": "Current unit count and occupancy by community and unit type, for vacancy composition"
-      }
-    },
-    {
-      "out": "ar_by_property_month.json",
-      "expect_rows_min": 1200,
-      "spec": {
-        "measures": [
-          "VW_Aged_Receivables.agedReceivablesTotal",
-          "VW_Aged_Receivables.current0to30",
-          "VW_Aged_Receivables.days31to60",
-          "VW_Aged_Receivables.days61to90",
-          "VW_Aged_Receivables.over90Days",
-          "VW_Aged_Receivables.customersWithBalance"
-        ],
-        "dimensions": [
-          "VW_Aged_Receivables.propertyName",
-          "VW_Aged_Receivables.reportMonth"
-        ],
-        "limit": 5000,
-        "question": "Aged receivables aging buckets by community by month, full history, for the AR trend chart"
-      }
-    },
-    {
-      "out": "rentroll_by_property_month.json",
-      "expect_rows_min": 1500,
-      "spec": {
-        "measures": [
-          "VW_Summary_Rent_Roll.totalCharged",
-          "VW_Summary_Rent_Roll.totalPaid",
-          "VW_Summary_Rent_Roll.collectionRate",
-          "VW_Summary_Rent_Roll.rentCharges",
-          "VW_Summary_Rent_Roll.vacancyLoss",
-          "VW_Summary_Rent_Roll.lossToLease",
-          "VW_Summary_Rent_Roll.debitBalances"
-        ],
-        "dimensions": [
-          "VW_Summary_Rent_Roll.propertyName",
-          "VW_Summary_Rent_Roll.reportMonth"
-        ],
-        "limit": 5000,
-        "question": "Collections, charges, payments, vacancy loss and loss to lease by community by month"
-      }
-    },
-    {
-      "out": "moves_by_property_month.json",
-      "expect_rows_min": 500,
-      "spec": {
-        "measures": [
-          "VW_MoveIns_MoveOuts.moveIns",
-          "VW_MoveIns_MoveOuts.moveOuts",
-          "VW_MoveIns_MoveOuts.netMovement"
-        ],
-        "dimensions": [
-          "VW_MoveIns_MoveOuts.propertyName",
-          "VW_MoveIns_MoveOuts.month"
-        ],
-        "timeRange": {
-          "dimension": "VW_MoveIns_MoveOuts.month",
-          "from": "{{START_OF_PRIOR_YEAR}}",
-          "to": "{{TODAY}}"
-        },
-        "limit": 5000,
-        "question": "Move ins and move outs by community by month for turnover tracking"
-      }
-    },
-    {
-      "out": "financials_by_property_month.json",
-      "expect_rows_min": 1500,
-      "spec": {
-        "measures": [
-          "VW_Budget_Comparison.totalRevenue",
-          "VW_Budget_Comparison.totalRevenueBudget",
-          "VW_Budget_Comparison.totalOperatingExpenses",
-          "VW_Budget_Comparison.totalOperatingExpensesBudget",
-          "VW_Budget_Comparison.noi",
-          "VW_Budget_Comparison.noiBudget",
-          "VW_Budget_Comparison.noiMargin"
-        ],
-        "dimensions": [
-          "VW_Budget_Comparison.propertyName",
-          "VW_Budget_Comparison.endDate"
-        ],
-        "timeRange": {
-          "dimension": "VW_Budget_Comparison.endDate",
-          "from": "{{START_OF_PRIOR_YEAR}}",
-          "to": "{{TODAY}}"
-        },
-        "limit": 5000,
-        "question": "Revenue, operating expenses, NOI and budget by community by month for the financials tab"
-      }
-    },
-    {
-      "out": "expense_categories_by_property_month.json",
-      "expect_rows_min": 1500,
-      "_comment": [
-        "Expense line items behind the controllable / non-controllable split and",
-        "utility recapture. Same model and grain as the financials query, so its",
-        "row count must match that file; if it does not, one of the two is partial."
-      ],
-      "spec": {
-        "measures": [
-          "VW_Budget_Comparison.repairsMaintenanceExpense",
-          "VW_Budget_Comparison.repairsMaintenanceBudget",
-          "VW_Budget_Comparison.payrollManagementExpense",
-          "VW_Budget_Comparison.utilitiesExpense",
-          "VW_Budget_Comparison.utilitiesExpenseBudget",
-          "VW_Budget_Comparison.utilityReimbursements",
-          "VW_Budget_Comparison.taxesExpense",
-          "VW_Budget_Comparison.insuranceExpense"
-        ],
-        "dimensions": [
-          "VW_Budget_Comparison.propertyName",
-          "VW_Budget_Comparison.endDate"
-        ],
-        "timeRange": {
-          "dimension": "VW_Budget_Comparison.endDate",
-          "from": "{{START_OF_PRIOR_YEAR}}",
-          "to": "{{TODAY}}"
-        },
-        "limit": 5000,
-        "question": "Expense line items by community by month for the controllable buckets and utility recapture"
-      }
-    },
-    {
-      "out": "income_categories_by_property_month.json",
-      "expect_rows_min": 1500,
-      "_comment": [
-        "Revenue line items plus the below-the-line rows. Same grain as the",
-        "financials query; row counts must match."
-      ],
-      "spec": {
-        "measures": [
-          "VW_Budget_Comparison.lotRentRentalIncome",
-          "VW_Budget_Comparison.ancillaryFeeIncome",
-          "VW_Budget_Comparison.nonOperatingIncome",
-          "VW_Budget_Comparison.legalProfessionalExpense",
-          "VW_Budget_Comparison.capexExpense",
-          "VW_Budget_Comparison.debtServiceExpense"
-        ],
-        "dimensions": [
-          "VW_Budget_Comparison.propertyName",
-          "VW_Budget_Comparison.endDate"
-        ],
-        "timeRange": {
-          "dimension": "VW_Budget_Comparison.endDate",
-          "from": "{{START_OF_PRIOR_YEAR}}",
-          "to": "{{TODAY}}"
-        },
-        "limit": 5000,
-        "question": "Revenue line items and below the line rows by community by month"
-      }
-    }
-  ],
-  "reportable_roster": {
-    "out": "pds_reportable.json",
-    "_comment": [
-      "The Reportable = Yes roster, and the gate on everything the dashboard shows.",
-      "",
-      "It lives in the `vwr VW_PDS_V2` sheet of the Property Data Sheet on SharePoint,",
-      "NOT in the warehouse: the warehouse MCP connector exposes only five models and",
-      "VW_PDS_V2 is not among them. If RentViewer ever enables it for AI analysis, this",
-      "becomes a seventh query and the SharePoint read goes away.",
-      "",
-      "Read the newest file under the SharePoint path below with the Microsoft 365",
-      "connector, take the `vwr VW_PDS_V2` sheet, keep rows where Reportable is exactly",
-      "Yes (blank and No are both excluded), and write one JSON object per row with the",
-      "fields listed in `fields`. The warehouse joins on `property_name` exactly.",
-      "",
-      "Refuse to build if this file is missing or empty rather than falling back to a",
-      "heuristic roster: guessing which of ~150 propertyName values are real communities",
-      "is exactly what this file exists to prevent.",
-      "",
-      "READER TRUNCATION WILL SILENTLY DROP COMMUNITIES. The workbook has six",
-      "worksheets and the resource reader caps at roughly 200KB, so a read of",
-      "`vwr VW_PDS_V2` came back with 203 of its 237 rows and the note '[Output",
-      "truncated -- 32 more rows in this sheet ... not shown]' buried mid-file.",
-      "Parsed as if complete it yielded 46 Reportable = Yes instead of 66, dropped",
-      "22 live communities including Great Oak, Riverwalk, The Oaks and Windward",
-      "Knoll, and resurrected Cambridge and Geiger which Austin had removed by hand.",
-      "",
-      "So: after any read, CHECK FOR THE TRUNCATION NOTE and check the row count",
-      "against the `NNN rows x NN columns` figure in the sheet heading. If they",
-      "disagree, the read is partial and must not be written. Same failure mode as",
-      "the row-limit warning on the queries below, different mechanism.",
-      "",
-      "When a read is partial and the workbook's lastModifiedDateTime is unchanged",
-      "since the roster was last built, the roster is already current and the right",
-      "move is to leave it alone and say so, not to rewrite it from the fragment."
+ "_comment": [
+  "Warehouse queries that feed the ops dashboard, in the order they should run.",
+  "",
+  "These run against the RentViewer data warehouse MCP tool",
+  "(mcp__RentViewer_Data_Warehouse__run_query). The warehouse is reachable only",
+  "through an authenticated MCP connector, so a plain HTTP job cannot run them --",
+  "the refresh is driven by a scheduled Claude session. See docs/ARCHITECTURE.md.",
+  "",
+  "Each entry's `out` is the filename build.py expects under pipeline/raw/.",
+  "",
+  "THE ROSTER IS NOT IN THESE QUERIES. Which communities are reportable comes from",
+  "the Property Data Sheet, not the warehouse -- see `reportable_roster` below.",
+  "",
+  "TWO RULES THAT MATTER:",
+  "  1. Keep `limit` comfortably above the real row count. A pull that hits its",
+  "     limit is silently truncated -- an early build read $588K of portfolio AR",
+  "     when the true figure was $1.41M, purely from a 2000-row cap.",
+  "  2. Never group a snapshot model by both reportMonth and a wide dimension",
+  "     at once unless you raise the limit to match; the row count multiplies.",
+  "",
+  "If a query times out at 60s, drop a measure or narrow the time range and",
+  "re-run rather than lowering the limit.",
+  "",
+  "SPLIT A QUERY THAT TIMES OUT, DO NOT SHRINK IT. Every query here now times",
+  "out at 60s with its full measure list -- the warehouse got slower, or the",
+  "history got longer. Send the measures in batches of two or three against the",
+  "same dimensions and time range, then join the parts on those dimensions.",
+  "The parts must agree on row count and key set before they are merged; a",
+  "silent mismatch would file a measure against the wrong property-month and",
+  "nothing downstream would catch it.",
+  "",
+  "There are eight files here, not six. expense_categories and income_categories",
+  "were pulled by hand when the Financials tab was built and never written down,",
+  "so refreshes updated financials_by_property_month.json and left the two",
+  "category files behind -- they sat at 2,028 rows while financials moved to",
+  "2,132. All three share a model and a grain, so their row counts must match."
+ ],
+ "queries": [
+  {
+   "out": "occupancy_by_property_month.json",
+   "expect_rows_min": 1500,
+   "spec": {
+    "measures": [
+     "VW_Rental_Unit_Listing.unitCount",
+     "VW_Rental_Unit_Listing.occupancyRate",
+     "VW_Rental_Unit_Listing.daysVacant",
+     "VW_Rental_Unit_Listing.daysAvailable",
+     "VW_Rental_Unit_Listing.totalActualRent",
+     "VW_Rental_Unit_Listing.totalMarketRent"
     ],
-    "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/main/Shared Documents/Asset Management & Finance/Property Data Sheet/",
-    "sheet": "vwr VW_PDS_V2",
-    "filter": "Reportable == 'Yes'",
-    "fields": [
-      "short_name",
-      "property_name",
-      "community",
-      "vehicle",
-      "state",
-      "mh_lots",
-      "rv_lots",
-      "other_units",
-      "total_units",
-      "core_units",
-      "sale_date",
-      "property_type",
-      "water_service",
-      "water_paid_by",
-      "sewer_service",
-      "sewer_paid_by",
-      "trash_paid_by",
-      "acquired_date",
-      "acquired_price",
-      "poh_pds",
-      "mh_lot_rent_2026",
-      "rv_lot_rent_2026"
+    "dimensions": [
+     "VW_Rental_Unit_Listing.propertyName",
+     "VW_Rental_Unit_Listing.reportMonth"
     ],
-    "expect_rows_min": 50,
-    "_fields_note": "Extended past the original eleven when the hot sheet landed: it needs Total Core Units as its occupancy denominator, Purchase Date and Price, POH for the PDS-vs-asset-listing check, and the two lot rents. Total Core Units lives on the PDS Clean sheet rather than VW_PDS_V2."
+    "limit": 5000,
+    "question": "Occupancy rate and unit count by community by month for the occupancy trend chart"
+   }
   },
-  "eviction_tracker": {
-    "out": "eviction_tracker.json",
-    "_comment": [
-      "The eviction tracker, and the only source that can say which receivables are",
-      "already in eviction. Without it the 90+ bucket is one undifferentiated number.",
-      "",
-      "It is a scripted Rent Manager report, not an API report and not a warehouse",
-      "model, so it cannot be pulled with run_report. It lands on SharePoint daily.",
-      "",
-      "READ THE UNDATED FILE at `sharepoint_file`. A dated copy is archived into",
-      "`Historical Eviction Tracker/`, but that folder runs a day or two behind the",
-      "live one -- an earlier build looked only there, saw nothing past Aug 31, and",
-      "wrongly concluded the daily job had stopped.",
-      "",
-      "Pipe the connector's output straight into the staging script, which strips the",
-      "resident name and case number and normalises the dates:",
-      "",
-      "    python3 pipeline/stage_eviction.py <downloaded-or-mcp-output>",
-      "",
-      "Never write this file by hand and never stage it without that script. It is the",
-      "only raw source that arrives with resident names attached, and the standalone",
-      "build gets emailed around.",
-      "",
-      "The build survives without it: the in-eviction bucket simply empties and every",
-      "balance falls through to needs-action. So check the as-of date in the output --",
-      "build.py raises a flag once it is more than two days old."
+  {
+   "out": "unit_listing_by_type.json",
+   "expect_rows_min": 300,
+   "spec": {
+    "measures": [
+     "VW_Rental_Unit_Listing.unitCount",
+     "VW_Rental_Unit_Listing.occupancyRate",
+     "VW_Rental_Unit_Listing.daysVacant",
+     "VW_Rental_Unit_Listing.daysAvailable"
     ],
-    "sharepoint_file": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Rent Manager/Eviction Tracker.csv",
-    "stage_with": "pipeline/stage_eviction.py",
-    "join_on": "ShortName plus Name (the unit), against EntitiesShortName plus SubEntitiesName on the AR detail",
-    "dropped_columns": [
-      "FullName",
-      "CaseNumber"
-    ]
+    "dimensions": [
+     "VW_Rental_Unit_Listing.propertyName",
+     "VW_Rental_Unit_Listing.unitTypeName"
+    ],
+    "limit": 2000,
+    "question": "Current unit count and occupancy by community and unit type, for vacancy composition"
+   }
+  },
+  {
+   "out": "ar_by_property_month.json",
+   "expect_rows_min": 1200,
+   "spec": {
+    "measures": [
+     "VW_Aged_Receivables.agedReceivablesTotal",
+     "VW_Aged_Receivables.current0to30",
+     "VW_Aged_Receivables.days31to60",
+     "VW_Aged_Receivables.days61to90",
+     "VW_Aged_Receivables.over90Days",
+     "VW_Aged_Receivables.customersWithBalance"
+    ],
+    "dimensions": [
+     "VW_Aged_Receivables.propertyName",
+     "VW_Aged_Receivables.reportMonth"
+    ],
+    "limit": 5000,
+    "question": "Aged receivables aging buckets by community by month, full history, for the AR trend chart"
+   }
+  },
+  {
+   "out": "rentroll_by_property_month.json",
+   "expect_rows_min": 1500,
+   "spec": {
+    "measures": [
+     "VW_Summary_Rent_Roll.totalCharged",
+     "VW_Summary_Rent_Roll.totalPaid",
+     "VW_Summary_Rent_Roll.collectionRate",
+     "VW_Summary_Rent_Roll.rentCharges",
+     "VW_Summary_Rent_Roll.vacancyLoss",
+     "VW_Summary_Rent_Roll.lossToLease",
+     "VW_Summary_Rent_Roll.debitBalances"
+    ],
+    "dimensions": [
+     "VW_Summary_Rent_Roll.propertyName",
+     "VW_Summary_Rent_Roll.reportMonth"
+    ],
+    "limit": 5000,
+    "question": "Collections, charges, payments, vacancy loss and loss to lease by community by month"
+   }
+  },
+  {
+   "out": "moves_by_property_month.json",
+   "expect_rows_min": 500,
+   "spec": {
+    "measures": [
+     "VW_MoveIns_MoveOuts.moveIns",
+     "VW_MoveIns_MoveOuts.moveOuts",
+     "VW_MoveIns_MoveOuts.netMovement"
+    ],
+    "dimensions": [
+     "VW_MoveIns_MoveOuts.propertyName",
+     "VW_MoveIns_MoveOuts.month"
+    ],
+    "timeRange": {
+     "dimension": "VW_MoveIns_MoveOuts.month",
+     "from": "{{START_OF_PRIOR_YEAR}}",
+     "to": "{{TODAY}}"
+    },
+    "limit": 5000,
+    "question": "Move ins and move outs by community by month for turnover tracking"
+   }
+  },
+  {
+   "out": "financials_by_property_month.json",
+   "expect_rows_min": 1500,
+   "spec": {
+    "measures": [
+     "VW_Budget_Comparison.totalRevenue",
+     "VW_Budget_Comparison.totalRevenueBudget",
+     "VW_Budget_Comparison.totalOperatingExpenses",
+     "VW_Budget_Comparison.totalOperatingExpensesBudget",
+     "VW_Budget_Comparison.noi",
+     "VW_Budget_Comparison.noiBudget",
+     "VW_Budget_Comparison.noiMargin"
+    ],
+    "dimensions": [
+     "VW_Budget_Comparison.propertyName",
+     "VW_Budget_Comparison.endDate"
+    ],
+    "timeRange": {
+     "dimension": "VW_Budget_Comparison.endDate",
+     "from": "{{START_OF_PRIOR_YEAR}}",
+     "to": "{{TODAY}}"
+    },
+    "limit": 5000,
+    "question": "Revenue, operating expenses, NOI and budget by community by month for the financials tab"
+   }
+  },
+  {
+   "out": "expense_categories_by_property_month.json",
+   "expect_rows_min": 1500,
+   "_comment": [
+    "Expense line items behind the controllable / non-controllable split and",
+    "utility recapture. Same model and grain as the financials query, so its",
+    "row count must match that file; if it does not, one of the two is partial."
+   ],
+   "spec": {
+    "measures": [
+     "VW_Budget_Comparison.repairsMaintenanceExpense",
+     "VW_Budget_Comparison.repairsMaintenanceBudget",
+     "VW_Budget_Comparison.payrollManagementExpense",
+     "VW_Budget_Comparison.utilitiesExpense",
+     "VW_Budget_Comparison.utilitiesExpenseBudget",
+     "VW_Budget_Comparison.utilityReimbursements",
+     "VW_Budget_Comparison.taxesExpense",
+     "VW_Budget_Comparison.insuranceExpense"
+    ],
+    "dimensions": [
+     "VW_Budget_Comparison.propertyName",
+     "VW_Budget_Comparison.endDate"
+    ],
+    "timeRange": {
+     "dimension": "VW_Budget_Comparison.endDate",
+     "from": "{{START_OF_PRIOR_YEAR}}",
+     "to": "{{TODAY}}"
+    },
+    "limit": 5000,
+    "question": "Expense line items by community by month for the controllable buckets and utility recapture"
+   }
+  },
+  {
+   "out": "income_categories_by_property_month.json",
+   "expect_rows_min": 1500,
+   "_comment": [
+    "Revenue line items plus the below-the-line rows. Same grain as the",
+    "financials query; row counts must match."
+   ],
+   "spec": {
+    "measures": [
+     "VW_Budget_Comparison.lotRentRentalIncome",
+     "VW_Budget_Comparison.ancillaryFeeIncome",
+     "VW_Budget_Comparison.nonOperatingIncome",
+     "VW_Budget_Comparison.legalProfessionalExpense",
+     "VW_Budget_Comparison.capexExpense",
+     "VW_Budget_Comparison.debtServiceExpense"
+    ],
+    "dimensions": [
+     "VW_Budget_Comparison.propertyName",
+     "VW_Budget_Comparison.endDate"
+    ],
+    "timeRange": {
+     "dimension": "VW_Budget_Comparison.endDate",
+     "from": "{{START_OF_PRIOR_YEAR}}",
+     "to": "{{TODAY}}"
+    },
+    "limit": 5000,
+    "question": "Revenue line items and below the line rows by community by month"
+   }
   }
+ ],
+ "reportable_roster": {
+  "out": "pds_reportable.json",
+  "_comment": [
+   "The Reportable = Yes roster, and the gate on everything the dashboard shows.",
+   "",
+   "It lives in the `vwr VW_PDS_V2` sheet of the Property Data Sheet on SharePoint,",
+   "NOT in the warehouse: the warehouse MCP connector exposes only five models and",
+   "VW_PDS_V2 is not among them. If RentViewer ever enables it for AI analysis, this",
+   "becomes a seventh query and the SharePoint read goes away.",
+   "",
+   "Read the newest file under the SharePoint path below with the Microsoft 365",
+   "connector, take the `vwr VW_PDS_V2` sheet, keep rows where Reportable is exactly",
+   "Yes (blank and No are both excluded), and write one JSON object per row with the",
+   "fields listed in `fields`. The warehouse joins on `property_name` exactly.",
+   "",
+   "Refuse to build if this file is missing or empty rather than falling back to a",
+   "heuristic roster: guessing which of ~150 propertyName values are real communities",
+   "is exactly what this file exists to prevent.",
+   "",
+   "READER TRUNCATION WILL SILENTLY DROP COMMUNITIES. The workbook has six",
+   "worksheets and the resource reader caps at roughly 200KB, so a read of",
+   "`vwr VW_PDS_V2` came back with 203 of its 237 rows and the note '[Output",
+   "truncated -- 32 more rows in this sheet ... not shown]' buried mid-file.",
+   "Parsed as if complete it yielded 46 Reportable = Yes instead of 66, dropped",
+   "22 live communities including Great Oak, Riverwalk, The Oaks and Windward",
+   "Knoll, and resurrected Cambridge and Geiger which Austin had removed by hand.",
+   "",
+   "So: after any read, CHECK FOR THE TRUNCATION NOTE and check the row count",
+   "against the `NNN rows x NN columns` figure in the sheet heading. If they",
+   "disagree, the read is partial and must not be written. Same failure mode as",
+   "the row-limit warning on the queries below, different mechanism.",
+   "",
+   "When a read is partial and the workbook's lastModifiedDateTime is unchanged",
+   "since the roster was last built, the roster is already current and the right",
+   "move is to leave it alone and say so, not to rewrite it from the fragment."
+  ],
+  "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/main/Shared Documents/Asset Management & Finance/Property Data Sheet/",
+  "sheet": "vwr VW_PDS_V2",
+  "filter": "Reportable == 'Yes'",
+  "fields": [
+   "short_name",
+   "property_name",
+   "community",
+   "vehicle",
+   "state",
+   "mh_lots",
+   "rv_lots",
+   "other_units",
+   "total_units",
+   "core_units",
+   "sale_date",
+   "property_type",
+   "water_service",
+   "water_paid_by",
+   "sewer_service",
+   "sewer_paid_by",
+   "trash_paid_by",
+   "acquired_date",
+   "acquired_price",
+   "poh_pds",
+   "mh_lot_rent_2026",
+   "rv_lot_rent_2026"
+  ],
+  "expect_rows_min": 50,
+  "_fields_note": "Extended past the original eleven when the hot sheet landed: it needs Total Core Units as its occupancy denominator, Purchase Date and Price, POH for the PDS-vs-asset-listing check, and the two lot rents. Total Core Units lives on the PDS Clean sheet rather than VW_PDS_V2."
+ },
+ "eviction_tracker": {
+  "out": "eviction_tracker.json",
+  "_comment": [
+   "The eviction tracker, and the only source that can say which receivables are",
+   "already in eviction. Without it the 90+ bucket is one undifferentiated number.",
+   "",
+   "It is a scripted Rent Manager report, not an API report and not a warehouse",
+   "model, so it cannot be pulled with run_report. It lands on SharePoint daily.",
+   "",
+   "READ THE UNDATED FILE at `sharepoint_file`. A dated copy is archived into",
+   "`Historical Eviction Tracker/`, but that folder runs a day or two behind the",
+   "live one -- an earlier build looked only there, saw nothing past Aug 31, and",
+   "wrongly concluded the daily job had stopped.",
+   "",
+   "Pipe the connector's output straight into the staging script, which strips the",
+   "resident name and case number and normalises the dates:",
+   "",
+   "    python3 pipeline/stage_eviction.py <downloaded-or-mcp-output>",
+   "",
+   "Never write this file by hand and never stage it without that script. It is the",
+   "only raw source that arrives with resident names attached, and the standalone",
+   "build gets emailed around.",
+   "",
+   "The build survives without it: the in-eviction bucket simply empties and every",
+   "balance falls through to needs-action. So check the as-of date in the output --",
+   "build.py raises a flag once it is more than two days old."
+  ],
+  "sharepoint_file": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Rent Manager/Eviction Tracker.csv",
+  "stage_with": "pipeline/stage_eviction.py",
+  "join_on": "ShortName plus Name (the unit), against EntitiesShortName plus SubEntitiesName on the AR detail",
+  "dropped_columns": [
+   "FullName",
+   "CaseNumber"
+  ]
+ },
+ "candidate_unit_grain": {
+  "_comment": [
+   "CANDIDATE, NOT LIVE. build.py does not read these; they are pulled into",
+   "pipeline/raw/candidate/ and diffed against the Rent Manager files by",
+   "pipeline/compare_sources.py. See docs/SOURCE_CONSOLIDATION.md.",
+   "",
+   "The point of these is that VW_Summary_Rent_Roll, VW_Aged_Receivables and",
+   "VW_MoveIns_MoveOuts all carry a unitName dimension, so the warehouse can",
+   "serve the unit grain the dashboard drill-ins need and the Rent Manager API",
+   "calls could go away. Asset Listing (report 244) cannot move -- there is no",
+   "assets cube.",
+   "",
+   "Same 60s wall as every other query here, so same fix: batch the measures",
+   "against identical dimensions and join with merge_pull.py. Do NOT add or",
+   "remove a dimension between batches; the merge keys on them and will refuse.",
+   "",
+   "STATUS 2026-09-08: rentroll matches to the dollar on rent charges and total",
+   "paid. AR is $513K apart with 879 unit keys the warehouse does not return --",
+   "unexplained, so AR stays on report 78. Moves untested."
+  ],
+  "rentroll_unit": {
+   "out": "candidate/wh_rentroll_unit.json",
+   "replaces": "Rent Manager report 69 SummaryRentRoll -> rm_rent_roll.json",
+   "status": "matches; safe to cut over",
+   "expect_rows_min": 9000,
+   "dimensions": [
+    "VW_Summary_Rent_Roll.propertyName",
+    "VW_Summary_Rent_Roll.unitName",
+    "VW_Summary_Rent_Roll.unitTypesName",
+    "VW_Summary_Rent_Roll.customerDisplayId"
+   ],
+   "timeRange": {
+    "dimension": "VW_Summary_Rent_Roll.endDate",
+    "from": "{{START_OF_CLOSED_MONTH}}",
+    "to": "{{END_OF_CLOSED_MONTH}}"
+   },
+   "limit": 15000,
+   "measure_batches": [
+    [
+     "VW_Summary_Rent_Roll.rentCharges",
+     "VW_Summary_Rent_Roll.miscCharges"
+    ],
+    [
+     "VW_Summary_Rent_Roll.totalCharged",
+     "VW_Summary_Rent_Roll.totalPaid"
+    ],
+    [
+     "VW_Summary_Rent_Roll.priorBalance",
+     "VW_Summary_Rent_Roll.credits"
+    ],
+    [
+     "VW_Summary_Rent_Roll.securityDeposit",
+     "VW_Summary_Rent_Roll.proratedRent"
+    ],
+    [
+     "VW_Summary_Rent_Roll.vacancyLoss",
+     "VW_Summary_Rent_Roll.lossToLease"
+    ]
+   ],
+   "_gap": [
+    "Market rent (RM's Rented100) is not on this cube. It is",
+    "VW_Rental_Unit_Listing.avgMarketRent, so it needs a join on unitName."
+   ]
+  },
+  "ar_unit": {
+   "out": "candidate/wh_ar_unit.json",
+   "replaces": "Rent Manager report 78 AgedReceivables -> rm_ar_detail.json",
+   "status": "BLOCKED -- $513K apart, 879 unit keys missing, cause unknown",
+   "expect_rows_min": 1200,
+   "dimensions": [
+    "VW_Aged_Receivables.propertyName",
+    "VW_Aged_Receivables.unitName"
+   ],
+   "limit": 15000,
+   "measure_batches": [
+    [
+     "VW_Aged_Receivables.agedReceivablesTotal",
+     "VW_Aged_Receivables.current0to30"
+    ],
+    [
+     "VW_Aged_Receivables.days31to60",
+     "VW_Aged_Receivables.days61to90",
+     "VW_Aged_Receivables.over90Days"
+    ]
+   ],
+   "_note": [
+    "Add chargeTypeName as a dimension for the payment-plan detection",
+    "build.py does by charge name, once the totals reconcile."
+   ]
+  }
+ }
 }
