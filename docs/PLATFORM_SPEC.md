@@ -38,6 +38,56 @@ is distribution.
 
 **Retention.** Daily rows for 24 months, then rolled to month-end only.
 
+## Freshness: the capture keys on the snapshot, not the run
+
+Austin's concern, and it is the load-bearing rule of the whole store. The
+warehouse models are live queries whose content depends on when the upstream
+refresh last ran. A stale feed does not fail. It returns the previous answer
+with no indication that it is old.
+
+**This already happened, on the day the store was designed.** On 2026-09-08 the
+latest `VW_Aged_Receivables` snapshot was `asOfDate 2026-09-05` and the rent
+roll's was the same. Three days behind. The query results said nothing about it;
+the staleness only surfaced because the `asOfDate` dimension was queried on a
+hunch, and it accounts for a large part of the $513K AR discrepancy in
+[SOURCE_CONSOLIDATION.md](SOURCE_CONSOLIDATION.md).
+
+Three rules follow.
+
+**1. Every pull records its own as-of date.** Read the snapshot date in the same
+call as the measures and store it beside them. Never infer freshness from the
+run date. `compare_sources.py` already does this via `WH_AR_AS_OF` and
+`drift_days`.
+
+**2. The capture is idempotent on the as-of date, not the run date.** One row
+per *snapshot*, not one per *run*. If today's pull returns Friday's snapshot,
+the store gains nothing and, crucially, invents nothing.
+
+This is the rule that protects the whole platform. Appending a run-dated row
+from an unrefreshed feed would fabricate a flat line, and every day-of-month
+baseline built on top of it would be quietly wrong while looking perfectly
+healthy. A missing day is recoverable. A fabricated day is not, because nothing
+downstream can tell it from a real one.
+
+**3. Staleness is itself an alert.** If a source's as-of has not advanced in the
+expected interval, that is a flag. The eviction tracker already works this way
+(`eviction-tracker-stale`); the rule generalises to every source, warehouse and
+SharePoint alike.
+
+Net: a stale feed costs a day of baseline. It never corrupts the history.
+
+### Consequence for prospects
+
+`dw_prospects` is **not exposed to the MCP connector** as of 2026-09-08 — the
+schema returns 11 models and none mentions prospects. It exists warehouse-side
+but has not been published to the semantic layer, so someone with RentViewer
+admin has to surface it before anything can read it.
+
+Once it is exposed, the open question is whether its refresh can be **triggered**
+as step zero of the daily routine, or whether we can only read whatever it last
+produced. Rule 2 makes us safe either way; triggering it just means we stop
+losing days.
+
 ## The analytical idea: compare like to like
 
 A raw number is nearly meaningless here and the JBJ question is the proof. 60%
