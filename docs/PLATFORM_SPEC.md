@@ -1,0 +1,144 @@
+# Ops platform: what it shows, what it alerts on, what happens next
+
+Decided 2026-09-08 with Austin. This is the design the rebuild follows. Nothing
+here is built yet except the two ledgers noted below.
+
+## The problem that forced this
+
+Nobody keeps intra-month history. Not Rent Manager, and not the warehouse.
+
+`VW_Summary_Rent_Roll` holds exactly two snapshots for Aug–Sep 2026: `2026-08-31`
+and `2026-09-05`. `VW_Aged_Receivables` holds 21 monthly snapshots, all month-end
+except a handful of scattered partials. So the question "is 60% collections at
+J Bar J normal for the 3rd of the month" **cannot be answered from any existing
+data**. There is no history of what the 3rd looks like.
+
+That is the whole reason for a snapshot store, and it is why capture starts
+before design finishes. Every day we do not capture is a day of baseline that
+can never be recovered.
+
+## Where the history lives
+
+**Git is the system of record.** `data/daily_facts.json`, append-only, one row
+per community per day.
+
+Not the raw pulls — those are 24MB a day, 8.7GB a year. The derived fact row is
+~20 metrics × 64 communities × 365 days ≈ 23,000 rows and about 6MB a year.
+
+Git rather than SharePoint for three reasons. It is already proven for exactly
+this: `data/flag_history.json` and `data/source_reconciliation.json` both live
+there because the container is reclaimed between runs. It is versioned, which
+matters more here than anywhere else in the project, because this store cannot
+be rebuilt if a write corrupts it. And there is no auth round-trip mid-run, so a
+SharePoint outage cannot silently cost a day.
+
+**SharePoint gets a published CSV copy** so Power Automate, Excel and the
+analysts can reach it. Write-through, never read-from. Git is truth, SharePoint
+is distribution.
+
+**Retention.** Daily rows for 24 months, then rolled to month-end only.
+
+## The analytical idea: compare like to like
+
+A raw number is nearly meaningless here and the JBJ question is the proof. 60%
+collected is alarming on the 25th and unremarkable on the 3rd. Four
+normalisations, in order of how much they matter:
+
+**1. Day of month.** The only honest comparison for anything cash-related is the
+same day of month in prior periods. Rent bills on the 1st, is late after the
+5th, and the collection curve is steep and non-linear through the first week.
+This is the primary axis and the reason the store is daily rather than monthly.
+
+**2. Same-store.** Congress and Shell Pointe are sold; Cambridge and Geiger Key
+were removed. Any year-over-year total that includes them compares different
+portfolios and will read as growth or decline that is really just composition.
+Every trend needs a same-store cut alongside the all-store one, on the set of
+communities present in **both** periods. This is not currently done anywhere and
+it is the most likely source of a wrong conclusion in the existing dashboard.
+
+**3. Seasonality.** The RV parks are snowbird businesses. August against January
+is not a comparison, it is two different products. For anything touching RV,
+year-over-year same-month is the only valid read, and month-over-month should
+be suppressed rather than shown misleadingly.
+
+**4. Rate versus volume.** A revenue rise is either more lots occupied or more
+rent per lot, and the action is completely different. Decompose it rather than
+reporting the total.
+
+Plus the two already handled: onboarding months excluded from move trailing
+averages, and the financials as-of stamp for GL posting lag.
+
+## Three views, one pipeline
+
+Austin's call: all three, off the same data.
+
+| View | Opens on | Cadence |
+|---|---|---|
+| **Exception scan** (Austin) | What broke against its own baseline, ranked by dollars. Everything else is a drill-in. | Daily, read in five minutes |
+| **Regional manager worklist** | My communities, my overdue items, sorted by what is actionable today | Daily |
+| **Founders / board** | Portfolio trend, same-store, budget variance | Monthly |
+
+## Alerts
+
+**What earns one: breaking its own baseline.** A community outside its own
+day-of-month range. Self-calibrating, no thresholds to maintain, and a park that
+has always run 70% occupancy does not alert forever for being itself.
+
+Deliberately **not** absolute thresholds, and deliberately not the current
+behaviour, where every true statement becomes a flag and nothing becomes a task.
+The 22 flags on the board today are mostly data-quality findings — real, but they
+are IT tickets, not operating decisions. Those stay, in their own tray, separate
+from operating alerts.
+
+**Confidence gate.** No alert fires until 60 days of baseline exist for that
+community and metric, and every alert is labelled provisional until 12 months
+exist. A thin baseline produces confident nonsense.
+
+**Routing: email to the regional manager.** Austin's call over a ClickUp task.
+The tradeoff, stated once: an email has no completion state, so nothing will
+record whether an alert was acted on. If that becomes a problem the fix is to
+add ClickUp later; the alert payload is the same either way.
+
+## Cross-checks rather than consolidation
+
+The Listings Dashboard and Prospects & Funnel Tracker already publish daily to
+SharePoint under `Birdcage/Data Analytics/Claude Cowork/Sales-Marketing/` and,
+duplicated, to `main/Sales/Dashboards/`. Austin's call: **leave them alone, read
+their data, and compare results to check accuracy.**
+
+That makes them a third reconciliation, the same discipline as
+`compare_sources.py`. Where two independently built pipelines agree, confidence
+is real. Where they disagree, one of them is wrong and we find out before the
+team does.
+
+## Prospects
+
+Stage history exists in neither system today. Austin is enabling a warehouse
+view; that is the starting source because it will carry history. Zoho CRM (MAV)
+owns top of funnel and exports notes to `main/Sales/Reporting/ZOHO CRM (MAV)/`,
+and stitching it in is a later phase once the handoff point between Zoho and
+Rent Manager is defined.
+
+Until the view exists there is nothing to capture, so prospects are not in
+phase one.
+
+## Blocked on one thing
+
+**The regional manager mapping is empty.** `pipeline/regional_managers.json` has
+zero managers and zero email addresses, and the Property Data Sheet has 41
+columns and no manager field.
+
+Two of the four decisions above depend on it: the regional manager worklist has
+no way to scope itself, and email routing has no addresses to send to. It is a
+64-row spreadsheet — community, manager name, email — and it unblocks both.
+
+Nothing else in phase one is blocked.
+
+## Phase one
+
+1. `daily_facts.json` and the capture step, appending every run. Starts before
+   anything else, because the baseline only accumulates forward.
+2. The same-store cut, which is a correctness fix to trends already on the page.
+3. Day-of-month curves rendered as soon as ~30 days exist, unlabelled and
+   without alerts, so the shape can be sanity-checked by eye.
+4. Alerts at 60 days, provisional, once the manager mapping exists.
