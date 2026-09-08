@@ -33,7 +33,11 @@ from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 
-SCHEMA_VERSION = 10
+SCHEMA_VERSION = 11
+
+# Points of expense ratio below the trailing median at which a closed month
+# reads as part-posted rather than efficient.
+PART_POSTED_GAP = 4.0
 
 # Warehouse model prefixes, and the raw file each one arrives in.
 SOURCES = {
@@ -1607,6 +1611,48 @@ def build(raw_dir, out_dir, registry_path):
     def closed_pts(s):
         return [p for p in s if not p["partial"]]
 
+    # How far the general ledger has actually posted. Every figure on the
+    # Financials tab is a closed-month figure, and a closed month whose expense
+    # ratio sits well under its own trailing range is not a good month, it is an
+    # unfinished one. This computes that read once: the trailing median ratio,
+    # the current month's ratio, and the last month whose expenses look complete.
+    # The as-of stamp on the tab and the part-posted data note both come from it,
+    # so they can never disagree.
+    def expense_posting(s):
+        pts = closed_pts(s)
+        if len(pts) < 7:
+            return None
+
+        def ratio(p_):
+            return (p_["opex"] / p_["revenue"] * 100) if p_.get("revenue") else None
+
+        prior = [r for r in (ratio(p_) for p_ in pts[:-1]) if r is not None]
+        if not prior:
+            return None
+        window = sorted(prior[-12:])
+        median = window[len(window) // 2]
+        cur = ratio(pts[-1])
+        # Walk back to the last month sitting inside the band. A run of
+        # part-posted months at the end is possible, and naming the newest of
+        # them as complete would be worse than saying nothing.
+        complete = None
+        for p_ in reversed(pts):
+            r = ratio(p_)
+            if r is not None and r >= median - PART_POSTED_GAP:
+                complete = p_["month"]
+                break
+        return {"median": rnd(median, 1), "current": rnd(cur, 1) if cur is not None else None,
+                "complete_through": complete, "month": pts[-1]["month"],
+                "part_posted": cur is not None and cur < median - PART_POSTED_GAP}
+
+    fin_live = next((p_ for p_ in fin_series if p_["partial"]), None)
+    fin_post = expense_posting(fin_series)
+    if fin_post:
+        log("financials as of %s: opex %.1f%% of revenue against a %.1f%% median; "
+            "expenses look complete through %s"
+            % (fin_post["month"], fin_post["current"], fin_post["median"],
+               fin_post["complete_through"] or "no month in the series"))
+
     # ---- portfolio blocks, one per period ----------------------------------
 
     def portfolio_block(mo, prev_mo):
@@ -2174,30 +2220,24 @@ def build(raw_dir, out_dir, registry_path):
 
     # A month whose expense ratio sits well under its own trailing range is not
     # a great month, it is an unfinished one. Saying so stops an inflated NOI
-    # being read as performance.
+    # being read as performance. The reading itself comes from expense_posting,
+    # the same one behind the as-of stamp on the Financials tab.
     closed_fin = closed_pts(fin_series)
-    if len(closed_fin) >= 7:
-        ratios = [(p["opex"] / p["revenue"] * 100) for p in closed_fin[:-1]
-                  if p.get("revenue")]
-        cur = (closed_fin[-1]["opex"] / closed_fin[-1]["revenue"] * 100
-               if closed_fin[-1].get("revenue") else None)
-        if ratios and cur is not None:
-            ratios_sorted = sorted(ratios[-12:])
-            median = ratios_sorted[len(ratios_sorted) // 2]
-            if cur < median - 4:
-                shortfall = (median - cur) / 100 * closed_fin[-1]["revenue"]
-                flags.append({
-                    "id": "closed-month-expenses-part-posted",
-                    "severity": "warn",
-                    "title": "%s expenses look only partly posted" % closed_fin[-1]["month"],
-                    "detail": ("Operating expense is %.0f%% of revenue against a %.0f%% median "
-                               "for the trailing year, a gap worth about %s. NOI of %s for the "
-                               "month is flattered by roughly that much and should not be read "
-                               "as performance until the ledger is closed out. %s is the last "
-                               "month with a full expense picture."
-                               % (cur, median, money(shortfall), money(closed_fin[-1]["noi"]),
-                                  closed_fin[-2]["month"] if len(closed_fin) > 1 else "The prior month")),
-                })
+    if fin_post and fin_post["part_posted"]:
+        shortfall = (fin_post["median"] - fin_post["current"]) / 100 * closed_fin[-1]["revenue"]
+        flags.append({
+            "id": "closed-month-expenses-part-posted",
+            "severity": "warn",
+            "title": "%s expenses look only partly posted" % fin_post["month"],
+            "detail": ("Operating expense is %.0f%% of revenue against a %.0f%% median "
+                       "for the trailing year, a gap worth about %s. NOI of %s for the "
+                       "month is flattered by roughly that much and should not be read "
+                       "as performance until the ledger is closed out. %s is the last "
+                       "month with a full expense picture."
+                       % (fin_post["current"], fin_post["median"], money(shortfall),
+                          money(closed_fin[-1]["noi"]),
+                          fin_post["complete_through"] or "No month in the series")),
+        })
 
     if unmapped_types:
         flags.append({
@@ -2515,6 +2555,37 @@ def build(raw_dir, out_dir, registry_path):
             "budget_from": budget_from,
             "first": months[0],
             "months": months,
+            # The Financials tab does not follow the period toggle. The general
+            # ledger posts after a month closes, so an open-month P&L would read
+            # as a collapse to zero and the tab deliberately stays on the closed
+            # month. That is defensible only if the page says so: flipping the
+            # header to September and watching every financial figure hold still
+            # looks like a bug otherwise. This is what the as-of stamp reads.
+            "financials": {
+                # the month every figure on the tab reports
+                "month": fin_post["month"] if fin_post else closed_month,
+                # when the ledger behind it was read out of the warehouse
+                "ledger_read": today.isoformat(),
+                # last month whose expenses look fully posted, which is not
+                # necessarily the month being reported
+                "expenses_full_through": fin_post["complete_through"] if fin_post else None,
+                "part_posted": bool(fin_post and fin_post["part_posted"]),
+                "expense_ratio": fin_post["current"] if fin_post else None,
+                "expense_ratio_median": fin_post["median"] if fin_post else None,
+                # What the GL has posted against the open month so far. This is
+                # the case for keeping the tab on the closed month, in numbers:
+                # rent accrues on the 1st while bills arrive all month, so an
+                # open-month P&L shows nearly a full month of revenue against a
+                # few days of expense and an NOI that is pure artefact. The
+                # stamp quotes these rather than asserting it.
+                "live_revenue": rnd(fin_live.get("revenue") or 0, 0) if fin_live else 0,
+                "live_opex": rnd(fin_live.get("opex") or 0, 0) if fin_live else 0,
+                "live_expense_ratio": (
+                    rnd(fin_live["opex"] / fin_live["revenue"] * 100, 1)
+                    if fin_live and fin_live.get("revenue") else None),
+                "live_noi": (rnd((fin_live.get("revenue") or 0) - (fin_live.get("opex") or 0), 0)
+                             if fin_live else 0),
+            },
         },
         "thresholds": reg.thresholds,
         "portfolio": portfolio,

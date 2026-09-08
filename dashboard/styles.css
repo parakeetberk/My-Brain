@@ -1003,6 +1003,7 @@ tr.child-row td:first-child { padding-left: 28px; }
   font-size: 12.5px;
   padding: 6px 10px;
 }
+.scope-dim, .scope-search { max-width: 100%; min-width: 0; }
 .scope-dim { font-weight: 600; }
 .scope-pick {
   display: inline-flex;
@@ -1092,4 +1093,75 @@ tr.child-row td:first-child { padding-left: 28px; }
   background: var(--critical-wash);
   font-size: 12.5px;
   line-height: 1.5;
+}
+
+/* ------------------------------------------------------- financials as of --- */
+
+/* The Financials tab reports a closed month and does not follow the header's
+   period toggle. That has to be stated on the page, not learned the hard way,
+   so the tab opens on a stamp carrying the three dates that decide how to read
+   everything under it: which month, when the ledger was read, and how far the
+   expense side has actually posted. It sits above the P&L rather than beside a
+   panel title, because it dates every number on the tab and not one panel. */
+.asof {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 13px 16px 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--pk-navy);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+/* When the header says September and this tab says August, the disagreement is
+   the whole point of the stamp -- so it warms up rather than staying quiet. Its
+   own wash rather than --watch-wash: at 0.2 alpha over deep navy that mix goes
+   olive and drags the body text down with it, and this panel is mostly text. */
+.asof.mismatch {
+  border-left-color: var(--watch);
+  background: rgba(255, 204, 59, 0.1);
+}
+
+/* The one figure on the stamp that is a caveat rather than a fact. Weight and
+   the portfolio text colour, not brand yellow -- yellow type on the wash above
+   is unreadable in either theme. */
+.asof-n.flagged { color: var(--text); font-weight: 700; }
+
+.asof-dates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px 24px;
+}
+
+.asof-date { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+
+.asof-k {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.asof-v {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.asof-n { font-size: 11px; color: var(--text-muted); }
+
+.asof-say { font-size: 12.5px; line-height: 1.5; }
+.asof-say p { margin: 0; }
+.asof-say p + p { margin-top: 5px; }
+
+/* On a phone the three date blocks stacking one per row pushes the prose --
+   which is the part that answers the question -- below the fold. Two up keeps
+   the whole stamp on one screen. */
+@media (max-width: 720px) {
+  .asof { padding: 11px 13px 12px; }
+  .asof-dates { grid-template-columns: repeat(auto-fit, minmax(142px, 1fr)); gap: 10px 14px; }
+  .asof-v { font-size: 15px; }
 }

@@ -159,7 +159,8 @@ Consequences that are wired in rather than left to the reader:
   0–30 bucket, which is the number that survives the month-start distortion.
 - **Financials always read the closed month**, in both modes. The general ledger
   does not post intra-month, so a live NOI would read as a collapse to zero. The
-  tab and the NOI tile both say so.
+  tab, the NOI tile and the P&L drill-in all date themselves; see
+  [the as-of stamp](#the-as-of-stamp-on-the-financials-tab).
 - Live collection rates are **not colour-banded** against the full-month
   threshold. A 44% month-to-date rate on day 4 is not a red flag.
 
@@ -479,6 +480,58 @@ What the chart then shows, with the loads set aside: **eight consecutive losing
 months through 2026**, 1,400 moves netting −168 over the ten clean months to
 July. August 2026 reads +26 and is not real either — its move-outs have not
 posted, which is its own flag.
+
+## The as-of stamp on the Financials tab
+
+The Financials tab is the one place where the masthead toggle does nothing.
+Switch the header from August to September and revenue, NOI and every variance
+on the tab hold perfectly still, because the ledger posts after a month closes.
+That is the right behaviour and it looks exactly like a broken page. So the tab
+opens on a stamp carrying the three dates that decide how to read everything
+beneath it:
+
+| Stamp field | What it answers | Where it comes from |
+|---|---|---|
+| **Reporting month** | Which month is this P&L? | last non-partial point in the financials series |
+| **Ledger read** | How fresh is the snapshot behind it? | the date `build.py` ran |
+| **Expenses complete through** | Is the NOI trustworthy? | last month whose expense ratio sits inside its own trailing band |
+
+The third is the one that matters and it is routinely a month behind the first.
+On 2026-09-08 the stamp reads August 2026 / Sep 8, 2026 / **July 2026**: August
+operating expense came in at 29% of revenue against a 37.4% trailing median, so
+August NOI of $2.67M is flattered by roughly $316K of bills that have not landed
+yet. The same reading drives the `closed-month-expenses-part-posted` data note —
+one computation, `expense_posting()` in `build.py`, feeding both, so the stamp
+and the note cannot disagree.
+
+When the header and the tab are on different months the stamp warms to a yellow
+wash and argues the case in that month's own numbers rather than asserting it:
+
+> The header is on Sep 2026, day 8. This tab is not, and will not follow it:
+> revenue, expense and NOI report Aug 2026 under either period. $2.51M of
+> revenue has posted against Sep 2026 and only $116K of expense — 5% of revenue
+> against a 37% median, so an open-month P&L would print an NOI near $2.40M off
+> a few days of bills.
+
+That asymmetry is the whole reason the tab does not follow the toggle. Rent
+accrues on the 1st; bills arrive all month. An open-month P&L carries nearly a
+full month of revenue against a few days of expense, and the NOI it prints is an
+artefact of the calendar. Quoting the ratio makes that arithmetic visible instead
+of asking the reader to take it on trust.
+
+Three smaller consequences:
+
+- `period.financials.month` is the single source for every financial month label
+  on the page, read through `finMonthOf(d)` in `app.js`. It is **not** the same
+  field as `period.closed`: if the GL has not posted the month just ended, the
+  last posted month is older, and a panel note reading "closed August" over July
+  numbers would be a lie.
+- The **P&L drill-in repeats the stamp** as a one-line note. It gets opened
+  straight from a table row and read on its own, two clicks away from the tab
+  header, so it has to date itself.
+- Brand yellow is used for the stamp's background wash, never for its type. Read
+  as text on that wash it fails contrast in both themes, so the "a month behind
+  the P&L" caveat is carried by weight instead.
 
 ## Financials tab: order and the utility panel
 

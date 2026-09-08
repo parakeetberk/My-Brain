@@ -50,6 +50,24 @@
     return MONTH_NAMES[parseInt(p[1], 10) - 1] + " " + p[0];
   }
 
+  /* "2026-09-08" -> "Sep 8, 2026". Parsed from the string parts on purpose:
+     new Date("2026-09-08") is read as UTC midnight and prints as the 7th for
+     anyone west of Greenwich, which is the whole company. */
+  function dayLabel(iso) {
+    if (!iso) return "";
+    var p = String(iso).slice(0, 10).split("-");
+    if (p.length < 3) return String(iso);
+    return MONTH_NAMES[parseInt(p[1], 10) - 1] + " " +
+      parseInt(p[2], 10) + ", " + p[0];
+  }
+
+  /* The month every financial figure on the page reports. Not always the closed
+     month: if the GL has not posted the month just ended, the last posted month
+     is older, and a label reading "closed August" over July numbers is a lie. */
+  function finMonthOf(d) {
+    return ((d.period || {}).financials || {}).month || d.period.closed;
+  }
+
   function monthShort(ym) {
     if (!ym) return "";
     var p = String(ym).split("-");
@@ -1172,7 +1190,7 @@
              v.charged ? pct(v.collection_pct) : "—",
              money(v.paid, { compact: true }) + " of " + money(v.charged, { compact: true })),
         Stat("NOI", money(c.closed.noi, { compact: true }),
-             "closed " + monthLabel(d.period.closed),
+             "closed " + monthLabel(finMonthOf(d)),
              c.closed.noi_budget && c.closed.noi < c.closed.noi_budget ? RED : GREEN),
         Stat("Utility recapture",
              e.utility_recapture_pct == null ? "—" : pct(e.utility_recapture_pct, 0),
@@ -1258,16 +1276,26 @@
           : h("span", { style: { color: "var(--text-muted)" } }, "—"))));
     });
 
+    var fin = (d.period || {}).financials || {};
+    var finMonth = finMonthOf(d);
     return h("div", null,
       h("div", { className: "panel-head" },
         h("h2", null, "Revenue and expense against budget"),
+        /* Same three dates as the stamp on the Financials tab. A drill-in gets
+           opened straight from a table and read on its own, so it has to date
+           itself rather than rely on a header two clicks away. */
         h("div", { className: "note" },
-          "Closed " + monthLabel(d.period.closed) + " and year to date through the same month")),
+          "Closed " + monthLabel(finMonth) + " and year to date through the same " +
+          "month · ledger read " + dayLabel(fin.ledger_read || d.generated_at) +
+          (fin.expenses_full_through && fin.expenses_full_through !== finMonth
+            ? " · expenses fully posted only through " +
+              monthLabel(fin.expenses_full_through)
+            : ""))),
       h("div", { className: "table-scroll" },
         h("table", { className: "data" },
           h("thead", null, h("tr", null,
             h("th", { style: { cursor: "default" } }, "Line"),
-            h("th", { style: { cursor: "default" } }, monthLabel(d.period.closed)),
+            h("th", { style: { cursor: "default" } }, monthLabel(finMonth)),
             h("th", { style: { cursor: "default" } }, "Budget"),
             h("th", { style: { cursor: "default" } }, "Variance"),
             h("th", { style: { cursor: "default" } }, "YTD"),
@@ -1851,7 +1879,8 @@
         title: groups.length + (groups.length === 1 ? " vehicle" : " vehicles") +
                ", " + filtered.length + " communities",
         note: (live ? "Live through day " + d.period.live_day : "Closed " + monthLabel(d.period.closed)) +
-              " · NOI always closed · click a vehicle to expand, a name to drill in",
+              " · NOI always closed " + monthLabel(finMonthOf(d)) +
+              " · click a vehicle to expand, a name to drill in",
         cols: cols, groups: groups,
         initialSort: { key: "occupancy", dir: 1 },
         footer: [
@@ -2559,10 +2588,96 @@
         rows: typeRows, initialSort: { key: "vacant", dir: -1 }
       })));
   }
+  /* The as-of stamp. Every figure on this tab is a closed-month figure and the
+     header's period toggle does not move any of them, because the general
+     ledger posts after a month closes. Switching the header to September and
+     watching revenue, NOI and every variance hold still reads as a broken page
+     unless something says otherwise, so this says it -- and says it loudest in
+     exactly that case, when the toggle and the tab disagree.
+
+     Three dates, because they are three different questions: which month the
+     P&L covers, when the ledger behind it was read, and how far the expense
+     side has actually posted. The third is the one that decides whether the NOI
+     is trustworthy, and it is routinely a month behind the first. */
+  function FinancialsAsOf(props) {
+    var d = props.data, mode = props.mode;
+    var f = (d.period || {}).financials || {};
+    var month = f.month || d.period.closed;
+    var mismatch = mode === "live" && d.period.live !== month;
+    var behind = f.expenses_full_through && f.expenses_full_through !== month;
+
+    /* Why the tab holds still, in that month's own numbers. Rent accrues on the
+       1st while bills arrive all month, so an open-month P&L carries most of a
+       month of revenue against a few days of expense: the NOI it prints is an
+       artefact of the calendar, not a result. Quoting the ratio makes that
+       arithmetic visible instead of asking the reader to take it on trust. */
+    var lines = [];
+    var M = function (v) { return money(v, { compact: true }); };
+    // The arithmetic belongs where the disagreement is visible. On the live
+    // toggle it is the answer to "why has nothing moved"; on the closed toggle
+    // it is background, and a paragraph of it there is just noise.
+    if (mismatch) {
+      lines.push("The header is on " + monthLabel(d.period.live) + ", day " +
+        d.period.live_day + ". This tab is not, and will not follow it: revenue, " +
+        "expense and NOI report " + monthLabel(month) + " under either period. " +
+        (f.live_revenue
+          ? M(f.live_revenue) + " of revenue has posted against " +
+            monthLabel(d.period.live) + " and only " + M(f.live_opex) + " of expense" +
+            (f.live_expense_ratio != null && f.expense_ratio_median != null
+              ? " — " + pct(f.live_expense_ratio, 0) + " of revenue against a " +
+                pct(f.expense_ratio_median, 0) + " median"
+              : "") +
+            ", so an open-month P&L would print an NOI near " + M(f.live_noi) +
+            " off a few days of bills."
+          : "Nothing has posted against " + monthLabel(d.period.live) + " yet."));
+    } else {
+      lines.push("Revenue, expense and NOI report closed " + monthLabel(month) +
+        " and do not follow the period toggle: rent accrues on the 1st while " +
+        "bills arrive all month, so an open-month P&L flatters itself." +
+        (f.live_revenue
+          ? " " + monthLabel(d.period.live) + " stands at " + M(f.live_revenue) +
+            " of revenue against " + M(f.live_opex) + " of expense so far."
+          : ""));
+    }
+    if (behind) {
+      lines.push("Expenses look fully posted only through " +
+        monthLabel(f.expenses_full_through) + "." +
+        (f.part_posted && f.expense_ratio != null && f.expense_ratio_median != null
+          ? " " + monthLabel(month) + " operating expense is " +
+            pct(f.expense_ratio, 0) + " of revenue against a " +
+            pct(f.expense_ratio_median, 0) + " median, so its NOI is flattered."
+          : "") +
+        " Read the month against budget, not as a result.");
+    }
+
+    return h("div", { className: "asof" + (mismatch ? " mismatch" : "") },
+      h("div", { className: "asof-dates" },
+        h("div", { className: "asof-date" },
+          h("span", { className: "asof-k" }, "Reporting month"),
+          h("span", { className: "asof-v" }, monthLabel(month)),
+          h("span", { className: "asof-n" }, "closed and posted")),
+        h("div", { className: "asof-date" },
+          h("span", { className: "asof-k" }, "Ledger read"),
+          h("span", { className: "asof-v" }, dayLabel(f.ledger_read || d.generated_at)),
+          h("span", { className: "asof-n" }, "warehouse snapshot behind this tab")),
+        h("div", { className: "asof-date" },
+          h("span", { className: "asof-k" }, "Expenses complete through"),
+          h("span", { className: "asof-v" },
+            f.expenses_full_through ? monthLabel(f.expenses_full_through) : "—"),
+          h("span", { className: "asof-n" + (behind ? " flagged" : "") },
+            behind ? "a month behind the P&L" : "in line with the P&L"))),
+      h("div", { className: "asof-say" }, lines.map(function (t, i) {
+        return h("p", { key: i }, t);
+      })));
+  }
+
   function FinancialsTab(d, filtered, mode, ctx) {
     var th = d.thresholds;
     // Always the closed month. The general ledger does not post intra-month, so
     // an open-month revenue or NOI figure would read as a collapse to zero.
+    // finMonth is that month, named once here so the stamp, the P&L note and
+    // every panel note below cannot drift apart.
+    var finMonth = ((d.period || {}).financials || {}).month || d.period.closed;
     var V = function (c) { return c.closed; };
     var E = function (c) { return c.expenses || {}; };
 
@@ -2646,13 +2761,15 @@
     var groups = groupByVehicle(d, filtered, mode);
 
     return h("div", null,
-      /* Order set by review: the P&L is what gets opened first, the budget
-         charts are the next question asked of it, and the expense composition
-         and utility picture are the analysis behind both. */
+      /* The as-of stamp comes before the numbers it dates. Order below set by
+         review: the P&L is what gets opened first, the budget charts are the
+         next question asked of it, and the expense composition and utility
+         picture are the analysis behind both. */
+      h(FinancialsAsOf, { data: d, mode: mode }),
       h("section", { className: "panel" },
         h(GroupedTable, {
           title: "P&L by vehicle",
-          note: "Closed " + monthLabel(d.period.closed) +
+          note: "Closed " + monthLabel(finMonth) +
                 " · click a community for its line items, month and year to date",
           cols: cols, groups: groups,
           initialSort: { key: "noi", dir: -1 },
@@ -2669,8 +2786,9 @@
       h("div", { className: "grid-2" },
         h(Panel, { title: "Revenue against budget",
                    note: d.period.budget_from
-                     ? "Actual versus plan · budget loaded from " + monthLabel(d.period.budget_from)
-                     : "Actual versus plan, by closed month" },
+                     ? "Closed months through " + monthLabel(finMonth) +
+                       " · budget loaded from " + monthLabel(d.period.budget_from)
+                     : "Closed months through " + monthLabel(finMonth) },
           h(LineChart, {
             series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
             lines: [{ key: "revenue", color: GREEN, area: true },
@@ -2683,7 +2801,8 @@
             h("span", null, h("i", { style: { background: GREEN } }), "Actual"),
             h("span", null, h("i", { style: { background: NAVY } }), "Budget"))),
         h(Panel, { title: "NOI against budget",
-                   note: "Excludes debt service, CapEx and depreciation" +
+                   note: "Closed months through " + monthLabel(finMonth) +
+                     " · excludes debt service, CapEx and depreciation" +
                      (d.period.budget_from ? " · budget from " + monthLabel(d.period.budget_from) : "") },
           h(LineChart, {
             series: closedOnly(d.trends.financials), zeroBase: false, height: 230,
@@ -2700,7 +2819,7 @@
       h("div", { className: "grid-2" },
         h(Panel, {
           title: "Operating expense ratio",
-          note: "Operating expense against revenue · closed " + monthLabel(d.period.closed)
+          note: "Operating expense against revenue · closed " + monthLabel(finMonth)
         },
           /* The headline sits above the split, mirroring the recapture panel
              next to it: one KPI percentage, then its breakdown. The ratio is
@@ -2746,7 +2865,8 @@
 
         h(Panel, {
           title: "Utility recapture",
-          note: "Billed back against spend · target " + target + "%"
+          note: "Billed back against spend · closed " + monthLabel(finMonth) +
+                " · target " + target + "%"
         },
           h("div", { className: "bignum",
                      style: { color: recapture == null ? "var(--text-muted)"
@@ -3418,7 +3538,7 @@
             : "no budget loaded"
         }, h("div", { className: "kdelta flat" },
             h("span", { style: { fontWeight: 500, color: "var(--text-muted)" } },
-              pct(closedP.noi_margin, 0) + " margin · closed " + monthLabel(d.period.closed)))),
+              pct(closedP.noi_margin, 0) + " margin · closed " + monthLabel(finMonthOf(d))))),
 
         h(Kpi, {
           label: "Vacant, not leasable",

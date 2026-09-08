@@ -1,6 +1,6 @@
 {
- "schema_version": 10,
- "generated_at": "2026-09-08T11:26:15+00:00",
+ "schema_version": 11,
+ "generated_at": "2026-09-08T12:07:49+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -32,7 +32,19 @@
    "2026-07",
    "2026-08",
    "2026-09"
-  ]
+  ],
+  "financials": {
+   "month": "2026-08",
+   "ledger_read": "2026-09-08",
+   "expenses_full_through": "2026-07",
+   "part_posted": true,
+   "expense_ratio": 29.0,
+   "expense_ratio_median": 37.4,
+   "live_revenue": 2514494.0,
+   "live_opex": 116468.0,
+   "live_expense_ratio": 4.6,
+   "live_noi": 2398026.0
+  }
  },
  "thresholds": {
   "occupancy": {
@@ -194082,7 +194094,7 @@
    "id": "closed-month-expenses-part-posted",
    "severity": "warn",
    "title": "2026-08 expenses look only partly posted",
-   "detail": "Operating expense is 29% of revenue against a 37% median for the trailing year, a gap worth about $317K. NOI of $2.67M for the month is flattered by roughly that much and should not be read as performance until the ledger is closed out. 2026-07 is the last month with a full expense picture.",
+   "detail": "Operating expense is 29% of revenue against a 37% median for the trailing year, a gap worth about $316K. NOI of $2.67M for the month is flattered by roughly that much and should not be read as performance until the ledger is closed out. 2026-07 is the last month with a full expense picture.",
    "first_seen": "2026-09-05",
    "last_seen": "2026-09-08",
    "days_open": 3,
