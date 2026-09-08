@@ -417,5 +417,92 @@
     "build.py does by charge name, once the totals reconcile."
    ]
   }
+ },
+ "asset_listing": {
+  "out": "rm_asset_listing_daily.json",
+  "_comment": [
+   "REPLACES the Rent Manager API call (report 244). Austin's call: read the",
+   "SharePoint drop instead. It is strictly better and it already has history.",
+   "",
+   "A dated CSV lands here every morning around 08:02-08:09 ET. 387 files as of",
+   "2026-09-08, so months of daily home-level history already exist -- assets are",
+   "the one thing we do NOT have to start accumulating from today.",
+   "",
+   "125 columns against the API's 30. What the API never gave us:",
+   "  * the entire home setup sequence with dates -- permit submitted/received,",
+   "    demo, footers/pads, spot units, set-side-tie-down, interior trim out,",
+   "    water/sewer/electrical/AC connection, skirting/gutter, steps/deck,",
+   "    PUNCH OUT, cert of occupancy. Twelve stages, each with a date, which",
+   "    makes time-in-stage derivable per home right now off existing files.",
+   "  * `UDF: Punch Out Date`. The dashboard carries a note saying there is no",
+   "    punch stage in Rent Manager. There is; it was never in the API pull.",
+   "  * Market Rent, Occupant, Est. Rehab Cost/Demo, the title workflow, and the",
+   "    lease-option (LOP) terms.",
+   "",
+   "TWO HAZARDS BEFORE USING THE HISTORY:",
+   "  1. The schema is not stable across the archive. Files around 2026-08-13",
+   "     to 08-17 and 08-31 carry a different header that begins with property",
+   "     name and short code (\"Whispering Pines FL\",\"WPMH\",...) rather than the",
+   "     125-column layout below. Read the header of every file; never assume",
+   "     column positions across dates.",
+   "  2. Column 101 is `UDF: Sewer Connection Date'` with a trailing apostrophe",
+   "     in the source. Match on the exact string or normalise it."
+  ],
+  "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/ParakeetBirdcage/Data  Analytics/Rent Manager/Historical Asset Listing/",
+  "file_pattern": "Asset Listing_YYMMDD.csv",
+  "lands_daily": "~08:05 ET",
+  "columns_current": 125,
+  "expect_rows_min": 1500,
+  "key_columns": [
+   "Property",
+   "Unit",
+   "Asset Name",
+   "Asset Type",
+   "Current Status"
+  ],
+  "pipeline_stages": [
+   "UDF: Permit Submitted Date",
+   "UDF: Permit Received Date",
+   "UDF: Demo Date",
+   "UDF: Footers / Pads Date",
+   "UDF: Spot Units Date",
+   "UDF: Set, Side & Tie Down",
+   "UDF: Interior Trim Out Date",
+   "UDF: Water Connection Date",
+   "UDF: Sewer Connection Date'",
+   "UDF: Electrical Connection Date",
+   "UDF: AC Connection Date",
+   "UDF: Skirting / Gutter Date",
+   "UDF: Steps/Deck Date",
+   "UDF: Punch Out Date",
+   "UDF: Cert of Occupancy Date"
+  ]
+ },
+ "prospects": {
+  "out": "prospects.json",
+  "status": "NOT WIRED -- no daily drop exists yet",
+  "_comment": [
+   "Austin is enabling a warehouse view. Until then there is no daily prospect",
+   "feed, so stage history still has to be accumulated forward. Three one-off",
+   "exports exist on SharePoint and none of them repeats:",
+   "",
+   "  1. `.../SAM Umbrella/initial info/AB reports sent/JW Claude_*-1-Prospect",
+   "     Stage Listing.csv` -- Rent Manager report 676. Columns: Stage, Name,",
+   "     Property, Unit, First Contact, Last Contact, Stage Date. This is the",
+   "     shape we want; it is a single snapshot from 2026-05-21.",
+   "  2. `.../SAM Umbrella/initial info/DW_Prospect Status Report_*.csv` -- the",
+   "     `DW_` prefix suggests this is already a warehouse export. Carries",
+   "     ProspectStage plus `Days In System` and `Application Days`, i.e.",
+   "     time-in-stage precomputed. Closest match to what Austin described.",
+   "     One-off, 2026-05-28.",
+   "  3. `.../SAM CRM & Prospect Reporting/Prospects_YYYY_MM_DD.csv` -- Zoho CRM",
+   "     export. Prospect Owner, Prospect Source, Prospect Status.",
+   "",
+   "PII. Files 1 and 3 carry prospect names, and the Zoho export also carries",
+   "email addresses and phone numbers. Any of these must be staged through the",
+   "same discipline as the eviction tracker: strip the identifying columns and",
+   "refuse to write a file that still contains them. Keep Property and Unit as",
+   "the join key. See pipeline/stage_eviction.py for the pattern."
+  ]
  }
 }

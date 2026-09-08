@@ -111,16 +111,60 @@ That makes them a third reconciliation, the same discipline as
 is real. Where they disagree, one of them is wrong and we find out before the
 team does.
 
+## Assets come from SharePoint, not the API, and the history already exists
+
+Austin's call, and it is a straight upgrade. A dated `Asset Listing_YYMMDD.csv`
+lands in `Birdcage/Data Analytics/Rent Manager/Historical Asset Listing/` every
+morning around 08:05. **387 files as of 2026-09-08**, so homes are the one thing
+we do not have to start accumulating today — the daily history is already there.
+
+It carries **125 columns against the API's 30**, and the difference is not
+padding. The whole home setup sequence is in it, each stage with its own date:
+permit submitted and received, demo, footers and pads, spot units, set side and
+tie down, interior trim out, water, sewer, electrical and AC connection,
+skirting and gutter, steps and deck, **punch out**, certificate of occupancy.
+
+Two consequences.
+
+**It closes an open data note.** The dashboard says there is no punch stage in
+Rent Manager, so the home pipeline jumps from rehab straight to ready. There is
+a punch stage. `UDF: Punch Out Date` was simply never in the API pull.
+
+**Time-in-stage for homes is answerable now.** Fifteen dated stages across
+months of daily files means we can compute how long each home sat at each step,
+and what normal looks like, without waiting for a baseline to accumulate. That
+is the analysis Austin wanted for prospects, available immediately for homes.
+
+Two hazards before trusting the archive. The schema is **not stable across
+dates** — files around 2026-08-13 to 08-17 and 08-31 carry a different header
+beginning with property name and short code rather than the 125-column layout.
+Read every file's header; never assume column positions. And column 101 is
+`UDF: Sewer Connection Date'` with a trailing apostrophe in the source.
+
 ## Prospects
 
-Stage history exists in neither system today. Austin is enabling a warehouse
-view; that is the starting source because it will carry history. Zoho CRM (MAV)
-owns top of funnel and exports notes to `main/Sales/Reporting/ZOHO CRM (MAV)/`,
-and stitching it in is a later phase once the handoff point between Zoho and
-Rent Manager is defined.
+No daily prospect feed exists. Three one-off exports sit on SharePoint and none
+of them repeats:
 
-Until the view exists there is nothing to capture, so prospects are not in
-phase one.
+| File | Source | What it has |
+|---|---|---|
+| `JW Claude_*-1-Prospect Stage Listing.csv` | RM report 676 | Stage, Property, Unit, First Contact, Last Contact, **Stage Date** |
+| `DW_Prospect Status Report_*.csv` | warehouse (`DW_` prefix) | ProspectStage, **Days In System**, **Application Days** |
+| `Prospects_YYYY_MM_DD.csv` | Zoho CRM | Prospect Owner, Source, Status |
+
+The `DW_` file is the closest match to what Austin described and suggests the
+warehouse view he is enabling may be a revival of something that already ran.
+Both it and the RM export carry Stage Date or a days-in-stage measure, which is
+what the funnel question needs.
+
+Until one of them lands daily, prospect history still has to be accumulated
+forward, so prospects stay out of phase one.
+
+**PII.** The RM stage listing carries prospect names and the Zoho export
+carries names, email addresses and phone numbers. Any of these gets staged
+through the same discipline as the eviction tracker: strip the identifying
+columns, keep Property and Unit as the join key, and refuse to write a file
+that still contains them. `pipeline/stage_eviction.py` is the pattern.
 
 ## Blocked on one thing
 
