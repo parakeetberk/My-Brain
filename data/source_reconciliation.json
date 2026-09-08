@@ -1,0 +1,34 @@
+{
+ "runs": [
+  {
+   "date": "2026-09-08",
+   "source": "ar",
+   "warehouse_total": 1012231.04,
+   "rent_manager_total": 1525120.25,
+   "gap": -512889.21,
+   "shared_keys": 704,
+   "only_warehouse": 62,
+   "only_rent_manager": 879,
+   "only_rent_manager_value": 648439.12,
+   "warehouse_as_of": "2026-09-05",
+   "rent_manager_as_of": "2026-09-04",
+   "drift_days": 1,
+   "note": "warehouse snapshot vs the rent manager pull; if the gap is timing it should collapse when both are pulled the same day"
+  },
+  {
+   "date": "2026-09-08",
+   "source": "rentroll",
+   "warehouse_total": 2920711.6,
+   "rent_manager_total": 2920711.6,
+   "gap": 0.0,
+   "shared_keys": 7343,
+   "only_warehouse": 97,
+   "only_rent_manager": 1,
+   "only_rent_manager_value": 0.0,
+   "warehouse_as_of": "2026-08-31",
+   "rent_manager_as_of": "2026-09-04",
+   "drift_days": -4,
+   "note": "rent charges, the first field"
+  }
+ ]
+}
