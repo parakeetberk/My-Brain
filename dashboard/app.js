@@ -3461,6 +3461,13 @@
     var p = d.portfolio[mode], th = d.thresholds;
     var closedP = d.portfolio.closed;
     var live = mode === "live";
+    // Receivables come from Rent Manager, which is as-of-run, while occupancy
+    // and collections come from the warehouse snapshot. When those two dates
+    // differ the live column carries both, and every AR figure has to say
+    // which one it is on rather than inherit the header's day.
+    var arSplit = live && d.period.ar_as_of &&
+                  d.period.ar_as_of !== d.period.live_as_of;
+    var arStamp = arSplit ? " · as of " + d.period.ar_as_of : "";
     var active = TABS.filter(function (t) { return t.id === tab; })[0];
     var showFilters = tab !== "overview";
 
@@ -3488,7 +3495,13 @@
                   ", not day " + new Date().getDate() + ": the warehouse has " +
                   "not refreshed since. Collections is a flow, so dividing " +
                   "these dollars by the calendar would read the month as worse " +
-                  "than it is.")
+                  "than it is." +
+                  (arSplit
+                    ? " Receivables are the exception and are current to " +
+                      d.period.ar_as_of + ", straight from " +
+                      (d.period.ar_source || "Rent Manager") +
+                      "; occupancy, collections and moves are the snapshot above."
+                    : ""))
               : null)),
         h(PeriodToggle, { data: d, mode: mode, onChange: setMode })),
 
@@ -3526,7 +3539,7 @@
           label: "Past due 30+",
           value: money(p.ar_past_due_30plus, { compact: true }),
           color: RED,
-          sub: "everything outside the 0–30 bucket"
+          sub: "everything outside the 0–30 bucket" + arStamp
         }, h(Delta, { curr: p.ar_past_due_30plus, prev: closedP.ar_past_due_30plus, money: true,
                       invert: true,
                       suffix: live ? "vs " + monthLabel(d.period.closed) + " close" : "vs prior month",
@@ -3536,7 +3549,8 @@
           label: "90+ days",
           value: money(p.ar_90_plus, { compact: true }),
           color: bandColor(band(p.ar_over90_share, th.over90_share, true)),
-          sub: pct(p.ar_over90_share, 0) + " of " + money(p.ar_total, { compact: true }) + " total AR"
+          sub: pct(p.ar_over90_share, 0) + " of " + money(p.ar_total, { compact: true }) +
+               " total AR" + arStamp
         }),
 
         h(Kpi, {

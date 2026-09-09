@@ -30,6 +30,34 @@
    "severity": "warn",
    "title": "The 90+ bucket is up 31% in seven months"
   },
+  "ar-communities-unreported-by-rm": {
+   "first_seen": "2026-09-09",
+   "history": [
+    {
+     "date": "2026-09-09",
+     "event": "opened",
+     "severity": "warn",
+     "title": "5 reportable communities have no receivables in Rent Manager"
+    }
+   ],
+   "last_seen": "2026-09-09",
+   "severity": "warn",
+   "title": "5 reportable communities have no receivables in Rent Manager"
+  },
+  "ar-split-live-rm-history-warehouse": {
+   "first_seen": "2026-09-09",
+   "history": [
+    {
+     "date": "2026-09-09",
+     "event": "opened",
+     "severity": "info",
+     "title": "Receivables: live from Rent Manager, history from the warehouse"
+    }
+   ],
+   "last_seen": "2026-09-09",
+   "severity": "info",
+   "title": "Receivables: live from Rent Manager, history from the warehouse"
+  },
   "closed-month-expenses-part-posted": {
    "first_seen": "2026-09-05",
    "history": [
@@ -172,12 +200,12 @@
      "date": "2026-09-09",
      "event": "changed",
      "severity": "info",
-     "title": "Live receivables run $328K above the closed month by design"
+     "title": "Live receivables run $160K above the closed month by design"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "Live receivables run $328K above the closed month by design"
+   "title": "Live receivables run $160K above the closed month by design"
   },
   "lots-exceed-pds-core": {
    "first_seen": "2026-09-05",

@@ -93,7 +93,28 @@
     ],
     "limit": 5000,
     "question": "Aged receivables aging buckets by community by month, full history, for the AR trend chart"
-   }
+   },
+   "_comment": [
+    "HISTORY ONLY, AS OF 2026-09-09. This pull no longer feeds the live column.",
+    "",
+    "Austin's call: receivables on the page come from Rent Manager report 78, which",
+    "is the system of record and is as-of-run, so it is current to the day while",
+    "this snapshot refreshes on an irregular cadence. Pinned to the same asOfDate",
+    "the two sources agree to $77K inside the roster, so the $513K gap that held",
+    "the switch up was the grace day, not a model difference.",
+    "",
+    "WHAT THIS PULL STILL OWNS, and why it cannot be retired: every closed month.",
+    "The receivables trend, the 90+ trend and the month-end baselines all read it.",
+    "Report 78 honours asOfDate but RECONSTRUCTS aging from the current ledger",
+    "rather than reading a stored snapshot, so money written off or reversed since",
+    "has vanished from its version of the past -- at the 2026-08-31 month end it",
+    "returns $491K against the real $618,782 recorded here, on 283 accounts against",
+    "419. Rebuilding the trend from report 78 would slope the 90+ line the wrong way",
+    "for a reason that has nothing to do with operations.",
+    "",
+    "So: keep pulling this every run, unchanged. build.py replaces ONLY the live",
+    "month. Both measurements are logged in data/source_reconciliation.json."
+   ]
   },
   {
    "out": "rentroll_by_property_month.json",
@@ -524,6 +545,111 @@
    "same discipline as the eviction tracker: strip the identifying columns and",
    "refuse to write a file that still contains them. Keep Property and Unit as",
    "the join key. See pipeline/stage_eviction.py for the pattern."
+  ]
+ },
+ "rm_reports": {
+  "_comment": [
+   "The five Rent Manager API pulls, written down here for the first time on",
+   "2026-09-09. They were previously declared only in the scheduled routine's",
+   "prompt, which is why they were once left out of the refresh entirely and sat",
+   "four days stale while everything around them was same-day, and why the rent",
+   "roll was still being pulled for the wrong month.",
+   "",
+   "All five go through mcp__RentView_Rent_Manager_API__run_report except the",
+   "property ids, which is list_entities. `properties` defaults to All; there is",
+   "no need to pass the id list.",
+   "",
+   "STAMP EVERY PULL WITH `_as_of`. These reports are as-of-run and state nothing",
+   "in their rows about when they were taken. build.py does not gate on it -- an",
+   "unattended run must not die over a metadata key -- but without it the",
+   "receivables column falls back to dating itself from its newest charge, which",
+   "is a LOWER BOUND, and raises the `ar-pull-not-stamped` flag.",
+   "",
+   "BROKEN SERVER SIDE, do not spend time on them: 74 Vacancy, 67 RentRoll,",
+   "10 UnitAvailability, 75 UnitTypeVacancy, 6 UnitList. All return HTTP 500 for",
+   "every parameter combination. SummaryRentRoll (69) carries the same fields."
+  ],
+  "pulls": [
+   {
+    "out": "rm_property_ids.json",
+    "call": "list_entities(entityType='Properties')",
+    "writes": [
+     "property_ids",
+     "id_to_short",
+     "short_to_name"
+    ],
+    "_note": [
+     "Run FIRST; the other four resolve to communities through entity id and short name.",
+     "Write the FULL entity list, not a roster-restricted one. build.py filters, and",
+     "short_to_name is what lets a utility sub-ledger's receivables reach its parent."
+    ]
+   },
+   {
+    "out": "rm_rent_roll.json",
+    "report_id": "69",
+    "report": "SummaryRentRoll",
+    "parameters": {
+     "startDate": "{{CLOSED_MONTH_START}}",
+     "endDate": "{{CLOSED_MONTH_END}}"
+    },
+    "expect_rows_min": 7000,
+    "_note": [
+     "THE CLOSED MONTH, not today. A pull left on the default date range returns the",
+     "month it happens to land in: on 2026-09-09 the committed file was still July."
+    ]
+   },
+   {
+    "out": "rm_ar_detail.json",
+    "report_id": "78",
+    "report": "AgedReceivables",
+    "parameters": {
+     "isSummary": false,
+     "asOfDate": "{{TODAY}}"
+    },
+    "expect_rows_min": 6000,
+    "_note": [
+     "THIS IS NOW THE LIVE RECEIVABLES SOURCE for the page, not just the drill-in.",
+     "See the ar_by_property_month.json comment for why history stays on the warehouse.",
+     "DO NOT MERGE additionalGrids.Grid2. It is a property-level rollup of the SAME",
+     "money: ~32 rows summing to the identical portfolio total as the ~7,800 detail",
+     "rows. Verified again 2026-09-09 at $865,981.53 on both sides. Appending it would",
+     "exactly double portfolio AR and it looks like dropped data."
+    ]
+   },
+   {
+    "out": "rm_moves_detail.json",
+    "report_id": "77",
+    "report": "MoveInMoveOut",
+    "parameters": {
+     "startDate": "{{START_OF_PRIOR_YEAR}}",
+     "endDate": "{{TODAY}}"
+    },
+    "expect_rows_min": 3500,
+    "pii_strip": [
+     "AccountsFirstName",
+     "AccountsLastName",
+     "AccountsName",
+     "AddressesStreet"
+    ],
+    "_note": [
+     "The ONLY report that returns resident names unredacted. Strip them and the street",
+     "address before anything downstream reads the file; the standalone build is emailed",
+     "around. Unit number plus account id is the whole identity the drill-ins need."
+    ]
+   },
+   {
+    "out": "rm_asset_listing.json",
+    "report_id": "244",
+    "report": "AssetListing",
+    "parameters": {},
+    "expect_rows_min": 1000,
+    "_note": [
+     "Not to be confused with pipeline/raw/asset_listing.json, which belongs to the",
+     "platform build thread and comes from the dated SharePoint CSVs: those carry 125",
+     "columns including the stage dates, this API report carries 30 and none of them.",
+     "Carries OccupantName populated on about 520 rows. Pre-existing, not stripped."
+    ]
+   }
   ]
  }
 }

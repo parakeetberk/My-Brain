@@ -86,9 +86,22 @@ STALE_DAYS = 1
 # lets a stale AR feed sit out a day without blocking occupancy from recording.
 FAMILIES = {
     "receivables": {
-        "source": "ar_by_property_month.json",
-        "cube": "VW_Aged_Receivables",
-        "date_key": "VW_Aged_Receivables.reportMonth",
+        # Repointed 2026-09-09 when the live column moved to Rent Manager.
+        #
+        # The VALUES were always taken from dashboard.json's live block, so they
+        # followed the switch on their own. The as-of and the change-hash did
+        # not: keyed on the warehouse file, this family would have gone on
+        # stamping RM figures with the warehouse's snapshot date, and -- worse
+        # -- would have appended nothing on any day the warehouse sat still.
+        # Since the warehouse refreshes irregularly and report 78 is as-of-run,
+        # that meant the one thing this store exists to record, the intra-month
+        # shape of receivables, would have quietly frozen.
+        #
+        # The month-end history stays on the warehouse in the separate
+        # `receivables_month_end` family, which this does not touch.
+        "source": "rm_ar_detail.json",
+        "cube": "Rent Manager report 78 AgedReceivables",
+        "date_key": "ChargesTransactionDate",
         "has_real_as_of": True,
         "metrics": ["ar_total", "ar_0_30", "ar_31_60", "ar_61_90", "ar_90_plus",
                     "ar_over90_share", "ar_past_due_30plus", "ar_accounts",
@@ -195,7 +208,10 @@ def read_family(fam, spec):
     if not rows:
         return None, "source file has no rows"
     wh = warehouse_asof()
-    stated = pl.get("as_of")            # the file-backed sources carry their own
+    # The file-backed sources carry their own as-of. `_as_of` is the same thing
+    # under this repo's convention for pull metadata, which is how the Rent
+    # Manager pulls stamp themselves.
+    stated = pl.get("as_of") or pl.get("_as_of")
     if stated:
         as_of, basis = stated, "stamped by the pull"
     elif wh:
@@ -220,6 +236,11 @@ def collect(d, fam, spec, read):
     for c in d["communities"]:
         row = {"family": fam, "as_of": as_of, "day": day,
                "describes": read.get("describes"),
+               # Which system produced this row. Receivables changed source on
+               # 2026-09-09, so a family can hold rows from two systems and
+               # anything computing a baseline across them has to be able to
+               # tell. Recorded per row rather than per family for that reason.
+               "source": spec["cube"],
                "drift_days": read.get("drift_days"),
                "community": c["short_name"], "park": c["name"],
                "vehicle": c.get("vehicle"), "kind": c.get("kind")}
@@ -276,10 +297,19 @@ def status():
                   % (fam, read["as_of_basis"], read.get("describes") or "?"))
     wh = warehouse_asof()
     if wh and wh["drift_days"] > STALE_DAYS:
+        # Receivables used to be the headline casualty of this drift. They are
+        # not any more: they come from Rent Manager, which is as-of-run. What
+        # the drift still moves is everything warehouse-backed, and collections
+        # is the one to watch because it is a flow -- the same dollars divided
+        # by the wrong number of elapsed days reads as a worse month.
+        stale = [f for f, sp in FAMILIES.items()
+                 if sp["source"].startswith(("ar_", "occupancy", "rentroll",
+                                             "financials", "moves"))]
         print("\n  STALE: the warehouse snapshot is %d days behind the read "
-              "(%s vs %s). AR is a stock, so drift moves it -- treat these "
-              "receivables figures as of %s, not today."
-              % (wh["drift_days"], wh["as_of"], wh["read_on"], wh["as_of"]))
+              "(%s vs %s), so treat %s as of %s rather than today. Receivables "
+              "are not affected -- they come from Rent Manager as-of-run."
+              % (wh["drift_days"], wh["as_of"], wh["read_on"],
+                 ", ".join(sorted(stale)), wh["as_of"]))
     print("\nstore holds %d rows across %d families"
           % (len(facts["rows"]), len(facts["families"])))
 

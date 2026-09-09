@@ -877,6 +877,7 @@ def build(raw_dir, out_dir, registry_path):
                 rm_lookup[str(k).strip().upper()] = c_name
 
     id_map = {}
+    rm_short_to_name = {}
     ids_path = os.path.join(raw_dir, "rm_property_ids.json")
     if os.path.exists(ids_path):
         with open(ids_path) as f:
@@ -885,6 +886,11 @@ def build(raw_dir, out_dir, registry_path):
             c_name = rm_lookup.get(str(short).strip().upper())
             if c_name:
                 id_map[str(pid)] = c_name
+        # Short name -> the property's full Rent Manager name, for the entities
+        # rm_lookup deliberately does not know: a utility sub-ledger is not a
+        # reportable community, but its money still has to reach a parent.
+        for short, full in (blob.get("short_to_name") or {}).items():
+            rm_short_to_name[str(short).strip().upper()] = full
 
     def rm_community(row):
         """Which reportable community an RM report row belongs to, or None."""
@@ -1238,6 +1244,131 @@ def build(raw_dir, out_dir, registry_path):
             })
         rows_out.sort(key=lambda x: -x["past_due_30plus"])
         ar_accounts_out[cname] = rows_out
+
+    # ---- live receivables: Rent Manager owns the column, warehouse the history -
+    #
+    # Austin's call, 2026-09-09. Two measurements settled it, both logged in
+    # data/source_reconciliation.json.
+    #
+    # WHY RENT MANAGER FOR THE LIVE READ. Report 78 is the system of record and
+    # is as-of-run, so it is current to today while the warehouse snapshot runs
+    # days behind on an irregular cadence. On the day this was wired the
+    # warehouse was four days stale and still reporting about $101K that had
+    # already been collected. Pinned to the same asOfDate the two sources agree
+    # to $77K inside the roster, so the $513K gap that had held this up was the
+    # grace day, not a model difference.
+    #
+    # WHY THE WAREHOUSE KEEPS THE HISTORY, and why this must never be extended
+    # to closed months. Report 78 honours asOfDate but RECONSTRUCTS aging from
+    # the current ledger rather than reading a stored snapshot, so anything
+    # written off, reversed or settled since has vanished from the past. At the
+    # 2026-08-31 month end it returns $491K against the warehouse's real
+    # snapshot of $618,782, 21% light, on 283 accounts against 419. The 90+
+    # bucket survives best because old money that is still old is still there;
+    # the recent buckets collapse. Rebuilding the trend that way would slope the
+    # 90+ line the wrong way for a reason that has nothing to do with
+    # operations, and it is the one line on this page nobody should flatter.
+    #
+    # So ONLY ar[name][live_month] is replaced. Every closed month, and
+    # therefore every trend point, baseline and month-end capture row, is
+    # untouched warehouse.
+    # `target` is rebound to an unrelated local further down this function, so
+    # it is bound here by default argument rather than captured by closure.
+    def rm_money_target(row, _target=target):
+        """Where an RM AR row's money lands, roll-ups included, or None."""
+        c = rm_community(row)
+        if c:
+            return c
+        # rm_community only resolves roster names, so a utility sub-ledger falls
+        # straight through it. The warehouse rolls that money into the parent
+        # community and dropping it here would quietly lose it -- about $12K
+        # across Applegate Water, Vantage Oaks Utility and Northgate Utility.
+        full = rm_short_to_name.get(str(row.get("EntitiesShortName") or "").strip().upper())
+        return _target(full) if full else None
+
+    def zero_ar():
+        return {"total": 0.0, "b0_30": 0.0, "b31_60": 0.0,
+                "b61_90": 0.0, "b90p": 0.0, "accounts": 0.0}
+
+    rm_ar_as_of, ar_source, ar_unreported = None, "warehouse", []
+    ar_as_of_inferred = False
+    if ar_rows_rm:
+        env_path = os.path.join(raw_dir, RM_SOURCES["rm_ar_detail"])
+        with open(env_path) as f:
+            env = json.load(f)
+        rm_ar_as_of = env.get("_as_of") if isinstance(env, dict) else None
+        if not rm_ar_as_of:
+            # Report 78 carries no as-of of its own, so the pull step should
+            # stamp `_as_of`. It is NOT a build gate, deliberately: the routine
+            # runs unattended into a session with no human in it, and killing
+            # the whole refresh over a missing metadata key would cost a day of
+            # every figure on the page to protect the label on one of them.
+            #
+            # So fall back to the newest charge in the file, which is a lower
+            # bound on the pull date and can never claim to be newer than the
+            # data actually is, and raise a flag so the omission is visible
+            # rather than absorbed.
+            dates = sorted(d for d in
+                           (str(r.get("ChargesTransactionDate") or "")[:10]
+                            for r in ar_rows_rm) if d)
+            rm_ar_as_of = dates[-1] if dates else read_on
+            ar_as_of_inferred = True
+            log("  WARN  %s carries no `_as_of`; dating the receivables column "
+                "from its newest charge, %s, which is a lower bound. Stamp the "
+                "file at pull time -- see pipeline/queries.json `rm_reports`."
+                % (RM_SOURCES["rm_ar_detail"], rm_ar_as_of))
+
+        rm_ar = defaultdict(zero_ar)
+        rm_acct = defaultdict(lambda: defaultdict(float))
+        for r in ar_rows_rm:
+            t = rm_money_target(r)
+            if not t:
+                continue
+            d = rm_ar[t]
+            d["total"] += num(r.get("TotalLeft"))
+            d["b0_30"] += num(r.get("LessThan30"))
+            d["b31_60"] += num(r.get("LessThan60"))
+            d["b61_90"] += num(r.get("LessThan90"))
+            d["b90p"] += num(r.get("GreaterThan90"))
+            acct = r.get("AccountsAccountID")
+            if acct is not None:
+                rm_acct[t][acct] += num(r.get("TotalLeft"))
+        # Match customersWithBalance: an account whose charges net to zero is
+        # not a balance anyone has to call about.
+        for t, accts in rm_acct.items():
+            rm_ar[t]["accounts"] = float(sum(1 for v in accts.values() if v > 0.005))
+
+        wh_live_before = sum((ar[n].get(live_month) or {}).get("total", 0.0) for n in kept)
+        for name in kept:
+            was, now = ar[name].get(live_month), rm_ar.get(name)
+            if was is None and now is None:
+                continue
+            if now is None:
+                # Rent Manager has no receivable rows for this community. Zero is
+                # the honest reading of the source that now owns the column, and
+                # the warehouse figure it replaces is named in a flag rather than
+                # dropped in silence.
+                if (was or {}).get("total", 0) > 0.005:
+                    ar_unreported.append((name, was["total"]))
+                ar[name][live_month] = zero_ar()
+            else:
+                ar[name][live_month] = dict(now)
+        ar_source = "Rent Manager report 78"
+        rm_live_total = sum((ar[n].get(live_month) or {}).get("total", 0.0) for n in kept)
+        log("live receivables from %s as of %s: %s, replacing the warehouse's %s"
+            % (ar_source, rm_ar_as_of, money(rm_live_total), money(wh_live_before)))
+        if rm_ar_as_of != live_as_of:
+            log("  NOTE: the live column now carries two as-of dates. Receivables "
+                "are %s; occupancy, collections and moves are still %s from the "
+                "warehouse snapshot."
+                % (rm_ar_as_of, live_as_of or "the calendar date"))
+        if ar_unreported:
+            log("  %d reportable %s no receivable rows in report 78 (%s of warehouse "
+                "balance now reads zero): %s"
+                % (len(ar_unreported),
+                   "community has" if len(ar_unreported) == 1 else "communities have",
+                   money(sum(v for _, v in ar_unreported)),
+                   ", ".join(n for n, _ in ar_unreported)))
 
     def vacancy_by_reason(name, comp):
         """
@@ -2523,6 +2654,59 @@ def build(raw_dir, out_dir, registry_path):
                        % ", ".join(sorted(rr_missing))),
         })
 
+    # Receivables now come from two systems on purpose, and a reader comparing
+    # the live tile against the trend chart is entitled to know which is which.
+    if ar_source != "warehouse":
+        flags.append({
+            "id": "ar-split-live-rm-history-warehouse",
+            "severity": "info",
+            "title": "Receivables: live from Rent Manager, history from the warehouse",
+            "detail": ("The live column reads %s as of %s. Every closed month, and so every "
+                       "point on the receivables and 90+ trends, is the warehouse's month-end "
+                       "snapshot. The split is deliberate. Report 78 is the system of record "
+                       "and is current to the day, and pinned to the same date the two sources "
+                       "agree inside the roster. But report 78 reconstructs aging from today's "
+                       "ledger instead of reading a stored snapshot, so at the %s month end it "
+                       "returns 21%% less than the warehouse actually recorded, on 283 accounts "
+                       "against 419. Written-off money disappears from its version of the past, "
+                       "which would flatter the one trend on this page that should not be "
+                       "flattered."
+                       % (ar_source, rm_ar_as_of, closed_month)),
+        })
+
+    if ar_as_of_inferred:
+        flags.append({
+            "id": "ar-pull-not-stamped",
+            "severity": "warn",
+            "title": "The receivables pull was not stamped with its as-of date",
+            "detail": ("Report 78 is as-of-run and states nothing in its rows about when it "
+                       "was taken, so the pull step is meant to write an `_as_of` key. This "
+                       "file has none, so the live receivables column is dated %s from its "
+                       "newest charge. That is a lower bound, not an as-of: the real pull "
+                       "could be later, and every receivable on the page would then be "
+                       "labelled older than it is. The fix is one line in the pull step."
+                       % rm_ar_as_of),
+        })
+
+    if ar_unreported:
+        flags.append({
+            "id": "ar-communities-unreported-by-rm",
+            "severity": "warn" if any(v > 20000 for _, v in ar_unreported) else "info",
+            "title": "%d reportable %s no receivables in Rent Manager"
+                     % (len(ar_unreported),
+                        "community has" if len(ar_unreported) == 1 else "communities have"),
+            "detail": ("Now that the live column comes from report 78 these read zero, and the "
+                       "warehouse balance they replace is %s: %s. Checked against Rent "
+                       "Manager's own rent roll, most of this is real: the debit balances "
+                       "there agree at or near zero, so those accounts paid and the warehouse "
+                       "snapshot simply had not seen it. Geiger Key is the exception that is "
+                       "not timing -- it has no Rent Manager property at all, its stays are "
+                       "booked in Campspot, so report 78 structurally cannot see its money."
+                       % (money(sum(v for _, v in ar_unreported)),
+                          ", ".join("%s %s" % (n, money(v))
+                                    for n, v in sorted(ar_unreported, key=lambda x: -x[1])))),
+        })
+
     rec = portfolio["expenses"].get("utility_recapture_pct")
     target = cfg.get("expense_buckets", {}).get("utility_recapture", {}).get("target_pct")
     if rec is not None and target and rec < target:
@@ -2587,6 +2771,15 @@ def build(raw_dir, out_dir, registry_path):
             "live_day_basis": live_basis,
             "read_on": read_on,
             "drift_days": drift_days,
+            # Receivables date themselves separately from the rest of the live
+            # column. They come from Rent Manager, which is as-of-run, while
+            # occupancy, collections and moves come from the warehouse snapshot.
+            # When the two disagree the page has to say which is which rather
+            # than let one `live_day` speak for both.
+            "ar_source": ar_source,
+            "ar_as_of": rm_ar_as_of or live_as_of,
+            "ar_day": int(rm_ar_as_of[8:10]) if rm_ar_as_of else live_day,
+            "ar_history_source": "warehouse VW_Aged_Receivables month-end snapshots",
             "days_in_live": days_in_live,
             "grace_day": grace_day,
             "budget_from": budget_from,
