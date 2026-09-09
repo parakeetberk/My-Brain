@@ -1,0 +1,2606 @@
+{
+ "generated": "2026-09-09",
+ "snapshots": [
+  "2026-07-01",
+  "2026-07-02",
+  "2026-07-03",
+  "2026-07-04",
+  "2026-07-05",
+  "2026-07-08",
+  "2026-07-11",
+  "2026-07-13",
+  "2026-07-14",
+  "2026-07-15",
+  "2026-07-16",
+  "2026-07-17",
+  "2026-07-18",
+  "2026-07-19",
+  "2026-07-21",
+  "2026-07-22",
+  "2026-07-23",
+  "2026-07-24",
+  "2026-07-25",
+  "2026-07-26",
+  "2026-07-27",
+  "2026-07-29",
+  "2026-07-30",
+  "2026-07-31",
+  "2026-08-01",
+  "2026-08-02",
+  "2026-08-03",
+  "2026-08-04",
+  "2026-08-05",
+  "2026-08-06",
+  "2026-08-07",
+  "2026-08-08",
+  "2026-08-09",
+  "2026-08-10",
+  "2026-08-11",
+  "2026-08-12",
+  "2026-08-14",
+  "2026-08-15",
+  "2026-08-16",
+  "2026-08-18",
+  "2026-08-19",
+  "2026-08-20",
+  "2026-08-21",
+  "2026-08-22",
+  "2026-08-23",
+  "2026-08-25",
+  "2026-08-26",
+  "2026-08-27",
+  "2026-08-28",
+  "2026-08-29",
+  "2026-08-30",
+  "2026-09-01",
+  "2026-09-02",
+  "2026-09-03",
+  "2026-09-05",
+  "2026-09-06"
+ ],
+ "snapshot_count": 56,
+ "asset_counts": {
+  "2026-07-01": 1522,
+  "2026-07-02": 1522,
+  "2026-07-03": 1522,
+  "2026-07-04": 1522,
+  "2026-07-05": 1522,
+  "2026-07-08": 1525,
+  "2026-07-11": 1528,
+  "2026-07-13": 1528,
+  "2026-07-14": 1528,
+  "2026-07-15": 1528,
+  "2026-07-16": 1512,
+  "2026-07-17": 1512,
+  "2026-07-18": 1513,
+  "2026-07-19": 1513,
+  "2026-07-21": 1512,
+  "2026-07-22": 1512,
+  "2026-07-23": 1512,
+  "2026-07-24": 1513,
+  "2026-07-25": 1513,
+  "2026-07-26": 1513,
+  "2026-07-27": 1513,
+  "2026-07-29": 1519,
+  "2026-07-30": 1520,
+  "2026-07-31": 1521,
+  "2026-08-01": 1522,
+  "2026-08-02": 1522,
+  "2026-08-03": 1522,
+  "2026-08-04": 1522,
+  "2026-08-05": 1522,
+  "2026-08-06": 1522,
+  "2026-08-07": 1523,
+  "2026-08-08": 1523,
+  "2026-08-09": 1523,
+  "2026-08-10": 1523,
+  "2026-08-11": 1523,
+  "2026-08-12": 1523,
+  "2026-08-14": 1711,
+  "2026-08-15": 1712,
+  "2026-08-16": 1723,
+  "2026-08-18": 1724,
+  "2026-08-19": 1724,
+  "2026-08-20": 1724,
+  "2026-08-21": 1743,
+  "2026-08-22": 1743,
+  "2026-08-23": 1743,
+  "2026-08-25": 1744,
+  "2026-08-26": 1743,
+  "2026-08-27": 1743,
+  "2026-08-28": 1743,
+  "2026-08-29": 1746,
+  "2026-08-30": 1746,
+  "2026-09-01": 1739,
+  "2026-09-02": 1737,
+  "2026-09-03": 1738,
+  "2026-09-05": 1744,
+  "2026-09-06": 1744
+ },
+ "transitions": [
+  {
+   "asset": "CENT-C15",
+   "community": "Central Mobile Home Park",
+   "manufacturer": "Vaga",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "FOX-10",
+   "community": "Fox Creek",
+   "manufacturer": "HORTO",
+   "from": "TBD",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "FOX-126",
+   "community": "Fox Creek",
+   "manufacturer": "SOUTH",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "FOX-4",
+   "community": "Fox Creek",
+   "manufacturer": "SUNSH",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "OBOPO-955-43",
+   "community": "Ormond Beach Oasis",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "PARK-42",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "PARKWOOD",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "TC-A-11",
+   "community": "Terrace Crossings",
+   "manufacturer": "Clayton",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "TO-75",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "WPMH-360 Daisy",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "Clar",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-02",
+   "prior": "2026-07-01"
+  },
+  {
+   "asset": "BELL-30A",
+   "community": "Belle Haven",
+   "manufacturer": "Skyline",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "BELL-42",
+   "community": "Belle Haven",
+   "manufacturer": "NEWM",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "BRUN-38",
+   "community": "Brunswick Estates",
+   "manufacturer": "Horton",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "FOX-10",
+   "community": "Fox Creek",
+   "manufacturer": "HORTO",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "FOX-60",
+   "community": "Fox Creek",
+   "manufacturer": "HORT",
+   "from": "For Sale",
+   "to": "Lease Option (LOP)",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "GULFPO-28",
+   "community": "Gulf Breeze MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "GULFPO-4",
+   "community": "Gulf Breeze MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "LUCK-2",
+   "community": "Lucky Clover",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "Sold",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "NGMH-3301 1st Ave",
+   "community": "Northgate MH",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "PARK-66",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "PARK-87",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "ROYAL-14",
+   "community": "Royal Oaks MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "RW-171",
+   "community": "Riverwalk",
+   "manufacturer": "Libe",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "RW-72",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "SOUTH-16",
+   "community": "Southgate",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "SUR-71",
+   "community": "Su-Rene",
+   "manufacturer": "HOME",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "SUR-79",
+   "community": "Su-Rene",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "TO-25",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "TO-83",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "WPMH-4770 Periwinkle",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-08",
+   "prior": "2026-07-05"
+  },
+  {
+   "asset": "DO-44",
+   "community": "Druid Oaks MHC",
+   "manufacturer": "Fleetwood",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "LS-130",
+   "community": "Lake Saunders",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "OCEANPO-95",
+   "community": "Oceanaire MHC",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "PARK-1",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Horton",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "PARK-33",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "PEACHSTATE",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "RO-2712 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "RO-2734 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "TO-22",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "TO-B1",
+   "community": "The Oaks",
+   "manufacturer": "Champion",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-11",
+   "prior": "2026-07-08"
+  },
+  {
+   "asset": "FOX-120",
+   "community": "Fox Creek",
+   "manufacturer": "Fleetwood",
+   "from": "TBD",
+   "to": "For Sale",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "FOX-55",
+   "community": "Fox Creek",
+   "manufacturer": "GILES",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "OAK-10",
+   "community": "Oakside MHP",
+   "manufacturer": "SUNSHINE",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "RW-72",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "TO-75",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "WOLFPO-10",
+   "community": "Wolf Bay MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "WPMH-360 Daisy",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "Clar",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "WPMH-4770 Periwinkle",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-14",
+   "prior": "2026-07-13"
+  },
+  {
+   "asset": "APPLE-335 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "FOX-10",
+   "community": "Fox Creek",
+   "manufacturer": "HORTO",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "FOX-38",
+   "community": "Fox Creek",
+   "manufacturer": "HMSTD",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "FOX-94",
+   "community": "Fox Creek",
+   "manufacturer": "SNS",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "RO-236WhiteSquirrel",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Tiny Heirloom",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "RO-2730 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-103",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-106",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-112",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-12",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-47",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-48",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "SOUTH-54",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "TC-B-4",
+   "community": "Terrace Crossings",
+   "manufacturer": "TRIN",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "TO-30",
+   "community": "The Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-15",
+   "prior": "2026-07-14"
+  },
+  {
+   "asset": "ARD-107",
+   "community": "Auburn Ridge",
+   "manufacturer": "Fleetwood",
+   "from": "Ordered",
+   "to": "To Be Demoed",
+   "observed": "2026-07-16",
+   "prior": "2026-07-15"
+  },
+  {
+   "asset": "ARD-81",
+   "community": "Auburn Ridge",
+   "manufacturer": "Edgewood",
+   "from": "Ordered",
+   "to": "To Be Demoed",
+   "observed": "2026-07-16",
+   "prior": "2026-07-15"
+  },
+  {
+   "asset": "BELL-16",
+   "community": "Belle Haven",
+   "manufacturer": "Vand",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-07-16",
+   "prior": "2026-07-15"
+  },
+  {
+   "asset": "HARB-A-05",
+   "community": "UNASSIGNED",
+   "manufacturer": "",
+   "from": "Ordered",
+   "to": "To Be Demoed",
+   "observed": "2026-07-16",
+   "prior": "2026-07-15"
+  },
+  {
+   "asset": "LS-120",
+   "community": "UNASSIGNED",
+   "manufacturer": "",
+   "from": "Ordered",
+   "to": "To Be Demoed",
+   "observed": "2026-07-16",
+   "prior": "2026-07-15"
+  },
+  {
+   "asset": "CA-13",
+   "community": "Crystal Acres",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "VO-131",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "VO-146",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "VO-148",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "VO-158",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "VO-160",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-17",
+   "prior": "2026-07-16"
+  },
+  {
+   "asset": "MWMHP-G",
+   "community": "Meadow Woods Mobile Home Park",
+   "manufacturer": "",
+   "from": "",
+   "to": "Sold",
+   "observed": "2026-07-21",
+   "prior": "2026-07-19"
+  },
+  {
+   "asset": "ARD-48",
+   "community": "Auburn Ridge",
+   "manufacturer": "Horton",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Fort Lauderdale",
+   "community": "UNASSIGNED",
+   "manufacturer": "King",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "GO-G14",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "GO-G15",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "GO-G23",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "GO-G24",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "HSRC-5",
+   "community": "Hunter Springs MHC",
+   "manufacturer": "Inns",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "PARK-78",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "PPH-2",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "SP-101",
+   "community": "Shell Pointe MHC",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "SP-304",
+   "community": "Shell Pointe MHC",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "TC-E-9",
+   "community": "Terrace Crossings",
+   "manufacturer": "JACB",
+   "from": "For Sale",
+   "to": "Needs Rehab",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 1",
+   "community": "UNASSIGNED",
+   "manufacturer": "Holid",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 2",
+   "community": "UNASSIGNED",
+   "manufacturer": "Holid",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 3",
+   "community": "UNASSIGNED",
+   "manufacturer": "Sparta",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 4",
+   "community": "UNASSIGNED",
+   "manufacturer": "Fan",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 5",
+   "community": "UNASSIGNED",
+   "manufacturer": "Skyline",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 6",
+   "community": "UNASSIGNED",
+   "manufacturer": "Rave",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "Twin Lakes 7",
+   "community": "UNASSIGNED",
+   "manufacturer": "Heri",
+   "from": "Rental",
+   "to": "Sold",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "VO-56",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "VO-86",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "WIND-108",
+   "community": "Windward Knoll",
+   "manufacturer": "Palm Harbor",
+   "from": "For Sale",
+   "to": "Lease Option (LOP)",
+   "observed": "2026-07-22",
+   "prior": "2026-07-21"
+  },
+  {
+   "asset": "APPLE-236 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "APPLE-248 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "DO-44",
+   "community": "Druid Oaks MHC",
+   "manufacturer": "Fleetwood",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "GO-G4",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "GO-G6",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "GO-G8",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "GO-G9",
+   "community": "Great Oak RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "NGMH-3301 1st Ave",
+   "community": "Northgate MH",
+   "manufacturer": "GUERDON",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "PARK-33",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "PEACHSTATE",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "PPH-1",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "PPH-36",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "PPH-6",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "RW-163",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "RW-53",
+   "community": "Riverwalk",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "SOUTH-16",
+   "community": "Southgate",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TC-B-4",
+   "community": "Terrace Crossings",
+   "manufacturer": "TRIN",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TO-75",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TO-79",
+   "community": "The Oaks",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TO-83",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TO-B7",
+   "community": "The Oaks",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "TRADE-2Olsen",
+   "community": "Tradewinds MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "VO-4482 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-23",
+   "prior": "2026-07-22"
+  },
+  {
+   "asset": "APPLE-227 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-24",
+   "prior": "2026-07-23"
+  },
+  {
+   "asset": "PPH-25",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-24",
+   "prior": "2026-07-23"
+  },
+  {
+   "asset": "PPH-3",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-24",
+   "prior": "2026-07-23"
+  },
+  {
+   "asset": "PPH-31",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-07-24",
+   "prior": "2026-07-23"
+  },
+  {
+   "asset": "RO-147WhiteSquirrel",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-24",
+   "prior": "2026-07-23"
+  },
+  {
+   "asset": "APPLE-216 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-25",
+   "prior": "2026-07-24"
+  },
+  {
+   "asset": "APPLE-220 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-25",
+   "prior": "2026-07-24"
+  },
+  {
+   "asset": "RO-149WhiteSquirrel",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-25",
+   "prior": "2026-07-24"
+  },
+  {
+   "asset": "APPLE-SFH",
+   "community": "Applegate MHC",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "ARD-48",
+   "community": "Auburn Ridge",
+   "manufacturer": "Horton",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "SA-265",
+   "community": "Shady Acres MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-10",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-101",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-110",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-111",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-130",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-137",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-147",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-161",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-66",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-69",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-84",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-87",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "VO-91A",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "WPMH-4770 Periwinkle",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "TBD",
+   "observed": "2026-07-29",
+   "prior": "2026-07-27"
+  },
+  {
+   "asset": "TO-32",
+   "community": "The Oaks",
+   "manufacturer": "Clayton",
+   "from": "Rent to Own Agreement",
+   "to": "TBD",
+   "observed": "2026-07-30",
+   "prior": "2026-07-29"
+  },
+  {
+   "asset": "TO-25",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-07-31",
+   "prior": "2026-07-30"
+  },
+  {
+   "asset": "BELL-18",
+   "community": "Belle Haven",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-08-01",
+   "prior": "2026-07-31"
+  },
+  {
+   "asset": "BELL-9",
+   "community": "Belle Haven",
+   "manufacturer": "GREA",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-01",
+   "prior": "2026-07-31"
+  },
+  {
+   "asset": "SOUTH-16",
+   "community": "Southgate",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-01",
+   "prior": "2026-07-31"
+  },
+  {
+   "asset": "WPMH-359 Daisy",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "Palm",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-08-01",
+   "prior": "2026-07-31"
+  },
+  {
+   "asset": "ARD-26",
+   "community": "Auburn Ridge",
+   "manufacturer": "BRIGADIER",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-04",
+   "prior": "2026-08-03"
+  },
+  {
+   "asset": "BOVIIPO-97",
+   "community": "Bay Oaks Village II",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-04",
+   "prior": "2026-08-03"
+  },
+  {
+   "asset": "BELL-71",
+   "community": "Belle Haven",
+   "manufacturer": "MIRA",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "PARK-16",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Clayton",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "RO-2726 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "SOUTH-107",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "SOUTH-35",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "SOUTH-75",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "TO-26",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "TO-44",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "TO-50",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-05",
+   "prior": "2026-08-04"
+  },
+  {
+   "asset": "FOX-121",
+   "community": "Fox Creek",
+   "manufacturer": "Fleetwood",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-08-06",
+   "prior": "2026-08-05"
+  },
+  {
+   "asset": "PARK-90",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "GILES",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-06",
+   "prior": "2026-08-05"
+  },
+  {
+   "asset": "RO-207WhiteSquirrel",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "",
+   "from": "To Be Demoed",
+   "to": "Sold",
+   "observed": "2026-08-06",
+   "prior": "2026-08-05"
+  },
+  {
+   "asset": "RO-211WhiteSquirrel",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "",
+   "from": "To Be Demoed",
+   "to": "Sold",
+   "observed": "2026-08-06",
+   "prior": "2026-08-05"
+  },
+  {
+   "asset": "APPLE-252 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "",
+   "from": "Sold",
+   "to": "TBD",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "PARK-12",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "RIVER",
+   "from": "Rental",
+   "to": "For Sale",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "PARK-62",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "PARK-70",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "DESTINY",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "PARK-73",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "CADE",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "SOUTH-98",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "WPMH-366 Lily",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-07",
+   "prior": "2026-08-06"
+  },
+  {
+   "asset": "BELL-9",
+   "community": "Belle Haven",
+   "manufacturer": "GREA",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "BOVIPO-C-2",
+   "community": "Bay Oaks Village I",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "BRUN-21",
+   "community": "Brunswick Estates",
+   "manufacturer": "",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "LWPO-17",
+   "community": "Lake Wales MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "LWPO-23",
+   "community": "Lake Wales MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "NGMH-3304 3rd Ave",
+   "community": "Northgate MH",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "PARK-1",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Horton",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "RO-2704 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "RO-2706 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "RO-2734 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "SUR-15",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "SUR-25",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "In Storage",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "TO-32",
+   "community": "The Oaks",
+   "manufacturer": "Clayton",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-11",
+   "prior": "2026-08-10"
+  },
+  {
+   "asset": "BOVIIPO-38",
+   "community": "Bay Oaks Village II",
+   "manufacturer": "Champion",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-12",
+   "prior": "2026-08-11"
+  },
+  {
+   "asset": "PPH-3",
+   "community": "Palm Haven Estates",
+   "manufacturer": "Skyline",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-08-12",
+   "prior": "2026-08-11"
+  },
+  {
+   "asset": "BELL-31",
+   "community": "Belle Haven",
+   "manufacturer": "Mana",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-14",
+   "prior": "2026-08-12"
+  },
+  {
+   "asset": "SOUTH-81",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-14",
+   "prior": "2026-08-12"
+  },
+  {
+   "asset": "SUR-13",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-14",
+   "prior": "2026-08-12"
+  },
+  {
+   "asset": "SUR-14",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-14",
+   "prior": "2026-08-12"
+  },
+  {
+   "asset": "SUR-37",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-14",
+   "prior": "2026-08-12"
+  },
+  {
+   "asset": "RW-35",
+   "community": "Riverwalk",
+   "manufacturer": "JACB",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-15",
+   "prior": "2026-08-14"
+  },
+  {
+   "asset": "RW-85",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-15",
+   "prior": "2026-08-14"
+  },
+  {
+   "asset": "VO-4542 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-15",
+   "prior": "2026-08-14"
+  },
+  {
+   "asset": "APPLE-252 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-08-18",
+   "prior": "2026-08-16"
+  },
+  {
+   "asset": "BELL-74",
+   "community": "Belle Haven",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-18",
+   "prior": "2026-08-16"
+  },
+  {
+   "asset": "SH-114",
+   "community": "Silver Hill MHC",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-18",
+   "prior": "2026-08-16"
+  },
+  {
+   "asset": "WPMH-366 Lily",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-18",
+   "prior": "2026-08-16"
+  },
+  {
+   "asset": "WPMH-4770 Periwinkle",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-18",
+   "prior": "2026-08-16"
+  },
+  {
+   "asset": "APPLE-244 Circle",
+   "community": "Applegate MHC",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "To Be Demoed",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "BELL-71",
+   "community": "Belle Haven",
+   "manufacturer": "MIRA",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "PARK-62",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "PARK-70",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "DESTINY",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "PARK-90",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "GILES",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "RW-146",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "SH-91",
+   "community": "Silver Hill MHC",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "TO-26",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "TO-44",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "TO-50",
+   "community": "The Oaks",
+   "manufacturer": "JACB",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4208 SE 21st Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4220 SE 23rd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4369 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4415 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4432 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4458 SE 22nd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4504 SE 21st Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "VO-4533 SE 23rd Ct.",
+   "community": "Vantage Oaks",
+   "manufacturer": "Skyline",
+   "from": "Delivered",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "WPMH-360 Daisy",
+   "community": "Whispering Pines MH FL",
+   "manufacturer": "Clar",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-19",
+   "prior": "2026-08-18"
+  },
+  {
+   "asset": "PARK-21",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "PIONEER HOUSING",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-107",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-114",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-119",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-4",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-9",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "VO-99",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-20",
+   "prior": "2026-08-19"
+  },
+  {
+   "asset": "PL-41",
+   "community": "Paradise Lakes",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-08-21",
+   "prior": "2026-08-20"
+  },
+  {
+   "asset": "SUR-57",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-08-21",
+   "prior": "2026-08-20"
+  },
+  {
+   "asset": "SUR-9",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-08-21",
+   "prior": "2026-08-20"
+  },
+  {
+   "asset": "FOX-24",
+   "community": "Fox Creek",
+   "manufacturer": "WESTF",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-23",
+   "prior": "2026-08-22"
+  },
+  {
+   "asset": "FOX-129",
+   "community": "Fox Creek",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "FOX-55",
+   "community": "Fox Creek",
+   "manufacturer": "GILES",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "LUCK-100",
+   "community": "Lucky Clover",
+   "manufacturer": "Jefr",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "NGMH-3306 2nd Ave",
+   "community": "Northgate MH",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "NGMH-3311 3rd Ave",
+   "community": "Northgate MH",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "PARK-1",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Horton",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "RW-35",
+   "community": "Riverwalk",
+   "manufacturer": "JACB",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "RW-85",
+   "community": "Riverwalk",
+   "manufacturer": "Dest",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "SOUTH-47",
+   "community": "Southgate",
+   "manufacturer": "Skyline",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "TC-C-6",
+   "community": "Terrace Crossings",
+   "manufacturer": "LIMI",
+   "from": "Rent to Own Agreement",
+   "to": "Sold",
+   "observed": "2026-08-25",
+   "prior": "2026-08-23"
+  },
+  {
+   "asset": "GULFPO-28",
+   "community": "Gulf Breeze MHC",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-27",
+   "prior": "2026-08-26"
+  },
+  {
+   "asset": "SILVER-21",
+   "community": "Silver Breeze",
+   "manufacturer": "",
+   "from": "Needs Rehab",
+   "to": "For Sale",
+   "observed": "2026-08-27",
+   "prior": "2026-08-26"
+  },
+  {
+   "asset": "SUR-25",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "In Storage",
+   "to": "Delivered",
+   "observed": "2026-08-28",
+   "prior": "2026-08-27"
+  },
+  {
+   "asset": "FOX-24",
+   "community": "Fox Creek",
+   "manufacturer": "WESTF",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-09-01",
+   "prior": "2026-08-30"
+  },
+  {
+   "asset": "SUR-12",
+   "community": "Su-Rene",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-01",
+   "prior": "2026-08-30"
+  },
+  {
+   "asset": "TO-49",
+   "community": "The Oaks",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "Needs Rehab",
+   "observed": "2026-09-01",
+   "prior": "2026-08-30"
+  },
+  {
+   "asset": "TO-72",
+   "community": "The Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-01",
+   "prior": "2026-08-30"
+  },
+  {
+   "asset": "VO-17",
+   "community": "Vantage Oaks",
+   "manufacturer": "",
+   "from": "TBD",
+   "to": "For Sale",
+   "observed": "2026-09-01",
+   "prior": "2026-08-30"
+  },
+  {
+   "asset": "FOX-10",
+   "community": "Fox Creek",
+   "manufacturer": "HORTO",
+   "from": "For Sale",
+   "to": "Sold",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "FOX-59",
+   "community": "Fox Creek",
+   "manufacturer": "Clayton",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "RO-2712 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Delivered",
+   "to": "Ordered",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "RO-2726 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Delivered",
+   "to": "Ordered",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "SOUTH-15",
+   "community": "Southgate",
+   "manufacturer": "Dest",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "TO-78",
+   "community": "The Oaks",
+   "manufacturer": "Dest",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-02",
+   "prior": "2026-09-01"
+  },
+  {
+   "asset": "LS-Comm Building",
+   "community": "Lake Saunders",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2702 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2710 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2712 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2716 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2726 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "RO-2728 D Mullet",
+   "community": "River Oaks RV Resort",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "VO-10",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "VO-22",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "VO-3",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "VO-41",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "VO-90",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-03",
+   "prior": "2026-09-02"
+  },
+  {
+   "asset": "ARD-131A",
+   "community": "Auburn Ridge",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "GULFPO-1",
+   "community": "Gulf Breeze MHC",
+   "manufacturer": "",
+   "from": "Rental",
+   "to": "TBD",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "NGMH-3317 2nd Ave",
+   "community": "Northgate MH",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "NGRV-94",
+   "community": "Northgate RV",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "NGRV-97",
+   "community": "Northgate RV",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "PARK-43",
+   "community": "Parkwood Mobile Home Park",
+   "manufacturer": "Fleetwood",
+   "from": "For Sale",
+   "to": "Rental",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "PL-120",
+   "community": "Paradise Lakes",
+   "manufacturer": "Cavco",
+   "from": "Sold",
+   "to": "Ordered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "PL-63",
+   "community": "Paradise Lakes",
+   "manufacturer": "Cavco",
+   "from": "To Be Demoed",
+   "to": "Ordered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "SS-101",
+   "community": "Sea Shells Manufactured Housing Community",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "SS-155",
+   "community": "Sea Shells Manufactured Housing Community",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "SS-304",
+   "community": "Sea Shells Manufactured Housing Community",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  },
+  {
+   "asset": "VO-66",
+   "community": "Vantage Oaks",
+   "manufacturer": "Cavco",
+   "from": "Ordered",
+   "to": "Delivered",
+   "observed": "2026-09-05",
+   "prior": "2026-09-03"
+  }
+ ]
+}
