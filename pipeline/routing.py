@@ -32,22 +32,14 @@ REGISTRY = os.path.join(REPO, "pipeline", "registry.json")
 OUT = os.path.join(REPO, "data", "routing.json")
 DOMAIN = "parakeetcommunities.com"
 
-# The token that goes in [community]. Change this one value to change every
-# address. "short_code" is what Austin chose provisionally; "slug" is the
-# community name with punctuation removed.
-TOKEN = "short_code"
+EMAILS = os.path.join(REPO, "pipeline", "community_emails.json")
 
-
-def slug(s):
-    return re.sub(r"[^a-z0-9]", "", (s or "").lower())
-
-
-def address(row):
-    if TOKEN == "short_code":
-        t = (row.get("short_name") or "").lower()
-    else:
-        t = slug(row.get("community") or row.get("property_name"))
-    return "%s@%s" % (t, DOMAIN) if t else None
+# Addresses are STORED, not derived. The first version of this file generated
+# them from the roster and would have got several wrong: obo@ and pse@ are
+# initialisms, triples@ drops a word, vantageoak@ is singular where the roster
+# is plural, GreenPointe@ spells what the roster calls Greene Pointe, and one
+# mailbox serves both Bay Oaks villages. Wrong address means mail about one park
+# arriving at another, so this is reviewed data rather than a rule.
 
 
 def sold_matchers():
@@ -68,61 +60,75 @@ def sold_matchers():
 
 def build():
     roster = json.load(open(ROSTER))
+    src = json.load(open(EMAILS))
     sold = sold_matchers()
-    table, missing, dupes, skipped = {}, [], {}, []
+    given, shared = src["communities"], src.get("_shared", {})
+    table, skipped, no_mailbox = {}, [], []
     for r in roster:
+        code, name = r["short_name"], r["property_name"]
         names = {str(r.get(f) or "").strip().upper()
                  for f in ("short_name", "property_name", "community")}
         if names & sold:
-            skipped.append(r["property_name"])
+            skipped.append(name)
             continue
-        a = address(r)
-        name = r["property_name"]
-        if not a:
-            missing.append(name)
+        local = given.get(code)
+        via = None
+        if not local and code in shared and not code.startswith("_"):
+            via = shared[code]
+            local = given.get(via)
+        if not local:
+            no_mailbox.append((code, name))
             continue
-        if a in dupes:
-            # Two communities resolving to one mailbox would silently merge two
-            # parks' alerts into one inbox, so it is an error rather than a note.
-            print("[routing] COLLISION %s -> %s and %s" % (a, dupes[a], name),
-                  file=sys.stderr)
-        dupes[a] = name
-        table[r["short_name"]] = {
-            "community": name, "email": a, "verified": False,
+        table[code] = {
+            "community": name,
+            "email": "%s@%s" % (local, DOMAIN),
+            "shares_with": via,
+            "verified": True,
         }
     payload = {
         "_comment": [
             "Derived from pipeline/raw/pds_reportable.json by pipeline/routing.py.",
             "Do not hand-edit: re-run `routing.py build` instead, or the next",
             "roster refresh will silently disagree with this file.",
-            "Convention: [%s]@%s, PROVISIONAL per Austin 2026-09-09." % (TOKEN, DOMAIN),
-            "verified=false everywhere until someone confirms the mailboxes exist.",
-            "The alert step must refuse to send to an unverified address.",
+            "Addresses come from pipeline/community_emails.json, supplied by",
+            "Austin from the M365 group list. They follow no derivable rule.",
             "Communities under registry.json `sold` are excluded outright.",
+            "`no_mailbox` communities have nowhere to send and must not be",
+            "silently skipped -- surface them instead.",
         ],
-        "convention": {"token": TOKEN, "domain": DOMAIN, "verified_any": False},
+        "convention": {"source": "pipeline/community_emails.json",
+                       "domain": DOMAIN, "supplied": src.get("supplied")},
+        "no_mailbox": [{"short_name": c, "community": n} for c, n in no_mailbox],
+        "not_a_community": src.get("_not_a_community", {}),
+        "unresolved": src.get("_unresolved", {}),
         "communities": table,
     }
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(payload, open(OUT, "w"), indent=1)
-    print("[routing] %d addresses -> data/routing.json  (token=%s, all unverified)"
-          % (len(table), TOKEN))
+    live = len([r for r in roster
+                if not ({str(r.get(f) or "").strip().upper()
+                         for f in ("short_name", "property_name", "community")} & sold)])
+    print("[routing] %d of %d live communities routed -> data/routing.json"
+          % (len(table), live))
+    sh = [c for c in table if table[c]["shares_with"]]
+    if sh:
+        print("[routing] sharing a mailbox with another park: %s" % ", ".join(sorted(sh)))
     if skipped:
-        print("[routing] excluded as sold, no mail will be routed: %s"
-              % ", ".join(sorted(skipped)))
-    if missing:
-        print("[routing] %d communities have no short code: %s"
-              % (len(missing), ", ".join(missing)))
+        print("[routing] excluded as sold: %s" % ", ".join(sorted(skipped)))
+    if no_mailbox:
+        print("[routing] NO MAILBOX for %d: %s"
+              % (len(no_mailbox), ", ".join("%s (%s)" % (c, n) for c, n in no_mailbox)))
 
 
 def show():
     d = json.load(open(OUT))
-    print("convention: [%s]@%s   verified: %s"
-          % (d["convention"]["token"], d["convention"]["domain"],
-             d["convention"]["verified_any"]))
+    print("source: %s   supplied %s"
+          % (d["convention"]["source"], d["convention"]["supplied"]))
     print("%-10s %-34s %s" % ("CODE", "COMMUNITY", "EMAIL"))
     for code, v in sorted(d["communities"].items()):
-        print("%-10s %-34s %s" % (code, v["community"][:34], v["email"]))
+        print("%-10s %-34s %-42s %s"
+              % (code, v["community"][:34], v["email"],
+                 ("shared with " + v["shares_with"]) if v["shares_with"] else ""))
 
 
 if __name__ == "__main__":

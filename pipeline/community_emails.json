@@ -1,0 +1,60 @@
+{
+ "_comment": [
+  "The real community mailboxes, supplied by Austin 2026-09-09 from the M365",
+  "group list. STORED, NOT DERIVED -- and that is the finding: the addresses",
+  "follow no rule the roster can reproduce. `obo@` and `pse@` are initialisms,",
+  "`triples@` drops a word, `vantageoak@` is singular where the roster is plural,",
+  "`GreenPointe@` spells what the roster calls Greene Pointe, and one mailbox",
+  "serves both Bay Oaks villages. Any generator would get several of these wrong",
+  "and mail would go to the wrong park, so the mapping is data and is reviewed by",
+  "a person rather than inferred.",
+  "",
+  "Keyed by roster short code. Case is preserved as supplied though SMTP does not",
+  "care. pipeline/routing.py consumes this and reports anything unmatched in",
+  "either direction rather than silently dropping it."
+ ],
+ "domain": "parakeetcommunities.com",
+ "supplied": "2026-09-09",
+ "communities": {
+  "AMER": "american", "APPLE": "applegate", "ARD": "AuburnRidge",
+  "BOVIPO": "bayoaksvillage", "BELL": "bellehaven", "BRUN": "BrunswickEstates",
+  "CENT": "central", "CA": "crystalacres", "DO": "druidoaks",
+  "EG": "everglades", "FOX": "foxcreek", "GO": "greatoakrv",
+  "GPT": "GreenPointe", "GULFPO": "gulfbreeze", "HARB": "harbour",
+  "HP": "hersheypark", "HSMHC": "huntersprings", "JBJ": "jbarj",
+  "LS": "lakesaunders", "LWPO": "lakewales", "LLMHC": "lambertonlake",
+  "LUCK": "luckyclover", "MAY": "mayflowerhills", "MCG": "mcgregordowns",
+  "MWMHP": "meadowwoods", "MON": "monson", "NGMH": "northgate",
+  "OAK": "OaksideMHP", "OCEANPO": "oceanaire", "OBOPO": "obo",
+  "PPH": "palmhavenestates", "PSEPO": "pse", "PL": "paradiselakes",
+  "PP": "ParadisePalms", "PARK": "parkwood", "RED": "Redlands",
+  "REG": "Regency", "RO": "riveroaksresort", "RW": "riverwalk",
+  "RIV": "riviera", "ROYAL": "royaloaks", "RP": "royalpalm",
+  "SS": "seashells", "SA": "shadyacres", "SO": "shadyoaks",
+  "SILVER": "silverbreeze", "SH": "silverhill", "SOUTH": "southgate",
+  "SUR": "Su-Rene", "TC": "terracecrossings", "TO": "theoaks",
+  "TCMHCPO": "townandcountry", "TRADE": "tradewinds", "SSS": "triples",
+  "VO": "vantageoak", "WWPO": "westwood", "WPMA": "whisperingpinesma",
+  "WPMH": "whisperingpines", "WIND": "windwardknoll", "WOLFPO": "wolfbay"
+ },
+ "_shared": {
+  "BOVIIPO": "BOVIPO",
+  "NGRV": "NGMH",
+  "_why": [
+   "Bay Oaks Village II has no mailbox of its own and shares Village I's.",
+   "Northgate RV has none and shares Northgate MH's.",
+   "Recorded rather than left as a gap, because an alert for these parks has",
+   "somewhere real to go -- but the mail lands in a shared inbox, so anything",
+   "sent must name the community in the subject or the recipient cannot tell",
+   "which park it is about."
+  ]
+ },
+ "_not_a_community": {
+  "regionalmgmt": "Functional mailbox, not a park. Candidate escalation target for anything that has no community address or has gone unanswered, but never a per-community route."
+ },
+ "_unresolved": {
+  "Spacecoastvillage": "No community of this name in the reportable roster. Either a park we do not report on, a renamed one, or a mailbox that outlived its community. Nobody has said which.",
+  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction. Mailbox exists; nothing routes to it.",
+  "shellpointe": "Shell Pointe MHC, sold July 2026. Mailbox still exists. Must never be routed to."
+ }
+}

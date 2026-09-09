@@ -150,20 +150,32 @@ turnover with no roster to maintain, and the manager, the regional and the
 director all see the same message land — which buys accountability without a
 task system, and removes what was listed below as the project's one blocker.
 
-Convention is `[community]@parakeetcommunities.com` with the **short code** in
-the slot, provisional per Austin on 2026-09-09 ("use the short code now and we
-will update it"). `pipeline/routing.py` derives all of them from the roster and
-writes `data/routing.json`, so changing the token is one constant here rather
-than re-collecting a list. Short codes won over name slugs on the awkward cases:
-Regency I & II becomes `reg@` rather than `regencyiii@`, and Whispering Pines
-does not collide with Whispering Pines FL.
+**The addresses are stored, not derived, and that is the finding.** Austin
+supplied the real list from the M365 groups on 2026-09-09 and it follows no rule
+the roster can reproduce: `obo@` and `pse@` are initialisms, `triples@` drops a
+word, `vantageoak@` is singular where the roster is plural, `GreenPointe@` spells
+what the roster calls Greene Pointe, and one mailbox serves both Bay Oaks
+villages. A generator would have got several wrong, and a wrong address means
+mail about one park landing at another. So the mapping lives in
+`pipeline/community_emails.json` as reviewed data; `pipeline/routing.py`
+consumes it and reports anything unmatched in either direction.
 
-Two guards in that generator. Communities under `registry.json` `sold` are
-excluded outright — 64 addresses, not the roster's 66, because mail to a park we
-no longer own is the worst possible bounce. And every entry carries
-`verified: false` until someone confirms the mailboxes resolve; **the alert step
-must refuse to send to an unverified address.** A derived address that does not
-exist bounces at best and reaches a stranger at worst.
+**61 of 64 live communities are routed.** The rest is the interesting part:
+
+| | |
+|---|---|
+| No mailbox at all | **Carley's, Hendersons MHC, Nalls Court MHC** |
+| Shares another park's inbox | Bay Oaks Village II → Village I; Northgate RV → Northgate MH |
+| Excluded as sold | Congress, Shell Pointe (`shellpointe@` still exists) |
+| Mailbox, no community | `Spacecoastvillage@` — nothing of that name in the roster |
+| Not a park | `regionalmgmt@` — a functional mailbox, and the natural escalation target |
+
+Three consequences worth building around. Communities with no mailbox must be
+**surfaced, not silently skipped** — an alert with nowhere to go is worse than no
+alert because everyone assumes it was sent. Anything mailed to a shared inbox
+must **name the community in the subject**, or the recipient cannot tell which
+park it concerns. And `shellpointe@` resolving to a park we sold in July is
+exactly the bounce the `sold` override exists to prevent.
 
 The remaining tradeoff, stated once: an email has no completion state, so nothing
 records whether an alert was acted on. Three people seeing it mitigates that.
@@ -255,8 +267,10 @@ all, and the addresses derive from the roster.
 
 What is still open, smaller than it was:
 
-- **Verify the 64 addresses resolve.** One pass by someone with the mailbox
-  list. Until then `verified: false` and nothing sends.
+- **Three communities need a mailbox**, or a decision to route them elsewhere:
+  Carley's, Hendersons MHC, Nalls Court MHC.
+- **`Spacecoastvillage@` needs explaining** — a mailbox with no community, which
+  is either a park we do not report on, a rename, or a leftover.
 - **The regional manager view still needs scoping** — which communities each
   regional covers. But that is one of three views, not the alerting path, and it
   can be deferred without holding anything else up. It is also arguably less
