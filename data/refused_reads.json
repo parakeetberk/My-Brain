@@ -1,0 +1,46 @@
+{
+ "_comment": [
+  "Reads the refresh refused rather than parsed from a fragment. Written so a",
+  "failure survives the container, which is thrown away between runs.",
+  "",
+  "One entry per refusal. `tail_unread` names the communities that fall in the",
+  "unread portion, so the gap is bounded rather than vague."
+ ],
+ "refusals": [
+  {
+   "run_date": "2026-09-09",
+   "step": "1. reportable roster",
+   "source": "Property Data Sheet - 08262026.xlsx, sheet `vwr VW_PDS_V2`",
+   "sharepoint_folder": "https://parakeetcommunities.sharepoint.com/sites/main/Shared Documents/Asset Management & Finance/Property Data Sheet/",
+   "workbook_last_modified": "2026-09-08T12:50:59Z",
+   "roster_on_disk_built": "2026-09-04",
+   "workbook_changed_since_roster": true,
+   "declared_rows": 237,
+   "rows_read": 194,
+   "rows_unread": 43,
+   "truncation_marker": "[Output truncated - 43 more rows in this sheet and any later sheets not shown.]",
+   "cut_off_after": "Town & Country MHC (TCMHCPO)",
+   "cause": "`PDS Clean` occupies 2,485 of the payload's 2,721 lines as a VLOOKUP formula dump and exhausts the reader's ~200KB budget before `vwr VW_PDS_V2` ends. Identical to the 2026-09-09 second attempt.",
+   "startPage_retried": true,
+   "startPage_result": "ignored - byte-identical payload returned, confirming the parameter does not apply to this format",
+   "reportable_yes_in_read_portion": 60,
+   "tail_unread": [
+    "Tradewinds MHC (TRADE)",
+    "Triple S Marina (SSS)",
+    "Vantage Oaks (VO)",
+    "Westwood MHC (WWPO)",
+    "Whispering Pines MA (WPMA)",
+    "Whispering Pines MH FL (WPMH)",
+    "Windward Knoll (WIND)",
+    "Wolf Bay MHC (WOLFPO)"
+   ],
+   "confirmed_in_read_portion": {
+    "CAMMHC": "Cambridge MHC - Reportable = Yes",
+    "GEIGRV": "Geiger Key RV Resort - Reportable = Yes"
+   },
+   "action_taken": "Refused. No build, no capture, no publish. Previous dashboard stands.",
+   "warehouse_asof_on_this_date": "2026-09-05",
+   "warehouse_moved_since_last_run": false
+  }
+ ]
+}

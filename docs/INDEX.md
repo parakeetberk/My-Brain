@@ -56,7 +56,27 @@ Never publish a stale or partial payload to the first one.
   `trig_01UXCQEFF7Hj3CQHouDz9oss` already did. Corrected 15-file pull list,
   push and email notifications.
 - The roster on disk was built 2026-09-04; the PDS changed 2026-09-08. Rebuild
-  and diff it, do not build on it silently.
+  and diff it, do not build on it silently. **Still open, and now blocking.**
+- **The PDS read is the single point of failure and needs a structural fix, not
+  another retry.** Four attempts have now failed the same way: 2026-09-08 (203
+  of 237), 2026-09-09 x2 (no locatable header; 194 of 237), and the 2026-09-09
+  refresh (194 of 237, cut after Town & Country MHC). Cause is settled and is
+  not intermittent: `PDS Clean` is 2,485 of the payload's 2,721 lines of
+  VLOOKUP formulas and eats the ~200KB reader budget before `vwr VW_PDS_V2`
+  ends. `startPage` was retried and returns a byte-identical payload, so
+  pagination is not available for this format. Every run will keep failing here
+  until the workbook or the read changes. Three fixes that would actually work,
+  cheapest first: **(1)** paste-special `PDS Clean` to values so it stops
+  emitting formulas, **(2)** move `vwr VW_PDS_V2` to be the first worksheet so
+  it is read before the budget is spent, or **(3)** get `VW_PDS_V2` exposed on
+  the RentViewer connector, which retires the SharePoint read entirely and is
+  the same ask already open for `dw_prospects`. Any one of them unblocks it.
+  Refusals are recorded in `data/refused_reads.json`.
+- **Cambridge MHC and Geiger Key RV Resort read Reportable = Yes** on the
+  2026-09-08 workbook, confirmed in the readable portion on 2026-09-09. The
+  last good build has both dropped. A clean rebuild pulls both into every
+  portfolio total, so the roster grows 66 -> 68 and every total moves. Expected,
+  not a truncation artifact, but it should not land silently.
 
 **Platform Build thread**
 - Backfill the 387-file asset archive for real slip and duration history.
