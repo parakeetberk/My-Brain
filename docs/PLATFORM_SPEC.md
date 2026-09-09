@@ -144,10 +144,30 @@ from operating alerts.
 community and metric, and every alert is labelled provisional until 12 months
 exist. A thin baseline produces confident nonsense.
 
-**Routing: email to the regional manager.** Austin's call over a ClickUp task.
-The tradeoff, stated once: an email has no completion state, so nothing will
-record whether an alert was acted on. If that becomes a problem the fix is to
-add ClickUp later; the alert payload is the same either way.
+**Routing: the community mailbox, not a named person.** Austin's call, and
+better than the per-manager mapping originally proposed here. It survives
+turnover with no roster to maintain, and the manager, the regional and the
+director all see the same message land — which buys accountability without a
+task system, and removes what was listed below as the project's one blocker.
+
+Convention is `[community]@parakeetcommunities.com` with the **short code** in
+the slot, provisional per Austin on 2026-09-09 ("use the short code now and we
+will update it"). `pipeline/routing.py` derives all of them from the roster and
+writes `data/routing.json`, so changing the token is one constant here rather
+than re-collecting a list. Short codes won over name slugs on the awkward cases:
+Regency I & II becomes `reg@` rather than `regencyiii@`, and Whispering Pines
+does not collide with Whispering Pines FL.
+
+Two guards in that generator. Communities under `registry.json` `sold` are
+excluded outright — 64 addresses, not the roster's 66, because mail to a park we
+no longer own is the worst possible bounce. And every entry carries
+`verified: false` until someone confirms the mailboxes resolve; **the alert step
+must refuse to send to an unverified address.** A derived address that does not
+exist bounces at best and reaches a stranger at worst.
+
+The remaining tradeoff, stated once: an email has no completion state, so nothing
+records whether an alert was acted on. Three people seeing it mitigates that.
+If it still bites, ClickUp goes on top later and the payload is unchanged.
 
 ## Cross-checks rather than consolidation
 
@@ -228,17 +248,34 @@ through the same discipline as the eviction tracker: strip the identifying
 columns, keep Property and Unit as the join key, and refuse to write a file
 that still contains them. `pipeline/stage_eviction.py` is the pattern.
 
-## Blocked on one thing
+## No longer blocked on the manager mapping
 
-**The regional manager mapping is empty.** `pipeline/regional_managers.json` has
-zero managers and zero email addresses, and the Property Data Sheet has 41
-columns and no manager field.
+Routing to the community mailbox removed it. Alerting needs no manager list at
+all, and the addresses derive from the roster.
 
-Two of the four decisions above depend on it: the regional manager worklist has
-no way to scope itself, and email routing has no addresses to send to. It is a
-64-row spreadsheet — community, manager name, email — and it unblocks both.
+What is still open, smaller than it was:
 
-Nothing else in phase one is blocked.
+- **Verify the 64 addresses resolve.** One pass by someone with the mailbox
+  list. Until then `verified: false` and nothing sends.
+- **The regional manager view still needs scoping** — which communities each
+  regional covers. But that is one of three views, not the alerting path, and it
+  can be deferred without holding anything else up. It is also arguably less
+  necessary now: if the regional is on the community distribution, the scoping
+  happens in their inbox.
+- **`dw_prospects` exposed to the connector.** Still the only thing standing
+  between us and the funnel work.
+
+## A note on the Property Data Sheet
+
+The PDS was modified 2026-09-08 at 12:50, after the roster on disk was built on
+2026-09-04, so **the roster may be stale**. An attempt to read the sheet on
+2026-09-09 came back with truncation markers present and the `vwr VW_PDS_V2`
+header could not be located, which is the same hazard that nearly wrecked the
+roster on 2026-09-08 — so nothing was concluded from that read, and in
+particular whether the PDS carries a community email column is still unknown.
+
+The next refresh must rebuild the roster from the sheet and diff it, per the
+runbook. It must not build on the roster on disk without saying it is stale.
 
 ## Phase one
 

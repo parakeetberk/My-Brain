@@ -1,0 +1,338 @@
+{
+ "_comment": [
+  "Derived from pipeline/raw/pds_reportable.json by pipeline/routing.py.",
+  "Do not hand-edit: re-run `routing.py build` instead, or the next",
+  "roster refresh will silently disagree with this file.",
+  "Convention: [short_code]@parakeetcommunities.com, PROVISIONAL per Austin 2026-09-09.",
+  "verified=false everywhere until someone confirms the mailboxes exist.",
+  "The alert step must refuse to send to an unverified address.",
+  "Communities under registry.json `sold` are excluded outright."
+ ],
+ "convention": {
+  "token": "short_code",
+  "domain": "parakeetcommunities.com",
+  "verified_any": false
+ },
+ "communities": {
+  "AMER": {
+   "community": "American",
+   "email": "amer@parakeetcommunities.com",
+   "verified": false
+  },
+  "APPLE": {
+   "community": "Applegate MHC",
+   "email": "apple@parakeetcommunities.com",
+   "verified": false
+  },
+  "ARD": {
+   "community": "Auburn Ridge",
+   "email": "ard@parakeetcommunities.com",
+   "verified": false
+  },
+  "BOVIPO": {
+   "community": "Bay Oaks Village I",
+   "email": "bovipo@parakeetcommunities.com",
+   "verified": false
+  },
+  "BOVIIPO": {
+   "community": "Bay Oaks Village II",
+   "email": "boviipo@parakeetcommunities.com",
+   "verified": false
+  },
+  "BELL": {
+   "community": "Belle Haven",
+   "email": "bell@parakeetcommunities.com",
+   "verified": false
+  },
+  "BRUN": {
+   "community": "Brunswick Estates",
+   "email": "brun@parakeetcommunities.com",
+   "verified": false
+  },
+  "CARL": {
+   "community": "Carley's Mobile Home Park",
+   "email": "carl@parakeetcommunities.com",
+   "verified": false
+  },
+  "CENT": {
+   "community": "Central Mobile Home Park",
+   "email": "cent@parakeetcommunities.com",
+   "verified": false
+  },
+  "CA": {
+   "community": "Crystal Acres",
+   "email": "ca@parakeetcommunities.com",
+   "verified": false
+  },
+  "DO": {
+   "community": "Druid Oaks MHC",
+   "email": "do@parakeetcommunities.com",
+   "verified": false
+  },
+  "EG": {
+   "community": "Everglades Mobile Home Park",
+   "email": "eg@parakeetcommunities.com",
+   "verified": false
+  },
+  "FOX": {
+   "community": "Fox Creek",
+   "email": "fox@parakeetcommunities.com",
+   "verified": false
+  },
+  "GO": {
+   "community": "Great Oak RV Resort",
+   "email": "go@parakeetcommunities.com",
+   "verified": false
+  },
+  "GPT": {
+   "community": "Greene Pointe",
+   "email": "gpt@parakeetcommunities.com",
+   "verified": false
+  },
+  "GULFPO": {
+   "community": "Gulf Breeze MHC",
+   "email": "gulfpo@parakeetcommunities.com",
+   "verified": false
+  },
+  "HARB": {
+   "community": "Harbour Mobile Home Park",
+   "email": "harb@parakeetcommunities.com",
+   "verified": false
+  },
+  "HENDS": {
+   "community": "Hendersons MHC",
+   "email": "hends@parakeetcommunities.com",
+   "verified": false
+  },
+  "HP": {
+   "community": "Hershey Park",
+   "email": "hp@parakeetcommunities.com",
+   "verified": false
+  },
+  "HSMHC": {
+   "community": "Hunter Springs MHP",
+   "email": "hsmhc@parakeetcommunities.com",
+   "verified": false
+  },
+  "JBJ": {
+   "community": "J Bar J Estates",
+   "email": "jbj@parakeetcommunities.com",
+   "verified": false
+  },
+  "LS": {
+   "community": "Lake Saunders",
+   "email": "ls@parakeetcommunities.com",
+   "verified": false
+  },
+  "LWPO": {
+   "community": "Lake Wales MHC",
+   "email": "lwpo@parakeetcommunities.com",
+   "verified": false
+  },
+  "LLMHC": {
+   "community": "Lamberton Lake MHC",
+   "email": "llmhc@parakeetcommunities.com",
+   "verified": false
+  },
+  "LUCK": {
+   "community": "Lucky Clover",
+   "email": "luck@parakeetcommunities.com",
+   "verified": false
+  },
+  "MAY": {
+   "community": "Mayflower Hills",
+   "email": "may@parakeetcommunities.com",
+   "verified": false
+  },
+  "MCG": {
+   "community": "McGregor Downs",
+   "email": "mcg@parakeetcommunities.com",
+   "verified": false
+  },
+  "MWMHP": {
+   "community": "Meadow Woods Mobile Home Park",
+   "email": "mwmhp@parakeetcommunities.com",
+   "verified": false
+  },
+  "MON": {
+   "community": "Monson",
+   "email": "mon@parakeetcommunities.com",
+   "verified": false
+  },
+  "NALLS": {
+   "community": "Nalls Court MHC",
+   "email": "nalls@parakeetcommunities.com",
+   "verified": false
+  },
+  "NGMH": {
+   "community": "Northgate MH",
+   "email": "ngmh@parakeetcommunities.com",
+   "verified": false
+  },
+  "OAK": {
+   "community": "Oakside MHP",
+   "email": "oak@parakeetcommunities.com",
+   "verified": false
+  },
+  "OCEANPO": {
+   "community": "Oceanaire MHC",
+   "email": "oceanpo@parakeetcommunities.com",
+   "verified": false
+  },
+  "OBOPO": {
+   "community": "Ormond Beach Oasis",
+   "email": "obopo@parakeetcommunities.com",
+   "verified": false
+  },
+  "PPH": {
+   "community": "Palm Haven Estates",
+   "email": "pph@parakeetcommunities.com",
+   "verified": false
+  },
+  "PSEPO": {
+   "community": "Palm Spring Estates",
+   "email": "psepo@parakeetcommunities.com",
+   "verified": false
+  },
+  "PL": {
+   "community": "Paradise Lakes",
+   "email": "pl@parakeetcommunities.com",
+   "verified": false
+  },
+  "PP": {
+   "community": "Paradise Palms",
+   "email": "pp@parakeetcommunities.com",
+   "verified": false
+  },
+  "PARK": {
+   "community": "Parkwood Mobile Home Park",
+   "email": "park@parakeetcommunities.com",
+   "verified": false
+  },
+  "RED": {
+   "community": "Redlands",
+   "email": "red@parakeetcommunities.com",
+   "verified": false
+  },
+  "REG": {
+   "community": "Regency I & II",
+   "email": "reg@parakeetcommunities.com",
+   "verified": false
+  },
+  "RO": {
+   "community": "River Oaks RV Resort",
+   "email": "ro@parakeetcommunities.com",
+   "verified": false
+  },
+  "RW": {
+   "community": "Riverwalk",
+   "email": "rw@parakeetcommunities.com",
+   "verified": false
+  },
+  "RIV": {
+   "community": "Riviera",
+   "email": "riv@parakeetcommunities.com",
+   "verified": false
+  },
+  "ROYAL": {
+   "community": "Royal Oaks MHC",
+   "email": "royal@parakeetcommunities.com",
+   "verified": false
+  },
+  "RP": {
+   "community": "Royal Palm Trailer Park",
+   "email": "rp@parakeetcommunities.com",
+   "verified": false
+  },
+  "SS": {
+   "community": "Sea Shells Manufactured Housing Community",
+   "email": "ss@parakeetcommunities.com",
+   "verified": false
+  },
+  "SA": {
+   "community": "Shady Acres MHC",
+   "email": "sa@parakeetcommunities.com",
+   "verified": false
+  },
+  "SO": {
+   "community": "Shady Oaks MHP",
+   "email": "so@parakeetcommunities.com",
+   "verified": false
+  },
+  "SILVER": {
+   "community": "Silver Breeze",
+   "email": "silver@parakeetcommunities.com",
+   "verified": false
+  },
+  "SH": {
+   "community": "Silver Hill MHC",
+   "email": "sh@parakeetcommunities.com",
+   "verified": false
+  },
+  "SOUTH": {
+   "community": "Southgate",
+   "email": "south@parakeetcommunities.com",
+   "verified": false
+  },
+  "SUR": {
+   "community": "Su-Rene",
+   "email": "sur@parakeetcommunities.com",
+   "verified": false
+  },
+  "TC": {
+   "community": "Terrace Crossings",
+   "email": "tc@parakeetcommunities.com",
+   "verified": false
+  },
+  "TO": {
+   "community": "The Oaks",
+   "email": "to@parakeetcommunities.com",
+   "verified": false
+  },
+  "TCMHCPO": {
+   "community": "Town & Country MHC",
+   "email": "tcmhcpo@parakeetcommunities.com",
+   "verified": false
+  },
+  "TRADE": {
+   "community": "Tradewinds MHC",
+   "email": "trade@parakeetcommunities.com",
+   "verified": false
+  },
+  "SSS": {
+   "community": "Triple S Marina",
+   "email": "sss@parakeetcommunities.com",
+   "verified": false
+  },
+  "VO": {
+   "community": "Vantage Oaks",
+   "email": "vo@parakeetcommunities.com",
+   "verified": false
+  },
+  "WWPO": {
+   "community": "Westwood MHC",
+   "email": "wwpo@parakeetcommunities.com",
+   "verified": false
+  },
+  "WPMA": {
+   "community": "Whispering Pines MA",
+   "email": "wpma@parakeetcommunities.com",
+   "verified": false
+  },
+  "WPMH": {
+   "community": "Whispering Pines MH FL",
+   "email": "wpmh@parakeetcommunities.com",
+   "verified": false
+  },
+  "WIND": {
+   "community": "Windward Knoll",
+   "email": "wind@parakeetcommunities.com",
+   "verified": false
+  },
+  "WOLFPO": {
+   "community": "Wolf Bay MHC",
+   "email": "wolfpo@parakeetcommunities.com",
+   "verified": false
+  }
+ }
+}
