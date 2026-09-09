@@ -70,13 +70,20 @@ Never publish a stale or partial payload to the first one.
   a column the map never read. 12 left, all disposed sales history. The 45 demos
   were not idle: 41 have a replacement home already ordered or delivered.
 - ~~Feed the slip report into the Tuesday pre-read~~ → `slip_pack.py` renders the
-  section; the Tuesday routine regenerates it weekly.
+  section. **The routine change is drafted but NOT applied** — see below.
 - ~~Champion delivery performance is unmeasurable~~ → wrong question. Champion
   Construction is the site-prep contractor, not a manufacturer, and
   `Req Delivery Date` is written only by the Cavco import. **Skyline** is the
   manufacturer that is actually unmeasured.
 
 Now open instead:
+- **Austin, one approval needed.** `trig_01MDcyYXyogo9xgQqWAxkTNq` runs on your
+  Windows desktop, so its prompt cannot be changed from a container session —
+  `update_trigger` returned `needs_device_approval` and changed nothing. The
+  finished replacement text is in `docs/proposed/tuesday-preread-prompt.md`.
+  Approve it in a Claude conversation on that machine and the slip section starts
+  appearing in the pack. Until then the Tuesday pre-read is unchanged. Do not
+  delete and recreate the routine; that loses its run history.
 - **Someone owns telling Rent Manager to stop blanking `Property`.** The pipeline
   works around it; the field is still wrong at source, and Vantage Oaks alone
   accounts for 20 of the 45.
