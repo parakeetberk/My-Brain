@@ -577,14 +577,77 @@ Southgate, Vantage Oaks and Palm Haven Estates.
 That is a genuinely open question and it is small enough to fix: one import, one
 field, the same shape as the Cavco one.
 
+### Checked against the vendor reports themselves, 2026-09-09
+
+Austin supplied both raw vendor files. They confirm who does what and **correct
+one thing this section originally implied.**
+
+Champion's report is a construction schedule keyed by lot, not by home: BT#,
+community, lot, permits, demo, footers, spot, set and tie down, trim out,
+utilities and their inspections, punch out, certificate of occupancy, project
+completion. No manufacturer, no model, no serial, no order number. Champion
+Construction is a contractor. That much holds.
+
+**But the report does carry delivery, and the earlier reading that there was
+nothing to get from it was wrong.** Column R on the FL sheet is `Delivery`, and
+**108 of 256 lots have a real date in it.** The `champion-import` skill drops
+that column deliberately. So the question is not whether Champion has delivery
+data. It is which half of it matters.
+
+| | Lots | Already in Rent Manager |
+|---|---|---|
+| Champion `Delivery`, on or before the snapshot (actuals) | 89 | mostly yes |
+| Champion `Delivery`, after the snapshot (forward schedule) | 19 | no |
+
+Matching Champion's 108 to Rent Manager on community and lot: 73 match, and of
+those **55 already carry a delivery date and 18 do not**. Split the 18 by
+whether the date has passed and the picture is specific:
+
+- **2 are missing actuals.** Small, and worth a manual fix.
+- **16 are forward delivery commitments that exist nowhere in Rent Manager.**
+  Seventeen of the eighteen are Cavco-built homes sitting in `Ordered` status
+  with a booked delivery week on Champion's schedule — Vantage Oaks 38, 39, 46,
+  70, 96, 97, 102, 103, 31C, 31D; Lucky Clover 5, 47, 64, 105; Windward Knoll 16
+  and 62.
+
+**Cavco's actuals are landing, by hand.** Its sheet carries `Req to Ship` and
+`Shipped`; 98 lines have a real `Shipped` date, 82 match an RM asset, and 81 of
+those 82 already have the delivery date. The `cavco-import` skill treats Home
+Delivery as audit-only and never imports it, so somebody is keying those off the
+audit workbook every cycle. The process works. It is just manual, and it only
+covers Cavco.
+
+### So the real gap is a forward commitment nobody records
+
+This is the part that matters for the slip watcher. Those 16 homes cannot slip in
+our data, because their delivery week was never written down. A date that is not
+recorded cannot be seen to move, and this is exactly the signal the watcher
+exists to catch. 39 of the 108 use the `WE ` week-ending convention, which the
+parser already accepts.
+
+Two data notes from the same pass. Riverwalk lots 10 and 69 (BT#3817, BT#3819)
+both read `2029-06-09`, three years out and almost certainly meant to be 2026.
+And **the `champion-import` skill is out of date against this file**: it expects
+one sheet named `Parakeet` with headers in row 2, while the report now ships two
+region sheets — `REG 621-FL Parakeet - Report` with headers on row 5 and a
+repeated header block per community, and `REG 645 -SC, GA, AL-Report` with 57
+lots in a region the skill has never seen. Run it as written and it either fails
+or silently reads the wrong rows.
+
 ### What this means for the call
 
-Do not ask Mark Doucette about delivery slip. Champion Construction's measurable
-work is the fifteen setup stages, and those are the free-text `TBD` columns — of
-1,745 assets only **50 carry a single real setup-stage date at all**. That, not
-delivery, is the Champion conversation, and it is a data-capture conversation
-before it is a performance one. The actuals are coming from FastField; until they
-land, status transitions are the only observed measure.
+Still do not ask Mark Doucette about delivery slip in the sense of "why was this
+home late" — Champion does not deliver. Do ask why sixteen booked delivery weeks
+live only on his spreadsheet. Champion's own measurable work is the fifteen setup
+stages, and of 1,745 assets only **50 carry a single real setup-stage date**.
+That is a data-capture conversation before it is a performance one. The actuals
+are coming from FastField; until they land, status transitions are the only
+observed measure.
+
+One more consequence for the throughput tab: seventeen Cavco homes read `Ordered`
+in Rent Manager while Champion has their delivery booked. The `Ordered` pile is
+overstated and `Delivered` understated by up to that much, so the
+Ordered-to-Delivered rate is measuring paperwork lag as well as real flow.
 
 Restated plainly: **there is one measured manufacturer, one unmeasured
 manufacturer, and one contractor who was never a manufacturer.**

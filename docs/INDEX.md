@@ -74,7 +74,10 @@ Never publish a stale or partial payload to the first one.
 - ~~Champion delivery performance is unmeasurable~~ → wrong question. Champion
   Construction is the site-prep contractor, not a manufacturer, and
   `Req Delivery Date` is written only by the Cavco import. **Skyline** is the
-  manufacturer that is actually unmeasured.
+  manufacturer that is actually unmeasured. Confirmed against both raw vendor
+  files 2026-09-09, which also corrected one thing: Champion's report *does*
+  carry a `Delivery` column with 108 real dates, and the forward half of it is
+  not captured anywhere.
 
 Now open instead:
 - **Austin, one approval needed.** `trig_01MDcyYXyogo9xgQqWAxkTNq` runs on your
@@ -87,6 +90,16 @@ Now open instead:
 - **Someone owns telling Rent Manager to stop blanking `Property`.** The pipeline
   works around it; the field is still wrong at source, and Vantage Oaks alone
   accounts for 20 of the 45.
+- **Capture Champion's `Delivery` column.** Checked against the raw vendor file:
+  16 homes have a booked delivery week that exists only on Champion's
+  spreadsheet, so they cannot slip in our data because the date was never
+  written down. The import drops that column on purpose; the forward half of it
+  should not be dropped.
+- **`champion-import` is out of date against the current report.** It expects one
+  sheet named `Parakeet` with headers in row 2; the file now has two region
+  sheets, headers on row 5 in the FL one, repeated per community block, plus 57
+  SC/GA/AL lots the skill has never seen. It will fail or misread. Fix before the
+  next run.
 - **Build a Skyline import** for `Req Delivery Date`. Same shape as the Cavco
   one, 30 homes in the pipeline with no commitment date to measure against.
 - **Recut the demo pace against 91, not 136.** 45 of the 136 have a home coming;
