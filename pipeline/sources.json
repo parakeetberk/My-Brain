@@ -25,6 +25,7 @@
   "asset_listing": {
    "canonical": [
     "community",
+    "financial_property",
     "unit",
     "asset_name",
     "asset_type",
@@ -69,6 +70,7 @@
      "as_of_from": "filename",
      "map": {
       "community": "Property",
+      "financial_property": "Financial Property",
       "unit": "Unit",
       "asset_name": "Asset Name",
       "asset_type": "Asset Type",
@@ -95,6 +97,7 @@
      "as_of_from": "run_date",
      "map": {
       "community": "EntitiesName",
+      "financial_property": "FinancialProperty",
       "unit": "SubEntitiesName",
       "asset_name": "AssetsAssetTagID",
       "asset_type": "AssetTypesName",

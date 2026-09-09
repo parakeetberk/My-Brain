@@ -65,11 +65,27 @@ Never publish a stale or partial payload to the first one.
   likely source of a wrong conclusion on the current page.
 - Watch the AR reconciliation ledger for whether the gap tracks drift.
 
-**Home Pipeline thread**
-- The 71 assets with no community, 45 marked to be demoed.
-- Feed the slip report into the Tuesday pre-read rather than a new email.
-- Champion delivery performance is unmeasurable — zero Champion homes carry
-  both a requested and an actual delivery date.
+**Home Pipeline thread** — all three closed 2026-09-09, see `PLATFORM_SPEC.md`
+- ~~The 71 assets with no community~~ → 59 recovered from `Financial Property`,
+  a column the map never read. 12 left, all disposed sales history. The 45 demos
+  were not idle: 41 have a replacement home already ordered or delivered.
+- ~~Feed the slip report into the Tuesday pre-read~~ → `slip_pack.py` renders the
+  section; the Tuesday routine regenerates it weekly.
+- ~~Champion delivery performance is unmeasurable~~ → wrong question. Champion
+  Construction is the site-prep contractor, not a manufacturer, and
+  `Req Delivery Date` is written only by the Cavco import. **Skyline** is the
+  manufacturer that is actually unmeasured.
+
+Now open instead:
+- **Someone owns telling Rent Manager to stop blanking `Property`.** The pipeline
+  works around it; the field is still wrong at source, and Vantage Oaks alone
+  accounts for 20 of the 45.
+- **Build a Skyline import** for `Req Delivery Date`. Same shape as the Cavco
+  one, 30 homes in the pipeline with no commitment date to measure against.
+- **Recut the demo pace against 91, not 136.** 45 of the 136 have a home coming;
+  the stalled backlog is the 91 with nothing coming.
+- **Austin: the Cavco zero-day median is Cavco measured against itself.** It is
+  not a vendor win and should not be presented as one on the call.
 
 ## Things that will bite whoever touches them
 
@@ -95,3 +111,7 @@ recoverable; a fabricated day cannot be told from a real one.
 (sold or an `x`-prefixed retired duplicate — sales history only) and
 `unattributed`. Counting historical inflates every current-inventory figure;
 filtering it erases real sales.
+
+**`Property` goes blank when a record is superseded; `Financial Property` does
+not.** That one column was hiding 59 assets, 45 of them demos. Anything reading
+`Property` alone undercounts. `community_source` says which field answered.

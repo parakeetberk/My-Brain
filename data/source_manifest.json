@@ -1,8 +1,8 @@
 {
  "asset_listing": {
   "provider": "sharepoint_daily",
-  "as_of": "2026-09-06",
-  "source_file": "Asset Listing_260906.csv",
+  "as_of": "2026-09-07",
+  "source_file": "Asset Listing_260907.csv",
   "row_count": 1745,
   "read_on": "2026-09-09"
  }

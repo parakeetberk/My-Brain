@@ -146,9 +146,21 @@ def classify_community(raw, look, roster, _cache={}):
                        still live, or a community that has been disposed. Its
                        assets are mostly Sold and they are real sales. Counts
                        toward sales history, never toward current inventory.
-      unattributed  -- UNASSIGNED, blank, or a name nothing matches. Counted
-                       nowhere and flagged, because 45 homes marked To Be Demoed
-                       with no community is a data problem, not a pile.
+      unattributed  -- UNASSIGNED, blank, or a name nothing matches, AND no
+                       `Financial Property` to recover from. Counted nowhere and
+                       flagged.
+
+    On the recovery. `Property` reads UNASSIGNED on 71 assets, 45 of them To Be
+    Demoed, and those 45 were being counted nowhere. They are not orphans: they
+    are the outgoing home on a lot where the replacement is already ordered or
+    delivered, and Rent Manager blanks `Property` when a record is superseded.
+    `Financial Property` is still populated on all 45 and names the park.
+
+    So normalise() falls back to it. That is a read of a field the export already
+    carries, not an inference: checked on 2026-09-07, all 45 have it, and on the
+    41 that also have a `-vN` sibling record it agrees with the sibling's park
+    41 times out of 41, with zero disagreements. `community_source` records which
+    field answered, so a recovered row is never mistaken for a clean one.
 
     The alias pass matters: `Hunter Springs MHC` in the asset file against
     `Hunter Springs MHP` in the roster was silently dropping seven live assets
@@ -198,6 +210,16 @@ def normalise(rows, field_map, dataset):
         if "community" in rec:
             scope, canon = classify_community(rec.get("community"), look, roster)
             rec["community_raw"] = rec.get("community")
+            rec["community_source"] = "property"
+            # `Property` goes blank when a record is superseded, but the asset
+            # still belongs to a park and `Financial Property` still says which.
+            # Recovering from it is a read, not a guess -- see the note below.
+            if scope == "unattributed" and rec.get("financial_property"):
+                alt_scope, alt_canon = classify_community(
+                    rec["financial_property"], look, roster)
+                if alt_scope != "unattributed" and alt_canon:
+                    scope, canon = alt_scope, alt_canon
+                    rec["community_source"] = "financial_property"
             rec["community"] = canon
             rec["scope"] = scope
         out.append(rec)

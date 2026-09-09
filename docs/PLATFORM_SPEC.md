@@ -254,11 +254,22 @@ Worth keeping the columns regardless. They are the team's forward-looking target
 dates, which is a different and useful thing — and `TBD` on 83% of the homes
 that have any value at all is itself a finding for whoever owns home setup.
 
-Two hazards before trusting the archive. The schema is **not stable across
-dates** — files around 2026-08-13 to 08-17 and 08-31 carry a different header
-beginning with property name and short code rather than the 125-column layout.
-Read every file's header; never assume column positions. And column 101 is
-`UDF: Sewer Connection Date'` with a trailing apostrophe in the source.
+Three hazards before trusting the archive. The schema is **not stable across
+dates** — some files carry a different header beginning with property name and
+short code rather than the 125-column layout. The alternate layout is **more
+widespread than first recorded**: 2026-07-28, 08-13, 08-17, 08-24 and **09-04**
+all carry it, so it is not a one-week glitch around mid-August and there is no
+safe date range to assume. Read every file's header; never assume column
+positions. Column 101 is `UDF: Sewer Connection Date'` with a trailing apostrophe
+in the source. And **consecutive files can be byte-identical** — 09-06 and 09-07
+are, being a Sunday and Labor Day. That is correct behaviour, not a broken
+export, and the slip watcher rightly emits nothing for such a pair. Do not treat
+an unchanged file as a failed pull.
+
+**`Financial Property` is the column that matters most and was the one not being
+read.** It survives when `Property` is blanked on a superseded record, and it is
+what recovered 59 of the 71 unattributed assets. It is now in the canonical map.
+See the unattributed section under the throughput tab.
 
 ## Prospects
 
@@ -344,6 +355,36 @@ one that slipped once by the same total, and only a ledger can tell them apart.
 existing Tuesday 5pm rehab pre-read routine already builds. A second email
 nobody asked for is how a good signal gets ignored.
 
+`pipeline/slip_pack.py` renders the ledger as that section and writes
+`data/pre_read_slips.md`. The Tuesday routine
+(`trig_01MDcyYXyogo9xgQqWAxkTNq`) regenerates it each week rather than reading a
+committed copy, because a week-old slip file is exactly the thing this is
+supposed to catch.
+
+Three judgements are baked into the renderer, and they are the difference between
+a section people act on and a table they skim.
+
+**Bulk moves collapse to one line.** The ten Lucky Clover homes are one decision.
+Printed as ten rows they invite ten explanations of a thing that needs one, and
+they crowd out the eight single-home pushes underneath. Three or more homes
+landing on the same date in the same observation prints as one line with the
+range. Two still print individually, because two can be coincidence.
+
+**The observation gap is stated out loud.** A push is dated when we *saw* it, not
+when it happened, and the archive has a 31-day hole between 2026-08-03 and
+2026-09-03. Saying "20 pushes this week" off that ledger would be flatly wrong.
+The header names the real window and flags any gap over three days, so the pack
+says "has moved", never "moved on".
+
+**No vendor league table.** See the Champion section below. `Req Delivery Date`
+is written only by the Cavco import, so a by-manufacturer breakdown of
+requested-delivery slips measures the import, not the vendor. The renderer prints
+that caveat rather than the table.
+
+Empty is a real answer and reads as one: with no pushes the section says nothing
+moved later *in the window scanned*, which is different from nothing being
+checked.
+
 First run over four snapshots (8/3, 9/3, 9/5, 9/6) found 20 pushes, all Cavco,
 +2,069 days in total. The headline is not the total, it is the shape: **ten
 Lucky Clover homes all re-dated from February and April to 2026-08-24 in one
@@ -374,9 +415,9 @@ ways:
 
 | Scope | Rows | What it is | Counts toward |
 |---|---|---|---|
-| `current` | 1,468 | live reportable community | piles and pace |
-| `historical` | 205 | `x`-prefixed retired duplicate of a live park, or a disposed community. 98 Sold. | sales history only |
-| `unattributed` | 71 | `UNASSIGNED` or a name nothing matches | nothing, and flagged |
+| `current` | 1,526 | live reportable community | piles and pace |
+| `historical` | 207 | `x`-prefixed retired duplicate of a live park, or a disposed community. Mostly Sold. | sales history only |
+| `unattributed` | 12 | `UNASSIGNED` with no `Financial Property` either | nothing, and flagged |
 
 The `x` prefix is Rent Manager's retired-record marker, and ten of them shadow
 communities that are still live — `xLake Wales MHC`, `xBay Oaks Village I` and
@@ -389,9 +430,55 @@ against `Hunter Springs MHP` in the roster** was silently dropping seven live
 assets over a three-letter suffix. That is the class of bug this whole exercise
 exists to catch.
 
-**71 unattributed assets, 45 of them marked To Be Demoed with no community at
-all.** Counted nowhere by design. That is a data-entry problem worth a flag, not
-a pile worth reporting.
+### The 71 unattributed were not orphans, and 59 of them are now attributed
+
+Resolved 2026-09-09, and it moved the demo pile.
+
+`Property` read `UNASSIGNED` on 71 assets, 45 of them To Be Demoed. They were
+counted nowhere. The reading that they are a data-entry backlog was wrong on
+both halves: the community was never missing, and the homes are not idle.
+
+**The community is in the file already.** `Financial Property` is populated on
+all 45 demos and names the park. That is a column the export has always carried
+and the canonical map simply did not read. It is now mapped, and `normalise()`
+falls back to it when `Property` classifies as unattributed.
+
+It is a read, not a guess, and it was checked before being trusted. 41 of the 45
+also carry a `-vN` sibling record, and the recovered park matches the sibling's
+park 41 times out of 41, zero disagreements. Every recovered row carries
+`community_source: financial_property`, so a recovered row can never be mistaken
+for a clean one, and the underlying `Property` value is still wrong in Rent
+Manager whether or not this pipeline works around it.
+
+**The homes are mid-swap, not stalled.** 41 of the 45 have a sibling replacement
+home already Ordered, Delivered or For Sale. `-v1` is the outgoing home, carrying
+a purchase price around $5K; the base record is its ~$50K Cavco replacement. Rent
+Manager blanks `Property` when a record is superseded, which is exactly why these
+fell out.
+
+So the demo pile is not one number, and reporting it as one is the mistake:
+
+| | Homes | What it is |
+|---|---|---|
+| Attributed, no replacement | 87 | bare lots, nothing coming. **This is the 52-month backlog.** |
+| Attributed, replacement in flight | 4 | mid-swap |
+| Recovered, replacement in flight | 41 | mid-swap, previously invisible |
+| Recovered, no replacement | 4 | bare lots, previously invisible |
+| **Current To Be Demoed** | **136** | was reported as 91 |
+
+Only 87 of the 91 previously reported demos were stalled lots. Adding the
+recovered 45 raises the pile to 136 but does *not* raise the backlog: 41 of the
+45 already have a home on the way. The pace figure has to be recut against the
+91 lots with nothing coming, not against 136.
+
+**Vantage Oaks is 20 of the 45**, against 32 Delivered and 11 Ordered in the same
+park. One community running a large infill program had its entire demo leg
+invisible. That concentration says the blanking follows a workflow, so it will
+keep happening until whoever runs that program is told.
+
+12 assets are still unattributed. All 12 are `Sold` with no `Financial Property`
+at all — Twin Lakes, Fort Lauderdale, a few bare unit numbers. Old sales history
+for parks we do not own. Correctly counted nowhere, and not worth chasing.
 
 ### The corrected numbers
 
@@ -400,7 +487,7 @@ Scoped to `current`, transitions only, 2026-08-03 to 2026-09-06:
 | Stage | Pile | In | Out | Net/mo | |
 |---|---|---|---|---|---|
 | Needs Rehab | 147 | 17 | 11 | **+5.3** | backlog growing |
-| To Be Demoed | 91 | 4 | 6 | −1.8 | 52 months to clear |
+| To Be Demoed | 136 | 4 | 6 | −1.8 | see below; only 91 of these are stalled |
 | Ordered | 69 | 5 | 30 | −22.1 | draining into delivery |
 | Delivered | 104 | 30 | 17 | +11.5 | |
 | For Sale | 128 | 29 | 9 | **+17.6** | the bottleneck |
@@ -417,8 +504,11 @@ For Sale  -> Rental       3.5/mo
 median slip is zero days and 26.5 homes a month arrive. Homes pile up after they
 are ready.
 
-The demo pile is the quiet one: 91 units clearing at under 2 a month is 52
-months, and every one is a lot carrying no rent.
+The demo pile is the quiet one, and it got quieter once the unattributed 45 were
+recovered. 136 homes carry the To Be Demoed status, but 45 of them already have a
+replacement ordered or delivered. The pile that is genuinely stuck is the **91
+lots with no home coming**, clearing at under 2 a month. Every one is a lot
+carrying no rent, and at that pace it is decades, not months.
 
 ### What the tab has to say out loud
 
@@ -445,3 +535,56 @@ already designed elsewhere. What this platform does in the meantime is derive
 what it can from status transitions, and hold a slot for the real actuals: a
 `asset_actuals` dataset in `sources.json` with a Quickbase provider, disabled
 until it exists. Same switch as every other source.
+
+## Champion cannot be compared to Cavco, because they do not do the same job
+
+The open question was why all 62 homes carrying both a requested and an actual
+delivery date are Cavco, and zero are Champion — read at the time as half the
+supply having no measurable delivery performance. Checked against
+`Asset Listing_260907.csv` on 2026-09-09. The premise does not hold, in three
+separate ways.
+
+**Champion Construction is the site-prep contractor, not a home manufacturer.**
+Its customer report feeds the set-and-prep tracker and the `champion-import`
+skill writes eighteen fields, all of them setup stages: permits, demo, footers,
+spot, set and tie down, trim out, utilities, skirting, steps, punch out,
+certificate of occupancy. Not one is a delivery date. The report *has* a Delivery
+column and the skill explicitly does not import it. Champion Construction never
+delivers a home; it preps the lot and sets what arrives. Measuring its delivery
+slip is a category error.
+
+**`Req Delivery Date` is a Cavco-only field by construction.** The `cavco-import`
+skill writes exactly three fields — Online, Offline and Req Delivery Date, the
+last from Cavco's "Req to Ship" column. Nothing else in the stack writes it. So
+all 62 populated rows are Cavco not because Cavco is better documented but
+because Cavco is the only source of the field. **Cavco's median slip of zero days
+is Cavco measured against itself.** It is not evidence that Cavco outperforms
+anyone, and it must not be presented on the call as though it were.
+
+**Champion is not half the supply. It is 2%.** Of 316 homes in the live pipeline
+(Ordered, Delivered, For Sale): Cavco 180, Skyline 30, Champion 6. Across the
+whole 1,745-row file Champion appears 29 times, mostly as the maker of old rental
+stock that came with an acquisition.
+
+### Skyline is the real measurement gap
+
+The manufacturer actually missing from delivery performance is **Skyline: 30
+homes in the pipeline, 29 with an actual delivery date, zero with a requested
+one.** There is no Skyline import. Nobody writes its commitment date, so there is
+nothing to measure a slip against — 27 of those 30 are already For Sale, at
+Southgate, Vantage Oaks and Palm Haven Estates.
+
+That is a genuinely open question and it is small enough to fix: one import, one
+field, the same shape as the Cavco one.
+
+### What this means for the call
+
+Do not ask Mark Doucette about delivery slip. Champion Construction's measurable
+work is the fifteen setup stages, and those are the free-text `TBD` columns — of
+1,745 assets only **50 carry a single real setup-stage date at all**. That, not
+delivery, is the Champion conversation, and it is a data-capture conversation
+before it is a performance one. The actuals are coming from FastField; until they
+land, status transitions are the only observed measure.
+
+Restated plainly: **there is one measured manufacturer, one unmeasured
+manufacturer, and one contractor who was never a manufacturer.**
