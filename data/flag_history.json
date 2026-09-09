@@ -18,11 +18,17 @@
      "event": "opened",
      "severity": "warn",
      "title": "The 90+ bucket is up 30% in seven months"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "The 90+ bucket is up 31% in seven months"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "The 90+ bucket is up 30% in seven months"
+   "title": "The 90+ bucket is up 31% in seven months"
   },
   "closed-month-expenses-part-posted": {
    "first_seen": "2026-09-05",
@@ -37,6 +43,20 @@
    "last_seen": "2026-09-09",
    "severity": "warn",
    "title": "2026-08 expenses look only partly posted"
+  },
+  "communities-without-rm-detail": {
+   "first_seen": "2026-09-09",
+   "history": [
+    {
+     "date": "2026-09-09",
+     "event": "opened",
+     "severity": "info",
+     "title": "2 communities have no Rent Manager unit detail"
+    }
+   ],
+   "last_seen": "2026-09-09",
+   "severity": "info",
+   "title": "2 communities have no Rent Manager unit detail"
   },
   "eviction-communities-off-roster": {
    "first_seen": "2026-09-05",
@@ -101,11 +121,17 @@
      "event": "opened",
      "severity": "warn",
      "title": "19 homes are for sale but not marked Ready to Market"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "18 homes are for sale but not marked Ready to Market"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "19 homes are for sale but not marked Ready to Market"
+   "title": "18 homes are for sale but not marked Ready to Market"
   },
   "former-resident-coverage": {
    "first_seen": "2026-09-05",
@@ -115,11 +141,17 @@
      "event": "opened",
      "severity": "info",
      "title": "Former-resident status is known for 570 of 1427 balances"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "info",
+     "title": "Former-resident status is known for 261 of 503 balances"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "Former-resident status is known for 570 of 1427 balances"
+   "title": "Former-resident status is known for 261 of 503 balances"
   },
   "live-ar-above-closed-month": {
    "first_seen": "2026-09-05",
@@ -140,12 +172,12 @@
      "date": "2026-09-09",
      "event": "changed",
      "severity": "info",
-     "title": "Live receivables run $316K above the closed month by design"
+     "title": "Live receivables run $328K above the closed month by design"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "Live receivables run $316K above the closed month by design"
+   "title": "Live receivables run $328K above the closed month by design"
   },
   "lots-exceed-pds-core": {
    "first_seen": "2026-09-05",
@@ -169,11 +201,17 @@
      "event": "opened",
      "severity": "warn",
      "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "2026-08 move-outs look unposted: 12 against a 12-month median of 124"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "2026-08 move-outs look unposted: 1 against a 12-month median of 73"
+   "title": "2026-08 move-outs look unposted: 12 against a 12-month median of 124"
   },
   "no-punch-stage-in-rm": {
    "first_seen": "2026-09-05",
@@ -217,11 +255,17 @@
      "event": "opened",
      "severity": "info",
      "title": "6 months carry onboarding move-ins, not leasing"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "info",
+     "title": "17 months carry onboarding move-ins, not leasing"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "6 months carry onboarding move-ins, not leasing"
+   "title": "17 months carry onboarding move-ins, not leasing"
   },
   "open-month-financials-unposted": {
    "first_seen": "2026-09-05",
@@ -266,11 +310,17 @@
      "event": "opened",
      "severity": "warn",
      "title": "43 communities disagree on how many park-owned homes they have"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "38 communities disagree on how many park-owned homes they have"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "43 communities disagree on how many park-owned homes they have"
+   "title": "38 communities disagree on how many park-owned homes they have"
   },
   "regional-managers-unmapped": {
    "first_seen": "2026-09-06",
@@ -294,11 +344,17 @@
      "event": "opened",
      "severity": "info",
      "title": "5 communities post revenue with no budget loaded"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "info",
+     "title": "8 communities post revenue with no budget loaded"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "5 communities post revenue with no budget loaded"
+   "title": "8 communities post revenue with no budget loaded"
   },
   "rv-revenue-in-campspot": {
    "first_seen": "2026-09-06",
@@ -314,11 +370,17 @@
      "event": "changed",
      "severity": "warn",
      "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "2 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "3 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
+   "title": "2 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
   },
   "sold-excluded-by-override": {
    "first_seen": "2026-09-05",
@@ -328,9 +390,16 @@
      "event": "opened",
      "severity": "info",
      "title": "2 sold properties are excluded by override, not by the PDS"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "resolved",
+     "severity": "info",
+     "title": "2 sold properties are excluded by override, not by the PDS"
     }
    ],
    "last_seen": "2026-09-09",
+   "resolved_on": "2026-09-09",
    "severity": "info",
    "title": "2 sold properties are excluded by override, not by the PDS"
   },
@@ -356,11 +425,17 @@
      "event": "opened",
      "severity": "warn",
      "title": "Utility recapture is 46% against a 80% target"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "warn",
+     "title": "Utility recapture is 45% against a 80% target"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "warn",
-   "title": "Utility recapture is 46% against a 80% target"
+   "title": "Utility recapture is 45% against a 80% target"
   },
   "vacancy-aging-coverage": {
    "first_seen": "2026-09-05",
@@ -370,11 +445,17 @@
      "event": "opened",
      "severity": "info",
      "title": "Vacancy aging covers 551 of 1820 vacant units"
+    },
+    {
+     "date": "2026-09-09",
+     "event": "changed",
+     "severity": "info",
+     "title": "Vacancy aging covers 552 of 1723 vacant units"
     }
    ],
    "last_seen": "2026-09-09",
    "severity": "info",
-   "title": "Vacancy aging covers 551 of 1820 vacant units"
+   "title": "Vacancy aging covers 552 of 1723 vacant units"
   },
   "vacancy-count-vs-named-list": {
    "first_seen": "2026-09-05",

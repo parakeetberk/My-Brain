@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-09-09T03:20:21+00:00",
+ "generated_at": "2026-09-09T18:47:17+00:00",
  "reportable_source": "pds_reportable.json",
  "counts": {
   "names_seen": 152,
-  "reportable_in_pds": 66,
-  "communities": 64,
-  "dropped": 83,
+  "reportable_in_pds": 67,
+  "communities": 67,
+  "dropped": 80,
   "rolled_up": 5,
   "reportable_without_data": 0
  },
@@ -197,9 +197,9 @@
    "reason": "Not marked Reportable = Yes in the Property Data Sheet"
   },
   "Geiger Key RV Resort": {
-   "disposition": "drop",
-   "canonical": null,
-   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
+   "disposition": "keep",
+   "canonical": "Geiger Key RV Resort",
+   "reason": ""
   },
   "Geiger Key Resort Propco": {
    "disposition": "drop",
@@ -557,14 +557,14 @@
    "reason": "Sold: Sold July 2026, confirmed by Austin 2026-09-04"
   },
   "Shirleys Trailer Park I": {
-   "disposition": "drop",
-   "canonical": null,
-   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
+   "disposition": "keep",
+   "canonical": "Shirleys Trailer Park I",
+   "reason": ""
   },
   "Shirleys Trailer Park II": {
-   "disposition": "drop",
-   "canonical": null,
-   "reason": "Not marked Reportable = Yes in the Property Data Sheet"
+   "disposition": "keep",
+   "canonical": "Shirleys Trailer Park II",
+   "reason": ""
   },
   "Silver Breeze": {
    "disposition": "keep",

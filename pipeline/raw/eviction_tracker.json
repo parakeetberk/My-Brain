@@ -1,7 +1,7 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-08",
- "case_count": 349,
+ "as_of": "2026-09-09",
+ "case_count": 350,
  "open_cases": 94,
  "dropped_columns": [
   "FullName",
@@ -929,7 +929,7 @@
    "closed": "2026-08-24",
    "stage_since": "2026-08-06",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 694.39,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -1517,7 +1517,7 @@
    "closed": "",
    "stage_since": "2025-09-30",
    "sent_to_attorney": "",
-   "open_charges": 1817.35,
+   "open_charges": 1167.35,
    "has_case": false
   },
   {
@@ -2585,7 +2585,7 @@
    "closed": "2026-01-20",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1308.29,
+   "open_charges": 1233.29,
    "has_case": false
   },
   {
@@ -2669,7 +2669,7 @@
    "closed": "2026-01-06",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 3703.16,
+   "open_charges": 3628.16,
    "has_case": false
   },
   {
@@ -2719,6 +2719,18 @@
    "sent_to_attorney": "",
    "open_charges": 11940.0,
    "has_case": true
+  },
+  {
+   "community": "Palm Spring",
+   "short_name": "PSEPO",
+   "unit": "19",
+   "stage": "Intake Packet",
+   "start": "2026-09-08",
+   "closed": "",
+   "stage_since": "2026-09-08",
+   "sent_to_attorney": "2026-09-08",
+   "open_charges": 3099.19,
+   "has_case": false
   },
   {
    "community": "Hunter Springs",
@@ -2846,10 +2858,10 @@
    "unit": "A100",
    "stage": "Rule to Vacate",
    "start": "2026-05-08",
-   "closed": "",
+   "closed": "2026-09-08",
    "stage_since": "2026-05-08",
    "sent_to_attorney": "",
-   "open_charges": 3942.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -3245,7 +3257,7 @@
    "closed": "2025-10-15",
    "stage_since": "2025-10-07",
    "sent_to_attorney": "",
-   "open_charges": 2296.0,
+   "open_charges": 2221.0,
    "has_case": false
   },
   {
@@ -3257,7 +3269,7 @@
    "closed": "2025-12-05",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1521.0,
+   "open_charges": 1446.0,
    "has_case": false
   },
   {
@@ -3305,7 +3317,7 @@
    "closed": "",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1521.0,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -3497,7 +3509,7 @@
    "closed": "2026-08-31",
    "stage_since": "2026-08-25",
    "sent_to_attorney": "2026-08-25",
-   "open_charges": 2253.75,
+   "open_charges": 1253.75,
    "has_case": false
   },
   {
@@ -3509,7 +3521,7 @@
    "closed": "2026-09-01",
    "stage_since": "2026-08-25",
    "sent_to_attorney": "2026-08-25",
-   "open_charges": 3631.79,
+   "open_charges": 1811.14,
    "has_case": false
   },
   {
@@ -3941,7 +3953,7 @@
    "closed": "2026-08-31",
    "stage_since": "2026-08-10",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 3397.99,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -4085,7 +4097,7 @@
    "closed": "2026-08-11",
    "stage_since": "2026-07-31",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 0.0,
+   "open_charges": 961.81,
    "has_case": false
   },
   {
