@@ -29,6 +29,38 @@
    "rent_manager_as_of": "2026-09-04",
    "drift_days": -4,
    "note": "rent charges, the first field"
+  },
+  {
+   "date": "2026-09-09",
+   "source": "ar",
+   "grain": "reportable property (not unit) -- the grain the dashboard headline uses",
+   "warehouse_total": 946345.0,
+   "rent_manager_total": 869813.99,
+   "gap": 76531.01,
+   "shared_keys": null,
+   "only_warehouse": 6,
+   "only_rent_manager": 0,
+   "only_rent_manager_value": 0.0,
+   "warehouse_as_of": "2026-09-05",
+   "rent_manager_as_of": "2026-09-05",
+   "drift_days": 0,
+   "note": "ZERO-DRIFT RUN, the falsifying test the 513K question was waiting on. RM report 78 was pinned with asOfDate=2026-09-05 to match the warehouse snapshot instead of being pulled as-of-run. The gap collapsed from -512,889 at 1 day of drift to +76,531 at zero drift, so the bulk of it was timing across the grace day and Austin's read was right. The 76,531 residual is 6 reportable communities RM returns no AR rows for at all and 87 fewer accounts with a balance."
+  },
+  {
+   "date": "2026-09-09",
+   "source": "ar_month_end_reconstruction",
+   "grain": "reportable property",
+   "warehouse_total": 618782.0,
+   "rent_manager_total": 490823.66,
+   "gap": 127958.34,
+   "shared_keys": null,
+   "only_warehouse": 16,
+   "only_rent_manager": 0,
+   "only_rent_manager_value": 0.0,
+   "warehouse_as_of": "2026-08-31",
+   "rent_manager_as_of": "2026-08-31",
+   "drift_days": 0,
+   "note": "Can report 78 carry the trend history? No. asOfDate is honoured, but the report RECONSTRUCTS aging from the current ledger rather than reading a snapshot, so anything written off, reversed or settled since has vanished from the past. At the 2026-08-31 month end it returns 490,824 against the warehouse's real snapshot of 618,782, 21 pct light, on 283 accounts against 419. The 90+ bucket survives best at -5 pct (306,243 vs 323,119) because old money that is still old is still there; the recent buckets collapse (0-30 at 115,716). Rebuilding 20 months of trend this way would slope the 90+ line the wrong way for a reason that has nothing to do with operations."
   }
  ]
 }
