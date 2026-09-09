@@ -15,10 +15,31 @@ and pushed. Files written to disk and not committed are gone.
 
 ## Cadence
 
-| | when | why that |
-|---|---|---|
-| **Daily refresh** | weekdays 07:00 ET (`0 11 * * 1-5`) | the asset listing lands ~08:05 ET, the warehouse refresh is irregular — see below |
-| **Tuesday pre-read** | Tuesdays 17:00 ET (`0 21 * * 2`) | ahead of the Wednesday calls, late enough that Tuesday's one-on-ones are done |
+| | routine | when | where it runs |
+|---|---|---|---|
+| **Daily refresh** | `trig_01T4XA7jhvobx7VHmsDkUUWd` | weekdays 07:00 ET (`0 11 * * 1-5`) | cloud, fresh session per fire |
+| **Tuesday pre-read** | `trig_01MDcyYXyogo9xgQqWAxkTNq` | Tuesdays 17:00 ET (`0 21 * * 2`) | **Austin's Windows desktop** |
+
+Two facts about these that matter more than the times.
+
+**The daily one is a cloud routine and safe to edit from a session.** Fresh
+session per fire, empty container, and it carries the Microsoft 365, RentViewer
+and Rent Manager connectors. Its prompt can be updated with `update_trigger`.
+
+**The Tuesday one is bound to Austin's desktop**, because it reads the My Brain
+vault on that machine. Its prompt can only change with his approval given in a
+conversation connected to that computer — `update_trigger` returns
+`needs_device_approval` and changes nothing. Never delete and recreate it to get
+around that: it discards the run history and the device binding. A pending prompt
+change for it sits in [proposed/tuesday-preread-prompt.md](proposed/tuesday-preread-prompt.md).
+
+**Connectors cannot be attached to a new routine from inside a session.** This
+organisation does not allow it — `create_trigger` rejects the parameter outright,
+and creating without it produces a routine whose sessions have no connector tools
+at all, which for this pipeline means a routine that cannot do anything. So a
+NEW scheduled routine has to be created by Austin in claude.ai Routines settings.
+Editing an existing one's prompt, name, schedule or enabled state works fine.
+That is why the daily refresh was amended rather than replaced.
 
 **The daily job runs daily even though the warehouse does not refresh daily.**
 That looks wasteful and is not. The warehouse's refresh cadence is irregular and
@@ -29,10 +50,11 @@ costs one wasted pull and guarantees we never miss the day it does refresh. The
 alternative, guessing the cadence, loses baseline permanently every time the
 guess is wrong.
 
-The 07:00 slot is before the asset listing lands at 08:05. That is deliberate for
-now: the asset archive keeps every day's file in SharePoint, so a missed day is
-recoverable from history, whereas the warehouse is not. Move the slot to 08:30 ET
-once the routine is proven, and the asset step stops running a day behind.
+The 07:00 slot sits before the asset listing lands at 08:05, which is fine
+because the daily job does not read the asset listing — that belongs to the
+Tuesday pre-read, and the archive keeps every day's file in SharePoint so a
+missed day is recoverable there. Worth revisiting only if the daily job ever
+takes on the asset fold.
 
 ## What runs, in order
 
@@ -110,5 +132,8 @@ slip. Ninety-three raw pushes came to one projection worth raising.
   `sources.json`, not a rebuild.
 - No warehouse model publishes a refresh timestamp. Until one does, step 2 is
   manual. Same ask, same person as `dw_prospects`.
-- The daily slot is 07:00 ET, an hour before the asset listing lands. Move to
-  08:30 once the routine has proven itself.
+- The daily refresh has never yet completed a run. It was created 2026-09-09 at
+  01:22 UTC and first fires the same day at 11:04 UTC. Until it does, treat the
+  schedule as unproven and read its first report closely.
+- Steps 2b and 5b are new as of 2026-09-09 and are in the routine's prompt but
+  have never run unattended.
