@@ -248,3 +248,90 @@ Nothing else in phase one is blocked.
 3. Day-of-month curves rendered as soon as ~30 days exist, unlabelled and
    without alerts, so the shape can be sanity-checked by eye.
 4. Alerts at 60 days, provisional, once the manager mapping exists.
+
+## Pushed dates: the slip watcher
+
+Austin's ask: catch it when a projected date moves later, and flag it so the
+question gets asked on the call rather than discovered afterwards.
+
+`pipeline/slip_watch.py` diffs consecutive daily asset snapshots per asset per
+date field and appends every movement to `data/date_slips.json`. Twenty date
+fields are watched — the three the Cavco and Champion imports write, plus all
+fifteen setup stages. Movements are classified rather than lumped: **pushed** (a
+real date moved later), **pulled** (earlier), **set** (a projection recorded for
+the first time, which is not a slip), **cleared**, and **text** (a placeholder
+edited). Only `pushed` reaches the call pack.
+
+The ledger is append-only and committed, so cumulative drift per home
+accumulates. A home that has slipped four times is a different conversation from
+one that slipped once by the same total, and only a ledger can tell them apart.
+
+**Not a new notification stream.** The output is shaped for the pack the
+existing Tuesday 5pm rehab pre-read routine already builds. A second email
+nobody asked for is how a good signal gets ignored.
+
+First run over four snapshots (8/3, 9/3, 9/5, 9/6) found 20 pushes, all Cavco,
++2,069 days in total. The headline is not the total, it is the shape: **ten
+Lucky Clover homes all re-dated from February and April to 2026-08-24 in one
+move**, +132 to +184 days each. Ten homes moving to an identical date on the
+same day is a bulk re-order or a data correction, not ten separate delays, and
+it is exactly the kind of thing that needs a sentence of explanation rather than
+a chart.
+
+Note the parser accepts what people actually type, including a `WE ` week-ending
+prefix, and treats `TBD`, `N/A` and blanks as "no projection yet" rather than as
+dates. A projection appearing for the first time is never counted as a slip.
+
+## Rehab and demo pace: the throughput tab
+
+Austin's requirement, verbatim in intent: the `Vacant, not leasable` tile should
+open a view answering whether we are on pace to rehab homes and get them
+occupied, and get demos infilled with new homes and sold, to meet occupancy
+goals.
+
+That is a flow question, not a count question, and the daily archive already
+answers it. Measured across 8/3 to 9/6, transitions only:
+
+| Stage | Pile | In | Out | Net per month |
+|---|---|---|---|---|
+| Needs Rehab | 160 | 17 | 11 | **+5** |
+| To Be Demoed | 149 | 4 | 6 | −2 |
+| Ordered → Delivered | | | | 28 |
+| Delivered → For Sale | | | | 15 |
+| For Sale → Sold | | | | 4 |
+| For Sale → Rental | | | | 4 |
+
+**The constraint is disposition, not supply.** We deliver 28 homes a month and
+convert roughly 8 to sold or rented. `For Sale` is accumulating at about +23 a
+month and stands at 135, which is seventeen months of inventory at the current
+clearance rate. Delivery is working. Rehab is losing ground slowly. The homes
+pile up after they are ready, not before.
+
+The demo pile is effectively static: 149 units moving out at 6 per 34 days would
+take over six years to clear, and it consumes lots that could carry rent.
+
+Two honesty notes for whoever builds the tab.
+
+**The pile counts will not match the tile.** The tile reads 393 (199 rehab, 194
+demo) because it counts *lots* inside the 64 reportable communities. The asset
+listing counts *homes* across 85 community names. Both are right; the view must
+say which it is showing rather than letting two numbers disagree in silence.
+
+**The inflow figure is ambiguous.** Counting newly-created asset records as
+inflow puts rehab at +17.6 a month rather than +5. 225 asset records appeared
+between the two snapshots and some of those are data entry catching up rather
+than newly failed homes. The tab should show the transition-only rate as the
+headline and the with-new-records rate as a second line, never blend them.
+
+## Actual completion dates are coming from FastField
+
+Recorded so nobody proposes the wrong fix later. The fifteen setup stages hold
+*projections* from Cavco and Champion. The matching *actuals* — when the crew
+finished each step — are coming from FastField forms feeding the Quickbase
+project, which is moving slowly.
+
+So: do **not** propose adding actual-date fields to Rent Manager. The capture is
+already designed elsewhere. What this platform does in the meantime is derive
+what it can from status transitions, and hold a slot for the real actuals: a
+`asset_actuals` dataset in `sources.json` with a Quickbase provider, disabled
+until it exists. Same switch as every other source.

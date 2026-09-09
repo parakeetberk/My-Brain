@@ -204,6 +204,52 @@
      }
     }
    ]
+  },
+  "asset_actuals": {
+   "canonical": [
+    "community",
+    "unit",
+    "asset_name",
+    "stage",
+    "completed_on",
+    "completed_by"
+   ],
+   "_comment": [
+    "The actual completion date per home per setup stage, as stamped by the crew.",
+    "Coming from FastField forms into the Quickbase project, which is moving",
+    "slowly. Declared now and disabled so that when it lands it is a flag flip",
+    "rather than a rebuild.",
+    "",
+    "Do NOT add actual-date fields to Rent Manager to fill the gap. The capture is",
+    "already designed in FastField; a parallel set in RM would create two answers",
+    "to the same question. Until this exists, durations are derived from Current",
+    "Status transitions across the daily snapshots -- coarser (five or six",
+    "milestones, not fifteen) but observed rather than typed."
+   ],
+   "providers": [
+    {
+     "name": "quickbase",
+     "kind": "api",
+     "enabled": false,
+     "_note": "FastField -> Quickbase. Not built yet. Enable when the project ships."
+    },
+    {
+     "name": "manual",
+     "kind": "dated_csv",
+     "enabled": true,
+     "_note": "Interim. A FastField CSV export dropped in pipeline/incoming/asset_actuals/.",
+     "pattern": "asset_actuals_YYYY-MM-DD.csv",
+     "as_of_from": "filename",
+     "map": {
+      "community": "Property",
+      "unit": "Unit",
+      "asset_name": "Asset Name",
+      "stage": "Stage",
+      "completed_on": "Completed",
+      "completed_by": "Submitted By"
+     }
+    }
+   ]
   }
  }
 }
