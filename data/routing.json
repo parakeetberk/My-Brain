@@ -28,14 +28,8 @@
    "community": "Nalls Court MHC"
   }
  ],
- "not_a_community": {
-  "regionalmgmt": "Functional mailbox, not a park. Candidate escalation target for anything that has no community address or has gone unanswered, but never a per-community route."
- },
- "unresolved": {
-  "Spacecoastvillage": "No community of this name in the reportable roster. Either a park we do not report on, a renamed one, or a mailbox that outlived its community. Nobody has said which.",
-  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction. Mailbox exists; nothing routes to it.",
-  "shellpointe": "Shell Pointe MHC, sold July 2026. Mailbox still exists. Must never be routed to."
- },
+ "not_a_community": {},
+ "unresolved": {},
  "communities": {
   "AMER": {
    "community": "American",

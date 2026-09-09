@@ -1,60 +1,124 @@
 {
  "_comment": [
-  "The real community mailboxes, supplied by Austin 2026-09-09 from the M365",
-  "group list. STORED, NOT DERIVED -- and that is the finding: the addresses",
-  "follow no rule the roster can reproduce. `obo@` and `pse@` are initialisms,",
-  "`triples@` drops a word, `vantageoak@` is singular where the roster is plural,",
-  "`GreenPointe@` spells what the roster calls Greene Pointe, and one mailbox",
-  "serves both Bay Oaks villages. Any generator would get several of these wrong",
-  "and mail would go to the wrong park, so the mapping is data and is reviewed by",
-  "a person rather than inferred.",
+  "Community mailboxes, reconciled against the M365 group export Austin supplied",
+  "on 2026-09-09 (pipeline/manual/m365_groups.csv). STORED, NOT DERIVED -- the",
+  "aliases follow no rule the roster reproduces: obo@ is Ormond Beach, pse@ is",
+  "Palm Spring, triples@ is Triple S, vantageoak@ is singular where the roster is",
+  "plural, and the group list spells Green Pointe where the roster says Greene.",
   "",
-  "Keyed by roster short code. Case is preserved as supplied though SMTP does not",
-  "care. pipeline/routing.py consumes this and reports anything unmatched in",
-  "either direction rather than silently dropping it."
+  "COUNTERINTUITIVE AND WORTH NOT BREAKING: the unsuffixed whisperingpines@ is",
+  "the FLORIDA park and whisperingpinesma@ is Massachusetts. The group names in",
+  "the CSV say so explicitly. Swapping them would send one state's numbers to the",
+  "other state's team.",
+  "",
+  "Keyed by roster short code. `groups` records which M365 groups share the",
+  "address, because two parks on one inbox changes what a message has to say."
  ],
  "domain": "parakeetcommunities.com",
+ "source": "pipeline/manual/m365_groups.csv",
  "supplied": "2026-09-09",
  "communities": {
-  "AMER": "american", "APPLE": "applegate", "ARD": "AuburnRidge",
-  "BOVIPO": "bayoaksvillage", "BELL": "bellehaven", "BRUN": "BrunswickEstates",
-  "CENT": "central", "CA": "crystalacres", "DO": "druidoaks",
-  "EG": "everglades", "FOX": "foxcreek", "GO": "greatoakrv",
-  "GPT": "GreenPointe", "GULFPO": "gulfbreeze", "HARB": "harbour",
-  "HP": "hersheypark", "HSMHC": "huntersprings", "JBJ": "jbarj",
-  "LS": "lakesaunders", "LWPO": "lakewales", "LLMHC": "lambertonlake",
-  "LUCK": "luckyclover", "MAY": "mayflowerhills", "MCG": "mcgregordowns",
-  "MWMHP": "meadowwoods", "MON": "monson", "NGMH": "northgate",
-  "OAK": "OaksideMHP", "OCEANPO": "oceanaire", "OBOPO": "obo",
-  "PPH": "palmhavenestates", "PSEPO": "pse", "PL": "paradiselakes",
-  "PP": "ParadisePalms", "PARK": "parkwood", "RED": "Redlands",
-  "REG": "Regency", "RO": "riveroaksresort", "RW": "riverwalk",
-  "RIV": "riviera", "ROYAL": "royaloaks", "RP": "royalpalm",
-  "SS": "seashells", "SA": "shadyacres", "SO": "shadyoaks",
-  "SILVER": "silverbreeze", "SH": "silverhill", "SOUTH": "southgate",
-  "SUR": "Su-Rene", "TC": "terracecrossings", "TO": "theoaks",
-  "TCMHCPO": "townandcountry", "TRADE": "tradewinds", "SSS": "triples",
-  "VO": "vantageoak", "WWPO": "westwood", "WPMA": "whisperingpinesma",
-  "WPMH": "whisperingpines", "WIND": "windwardknoll", "WOLFPO": "wolfbay"
+  "AMER": "american",
+  "APPLE": "applegate",
+  "ARD": "AuburnRidge",
+  "BELL": "bellehaven",
+  "BOVIPO": "bayoaksvillage",
+  "BRUN": "BrunswickEstates",
+  "CA": "crystalacres",
+  "CENT": "central",
+  "DO": "druidoaks",
+  "EG": "everglades",
+  "FOX": "foxcreek",
+  "GO": "greatoakrv",
+  "GPT": "GreenPointe",
+  "GULFPO": "gulfbreeze",
+  "HARB": "harbour",
+  "HP": "hersheypark",
+  "HSMHC": "huntersprings",
+  "JBJ": "jbarj",
+  "LLMHC": "lambertonlake",
+  "LS": "lakesaunders",
+  "LUCK": "luckyclover",
+  "LWPO": "lakewales",
+  "MAY": "mayflowerhills",
+  "MCG": "mcgregordowns",
+  "MON": "monson",
+  "MWMHP": "meadowwoods",
+  "NGMH": "northgate",
+  "OAK": "OaksideMHP",
+  "OBOPO": "obo",
+  "OCEANPO": "oceanaire",
+  "PARK": "parkwood",
+  "PL": "paradiselakes",
+  "PP": "ParadisePalms",
+  "PPH": "palmhavenestates",
+  "PSEPO": "pse",
+  "RED": "Redlands",
+  "REG": "Regency",
+  "RIV": "riviera",
+  "RO": "riveroaksresort",
+  "ROYAL": "royaloaks",
+  "RP": "royalpalm",
+  "RW": "riverwalk",
+  "SA": "shadyacres",
+  "SH": "silverhill",
+  "SILVER": "silverbreeze",
+  "SO": "shadyoaks",
+  "SOUTH": "southgate",
+  "SS": "seashells",
+  "SSS": "triples",
+  "SUR": "Su-Rene",
+  "TC": "terracecrossings",
+  "TCMHCPO": "townandcountry",
+  "TO": "theoaks",
+  "TRADE": "tradewinds",
+  "VO": "vantageoak",
+  "WIND": "windwardknoll",
+  "WOLFPO": "wolfbay",
+  "WPMA": "whisperingpinesma",
+  "WPMH": "whisperingpines",
+  "WWPO": "westwood"
+ },
+ "_shared_inbox": {
+  "BOVIPO": {
+   "alias": "bayoaksvillage",
+   "groups": [
+    "Bay Oaks Village 1",
+    "Bay Oaks Village 2"
+   ]
+  },
+  "REG": {
+   "alias": "Regency",
+   "groups": [
+    "Regency 1",
+    "Regency 2"
+   ]
+  }
  },
  "_shared": {
   "BOVIIPO": "BOVIPO",
   "NGRV": "NGMH",
   "_why": [
-   "Bay Oaks Village II has no mailbox of its own and shares Village I's.",
-   "Northgate RV has none and shares Northgate MH's.",
-   "Recorded rather than left as a gap, because an alert for these parks has",
-   "somewhere real to go -- but the mail lands in a shared inbox, so anything",
-   "sent must name the community in the subject or the recipient cannot tell",
-   "which park it is about."
+   "Bay Oaks Village 2 has its own M365 group but shares Village 1's address, so",
+   "the roster's second entry routes to the same inbox.",
+   "Northgate RV has no group of its own; the single `northgate` group covers",
+   "both the MH and RV sides.",
+   "Anything sent to a shared inbox MUST name the community in the subject, or",
+   "the recipient cannot tell which park it concerns."
   ]
  },
- "_not_a_community": {
-  "regionalmgmt": "Functional mailbox, not a park. Candidate escalation target for anything that has no community address or has gone unanswered, but never a per-community route."
+ "_no_mailbox": {
+  "CARL": "Carley's Mobile Home Park",
+  "HENDS": "Hendersons MHC",
+  "NALLS": "Nalls Court MHC",
+  "_why": "No M365 group exists. Surface these rather than skipping them -- an alert with nowhere to go is worse than no alert, because everyone assumes it was sent. Candidate fallback: regionalmgmt@."
  },
- "_unresolved": {
-  "Spacecoastvillage": "No community of this name in the reportable roster. Either a park we do not report on, a renamed one, or a mailbox that outlived its community. Nobody has said which.",
-  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction. Mailbox exists; nothing routes to it.",
-  "shellpointe": "Shell Pointe MHC, sold July 2026. Mailbox still exists. Must never be routed to."
+ "_groups_without_a_live_community": {
+  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction.",
+  "shellpointe": "Shell Pointe MHC, sold July 2026. The group still exists; nothing may route to it.",
+  "Spacecoastvillage": "Group name is 'Space Coast Village'. No community of that name in the reportable roster -- a park we do not report on, a rename, or a group that outlived its community. Unresolved."
+ },
+ "_not_in_the_export": {
+  "regionalmgmt": "Appeared in the list Austin pasted but is absent from the group CSV, so it is a shared mailbox or a different object type rather than an M365 group. Not a park either way; the natural escalation target for the three communities with no mailbox."
  }
 }

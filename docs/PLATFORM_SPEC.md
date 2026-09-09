@@ -160,15 +160,23 @@ mail about one park landing at another. So the mapping lives in
 `pipeline/community_emails.json` as reviewed data; `pipeline/routing.py`
 consumes it and reports anything unmatched in either direction.
 
-**61 of 64 live communities are routed.** The rest is the interesting part:
+Reconciled against the M365 group export (`pipeline/manual/m365_groups.csv`),
+which supplies group *names* alongside the aliases and so settles every
+ambiguity. **61 of 64 live communities routed.** The rest is the interesting
+part:
 
 | | |
 |---|---|
 | No mailbox at all | **Carley's, Hendersons MHC, Nalls Court MHC** |
-| Shares another park's inbox | Bay Oaks Village II → Village I; Northgate RV → Northgate MH |
+| Two parks, one inbox | Bay Oaks Village 1 + 2 → `bayoaksvillage@`; Regency 1 + 2 → `Regency@`; Northgate MH + RV → `northgate@` |
 | Excluded as sold | Congress, Shell Pointe (`shellpointe@` still exists) |
-| Mailbox, no community | `Spacecoastvillage@` — nothing of that name in the roster |
-| Not a park | `regionalmgmt@` — a functional mailbox, and the natural escalation target |
+| Group, no live community | `Spacecoastvillage@` ("Space Coast Village"), `geigerkey@` |
+| Not in the group export | `regionalmgmt@` — appeared in the pasted list but is absent from the CSV, so a shared mailbox rather than a group. Not a park; the natural escalation target |
+
+**One mapping is counterintuitive and must not be "corrected".** The unsuffixed
+`whisperingpines@` is the **Florida** park; `whisperingpinesma@` is
+Massachusetts. The group names in the export say so explicitly. Swapping them
+sends one state's numbers to the other state's team.
 
 Three consequences worth building around. Communities with no mailbox must be
 **surfaced, not silently skipped** — an alert with nowhere to go is worse than no
