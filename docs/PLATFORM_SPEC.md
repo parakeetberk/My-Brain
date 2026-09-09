@@ -59,6 +59,37 @@ call as the measures and store it beside them. Never infer freshness from the
 run date. `compare_sources.py` already does this via `WH_AR_AS_OF` and
 `drift_days`.
 
+> **CORRECTION, 2026-09-09.** This rule cannot be satisfied from the warehouse
+> as it stands, and the paragraph above overstated what `asOfDate` is.
+>
+> `VW_Aged_Receivables.asOfDate` is not a snapshot calendar. It is a per-charge
+> attribute. Complete portfolio snapshots appear only at month-end and at the
+> current live read — 1,001 customers on 2026-07-31, 949 on 2026-08-31, 1,328
+> on 2026-09-05 — while every other date in it holds one to sixteen customers.
+> Reading it as a snapshot calendar would have filed a $2,669 portfolio for
+> 2026-07-11 and a $20,505 one for 2026-09-03.
+>
+> The other ten models have no snapshot dimension at all. `reportMonth` and
+> `endDate` are the period the data *describes*, not when it was captured; they
+> read `2026-09` all month while the live figures underneath them change daily.
+>
+> So the as-of has to be **stamped by whoever ran the pull**
+> (`data/warehouse_asof.json`, written by `capture.py stamp <date>`), and
+> `capture.py` refuses to append without it. A fact row carrying a guessed date
+> is worse than a missing day, because nothing later can tell it from a real
+> one. Idempotency is decided by a **content hash** of the normalised rows,
+> which is exact and, unlike a date, also catches a restatement inside an
+> existing month.
+>
+> Getting a real refresh timestamp published on the semantic layer is the fix,
+> and it belongs on the same list as exposing `dw_prospects`.
+
+**1b. There is twenty months of month-end AR history already in the warehouse.**
+`VW_Aged_Receivables` holds complete month-end snapshots back to at least
+2025-01. Nobody has been reading them. Consequence: AR is **not** starting from
+zero — only its intra-month shape is. Month-over-month and year-over-year on
+receivables are available today, without waiting for the capture to accumulate.
+
 **2. The capture is idempotent on the as-of date, not the run date.** One row
 per *snapshot*, not one per *run*. If today's pull returns Friday's snapshot,
 the store gains nothing and, crucially, invents nothing.
@@ -73,6 +104,10 @@ downstream can tell it from a real one.
 expected interval, that is a flag. The eviction tracker already works this way
 (`eviction-tracker-stale`); the rule generalises to every source, warehouse and
 SharePoint alike.
+
+`capture.py` stores `drift_days` on every fact row and prints a STALE line above
+`STALE_DAYS = 1`. It fired on the first run: the warehouse snapshot was
+2026-09-05 against a read of 2026-09-09, four days behind.
 
 Net: a stale feed costs a day of baseline. It never corrupts the history.
 
