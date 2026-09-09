@@ -43,8 +43,12 @@ Never publish a stale or partial payload to the first one.
 
 **Austin**
 - Verify the 64 community addresses actually deliver. Nothing has been mailed.
-- Get `dw_prospects` exposed to the warehouse connector. It is the only thing
-  blocking the funnel work.
+- ~~Get `dw_prospects` exposed to the warehouse connector.~~ **Done 2026-09-09.**
+  It landed as `VW_Prospect_Stage_Listing`, not `dw_prospects`, and the schema now
+  returns 12 models. `pipeline/sources.json` is switched over and records its four
+  gotchas. The big one: it carries no numeric property id, so it **cannot be joined
+  to any other model** and cannot be restricted by property. Funnel work is
+  unblocked and belongs to the Platform Build thread.
 - Explain nothing further about Space Coast Village — answered: it is the
   Silver Breeze rename.
 - Decide whether the disposition bottleneck is pricing, marketing or staffing.

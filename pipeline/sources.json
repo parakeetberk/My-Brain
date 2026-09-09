@@ -165,12 +165,46 @@
    ],
    "providers": [
     {
-     "name": "warehouse_dw_prospects",
+     "name": "warehouse_prospect_stage_listing",
      "kind": "warehouse",
-     "enabled": false,
-     "_note": "NOT EXPOSED as of 2026-09-08 -- get_schema returns 11 models, none for prospects. Enable once RentViewer publishes it. Live query, so read its as-of and never assume.",
-     "model": "dw_prospects",
-     "as_of_from": "snapshot_dimension"
+     "enabled": true,
+     "_note": [
+      "LIVE as of 2026-09-09. Austin got it exposed; get_schema now returns 12 models.",
+      "The model is VW_Prospect_Stage_Listing, NOT the dw_prospects name guessed here",
+      "before it landed. It supersedes both SharePoint fallbacks below, and it carries",
+      "no prospect name, email or phone, so the pii_strip list does not apply to it.",
+      "",
+      "FOUR THINGS THAT WILL MISLEAD YOU, straight from the model description:",
+      "  1. IT CANNOT BE JOINED TO ANY OTHER MODEL. It carries propertyShortName and",
+      "     no numeric property id, so it cannot be restricted by property and cannot",
+      "     be joined to the roster or to the other cubes. A property-restricted user",
+      "     gets an error rather than a partial answer. Anything per community has to",
+      "     resolve on short name through the alias map, with all the risk that",
+      "     carries -- see the alias map warning in docs/INDEX.md.",
+      "  2. THE LIST IS CUMULATIVE BACK TO 2017 and includes Lost prospects, so a bare",
+      "     count is the whole standing list, not the current funnel. Filter on",
+      "     dateCreated, or use the activeProspects / lostProspects / convertedToResident",
+      "     / hasApplied segments.",
+      "  3. `no date yet` is stored as 1900-01-01 and exposed as NULL, and the matching",
+      "     day counts are blank. Every average covers only records that have the event.",
+      "  4. Time ranges default to dateCreated. To see the pipeline as it stood on an",
+      "     earlier date, range or group on refreshDate instead.",
+      "",
+      "The description also references a `reportMonth` dimension that the schema does",
+      "not expose. The real ones are createdMonth and refreshDate. Do not code against",
+      "reportMonth without checking get_schema first.",
+      "",
+      "NOT WIRED INTO build.py. The funnel work belongs to the platform build thread;",
+      "this entry only records that the source is live and how it behaves."
+     ],
+     "model": "VW_Prospect_Stage_Listing",
+     "as_of_from": "refreshDate",
+     "segments": [
+      "VW_Prospect_Stage_Listing.activeProspects",
+      "VW_Prospect_Stage_Listing.lostProspects",
+      "VW_Prospect_Stage_Listing.convertedToResident",
+      "VW_Prospect_Stage_Listing.hasApplied"
+     ]
     },
     {
      "name": "sharepoint_dw_export",
