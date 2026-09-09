@@ -3478,7 +3478,18 @@
             h("div", { className: "sub" },
               p.communities + " reportable communities · " + count(p.total_units) +
               " lots · " + monthLabel(d.period[live ? "live" : "closed"]) +
-              (live ? " through day " + d.period.live_day : " closed")))),
+              (live ? " through day " + d.period.live_day : " closed")),
+            live && d.period.drift_days
+              ? h("div", { className: "sub", style: { color: "var(--yellow)" } },
+                  "Data as of " + d.period.live_as_of + ", read " +
+                  d.period.read_on + " — " + d.period.drift_days +
+                  (d.period.drift_days === 1 ? " day" : " days") +
+                  " behind. Day " + d.period.live_day +
+                  ", not day " + new Date().getDate() + ": the warehouse has " +
+                  "not refreshed since. Collections is a flow, so dividing " +
+                  "these dollars by the calendar would read the month as worse " +
+                  "than it is.")
+              : null)),
         h(PeriodToggle, { data: d, mode: mode, onChange: setMode })),
 
       h(Exceptions, { flags: d.flags, ledgerFrom: d.ledger_from }),

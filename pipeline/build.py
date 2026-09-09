@@ -505,14 +505,47 @@ def build(raw_dir, out_dir, registry_path):
     live_month = months[-1]
     closed_month = months[-2] if len(months) > 1 else live_month
 
+    # THE LIVE DAY COMES FROM THE DATA, NOT THE CALENDAR.
+    #
+    # It used to be `date.today().day`, which is wrong whenever the warehouse has
+    # not refreshed today -- and its refresh is irregular. On 2026-09-09 the
+    # newest warehouse data was 2026-09-05, so the header read "day 9" over five
+    # days of payments. Collections is a FLOW: a reader dividing the same dollars
+    # by nine elapsed days instead of five concludes the month is going badly
+    # when it is four days younger than the label claims. AR, a stock, is not
+    # distorted by the label but is still four days stale.
+    #
+    # So the day is the warehouse as-of's day, from data/warehouse_asof.json,
+    # which the pull step stamps because no warehouse model publishes a refresh
+    # timestamp (see docs/PLATFORM_SPEC.md). Falling back to today is kept for a
+    # build with no stamp, and the fallback is recorded rather than hidden.
     today = date.today()
-    live_day = today.day if today.strftime("%Y-%m") == live_month else monthrange(
-        int(live_month[:4]), int(live_month[5:7]))[1]
     days_in_live = monthrange(int(live_month[:4]), int(live_month[5:7]))[1]
+    wh_path = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "data", "warehouse_asof.json")
+    wh = json.load(open(wh_path)) if os.path.exists(wh_path) else {}
+    live_as_of, live_basis = None, "calendar date, no warehouse as-of stamped"
+    if wh.get("as_of", "")[:7] == live_month:
+        live_as_of = wh["as_of"]
+        live_day = int(live_as_of[8:10])
+        live_basis = "warehouse as-of, stamped %s" % wh.get("read_on")
+    elif today.strftime("%Y-%m") == live_month:
+        live_day = today.day
+    else:
+        live_day = days_in_live
+        live_basis = "month is closed, day is its last"
+    read_on = wh.get("read_on") or today.isoformat()
+    drift_days = wh.get("drift_days")
     grace_day = cfg.get("grace_day", DEFAULT_GRACE_DAY)
 
-    log("periods %s .. %s  (closed: %s, live: %s day %d of %d)"
-        % (months[0], live_month, closed_month, live_month, live_day, days_in_live))
+    log("periods %s .. %s  (closed: %s, live: %s day %d of %d — %s)"
+        % (months[0], live_month, closed_month, live_month, live_day,
+           days_in_live, live_basis))
+    if drift_days:
+        log("  STALE: the warehouse snapshot is %d day%s behind this read "
+            "(%s vs %s), so the live column is day %d, not day %d"
+            % (drift_days, "" if drift_days == 1 else "s", live_as_of, read_on,
+               live_day, today.day))
 
     # ---- classify every propertyName the warehouse returned ----
     all_names = set()
@@ -2550,6 +2583,10 @@ def build(raw_dir, out_dir, registry_path):
             "closed": closed_month,
             "live": live_month,
             "live_day": live_day,
+            "live_as_of": live_as_of,
+            "live_day_basis": live_basis,
+            "read_on": read_on,
+            "drift_days": drift_days,
             "days_in_live": days_in_live,
             "grace_day": grace_day,
             "budget_from": budget_from,
