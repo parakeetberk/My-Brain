@@ -284,44 +284,80 @@ dates. A projection appearing for the first time is never counted as a slip.
 
 ## Rehab and demo pace: the throughput tab
 
-Austin's requirement, verbatim in intent: the `Vacant, not leasable` tile should
-open a view answering whether we are on pace to rehab homes and get them
-occupied, and get demos infilled with new homes and sold, to meet occupancy
-goals.
+Austin's requirement: the `Vacant, not leasable` tile should open a view
+answering whether we are on pace to rehab homes and get them occupied, and get
+demos infilled with new homes and sold, to meet occupancy goals.
 
-That is a flow question, not a count question, and the daily archive already
-answers it. Measured across 8/3 to 9/6, transitions only:
+That is a flow question, not a count question, and the daily archive answers it.
 
-| Stage | Pile | In | Out | Net per month |
-|---|---|---|---|---|
-| Needs Rehab | 160 | 17 | 11 | **+5** |
-| To Be Demoed | 149 | 4 | 6 | −2 |
-| Ordered → Delivered | | | | 28 |
-| Delivered → For Sale | | | | 15 |
-| For Sale → Sold | | | | 4 |
-| For Sale → Rental | | | | 4 |
+### Assets carry three kinds of community, not two
 
-**The constraint is disposition, not supply.** We deliver 28 homes a month and
-convert roughly 8 to sold or rented. `For Sale` is accumulating at about +23 a
-month and stands at 135, which is seventeen months of inventory at the current
-clearance rate. Delivery is working. Rehab is losing ground slowly. The homes
-pile up after they are ready, not before.
+Austin's correction, and it moved the numbers materially. The asset listing
+deliberately keeps disposed and inactive records so sales can still be tracked.
+Filtering them out erases real history; counting them inflates every
+current-inventory figure. So `classify_community()` in `sources.py` splits three
+ways:
 
-The demo pile is effectively static: 149 units moving out at 6 per 34 days would
-take over six years to clear, and it consumes lots that could carry rent.
+| Scope | Rows | What it is | Counts toward |
+|---|---|---|---|
+| `current` | 1,468 | live reportable community | piles and pace |
+| `historical` | 205 | `x`-prefixed retired duplicate of a live park, or a disposed community. 98 Sold. | sales history only |
+| `unattributed` | 71 | `UNASSIGNED` or a name nothing matches | nothing, and flagged |
 
-Two honesty notes for whoever builds the tab.
+The `x` prefix is Rent Manager's retired-record marker, and ten of them shadow
+communities that are still live — `xLake Wales MHC`, `xBay Oaks Village I` and
+`II`, `xOrmond Beach Oasis`, `xPalm Spring Estates`, `xGulf Breeze MHP`,
+`xWolf Bay`, `xOceanaire MHC`, `xWestwood MHP`, `xTown & Country MHC`. Their
+assets are the sales history of parks we still own.
 
-**The pile counts will not match the tile.** The tile reads 393 (199 rehab, 194
-demo) because it counts *lots* inside the 64 reportable communities. The asset
-listing counts *homes* across 85 community names. Both are right; the view must
-say which it is showing rather than letting two numbers disagree in silence.
+The alias pass earns its keep too: **`Hunter Springs MHC` in the asset file
+against `Hunter Springs MHP` in the roster** was silently dropping seven live
+assets over a three-letter suffix. That is the class of bug this whole exercise
+exists to catch.
 
-**The inflow figure is ambiguous.** Counting newly-created asset records as
-inflow puts rehab at +17.6 a month rather than +5. 225 asset records appeared
-between the two snapshots and some of those are data entry catching up rather
-than newly failed homes. The tab should show the transition-only rate as the
-headline and the with-new-records rate as a second line, never blend them.
+**71 unattributed assets, 45 of them marked To Be Demoed with no community at
+all.** Counted nowhere by design. That is a data-entry problem worth a flag, not
+a pile worth reporting.
+
+### The corrected numbers
+
+Scoped to `current`, transitions only, 2026-08-03 to 2026-09-06:
+
+| Stage | Pile | In | Out | Net/mo | |
+|---|---|---|---|---|---|
+| Needs Rehab | 147 | 17 | 11 | **+5.3** | backlog growing |
+| To Be Demoed | 91 | 4 | 6 | −1.8 | 52 months to clear |
+| Ordered | 69 | 5 | 30 | −22.1 | draining into delivery |
+| Delivered | 104 | 30 | 17 | +11.5 | |
+| For Sale | 128 | 29 | 9 | **+17.6** | the bottleneck |
+
+```
+Ordered   -> Delivered   26.5/mo
+Delivered -> For Sale    15.0/mo
+For Sale  -> Sold         4.4/mo
+For Sale  -> Rental       3.5/mo
+```
+
+**The constraint is disposition, not supply.** 128 homes for sale clearing at
+7.9 a month is **16 months of inventory**. Delivery is not the problem — Cavco's
+median slip is zero days and 26.5 homes a month arrive. Homes pile up after they
+are ready.
+
+The demo pile is the quiet one: 91 units clearing at under 2 a month is 52
+months, and every one is a lot carrying no rent.
+
+### What the tab has to say out loud
+
+**The piles will not match the tile.** The tile reads 393 (199 rehab, 194 demo)
+because it counts *lots* inside the 64 reportable communities. The asset listing
+counts *homes*, and after scoping, 147 rehab and 91 demo. Both are right. The
+view must name which it is showing rather than letting two numbers disagree in
+silence.
+
+**Never blend transitions with new records.** 25 new `current` asset records
+appeared between the two snapshots and 196 new `historical` ones — the latter
+almost certainly a backfill of sold homes rather than 196 events. Transition
+rates are the headline; record creation is a separate line.
 
 ## Actual completion dates are coming from FastField
 

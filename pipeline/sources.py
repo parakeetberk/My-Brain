@@ -24,8 +24,10 @@ import glob
 import io
 import json
 import os
+import difflib
 import re
 import sys
+from collections import defaultdict
 from datetime import date, datetime
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -106,8 +108,80 @@ def candidates(dataset_name, prov):
     return out
 
 
+def community_index():
+    """short name / property name / community -> the canonical roster name."""
+    path = os.path.join(REPO, "pipeline", "raw", "pds_reportable.json")
+    if not os.path.exists(path):
+        return {}, []
+    pds = json.load(open(path))
+    look = {}
+    for p in pds:
+        for k in (p.get("short_name"), p.get("property_name"), p.get("community")):
+            if k and str(k).strip():
+                look[str(k).strip().upper()] = p["property_name"]
+    return look, sorted({p["property_name"] for p in pds})
+
+
+def _norm_name(x):
+    """Strip the retired-record prefix and the interchangeable suffixes."""
+    x = re.sub(r"^x", "", x or "", flags=re.I)
+    x = re.sub(r"\b(MHC|MHP|Manufactured Housing Community|Homes|Village|Park)\b",
+               "", x, flags=re.I)
+    return re.sub(r"[^a-z0-9]", "", x.lower())
+
+
+def classify_community(raw, look, roster, _cache={}):
+    """
+    Assets carry communities the roster does not, and they are not all the same
+    kind of problem. Austin's point: the asset listing deliberately keeps
+    disposed and inactive records so sales can still be tracked, so filtering
+    them out would erase real history while counting them inflates every
+    current-inventory number.
+
+    Three outcomes, never two:
+
+      current       -- a live reportable community. Counts toward the piles and
+                       the pace.
+      historical    -- an `x`-prefixed retired duplicate of a community that is
+                       still live, or a community that has been disposed. Its
+                       assets are mostly Sold and they are real sales. Counts
+                       toward sales history, never toward current inventory.
+      unattributed  -- UNASSIGNED, blank, or a name nothing matches. Counted
+                       nowhere and flagged, because 45 homes marked To Be Demoed
+                       with no community is a data problem, not a pile.
+
+    The alias pass matters: `Hunter Springs MHC` in the asset file against
+    `Hunter Springs MHP` in the roster was silently dropping seven live assets
+    over a three-letter suffix.
+    """
+    key = (raw or "").strip()
+    if key in _cache:
+        return _cache[key]
+    up = key.upper()
+    if not key or up == "UNASSIGNED":
+        out = ("unattributed", None)
+    elif up in look:
+        out = ("current", look[up])
+    else:
+        n = _norm_name(key)
+        nr = {_norm_name(r): r for r in roster}
+        hit = nr.get(n)
+        if not hit:
+            m = difflib.get_close_matches(n, list(nr), 1, 0.92)
+            hit = nr[m[0]] if m else None
+        if hit and key.lower().startswith("x"):
+            out = ("historical", hit)          # retired duplicate of a live park
+        elif hit:
+            out = ("current", hit)             # alias miss, e.g. MHC vs MHP
+        else:
+            out = ("historical", key)          # disposed or never reportable
+    _cache[key] = out
+    return out
+
+
 def normalise(rows, field_map, dataset):
     """Map provider columns onto canonical ones, and pull the stage dates."""
+    look, roster = community_index()
     stages = dataset.get("stage_dates") or {}
     strip = set(dataset.get("pii_strip") or [])
     out = []
@@ -121,6 +195,11 @@ def normalise(rows, field_map, dataset):
         # PII never reaches a written file, whichever provider served it.
         for bad in strip:
             rec.pop(bad, None)
+        if "community" in rec:
+            scope, canon = classify_community(rec.get("community"), look, roster)
+            rec["community_raw"] = rec.get("community")
+            rec["community"] = canon
+            rec["scope"] = scope
         out.append(rec)
     return out
 
@@ -188,6 +267,17 @@ def build(which=None):
                                          else "  AS-OF UNCHANGED, no new day of history")
         print("[sources] %-16s %-20s as of %s  %5d rows -> raw/%s.json%s"
               % (name, prov["name"], as_of, len(recs), name, moved))
+        if recs and "scope" in recs[0]:
+            tally = defaultdict(int)
+            for r in recs:
+                tally[r["scope"]] += 1
+            print("[sources]   scope: %s"
+                  % ", ".join("%s %d" % (k, tally[k])
+                              for k in ("current", "historical", "unattributed")
+                              if tally[k]))
+            if tally["unattributed"]:
+                print("[sources]   WARNING %d rows have no community and are counted "
+                      "nowhere" % tally["unattributed"])
         manifest[name] = {"provider": prov["name"], "as_of": as_of,
                           "source_file": os.path.basename(path),
                           "row_count": len(recs),
