@@ -25,6 +25,7 @@
   "BOVIPO": "bayoaksvillage",
   "BRUN": "BrunswickEstates",
   "CA": "crystalacres",
+  "CARL": "carleys",
   "CENT": "central",
   "DO": "druidoaks",
   "EG": "everglades",
@@ -33,6 +34,7 @@
   "GPT": "GreenPointe",
   "GULFPO": "gulfbreeze",
   "HARB": "harbour",
+  "HENDS": "hendersons",
   "HP": "hersheypark",
   "HSMHC": "huntersprings",
   "JBJ": "jbarj",
@@ -44,6 +46,7 @@
   "MCG": "mcgregordowns",
   "MON": "monson",
   "MWMHP": "meadowwoods",
+  "NALLS": "nalls",
   "NGMH": "northgate",
   "OAK": "OaksideMHP",
   "OBOPO": "obo",
@@ -107,18 +110,33 @@
    "the recipient cannot tell which park it concerns."
   ]
  },
- "_no_mailbox": {
-  "CARL": "Carley's Mobile Home Park",
-  "HENDS": "Hendersons MHC",
-  "NALLS": "Nalls Court MHC",
-  "_why": "No M365 group exists. Surface these rather than skipping them -- an alert with nowhere to go is worse than no alert, because everyone assumes it was sent. Candidate fallback: regionalmgmt@."
- },
  "_groups_without_a_live_community": {
-  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction.",
-  "shellpointe": "Shell Pointe MHC, sold July 2026. The group still exists; nothing may route to it.",
-  "Spacecoastvillage": "Group name is 'Space Coast Village'. No community of that name in the reportable roster -- a park we do not report on, a rename, or a group that outlived its community. Unresolved."
+  "geigerkey": "Geiger Key RV Resort, removed from the roster at Austin's direction. Group exists; nothing routes to it.",
+  "shellpointe": "Shell Pointe MHC, sold July 2026. Group still exists; nothing may route to it."
  },
- "_not_in_the_export": {
-  "regionalmgmt": "Appeared in the list Austin pasted but is absent from the group CSV, so it is a shared mailbox or a different object type rather than an M365 group. Not a park either way; the natural escalation target for the three communities with no mailbox."
+ "_pending_rename": {
+  "SILVER": {
+   "current_name": "Silver Breeze",
+   "current_alias": "silverbreeze",
+   "future_name": "Space Coast Village",
+   "future_alias": "Spacecoastvillage",
+   "_why": [
+    "Austin 2026-09-09: Silver Breeze is being renamed to Space Coast Village, and",
+    "Spacecoastvillage@ already exists. That is why the group reconciliation showed",
+    "an orphan mailbox with no community -- it is the successor, not a leftover.",
+    "",
+    "ROUTING STAYS ON silverbreeze@ until the rename lands in the Property Data",
+    "Sheet. Sending to the new address before the team watches it loses the mail;",
+    "sending to both duplicates every alert. When the PDS renames the community,",
+    "flip `communities.SILVER` to the future alias and delete this block.",
+    "",
+    "The roster will also need its alias map updated so the warehouse and Rent",
+    "Manager spellings of the old name still resolve -- both systems will keep",
+    "saying Silver Breeze long after the PDS changes."
+   ]
+  }
+ },
+ "_not_a_community": {
+  "regionalmgmt": "A real mailbox but deliberately NOT a routing option, per Austin 2026-09-09. Every community now has its own address, so there is no fallback case left to need it."
  }
 }

@@ -167,16 +167,33 @@ part:
 
 | | |
 |---|---|
-| No mailbox at all | **Carley's, Hendersons MHC, Nalls Court MHC** |
 | Two parks, one inbox | Bay Oaks Village 1 + 2 → `bayoaksvillage@`; Regency 1 + 2 → `Regency@`; Northgate MH + RV → `northgate@` |
 | Excluded as sold | Congress, Shell Pointe (`shellpointe@` still exists) |
-| Group, no live community | `Spacecoastvillage@` ("Space Coast Village"), `geigerkey@` |
-| Not in the group export | `regionalmgmt@` — appeared in the pasted list but is absent from the CSV, so a shared mailbox rather than a group. Not a park; the natural escalation target |
+| Group, no live community | `geigerkey@` — removed from the roster at Austin's direction |
+| Deliberately not an option | `regionalmgmt@` — a real mailbox, excluded per Austin. Every community has its own address, so no fallback case remains |
+
+**All 64 live communities route.** Carley's, Hendersons and Nalls Court turned
+out to have mailboxes (`carleys@`, `hendersons@`, `nalls@`) that simply were not
+in the export.
 
 **One mapping is counterintuitive and must not be "corrected".** The unsuffixed
 `whisperingpines@` is the **Florida** park; `whisperingpinesma@` is
 Massachusetts. The group names in the export say so explicitly. Swapping them
 sends one state's numbers to the other state's team.
+
+**A pending rename, recorded so it is not mistaken for a bug twice.**
+`Spacecoastvillage@` looked like a mailbox with no community. It is the
+successor: **Silver Breeze is being renamed to Space Coast Village**, and the
+address already exists. Routing deliberately stays on `silverbreeze@` until the
+rename lands in the Property Data Sheet — sending to the new address before the
+team watches it loses the mail, and sending to both duplicates every alert.
+
+When the PDS renames it, three things move together: flip the alias in
+`community_emails.json`, delete the `_pending_rename` block, and add the old
+spelling to the roster's alias map, because the warehouse and Rent Manager will
+both keep saying Silver Breeze long after the PDS changes. That last step is the
+one that would otherwise silently drop a community, exactly as the
+`Hunter Springs MHC` / `MHP` mismatch did.
 
 Three consequences worth building around. Communities with no mailbox must be
 **surfaced, not silently skipped** — an alert with nowhere to go is worse than no
@@ -275,10 +292,8 @@ all, and the addresses derive from the roster.
 
 What is still open, smaller than it was:
 
-- **Three communities need a mailbox**, or a decision to route them elsewhere:
-  Carley's, Hendersons MHC, Nalls Court MHC.
-- **`Spacecoastvillage@` needs explaining** — a mailbox with no community, which
-  is either a park we do not report on, a rename, or a leftover.
+- **Verify the 64 addresses actually deliver.** The mapping is reconciled against
+  the group export, but no mail has been sent to any of them.
 - **The regional manager view still needs scoping** — which communities each
   regional covers. But that is one of three views, not the alerting path, and it
   can be deferred without holding anything else up. It is also arguably less

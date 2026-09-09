@@ -14,21 +14,10 @@
   "domain": "parakeetcommunities.com",
   "supplied": "2026-09-09"
  },
- "no_mailbox": [
-  {
-   "short_name": "CARL",
-   "community": "Carley's Mobile Home Park"
-  },
-  {
-   "short_name": "HENDS",
-   "community": "Hendersons MHC"
-  },
-  {
-   "short_name": "NALLS",
-   "community": "Nalls Court MHC"
-  }
- ],
- "not_a_community": {},
+ "no_mailbox": [],
+ "not_a_community": {
+  "regionalmgmt": "A real mailbox but deliberately NOT a routing option, per Austin 2026-09-09. Every community now has its own address, so there is no fallback case left to need it."
+ },
  "unresolved": {},
  "communities": {
   "AMER": {
@@ -70,6 +59,12 @@
   "BRUN": {
    "community": "Brunswick Estates",
    "email": "BrunswickEstates@parakeetcommunities.com",
+   "shares_with": null,
+   "verified": true
+  },
+  "CARL": {
+   "community": "Carley's Mobile Home Park",
+   "email": "carleys@parakeetcommunities.com",
    "shares_with": null,
    "verified": true
   },
@@ -124,6 +119,12 @@
   "HARB": {
    "community": "Harbour Mobile Home Park",
    "email": "harbour@parakeetcommunities.com",
+   "shares_with": null,
+   "verified": true
+  },
+  "HENDS": {
+   "community": "Hendersons MHC",
+   "email": "hendersons@parakeetcommunities.com",
    "shares_with": null,
    "verified": true
   },
@@ -190,6 +191,12 @@
   "MON": {
    "community": "Monson",
    "email": "monson@parakeetcommunities.com",
+   "shares_with": null,
+   "verified": true
+  },
+  "NALLS": {
+   "community": "Nalls Court MHC",
+   "email": "nalls@parakeetcommunities.com",
    "shares_with": null,
    "verified": true
   },
