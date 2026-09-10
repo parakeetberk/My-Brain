@@ -1,6 +1,6 @@
 {
  "schema_version": 11,
- "generated_at": "2026-09-10T11:35:24+00:00",
+ "generated_at": "2026-09-10T11:40:24+00:00",
  "source": "RentViewer data warehouse (Rent Manager) \u00b7 roster from Property Data Sheet",
  "period": {
   "closed": "2026-08",
@@ -176497,8 +176497,8 @@
     {
      "date": "2026-09-10",
      "event": "changed",
-     "title": "Live receivables run $146K above the closed month by design",
-     "severity": "info"
+     "severity": "info",
+     "title": "Live receivables run $146K above the closed month by design"
     },
     {
      "date": "2026-09-09",
@@ -176597,8 +176597,8 @@
     {
      "date": "2026-09-10",
      "event": "changed",
-     "title": "Vacancy aging covers 552 of 1724 vacant units",
-     "severity": "info"
+     "severity": "info",
+     "title": "Vacancy aging covers 552 of 1724 vacant units"
     },
     {
      "date": "2026-09-09",
@@ -176735,8 +176735,8 @@
     {
      "date": "2026-09-10",
      "event": "changed",
-     "title": "Former-resident status is known for 255 of 486 balances",
-     "severity": "info"
+     "severity": "info",
+     "title": "Former-resident status is known for 255 of 486 balances"
     },
     {
      "date": "2026-09-09",
@@ -176785,8 +176785,8 @@
     {
      "date": "2026-09-10",
      "event": "changed",
-     "title": "21 homes are for sale but not marked Ready to Market",
-     "severity": "warn"
+     "severity": "warn",
+     "title": "21 homes are for sale but not marked Ready to Market"
     },
     {
      "date": "2026-09-09",
