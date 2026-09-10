@@ -3,7 +3,7 @@
 Read this first. It exists because the work is split across three sessions and
 each one has to pick up cold without re-deriving what is already settled.
 
-Updated 2026-09-09.
+Updated 2026-09-10.
 
 ## The three threads
 
@@ -59,28 +59,53 @@ Never publish a stale or partial payload to the first one.
   to the session that created it and will die with it, exactly as
   `trig_01UXCQEFF7Hj3CQHouDz9oss` already did. Corrected 15-file pull list,
   push and email notifications.
-- The roster on disk was built 2026-09-04; the PDS changed 2026-09-08. Rebuild
-  and diff it, do not build on it silently. **Still open, and now blocking.**
-- **The PDS read is the single point of failure and needs a structural fix, not
-  another retry.** Four attempts have now failed the same way: 2026-09-08 (203
+- ~~The roster on disk was built 2026-09-04; the PDS changed 2026-09-08. Rebuild
+  and diff it.~~ **Closed 2026-09-10.** Rebuilt from a complete read and diffed
+  against disk: 67 communities both sides, zero adds, zero drops, and the only
+  field differences were three blank RV lot rents reading `None` against `0.0`.
+  The roster on disk was already correct, so it was left alone.
+- ~~**The PDS read is the single point of failure.**~~ **Fixed 2026-09-10, by
+  fix (2).** Austin reordered the tabs so `vwr VW_PDS_V2` is first in
+  `ParakeetBirdcage / Data  Analytics / Property Data Sheet.xlsx`, and that file
+  now reads complete: 237 of 237 declared rows, no truncation marker in the
+  roster sheet, 67 Reportable = Yes. `pipeline/queries.json` points at it and is
+  authoritative; the dated copies under `Asset Management & Finance` still have
+  `PDS Clean` first and still truncate, so do not read those. What truncates now
+  is `PDS Clean` itself, second in tab order, losing its last 3 rows -- see the
+  live note below.
+
+  History, for the record. Four attempts failed the same way: 2026-09-08 (203
   of 237), 2026-09-09 x2 (no locatable header; 194 of 237), and the 2026-09-09
-  refresh (194 of 237, cut after Town & Country MHC). Cause is settled and is
-  not intermittent: `PDS Clean` is 2,485 of the payload's 2,721 lines of
-  VLOOKUP formulas and eats the ~200KB reader budget before `vwr VW_PDS_V2`
-  ends. `startPage` was retried and returns a byte-identical payload, so
-  pagination is not available for this format. Every run will keep failing here
-  until the workbook or the read changes. Three fixes that would actually work,
-  cheapest first: **(1)** paste-special `PDS Clean` to values so it stops
-  emitting formulas, **(2)** move `vwr VW_PDS_V2` to be the first worksheet so
-  it is read before the budget is spent, or **(3)** get `VW_PDS_V2` exposed on
-  the RentViewer connector, which retires the SharePoint read entirely and is
-  the same ask already open for `dw_prospects`. Any one of them unblocks it.
-  Refusals are recorded in `data/refused_reads.json`.
-- **Cambridge MHC and Geiger Key RV Resort read Reportable = Yes** on the
-  2026-09-08 workbook, confirmed in the readable portion on 2026-09-09. The
-  last good build has both dropped. A clean rebuild pulls both into every
-  portfolio total, so the roster grows 66 -> 68 and every total moves. Expected,
-  not a truncation artifact, but it should not land silently.
+  refresh (194 of 237, cut after Town & Country MHC). The cause was settled and
+  was not intermittent: `PDS Clean` was 2,485 of the payload's 2,721 lines of
+  VLOOKUP formulas and ate the ~200KB reader budget before `vwr VW_PDS_V2`
+  ended. `startPage` was retried and returned a byte-identical payload, so
+  pagination is not available for this format. Of the three fixes proposed,
+  **(2)** is the one that landed. **(3)**, getting `VW_PDS_V2` onto the
+  RentViewer connector, is still worth having: it would retire the SharePoint
+  read entirely and take `PDS Clean` down with it. Refusals from that period are
+  recorded in `data/refused_reads.json`.
+- **`PDS Clean` truncates instead, and it is the only source of Total Core
+  Units.** It is second in tab order and loses its last ~3 rows, so on
+  2026-09-10 five reportable communities had no core_units from the read: STPI,
+  STPII, WPMH, WIND, WOLFPO. WPMH, WIND and WOLFPO were carried forward from the
+  previous roster. STPI and STPII are not in `PDS Clean` at all, so they fall
+  back -- to 32 and 10, which equals their PDS MH lot count exactly, so the
+  occupancy denominator is right rather than merely quiet. Check this every
+  rebuild: a fallback that silently disagrees would also zero the
+  `lots-exceed-pds-core` flag meant to catch it.
+- ~~**Cambridge MHC and Geiger Key RV Resort read Reportable = Yes.**~~
+  **Closed 2026-09-10.** It settled at 67, not 68. On the current workbook
+  `CAMMHC` Cambridge MHC reads Reportable = **No** -- Austin flipped it in the
+  2026-09-09 18:24Z edit -- and `GEIGRV` Geiger Key RV Resort reads **Yes**. So
+  Geiger Key is in every portfolio total and Cambridge is out, and both are
+  correct by the roster rather than by an override.
+- **Geiger Key has no Rent Manager property at all.** Its stays are booked in
+  Campspot, so now that live receivables come from report 78 it structurally
+  reads $0 against a $33K warehouse balance. It is the largest of the five
+  communities in the `ar-communities-unreported-by-rm` flag and the only one
+  that is not a timing difference. Someone owns deciding whether Campspot
+  receivables reach this page or Geiger Key's AR column carries a caveat.
 
 **Platform Build thread**
 - Backfill the 387-file asset archive for real slip and duration history.

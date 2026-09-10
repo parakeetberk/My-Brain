@@ -1,8 +1,8 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-09",
- "case_count": 350,
- "open_cases": 94,
+ "as_of": "2026-09-10",
+ "case_count": 358,
+ "open_cases": 104,
  "dropped_columns": [
   "FullName",
   "CaseNumber"
@@ -1445,7 +1445,7 @@
    "closed": "2026-03-23",
    "stage_since": "2026-03-11",
    "sent_to_attorney": "2026-03-02",
-   "open_charges": 1557.8,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -1613,7 +1613,7 @@
    "closed": "",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 2604.53,
+   "open_charges": 3579.53,
    "has_case": true
   },
   {
@@ -2207,6 +2207,18 @@
   {
    "community": "Brunswick Estates",
    "short_name": "BRUN",
+   "unit": "30",
+   "stage": "Dispossessory",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 1943.0,
+   "has_case": false
+  },
+  {
+   "community": "Brunswick Estates",
+   "short_name": "BRUN",
    "unit": "66",
    "stage": "Dispossessory",
    "start": "2025-08-06",
@@ -2239,6 +2251,18 @@
    "sent_to_attorney": "",
    "open_charges": 570.0,
    "has_case": true
+  },
+  {
+   "community": "Brunswick Estates",
+   "short_name": "BRUN",
+   "unit": "53",
+   "stage": "Writ of Possession",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 1823.0,
+   "has_case": false
   },
   {
    "community": "Brunswick Estates",
@@ -2387,11 +2411,23 @@
   {
    "community": "Shady Acres",
    "short_name": "SA",
-   "unit": "142",
+   "unit": "139",
    "stage": "Dispossessory",
-   "start": "2026-04-27",
-   "closed": "2026-06-10",
-   "stage_since": "2026-05-27",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 1204.24,
+   "has_case": false
+  },
+  {
+   "community": "Shady Acres",
+   "short_name": "SA",
+   "unit": "142",
+   "stage": "Writ of Possession",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
    "sent_to_attorney": "",
    "open_charges": 2353.58,
    "has_case": false
@@ -2400,10 +2436,10 @@
    "community": "Shady Acres",
    "short_name": "SA",
    "unit": "157",
-   "stage": "Dispossessory",
+   "stage": "Writ of Possession",
    "start": "2025-12-19",
    "closed": "",
-   "stage_since": "2026-02-20",
+   "stage_since": "2026-09-09",
    "sent_to_attorney": "",
    "open_charges": 7169.93,
    "has_case": true
@@ -2424,10 +2460,10 @@
    "community": "Shady Acres",
    "short_name": "SA",
    "unit": "235",
-   "stage": "Demand Notice",
+   "stage": "Writ of Possession",
    "start": "2026-03-20",
    "closed": "",
-   "stage_since": "2026-03-20",
+   "stage_since": "2026-09-09",
    "sent_to_attorney": "",
    "open_charges": 4026.41,
    "has_case": false
@@ -2479,6 +2515,18 @@
    "sent_to_attorney": "",
    "open_charges": 6773.56,
    "has_case": true
+  },
+  {
+   "community": "Druid Oaks",
+   "short_name": "DO",
+   "unit": "146",
+   "stage": "Dispossessory",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 1014.51,
+   "has_case": false
   },
   {
    "community": "Druid Oaks",
@@ -2868,13 +2916,13 @@
    "community": "Hershey Park",
    "short_name": "HP",
    "unit": "N103",
-   "stage": "Rule to Vacate",
-   "start": "2026-03-26",
-   "closed": "2026-04-14",
-   "stage_since": "2026-03-26",
+   "stage": "Writ of Ejectment",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
    "sent_to_attorney": "",
    "open_charges": 1325.0,
-   "has_case": true
+   "has_case": false
   },
   {
    "community": "Hershey Park",
@@ -3461,7 +3509,7 @@
    "closed": "2026-05-28",
    "stage_since": "2026-04-03",
    "sent_to_attorney": "2026-03-30",
-   "open_charges": 575.0,
+   "open_charges": 650.0,
    "has_case": true
   },
   {
@@ -3552,10 +3600,10 @@
    "community": "Riverwalk",
    "short_name": "RW",
    "unit": "57",
-   "stage": "Court: Final Judgement",
+   "stage": "Auction Request",
    "start": "2026-06-02",
    "closed": "",
-   "stage_since": "2026-08-06",
+   "stage_since": "2026-09-09",
    "sent_to_attorney": "2026-06-01",
    "open_charges": 5491.89,
    "has_case": true
@@ -4197,6 +4245,18 @@
    "has_case": false
   },
   {
+   "community": "Regency I & II",
+   "short_name": "REG",
+   "unit": "70",
+   "stage": "Writ of Possession",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 2055.0,
+   "has_case": false
+  },
+  {
    "community": "Palm Haven Estates",
    "short_name": "PPH",
    "unit": "L",
@@ -4206,6 +4266,42 @@
    "stage_since": "2026-08-26",
    "sent_to_attorney": "2026-08-26",
    "open_charges": 1225.91,
+   "has_case": false
+  },
+  {
+   "community": "Mcgregor",
+   "short_name": "MCG",
+   "unit": "56",
+   "stage": "Writ of Ejectment",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 5690.0,
+   "has_case": false
+  },
+  {
+   "community": "Mcgregor",
+   "short_name": "MCG",
+   "unit": "76",
+   "stage": "Writ of Ejectment",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 3125.0,
+   "has_case": false
+  },
+  {
+   "community": "Mcgregor",
+   "short_name": "MCG",
+   "unit": "121",
+   "stage": "Rule to Vacate",
+   "start": "2026-09-09",
+   "closed": "",
+   "stage_since": "2026-09-09",
+   "sent_to_attorney": "",
+   "open_charges": 3720.0,
    "has_case": false
   }
  ]

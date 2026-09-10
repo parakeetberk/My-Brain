@@ -26,7 +26,7 @@
      "title": "The 90+ bucket is up 31% in seven months"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "The 90+ bucket is up 31% in seven months"
   },
@@ -40,7 +40,7 @@
      "title": "5 reportable communities have no receivables in Rent Manager"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "5 reportable communities have no receivables in Rent Manager"
   },
@@ -54,7 +54,7 @@
      "title": "Receivables: live from Rent Manager, history from the warehouse"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "Receivables: live from Rent Manager, history from the warehouse"
   },
@@ -68,7 +68,7 @@
      "title": "2026-08 expenses look only partly posted"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "2026-08 expenses look only partly posted"
   },
@@ -82,7 +82,7 @@
      "title": "2 communities have no Rent Manager unit detail"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "2 communities have no Rent Manager unit detail"
   },
@@ -96,7 +96,7 @@
      "title": "2 eviction communities are outside the reportable roster"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "2 eviction communities are outside the reportable roster"
   },
@@ -137,7 +137,7 @@
      "title": "15 eviction cases have been open more than a year"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "15 eviction cases have been open more than a year"
   },
@@ -155,11 +155,17 @@
      "event": "changed",
      "severity": "warn",
      "title": "18 homes are for sale but not marked Ready to Market"
+    },
+    {
+     "date": "2026-09-10",
+     "event": "changed",
+     "severity": "warn",
+     "title": "21 homes are for sale but not marked Ready to Market"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
-   "title": "18 homes are for sale but not marked Ready to Market"
+   "title": "21 homes are for sale but not marked Ready to Market"
   },
   "former-resident-coverage": {
    "first_seen": "2026-09-05",
@@ -175,11 +181,17 @@
      "event": "changed",
      "severity": "info",
      "title": "Former-resident status is known for 261 of 503 balances"
+    },
+    {
+     "date": "2026-09-10",
+     "event": "changed",
+     "severity": "info",
+     "title": "Former-resident status is known for 255 of 486 balances"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
-   "title": "Former-resident status is known for 261 of 503 balances"
+   "title": "Former-resident status is known for 255 of 486 balances"
   },
   "live-ar-above-closed-month": {
    "first_seen": "2026-09-05",
@@ -201,11 +213,17 @@
      "event": "changed",
      "severity": "info",
      "title": "Live receivables run $160K above the closed month by design"
+    },
+    {
+     "date": "2026-09-10",
+     "event": "changed",
+     "severity": "info",
+     "title": "Live receivables run $146K above the closed month by design"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
-   "title": "Live receivables run $160K above the closed month by design"
+   "title": "Live receivables run $146K above the closed month by design"
   },
   "lots-exceed-pds-core": {
    "first_seen": "2026-09-05",
@@ -217,7 +235,7 @@
      "title": "2 communities carry more lots in Rent Manager than the PDS counts"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "2 communities carry more lots in Rent Manager than the PDS counts"
   },
@@ -237,7 +255,7 @@
      "title": "2026-08 move-outs look unposted: 12 against a 12-month median of 124"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "2026-08 move-outs look unposted: 12 against a 12-month median of 124"
   },
@@ -251,7 +269,7 @@
      "title": "There is no punch stage in Rent Manager"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "There is no punch stage in Rent Manager"
   },
@@ -271,7 +289,7 @@
      "title": "30 occupied lots across 10 communities are not billed at all"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "30 occupied lots across 10 communities are not billed at all"
   },
@@ -291,7 +309,7 @@
      "title": "17 months carry onboarding move-ins, not leasing"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "17 months carry onboarding move-ins, not leasing"
   },
@@ -326,7 +344,7 @@
      "title": "Payment plans are still detected by charge name, not by a field"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "Payment plans are still detected by charge name, not by a field"
   },
@@ -346,7 +364,7 @@
      "title": "38 communities disagree on how many park-owned homes they have"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "38 communities disagree on how many park-owned homes they have"
   },
@@ -360,7 +378,7 @@
      "title": "Regional manager assignments are not filled in"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "Regional manager assignments are not filled in"
   },
@@ -380,7 +398,7 @@
      "title": "8 communities post revenue with no budget loaded"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "8 communities post revenue with no budget loaded"
   },
@@ -406,7 +424,7 @@
      "title": "2 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "2 RV resorts show expenses but almost no revenue: the bookings are in Campspot"
   },
@@ -441,7 +459,7 @@
      "title": "$12K of receivables rolled in from sub-ledgers"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "$12K of receivables rolled in from sub-ledgers"
   },
@@ -461,7 +479,7 @@
      "title": "Utility recapture is 45% against a 80% target"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "warn",
    "title": "Utility recapture is 45% against a 80% target"
   },
@@ -479,11 +497,17 @@
      "event": "changed",
      "severity": "info",
      "title": "Vacancy aging covers 552 of 1723 vacant units"
+    },
+    {
+     "date": "2026-09-10",
+     "event": "changed",
+     "severity": "info",
+     "title": "Vacancy aging covers 552 of 1724 vacant units"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
-   "title": "Vacancy aging covers 552 of 1723 vacant units"
+   "title": "Vacancy aging covers 552 of 1724 vacant units"
   },
   "vacancy-count-vs-named-list": {
    "first_seen": "2026-09-05",
@@ -495,10 +519,10 @@
      "title": "Vacant unit counts and the named unit list use different definitions"
     }
    ],
-   "last_seen": "2026-09-09",
+   "last_seen": "2026-09-10",
    "severity": "info",
    "title": "Vacant unit counts and the named unit list use different definitions"
   }
  },
- "updated": "2026-09-09"
+ "updated": "2026-09-10"
 }
