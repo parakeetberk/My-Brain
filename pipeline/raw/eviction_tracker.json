@@ -1,6 +1,6 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-10",
+ "as_of": "2026-09-11",
  "case_count": 358,
  "open_cases": 104,
  "dropped_columns": [
@@ -641,7 +641,7 @@
    "closed": "",
    "stage_since": "2026-07-14",
    "sent_to_attorney": "2026-07-06",
-   "open_charges": 1241.33,
+   "open_charges": 1166.33,
    "has_case": true
   },
   {
@@ -864,10 +864,10 @@
    "community": "Tradewinds",
    "short_name": "TRADE",
    "unit": "16 Olsen Road",
-   "stage": "Court: Final Judgement",
+   "stage": "Writ of Possession",
    "start": "2026-07-01",
    "closed": "",
-   "stage_since": "2026-08-19",
+   "stage_since": "2026-09-10",
    "sent_to_attorney": "2026-07-01",
    "open_charges": 3345.81,
    "has_case": true
@@ -4157,7 +4157,7 @@
    "closed": "2026-03-17",
    "stage_since": "2026-03-10",
    "sent_to_attorney": "2026-03-02",
-   "open_charges": 1132.85,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
