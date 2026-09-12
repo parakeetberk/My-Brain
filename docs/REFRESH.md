@@ -97,6 +97,28 @@ Refuse and record, never normalise into something plausible.
 *Gate:* never publish a stale or partial payload. The team reads that page as
 fact. If any step above failed, the previous version stands.
 
+### Two builds, and they are not interchangeable
+
+`build/parakeet_ops_dashboard.html` — the one the routine commits and publishes —
+loads React from `cdnjs.cloudflare.com` at page load. That is correct for the
+artifact: the viewer allows cdnjs, and it keeps 142KB out of every daily commit.
+
+**It is not a file to email or hand to anyone.** Off the network, on a locked-down
+corporate connection, or anywhere cdnjs is blocked, it renders a blank page with
+no error. Someone opening it on a plane concludes the dashboard is broken.
+
+For a download, an email attachment, or anything that has to work offline, build
+the standalone instead — React inlined, no network at all:
+
+    python3 pipeline/publish.py --standalone --out "Parakeet Ops Dashboard <date>.html"
+
+Same data, same page, 142KB larger. It is deliberately NOT committed: it is one
+command from the committed `data/dashboard.json`, and a second 2.9MB copy every
+weekday would add about 700MB a year to the repo for nothing.
+
+So: **artifact and repo copy are CDN-linked. Anything that leaves the building is
+standalone.** Check which one you have before sending it.
+
 **7. Commit and push.** Everything under `data/` plus any refused-file records.
 *Gate:* this is not optional. An unpushed run is a run that did not happen.
 
