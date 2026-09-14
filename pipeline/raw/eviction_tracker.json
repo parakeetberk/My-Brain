@@ -1,8 +1,8 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-11",
+ "as_of": "2026-09-14",
  "case_count": 358,
- "open_cases": 104,
+ "open_cases": 96,
  "dropped_columns": [
   "FullName",
   "CaseNumber"
@@ -338,7 +338,7 @@
    "unit": "48",
    "stage": "Public Sale",
    "start": "2026-03-30",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-08-05",
    "sent_to_attorney": "2026-03-30",
    "open_charges": 262.97,
@@ -386,7 +386,7 @@
    "unit": "C-18",
    "stage": "Public Sale",
    "start": "2026-03-05",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-08-05",
    "sent_to_attorney": "2026-03-05",
    "open_charges": 0.0,
@@ -641,7 +641,7 @@
    "closed": "",
    "stage_since": "2026-07-14",
    "sent_to_attorney": "2026-07-06",
-   "open_charges": 1166.33,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -660,10 +660,10 @@
    "community": "Applegate",
    "short_name": "APPLE",
    "unit": "244 Circle Drive",
-   "stage": "Title Pending",
+   "stage": "Case Closed",
    "start": "2026-03-30",
-   "closed": "",
-   "stage_since": "2026-09-03",
+   "closed": "2026-09-11",
+   "stage_since": "2026-09-11",
    "sent_to_attorney": "2026-03-30",
    "open_charges": 122.6,
    "has_case": true
@@ -1214,7 +1214,7 @@
    "unit": "4532 SE 23rd Ct.",
    "stage": "Public Sale",
    "start": "2026-03-30",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-08-05",
    "sent_to_attorney": "2026-03-30",
    "open_charges": 0.0,
@@ -1505,7 +1505,7 @@
    "closed": "",
    "stage_since": "2025-09-30",
    "sent_to_attorney": "",
-   "open_charges": 1899.65,
+   "open_charges": 1249.65,
    "has_case": false
   },
   {
@@ -1610,7 +1610,7 @@
    "unit": "86",
    "stage": "Court: Complaint",
    "start": "2026-08-31",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-31",
    "open_charges": 3579.53,
@@ -2042,7 +2042,7 @@
    "unit": "73",
    "stage": "Writ of Possession",
    "start": "2025-12-02",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-02-20",
    "sent_to_attorney": "2025-12-02",
    "open_charges": 0.0,
@@ -2357,7 +2357,7 @@
    "closed": "",
    "stage_since": "2026-07-31",
    "sent_to_attorney": "",
-   "open_charges": 4500.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -2393,7 +2393,7 @@
    "closed": "2025-08-14",
    "stage_since": "2025-08-06",
    "sent_to_attorney": "",
-   "open_charges": 582.48,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -3317,7 +3317,7 @@
    "closed": "2025-12-05",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1446.0,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -3509,7 +3509,7 @@
    "closed": "2026-05-28",
    "stage_since": "2026-04-03",
    "sent_to_attorney": "2026-03-30",
-   "open_charges": 650.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -3590,10 +3590,10 @@
    "unit": "56",
    "stage": "Public Sale",
    "start": "2026-06-15",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-08-13",
    "sent_to_attorney": "2026-06-02",
-   "open_charges": 6262.76,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -4190,7 +4190,7 @@
    "unit": "31 Olsen Road",
    "stage": "Public Sale",
    "start": "2026-05-01",
-   "closed": "",
+   "closed": "2026-09-11",
    "stage_since": "2026-08-11",
    "sent_to_attorney": "2026-05-21",
    "open_charges": 0.0,
