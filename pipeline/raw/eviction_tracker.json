@@ -1,7 +1,7 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-15",
- "case_count": 358,
+ "as_of": "2026-09-16",
+ "case_count": 359,
  "open_cases": 91,
  "dropped_columns": [
   "FullName",
@@ -129,7 +129,7 @@
    "has_case": true
   },
   {
-   "community": "Everglades Mobile Home Park",
+   "community": "Everglades",
    "short_name": "EG",
    "unit": "E27",
    "stage": "Court: Final Judgement",
@@ -297,7 +297,7 @@
    "has_case": false
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "1",
    "stage": "Auction Request",
@@ -309,7 +309,7 @@
    "has_case": true
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "12",
    "stage": "Court: Complaint",
@@ -321,7 +321,7 @@
    "has_case": true
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "28",
    "stage": "Court: Final Judgement",
@@ -333,7 +333,7 @@
    "has_case": true
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "48",
    "stage": "Public Sale",
@@ -528,10 +528,10 @@
    "community": "Congress",
    "short_name": "CONG",
    "unit": "15",
-   "stage": "Auction Request",
+   "stage": "Public Sale",
    "start": "2026-03-30",
    "closed": "",
-   "stage_since": "2026-07-13",
+   "stage_since": "2026-09-15",
    "sent_to_attorney": "2026-03-30",
    "open_charges": 6156.43,
    "has_case": true
@@ -936,10 +936,10 @@
    "community": "Southgate",
    "short_name": "SOUTH",
    "unit": "25",
-   "stage": "Court: Complaint",
+   "stage": "Court: Final Judgement",
    "start": "2026-07-31",
    "closed": "",
-   "stage_since": "2026-08-13",
+   "stage_since": "2026-09-15",
    "sent_to_attorney": "2026-07-31",
    "open_charges": 2508.07,
    "has_case": true
@@ -1053,7 +1053,7 @@
    "has_case": true
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "33",
    "stage": "Court: Complaint",
@@ -1116,10 +1116,10 @@
    "community": "Vantage Oaks",
    "short_name": "VO",
    "unit": "98",
-   "stage": "Auction Request",
+   "stage": "Public Sale",
    "start": "2026-07-01",
    "closed": "",
-   "stage_since": "2026-08-27",
+   "stage_since": "2026-09-15",
    "sent_to_attorney": "2026-07-01",
    "open_charges": 2400.0,
    "has_case": true
@@ -1766,7 +1766,7 @@
    "unit": "81",
    "stage": "Intake Packet",
    "start": "2026-08-31",
-   "closed": "",
+   "closed": "2026-09-15",
    "stage_since": "2026-08-31",
    "sent_to_attorney": "2026-08-31",
    "open_charges": 2750.0,
@@ -2097,7 +2097,7 @@
    "has_case": true
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "23",
    "stage": "Writ of Possession",
@@ -2633,7 +2633,7 @@
    "closed": "2026-01-20",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 1233.29,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -2733,7 +2733,7 @@
    "has_case": true
   },
   {
-   "community": "Greene Pointe MHC",
+   "community": "Greene Pointe",
    "short_name": "GPT",
    "unit": "305 Blue Pointe",
    "stage": "Rule to Vacate",
@@ -2745,7 +2745,7 @@
    "has_case": true
   },
   {
-   "community": "Greene Pointe MHC",
+   "community": "Greene Pointe",
    "short_name": "GPT",
    "unit": "407 Black Pointe",
    "stage": "Rule to Vacate",
@@ -2757,7 +2757,7 @@
    "has_case": true
   },
   {
-   "community": "Greene Pointe MHC",
+   "community": "Greene Pointe",
    "short_name": "GPT",
    "unit": "315 Blue Pointe",
    "stage": "Writ of Ejectment",
@@ -2805,7 +2805,7 @@
    "has_case": false
   },
   {
-   "community": "Lake Wales, MHC",
+   "community": "Lake Wales",
    "short_name": "LWPO",
    "unit": "15",
    "stage": "Writ of Possession",
@@ -3273,6 +3273,18 @@
    "has_case": false
   },
   {
+   "community": "Vantage Oaks",
+   "short_name": "VO",
+   "unit": "112",
+   "stage": "Court: Complaint",
+   "start": "2026-09-15",
+   "closed": "",
+   "stage_since": "2026-09-15",
+   "sent_to_attorney": "",
+   "open_charges": 1200.0,
+   "has_case": true
+  },
+  {
    "community": "Parkwood Mobile Home Park",
    "short_name": "PARK",
    "unit": "60",
@@ -3297,7 +3309,7 @@
    "has_case": true
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "21",
    "stage": "Rule to Vacate",
@@ -3309,7 +3321,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "27",
    "stage": "Rule to Vacate",
@@ -3321,7 +3333,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "46",
    "stage": "Rule to Vacate",
@@ -3333,7 +3345,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "55",
    "stage": "Rule to Vacate",
@@ -3345,7 +3357,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "73",
    "stage": "Demand Notice",
@@ -3357,7 +3369,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "86",
    "stage": "Rule to Vacate",
@@ -3369,7 +3381,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "91",
    "stage": "Demand Notice",
@@ -3381,7 +3393,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "114",
    "stage": "Demand Notice",
@@ -3393,7 +3405,7 @@
    "has_case": false
   },
   {
-   "community": "Silver Hill MHC",
+   "community": "Silver Hill",
    "short_name": "SH",
    "unit": "123",
    "stage": "Rule to Vacate",
@@ -3405,7 +3417,7 @@
    "has_case": false
   },
   {
-   "community": "Northgate MH",
+   "community": "Northgate MH & RV",
    "short_name": "NGMH",
    "unit": "3294 C Ave",
    "stage": "Court: Complaint",
@@ -3417,7 +3429,7 @@
    "has_case": true
   },
   {
-   "community": "Northgate MH",
+   "community": "Northgate MH & RV",
    "short_name": "NGMH",
    "unit": "3304 3rd Ave",
    "stage": "Title Pending",
@@ -3960,13 +3972,13 @@
    "community": "Lucky Clover",
    "short_name": "LUCK",
    "unit": "86",
-   "stage": "Intake Packet",
+   "stage": "Court: Complaint",
    "start": "2026-08-31",
    "closed": "",
-   "stage_since": "2026-08-31",
+   "stage_since": "2026-09-15",
    "sent_to_attorney": "2026-08-31",
    "open_charges": 2608.41,
-   "has_case": false
+   "has_case": true
   },
   {
    "community": "Vantage Oaks",
@@ -4164,13 +4176,13 @@
    "community": "Lucky Clover",
    "short_name": "LUCK",
    "unit": "5",
-   "stage": "Intake Packet",
+   "stage": "Court: Complaint",
    "start": "2026-08-31",
    "closed": "",
-   "stage_since": "2026-08-31",
+   "stage_since": "2026-09-15",
    "sent_to_attorney": "2026-08-31",
    "open_charges": 2750.0,
-   "has_case": false
+   "has_case": true
   },
   {
    "community": "Windward Knoll",
