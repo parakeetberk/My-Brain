@@ -1,6 +1,6 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-16",
+ "as_of": "2026-09-17",
  "case_count": 359,
  "open_cases": 91,
  "dropped_columns": [
@@ -1613,7 +1613,7 @@
    "closed": "2026-09-11",
    "stage_since": "2026-09-03",
    "sent_to_attorney": "2026-08-31",
-   "open_charges": 3579.53,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -2148,10 +2148,10 @@
    "community": "Palm Spring",
    "short_name": "PSEPO",
    "unit": "38",
-   "stage": "Court: Final Judgement",
+   "stage": "Writ of Possession",
    "start": "2026-06-18",
    "closed": "",
-   "stage_since": "2026-08-10",
+   "stage_since": "2026-09-16",
    "sent_to_attorney": "2026-06-18",
    "open_charges": 6678.65,
    "has_case": true
