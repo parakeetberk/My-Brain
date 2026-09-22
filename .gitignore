@@ -9,3 +9,11 @@ node_modules/
 # nothing in the build reads them and they would double the repo.
 pipeline/raw/candidate/
 pipeline/incoming/
+
+# Standalone dashboard builds, e.g. "Parakeet Ops Dashboard 2026-09-22.html".
+# The emailable build with React inlined, one command from the committed
+# data/dashboard.json:
+#     python3 pipeline/publish.py --standalone --out "build/<name>.html"
+# Deliberately not committed -- see docs/REFRESH.md. A second 2.9MB copy every
+# weekday would add roughly 700MB a year to the repo for nothing.
+build/Parakeet Ops Dashboard *.html
