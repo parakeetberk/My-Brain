@@ -1,6 +1,6 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-21",
+ "as_of": "2026-09-22",
  "case_count": 359,
  "open_cases": 91,
  "dropped_columns": [
@@ -4157,7 +4157,7 @@
    "closed": "2026-08-11",
    "stage_since": "2026-07-31",
    "sent_to_attorney": "2026-07-31",
-   "open_charges": 961.81,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
