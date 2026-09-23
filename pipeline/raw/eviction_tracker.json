@@ -1,6 +1,6 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-22",
+ "as_of": "2026-09-23",
  "case_count": 359,
  "open_cases": 91,
  "dropped_columns": [
@@ -113,7 +113,7 @@
    "closed": "2026-06-23",
    "stage_since": "2025-09-10",
    "sent_to_attorney": "",
-   "open_charges": 12681.54,
+   "open_charges": 11681.54,
    "has_case": true
   },
   {
@@ -1001,7 +1001,7 @@
    "closed": "2026-06-12",
    "stage_since": "2026-06-09",
    "sent_to_attorney": "2026-05-29",
-   "open_charges": 735.52,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -1529,7 +1529,7 @@
    "closed": "",
    "stage_since": "2025-09-12",
    "sent_to_attorney": "",
-   "open_charges": 2150.0,
+   "open_charges": 1500.0,
    "has_case": true
   },
   {
@@ -2741,7 +2741,7 @@
    "closed": "2026-06-29",
    "stage_since": "2026-06-17",
    "sent_to_attorney": "",
-   "open_charges": 765.0,
+   "open_charges": 0.0,
    "has_case": true
   },
   {
@@ -3612,10 +3612,10 @@
    "community": "Riverwalk",
    "short_name": "RW",
    "unit": "57",
-   "stage": "Auction Request",
+   "stage": "Public Sale",
    "start": "2026-06-02",
    "closed": "",
-   "stage_since": "2026-09-09",
+   "stage_since": "2026-09-22",
    "sent_to_attorney": "2026-06-01",
    "open_charges": 5491.89,
    "has_case": true
