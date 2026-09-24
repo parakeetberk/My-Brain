@@ -1,8 +1,8 @@
 {
  "source": "Eviction Tracker.csv (Rent Manager scripted report)",
- "as_of": "2026-09-23",
- "case_count": 359,
- "open_cases": 91,
+ "as_of": "2026-09-24",
+ "case_count": 361,
+ "open_cases": 94,
  "dropped_columns": [
   "FullName",
   "CaseNumber"
@@ -1644,13 +1644,13 @@
    "community": "Ormond Beach",
    "short_name": "OBOPO",
    "unit": "955-12",
-   "stage": "Intake Packet",
+   "stage": "Court: Complaint",
    "start": "2026-08-27",
    "closed": "",
-   "stage_since": "2026-08-27",
+   "stage_since": "2026-09-23",
    "sent_to_attorney": "2026-08-27",
    "open_charges": 2516.26,
-   "has_case": false
+   "has_case": true
   },
   {
    "community": "American",
@@ -2243,14 +2243,26 @@
   {
    "community": "Brunswick Estates",
    "short_name": "BRUN",
+   "unit": "10",
+   "stage": "Dispossessory",
+   "start": "2026-09-23",
+   "closed": "",
+   "stage_since": "2026-09-23",
+   "sent_to_attorney": "",
+   "open_charges": 693.0,
+   "has_case": false
+  },
+  {
+   "community": "Brunswick Estates",
+   "short_name": "BRUN",
    "unit": "11",
    "stage": "Dispossessory",
-   "start": "2025-08-06",
-   "closed": "2025-10-02",
-   "stage_since": "2025-08-20",
+   "start": "2026-09-23",
+   "closed": "",
+   "stage_since": "2026-09-23",
    "sent_to_attorney": "",
-   "open_charges": 570.0,
-   "has_case": true
+   "open_charges": 653.0,
+   "has_case": false
   },
   {
    "community": "Brunswick Estates",
@@ -2443,6 +2455,18 @@
    "sent_to_attorney": "",
    "open_charges": 7169.93,
    "has_case": true
+  },
+  {
+   "community": "Shady Acres",
+   "short_name": "SA",
+   "unit": "200",
+   "stage": "Dispossessory",
+   "start": "2026-09-23",
+   "closed": "",
+   "stage_since": "2026-09-23",
+   "sent_to_attorney": "",
+   "open_charges": 621.41,
+   "has_case": false
   },
   {
    "community": "Shady Acres",
@@ -2669,7 +2693,7 @@
    "closed": "2025-12-18",
    "stage_since": "2025-11-18",
    "sent_to_attorney": "",
-   "open_charges": 719.56,
+   "open_charges": 0.0,
    "has_case": false
   },
   {
@@ -3420,10 +3444,10 @@
    "community": "Northgate MH & RV",
    "short_name": "NGMH",
    "unit": "3294 C Ave",
-   "stage": "Court: Complaint",
+   "stage": "Court: Final Judgement",
    "start": "2026-07-31",
    "closed": "",
-   "stage_since": "2026-08-13",
+   "stage_since": "2026-09-23",
    "sent_to_attorney": "2026-07-31",
    "open_charges": 2832.48,
    "has_case": true
