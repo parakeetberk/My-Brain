@@ -1,0 +1,123 @@
+<title>The Open Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700&family=Red+Hat+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light}
+html,body{margin:0;padding:0}
+img{max-width:100%}
+[hidden]:not([hidden=until-found]){display:none!important}
+__BOARD_CSS__
+/* ---- comments ---- */
+.cbtn{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.04em;
+  text-transform:uppercase;padding:3px 7px;border-radius:3px;cursor:pointer;
+  background:transparent;color:var(--ink-dim);border:1px solid var(--rule);white-space:nowrap;
+  display:inline-flex;align-items:center;gap:5px}
+.cbtn:hover{border-color:var(--ink-dim);color:var(--ink)}
+.cbtn.has{border-color:var(--ink-dim);color:var(--ink);background:var(--panel)}
+.cbtn.pend{border-color:var(--yellow);background:var(--yellow);color:#3D2E00}
+.cbtn i{font-style:normal;font-family:var(--mono);font-size:10px;opacity:.75}
+.wrap{max-width:1320px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important}
+.row{grid-template-columns:40px 74px 92px 1fr 128px 116px 128px}
+.flg{display:flex;gap:4px;padding-top:1px}
+.fl{display:inline-flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;user-select:none}
+.fl input{margin:0;cursor:pointer;accent-color:var(--green)}
+.fl span{font-family:var(--disp);font-weight:700;font-size:8px;letter-spacing:.06em;color:var(--muted)}
+.fl.fl-set span,.fl.fl-pend span{color:var(--ink)}
+.fl.fl-pend input{outline:2px solid var(--yellow);outline-offset:1px}
+.row:has(.fl input:checked){background:rgba(74,186,129,.06)}
+.com{font-size:12.5px;color:var(--ink-dim);min-width:0;overflow:hidden}
+.ef{cursor:pointer;border-bottom:1px dashed transparent;border-radius:2px;padding:0 2px}
+.ef:hover{border-bottom-color:var(--ink-dim);background:var(--panel2)}
+.pill.ef:hover{filter:brightness(.94)}
+.ef .blank{color:var(--muted);font-style:italic;font-size:11.5px}
+.ef.ed-pend{box-shadow:inset 0 -2px 0 var(--yellow);background:rgba(255,204,59,.16)}
+.ef.ed-open{box-shadow:inset 0 -2px 0 var(--ink-dim)}
+.ef.ed-done{box-shadow:inset 0 -2px 0 var(--green)}
+.efsel{font-family:var(--body);font-size:12px;max-width:100%;padding:1px 3px;
+  border:1px solid var(--ink);border-radius:3px;background:var(--ground);color:var(--ink)}
+.chip{display:inline-block;margin-left:7px;padding:1px 6px;border-radius:3px;font-family:var(--mono);
+  font-size:10.5px;background:var(--panel2);color:var(--ink-dim);white-space:nowrap}
+.chip.over{background:var(--red);color:#fff}
+.chip.cost{background:transparent;border:1px solid var(--rule);color:var(--ink)}
+.chip.ef{cursor:pointer}
+.chip.ef:hover{outline:1px solid var(--ink-dim)}
+.chip-empty{background:transparent;border:1px dashed var(--rule);color:var(--muted);font-family:var(--body);font-style:italic}
+.chip.ed-pend{outline:2px solid var(--yellow)}
+.chip.ed-open{outline:1px solid var(--ink-dim)}
+.chip.ed-done{outline:1px solid var(--green)}
+.efinp{font-family:var(--mono);font-size:11px;width:118px;padding:1px 4px;
+  border:1px solid var(--ink);border-radius:3px;background:var(--ground);color:var(--ink)}
+.mmeta dd .chip{margin-left:0}
+.cm.st-reply{border-left-color:var(--green);background:var(--panel);padding:6px 0 6px 12px;border-radius:0 3px 3px 0}
+.st-reply .cms{background:var(--ink);color:var(--ground)}
+.cmcopy{margin-left:auto;background:transparent;border:1px solid var(--rule);border-radius:3px;
+  color:var(--ink-dim);cursor:pointer;font-family:var(--disp);font-weight:700;font-size:9px;
+  letter-spacing:.06em;text-transform:uppercase;padding:2px 7px}
+.cmcopy:hover{color:var(--ink);border-color:var(--ink-dim)}
+.cmcopy.copied{background:var(--green);color:#0C2A1C;border-color:var(--green)}
+.cm.st-reply .cmb{font-size:13px;line-height:1.6}
+.chip.who{background:transparent;border:1px dashed var(--rule);color:var(--ink-dim);font-family:var(--body)}
+.mmeta dd.over{color:var(--red);font-weight:700}
+.row.hascom{box-shadow:inset 3px 0 0 var(--ink-dim)}
+.row.haspend{box-shadow:inset 3px 0 0 var(--yellow)}
+
+.mask{position:fixed;inset:0;background:rgba(20,32,42,.55);z-index:200;
+  display:flex;align-items:flex-start;justify-content:center;padding:48px 18px;overflow:auto}
+.modal{background:var(--ground);border:1px solid var(--rule);border-radius:6px;
+  width:100%;max-width:760px;box-shadow:0 24px 64px rgba(0,0,0,.3);display:flex;flex-direction:column}
+.mhead{padding:18px 22px 14px;border-bottom:1px solid var(--rule);display:flex;gap:12px;align-items:flex-start}
+.mhead .rid{cursor:pointer}
+.mhead h3{font-family:var(--disp);font-size:15px;font-weight:700;margin:0;flex:1;line-height:1.4}
+.mx{background:transparent;border:0;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;padding:0 2px}
+.mx:hover{color:var(--ink)}
+.mmeta{padding:10px 22px 14px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-dim)}
+.mmeta dl{display:grid;grid-template-columns:88px 1fr;gap:4px 12px;margin:0}
+.mmeta dt{color:var(--muted);font-family:var(--disp);font-weight:700;font-size:10px;
+  letter-spacing:.09em;text-transform:uppercase;padding-top:2px}
+.mmeta dd{margin:0}
+.mnotes{padding:12px 22px 14px;border-bottom:1px solid var(--rule);max-height:26vh;overflow:auto}
+.mnotes h4{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.mnotes p{margin:0;font-size:13px;color:var(--ink-dim);line-height:1.6}
+.mlog{padding:6px 22px 14px;max-height:40vh;overflow:auto}
+.mlog h4,.madd h4{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.cm{border-left:2px solid var(--rule);padding:2px 0 2px 12px;margin:0 0 12px}
+.cm.st-pending{border-left-color:var(--yellow)}
+.cm.st-open{border-left-color:var(--ink-dim)}
+.cm.st-actioned{border-left-color:var(--green)}
+.cmh{display:flex;gap:8px;align-items:center;margin-bottom:3px}
+.cmt{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.cms{font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.08em;
+  text-transform:uppercase;padding:1px 6px;border-radius:2px}
+.st-pending .cms{background:var(--yellow);color:#3D2E00}
+.st-open .cms{background:var(--panel2);color:var(--ink-dim)}
+.st-actioned .cms{background:var(--green);color:#0C2A1C}
+.cmb{font-size:13.5px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
+.cmdel{margin-left:auto;background:transparent;border:0;color:var(--muted);cursor:pointer;
+  font-size:11px;text-decoration:underline}
+.cmdel:hover{color:var(--red)}
+.nocm{font-size:13px;color:var(--muted);padding:2px 0 8px}
+.madd{padding:0 22px 18px}
+.madd textarea{width:100%;min-height:88px;font-family:var(--body);font-size:13.5px;
+  color:var(--ink);background:var(--ground);border:1px solid var(--rule);border-radius:4px;
+  padding:10px 12px;resize:vertical}
+.madd textarea:focus{outline:2px solid var(--green);outline-offset:1px}
+.mact{display:flex;gap:8px;align-items:center;margin-top:10px}
+.hint{font-size:11.5px;color:var(--muted);margin-left:auto}
+
+.savebar{position:sticky;bottom:0;z-index:60;margin:0 -24px -90px;padding:12px 24px;
+  background:var(--panel);border-top:1px solid var(--rule);display:flex;gap:10px;align-items:center;
+  box-shadow:0 -6px 22px rgba(0,0,0,.10)}
+.savebar b{font-family:var(--disp);font-size:13px}
+.savebar .sp{margin-left:auto}
+.btn.pri{background:var(--green);border-color:var(--green);color:#0C2A1C;font-weight:700}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:300;
+  background:var(--ink);color:var(--ground);padding:10px 18px;border-radius:4px;font-size:13px;
+  box-shadow:0 10px 30px rgba(0,0,0,.28);max-width:min(560px,92vw)}
+.warnbar{margin:14px 0 0;padding:11px 16px;border-left:3px solid var(--yellow);
+  background:var(--panel);font-size:13px;color:var(--ink-dim);border-radius:0 3px 3px 0}
+@media (max-width:900px){.savebar{margin:0 -16px -70px;padding:10px 16px;flex-wrap:wrap}}
+</style>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parakeet Communities — WF004 Move Out Build Spec v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4;
+      margin: 2.2cm 1.8cm 2.4cm 1.8cm;
+      @top-left {
+        content: "PARAKEET COMMUNITIES \2014 CONFIDENTIAL \2014 INTERNAL BUILD SPEC";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #888;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+      }
+      @top-right {
+        content: string(doctitle);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #2F4E65; font-weight: 600;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+      }
+      @bottom-left {
+        content: "Parakeet Communities \B7 WF004 Move Out Build Spec \B7 v1.0 \B7 Confidential \B7 08/19/26";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6pt; color: #aaa;
+        border-top: 0.5pt solid #eee; padding-top: 4pt;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7.5pt; color: #777;
+        border-top: 0.5pt solid #eee; padding-top: 4pt;
+      }
+    }
+    @page :first { margin: 0; @top-left{content:none;} @top-right{content:none;} @bottom-left{content:none;} @bottom-right{content:none;} }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:0; font-family:'Red Hat Display',sans-serif; font-size:9pt; color:#222; line-height:1.45; string-set: doctitle ""; }
+    h1 { string-set: doctitle content(); }
+    p { margin:0 0 8px 0; }
+
+    /* COVER */
+    .cover { width:210mm; height:297mm; margin:0; padding:0; position:relative; overflow:hidden; page-break-after:always;
+      background:linear-gradient(155deg,#1b2f40 0%,#2F4E65 42%,#3a6275 68%,#1b2f40 100%);
+      color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+    .cover-stripe-top { position:absolute; top:0; left:0; right:0; height:8px;
+      background:linear-gradient(90deg,#4ABA81 0% 33%,#FFCC3B 33% 66%,#F16262 66% 100%); }
+    .cover-stripe-bot { position:absolute; bottom:0; left:0; right:0; height:4px; background:#4ABA81; }
+    .cover-wordmark { font-size:11pt; font-weight:700; letter-spacing:3px; text-transform:lowercase; margin-bottom:44px; }
+    .cover-wordmark .g { color:#4ABA81; } .cover-wordmark .n { color:#a8cede; }
+    .cover-eyebrow { font-size:8pt; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:#4ABA81; margin-bottom:10px; }
+    .cover-wf-badge { display:inline-block; background:rgba(74,186,129,0.18); border:1px solid #4ABA81; color:#4ABA81; font-size:8pt; font-weight:700; letter-spacing:2px; padding:4px 14px; margin-bottom:16px; text-transform:uppercase; }
+    .cover h1 { font-size:36pt; font-weight:800; color:#fff; text-align:center; line-height:1.05; margin:0 0 10px 0; padding:0 36px; string-set:doctitle ""; }
+    .cover-subtitle { font-size:11pt; font-weight:400; color:#bdd4e3; line-height:1.45; margin-bottom:6px; padding:0 50px; }
+    .cover-tagline { font-size:8.5pt; color:#7ea5be; margin-bottom:28px; }
+    .cover-divider { width:55px; height:2px; background:#4ABA81; margin:0 auto 26px; }
+    .cover-meta { display:flex; gap:28px; margin-bottom:26px; flex-wrap:wrap; justify-content:center; }
+    .cover-meta-item .lbl { font-size:7pt; color:#7ea5be; text-transform:uppercase; letter-spacing:1.8px; display:block; margin-bottom:4px; }
+    .cover-meta-item .val { font-size:10pt; font-weight:600; color:#fff; }
+    .cover-status-pill { display:inline-block; background:#FFCC3B; color:#3a2800; font-size:8pt; font-weight:700; letter-spacing:1px; padding:5px 16px; text-transform:uppercase; margin-bottom:24px; }
+    .cover-changes { background:rgba(255,255,255,0.07); border-left:3px solid #4ABA81; padding:11px 18px; margin:0 44px; font-size:7.5pt; color:#bdd4e3; line-height:1.55; text-align:left; }
+    .cover-footer { position:absolute; bottom:18px; font-size:7pt; color:#6a92a8; letter-spacing:0.8px; left:0; right:0; text-align:center; }
+
+    /* TOC */
+    .toc-page { padding-top:10px; }
+    .toc-title { font-size:20pt; color:#2F4E65; margin-bottom:20px; border-bottom:2pt solid #2F4E65; padding-bottom:8px; font-weight:700; page-break-after:avoid; }
+    .toc-list { list-style:none; padding:0; margin:0; column-count:2; column-gap:0.8cm; }
+    .toc-list li { display:flex; align-items:baseline; padding:3.5px 0; break-inside:avoid; }
+    .toc-list li a { display:flex; align-items:baseline; width:100%; text-decoration:none; color:#333; }
+    .toc-list .toc-h2 .toc-text { font-weight:700; font-size:10pt; color:#2F4E65; }
+    .toc-list .toc-h3 { padding-left:16px; }
+    .toc-list .toc-h3 .toc-text { font-weight:400; font-size:9pt; color:#555; }
+    .toc-text { white-space:nowrap; flex-shrink:0; }
+    .toc-dots { flex:1; margin:0 5px; border-bottom:1.5px dotted #bbb; min-width:20px; position:relative; top:-3px; }
+    .toc-page-num { flex-shrink:0; text-align:right; min-width:18px; font-size:9pt; color:#555; }
+
+    /* SECTION HEADER */
+    .sec-hdr { background:#2F4E65; color:#fff; padding:7px 12px; margin:0 0 12px 0; display:flex; align-items:baseline; gap:10px; page-break-after:avoid; }
+    .sec-hdr .num { font-size:7pt; font-weight:700; color:#4ABA81; text-transform:uppercase; letter-spacing:1.5px; white-space:nowrap; }
+    .sec-hdr .ttl { font-size:13pt; font-weight:700; }
+    h2 { font-size:13pt; font-weight:700; color:#2F4E65; margin:18px 0 8px; border-bottom:1pt solid #c8d8e4; padding-bottom:4px; page-break-after:avoid; }
+    h3 { font-size:10.5pt; font-weight:700; color:#2F4E65; margin:14px 0 6px; page-break-after:avoid; }
+
+    /* SECTION */
+    .section { padding:18px 0 8px; page-break-inside:avoid; }
+    .section + .section { border-top:1pt solid #e8ecef; }
+
+    /* META GRID */
+    .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+    .meta-item { background:#eef4fa; border-left:3px solid #2F4E65; padding:6px 10px; }
+    .meta-item .mk { font-size:6.5pt; font-weight:700; color:#2F4E65; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:2px; }
+    .meta-item .mv { font-size:9pt; font-weight:600; color:#222; }
+
+    /* TABLES */
+    table { width:100%; border-collapse:collapse; margin-bottom:14px; font-size:8.5pt; }
+    th { background:#2F4E65; color:#fff; font-weight:600; padding:5px 8px; text-align:left; font-size:8pt; }
+    td { padding:5px 8px; border-bottom:0.5pt solid #e0e8f0; vertical-align:top; }
+    tr:nth-child(even) td { background:#f5f8fb; }
+    .spec-table th { background:#2F4E65; }
+    .stage-hdr td { background:#eef4fa; font-weight:700; color:#2F4E65; font-size:8.5pt; }
+
+    /* BADGES */
+    .b { display:inline-block; font-size:7pt; font-weight:700; letter-spacing:0.5px; padding:2px 7px; text-transform:uppercase; }
+    .b-green { background:#4ABA81; color:#fff; }
+    .b-yellow { background:#FFCC3B; color:#5a4a00; }
+    .b-red { background:#F16262; color:#fff; }
+    .b-navy { background:#2F4E65; color:#fff; }
+    .b-gray { background:#9e9e9e; color:#fff; }
+    .b-orange { background:#F5A623; color:#fff; }
+
+    .open-badge { display:inline-block; font-size:7pt; font-weight:700; padding:2px 7px; text-transform:uppercase; background:#F16262; color:#fff; margin-right:4px; }
+
+    /* FLOW DIAGRAM */
+    .flow { display:flex; flex-wrap:wrap; gap:0; margin:10px 0 14px; align-items:stretch; }
+    .flow-stage { flex:1; min-width:90px; background:#eef4fa; border:1pt solid #c8d8e4; padding:7px 8px; text-align:center; position:relative; font-size:7.5pt; }
+    .flow-stage .fsn { font-size:7pt; color:#4ABA81; font-weight:700; display:block; margin-bottom:3px; }
+    .flow-stage .fst { font-weight:600; color:#2F4E65; font-size:8pt; line-height:1.3; }
+    .flow-stage .fso { font-size:6.5pt; color:#777; display:block; margin-top:2px; }
+    .flow-stage-active { background:#2F4E65; border-color:#2F4E65; }
+    .flow-stage-active .fsn { color:#4ABA81; }
+    .flow-stage-active .fst { color:#fff; }
+    .flow-stage-active .fso { color:#a8cede; }
+    .flow-arrow { display:flex; align-items:center; padding:0 3px; color:#4ABA81; font-size:12pt; font-weight:700; }
+
+    /* NOTE BOX */
+    .note { background:#fff8e1; border-left:3px solid #FFCC3B; padding:7px 10px; font-size:8pt; margin:8px 0 12px; }
+    .note-blue { background:#eef4fa; border-left:3px solid #2F4E65; padding:7px 10px; font-size:8pt; margin:8px 0 12px; }
+    .note-green { background:#f0faf5; border-left:3px solid #4ABA81; padding:7px 10px; font-size:8pt; margin:8px 0 12px; }
+    .note-red { background:#fff0f0; border-left:3px solid #F16262; padding:7px 10px; font-size:8pt; margin:8px 0 12px; }
+
+    /* GATE RULE */
+    .gate-id { white-space:nowrap; font-weight:700; color:#2F4E65; }
+
+    /* FIELD TYPES */
+    .fld-calc { background:#fff3cd; padding:1px 5px; font-size:7.5pt; font-weight:600; }
+    .fld-ro { background:#e8f0fe; padding:1px 5px; font-size:7.5pt; font-weight:600; }
+
+    /* PARALLEL TRACK */
+    .parallel-box { border:1.5pt dashed #4ABA81; border-radius:2pt; padding:8px 10px; margin:8px 0 12px; }
+    .parallel-box .ptitle { font-size:7.5pt; font-weight:700; color:#4ABA81; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; display:block; }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-stripe-top"></div>
+  <div class="cover-wordmark"><span class="g">parakeet</span> <span class="n">communities</span></div>
+  <div class="cover-eyebrow">Build Specification</div>
+  <div class="cover-wf-badge">WF004 &nbsp;·&nbsp; Move Out</div>
+  <h1>Move Out</h1>
+  <div class="cover-subtitle">Workflow Design Spec — Move Out Form, Regional Approval,<br>RM Batch Export &amp; Move Out Inspection</div>
+  <div class="cover-tagline">FastField &nbsp;·&nbsp; QuickBase &nbsp;·&nbsp; SharePoint &nbsp;·&nbsp; Rent Manager</div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><span class="lbl">Version</span><span class="val">v1.0</span></div>
+    <div class="cover-meta-item"><span class="lbl">Date</span><span class="val">08/19/26</span></div>
+    <div class="cover-meta-item"><span class="lbl">Status</span><span class="val"><span class="cover-status-pill">Draft for Review</span></span></div>
+    <div class="cover-meta-item"><span class="lbl">Workflow ID</span><span class="val">WF004</span></div>
+    <div class="cover-meta-item"><span class="lbl">Supersedes</span><span class="val">N/A — Initial Release</span></div>
+    <div class="cover-meta-item"><span class="lbl">Communities</span><span class="val">68 Active</span></div>
+  </div>
+  <div class="cover-changes">
+    <strong>v1.0 — Initial Release:</strong> Full WF004 Move Out workflow designed. 3 triggers (voluntary notice, lease non-renewal, eviction outcome) — same path for all. Move Out Form in FastField → Regional approval in FastField → QB batch collector → daily RM CSV export → 48-hr Move Out Inspection in FastField → SharePoint. 5 open items flagged for build phase.
+  </div>
+  <div class="cover-footer">Parakeet Communities &nbsp;·&nbsp; WF004 Move Out Build Spec &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; 08/19/26</div>
+  <div class="cover-stripe-bot"></div>
+</div>
+
+<!-- TOC -->
+<div class="toc-page">
+  <div class="toc-title">Table of Contents</div>
+  <ul class="toc-list">
+    <li class="toc-h2"><a href="#sec-1"><span class="toc-text">1. Overview &amp; Scope</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-1"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-2"><span class="toc-text">2. Workflow Summary</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-2"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-3"><span class="toc-text">3. Stage Detail</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-3"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-4"><span class="toc-text">4. QB Table — Move Out Records</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-4"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-5"><span class="toc-text">5. FastField Forms</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-5"></span></span></a></li>
+    <li class="toc-h3"><a href="#sec-5a"><span class="toc-text">5A. Move Out Form</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-5a"></span></span></a></li>
+    <li class="toc-h3"><a href="#sec-5b"><span class="toc-text">5B. Move Out Inspection</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-5b"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-6"><span class="toc-text">6. SharePoint Integration</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-6"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-7"><span class="toc-text">7. RM Batch Export</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-7"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-8"><span class="toc-text">8. Automations</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-8"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-9"><span class="toc-text">9. Gate Rules</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-9"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-10"><span class="toc-text">10. Reports</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-10"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-11"><span class="toc-text">11. Workflow Connections</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-11"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-12"><span class="toc-text">12. Open Items</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-12"></span></span></a></li>
+    <li class="toc-h2"><a href="#sec-13"><span class="toc-text">13. Version History</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec-13"></span></span></a></li>
+  </ul>
+</div>
+
+<!-- SECTION 1: OVERVIEW -->
+<div class="section" id="sec-1">
+  <div class="sec-hdr"><span class="num">Section 01</span><span class="ttl">Overview &amp; Scope</span></div>
+  <div class="meta-grid">
+    <div class="meta-item"><span class="mk">Workflow ID</span><span class="mv">WF004</span></div>
+    <div class="meta-item"><span class="mk">Workflow Name</span><span class="mv">Move Out</span></div>
+    <div class="meta-item"><span class="mk">Version</span><span class="mv">v1.0 &nbsp;<span class="b b-yellow">Draft</span></span></div>
+    <div class="meta-item"><span class="mk">Primary Actor</span><span class="mv">Community Manager</span></div>
+    <div class="meta-item"><span class="mk">Approver</span><span class="mv">Regional Manager</span></div>
+    <div class="meta-item"><span class="mk">RM Processor</span><span class="mv">Justin / Rent Manager Team</span></div>
+    <div class="meta-item"><span class="mk">System of Record</span><span class="mv">Rent Manager — all resident &amp; financial data</span></div>
+    <div class="meta-item"><span class="mk">Trigger</span><span class="mv">Voluntary Notice / Lease Non-Renewal / Eviction Outcome</span></div>
+    <div class="meta-item"><span class="mk">Outcome</span><span class="mv">RM updated · Inspection on SharePoint · Unit flagged for WF003</span></div>
+    <div class="meta-item"><span class="mk">FastField Forms</span><span class="mv">2 — Move Out Form · Move Out Inspection</span></div>
+    <div class="meta-item"><span class="mk">QB Tables</span><span class="mv">Move Out Records (+ shared: Communities, Lots)</span></div>
+    <div class="meta-item"><span class="mk">JotForms Replaced</span><span class="mv">JotForm #9 (Move Out Inspection) · JotForm #13 (Move In/Out Request)</span></div>
+  </div>
+
+  <h3>1.1 Purpose</h3>
+  <p>WF004 formalizes the move-out process across all 68 Parakeet Communities. It captures every move-out event — regardless of reason — through a single FastField form, routes it to the Regional Manager for approval, triggers a daily batch export to Rent Manager, and ensures a Move Out Inspection is completed within 48 hours and stored in SharePoint for review at the weekly Monday Asset Disposition meeting (WF003).</p>
+
+  <h3>1.2 Scope</h3>
+  <table class="spec-table">
+    <tr><td><strong>In Scope</strong></td><td>All 3 move-out triggers; FastField Move Out Form with Regional approval routing; QB Move Out Records table; daily RM batch CSV export; FastField Move Out Inspection with SharePoint storage; 48-hour SLA monitoring; WF003 feed (Asset Status = TBD / Needs Rehab triggers Monday meeting agenda item)</td></tr>
+    <tr><td><strong>Out of Scope</strong></td><td>Security deposit processing (stays in RM); eviction legal proceedings; resident re-application; new lease creation (WF005 Move In); any RM record changes other than the daily batch import</td></tr>
+    <tr><td><strong>System of Record</strong></td><td>Rent Manager. QB is a workflow coordinator and batch collector — it does not own resident or financial records. Community Manager does not change any QB or RM status fields directly.</td></tr>
+  </table>
+
+  <h3>1.3 Triggers (All 3 — Same Path)</h3>
+  <table class="spec-table">
+    <thead><tr><th>Trigger</th><th>Description</th><th>Who Initiates</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Voluntary Notice</strong></td><td>Resident submits written notice of intent to vacate. Manager confirms receipt and fills the Move Out Form.</td><td>Community Manager</td></tr>
+      <tr><td><strong>Lease Non-Renewal</strong></td><td>Lease expires without renewal — either resident declines or Parakeet declines to renew. Manager fills the Move Out Form when the decision is made.</td><td>Community Manager</td></tr>
+      <tr><td><strong>Eviction Outcome</strong></td><td>Legal eviction process concludes with possession returning to Parakeet. Manager fills the Move Out Form once the unit is vacated.</td><td>Community Manager</td></tr>
+    </tbody>
+  </table>
+  <div class="note-blue"><strong>Same workflow path for all three triggers.</strong> The reason is captured in the Move Out Form and flows through to the RM batch export for proper RM record categorization — but the QB workflow stages are identical regardless of trigger type.</div>
+</div>
+
+<!-- SECTION 2: WORKFLOW SUMMARY -->
+<div class="section" id="sec-2">
+  <div class="sec-hdr"><span class="num">Section 02</span><span class="ttl">Workflow Summary</span></div>
+  <p style="font-size:8.5pt;margin:0 0 10px 0;">WF004 runs two parallel tracks after the Move Out Form is submitted: the <strong>Approval &amp; RM Export track</strong> and the <strong>Inspection track</strong>. Both must complete before the record is Closed. The inspection SLA clock starts from the move-out date regardless of the approval state.</p>
+
+  <div class="flow">
+    <div class="flow-stage flow-stage-active"><span class="fsn">Stage 1</span><span class="fst">Initiated</span><span class="fso">Manager submits FastField Move Out Form</span></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-stage"><span class="fsn">Stage 2</span><span class="fst">Pending Regional Approval</span><span class="fso">FastField routes to Regional Manager</span></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-stage"><span class="fsn">Stage 3</span><span class="fst">Approved &amp; Queued</span><span class="fso">Data syncs to QB · queued for RM export</span></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-stage"><span class="fsn">Stage 4</span><span class="fst">RM Export Sent</span><span class="fso">Daily 6 PM ET batch CSV to Justin</span></div>
+  </div>
+
+  <div class="parallel-box">
+    <span class="ptitle">&#9654; Parallel Track — Inspection (starts from move-out date · 48-hr SLA)</span>
+    <div class="flow">
+      <div class="flow-stage"><span class="fsn">Stage 5</span><span class="fst">Inspection Pending</span><span class="fso">48-hr clock running from move-out date</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-stage"><span class="fsn">Stage 6</span><span class="fst">Inspection Complete</span><span class="fso">FastField submitted · saved to SharePoint · QB link updated</span></div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-stage flow-stage-active"><span class="fsn">Stage 7</span><span class="fst">Closed</span><span class="fso">RM export sent + inspection complete · Asset Status updated in RM → WF003 feed</span></div>
+  </div>
+
+  <p style="font-size:8pt; color:#666; margin-top:6px;"><em>If Regional returns the form (not approved), status reverts to Initiated. See O-WF004-005 for return correction flow.</em></p>
+
+  <h3>2.1 Stage Summary Table</h3>
+  <table class="spec-table">
+    <thead><tr><th style="width:5%">#</th><th style="width:22%">Stage</th><th style="width:18%">Owner</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td>Initiated</td><td>Community Manager</td><td>Manager fills and submits <strong>PARAKEET — WF004 — Move Out Form</strong> in FastField. Captures: community, lot, asset, resident details, move-out date, reason, notice date, forwarding address. FastField webhook fires to QB on submission → QB Move Out Record created.</td></tr>
+      <tr><td><strong>2</strong></td><td>Pending Regional Approval</td><td>Regional Manager</td><td>FastField routes the submitted form to the Regional Manager for review. Regional approves or returns the form directly in FastField. QB record status mirrors approval state via webhook. No QB action required by the Regional Manager.</td></tr>
+      <tr><td><strong>3</strong></td><td>Approved &amp; Queued</td><td>QB (automated)</td><td>Regional approval webhook updates QB record: <code>Regional Approval Status = Approved</code>; <code>RM Export Status = Queued</code>. Record joins that day's RM export batch. No manual steps.</td></tr>
+      <tr><td><strong>4</strong></td><td>RM Export Sent</td><td>QB (automated) → Justin</td><td>Daily at 6:00 PM ET: QB auto-generates CSV of all Queued records → emails to Justin and the RM team. QB sets <code>RM Export Status = Exported</code>. Justin's team imports CSV into Rent Manager and processes all field updates, financial records, and any required follow-up in RM.</td></tr>
+      <tr><td><strong>5</strong></td><td>Inspection Pending</td><td>Community Manager</td><td>48-hour SLA clock starts from the move-out date (not from the approval date). Manager completes the <strong>PARAKEET — WF004 — Move Out Inspection</strong> in FastField within 48 hours. If inspection not submitted within 48 hours, A-MO-06 fires an overdue alert to the Manager and Regional.</td></tr>
+      <tr><td><strong>6</strong></td><td>Inspection Complete</td><td>QB (automated)</td><td>FastField Inspection webhook received: QB Pipeline pushes the inspection PDF/data to SharePoint (confirmed library path — see O-WF004-004). QB updates: <code>Inspection Status = Complete</code>; <code>Inspection SharePoint Link</code> populated. Inspection is available for reference at the Monday WF003 meeting.</td></tr>
+      <tr><td><strong>7</strong></td><td>Closed</td><td>QB (automated)</td><td>When both conditions are met — <code>RM Export Status = Exported</code> AND <code>Inspection Status = Complete</code> — QB sets <code>Record Status = Closed</code>. RM team updates Asset Status in RM (TBD or Needs Rehab) → QB reads updated status via sync. Unit becomes eligible for WF003 Monday meeting agenda.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 3: STAGE DETAIL -->
+<div class="section" id="sec-3">
+  <div class="sec-hdr"><span class="num">Section 03</span><span class="ttl">Stage Detail</span></div>
+
+  <h3>3.1 Returned Forms (Stage 2 → Back to Stage 1)</h3>
+  <p>If the Regional Manager returns the Move Out Form in FastField (does not approve), the QB record reverts to <code>Record Status = Initiated</code> and a notification is sent to the Community Manager with the Regional's notes. The Manager corrects and resubmits in FastField. See open item O-WF004-005 for the exact return/correction flow confirmation.</p>
+
+  <h3>3.2 Parallel Track Timing</h3>
+  <p>The Inspection track (Stages 5–6) runs independently of the Approval track (Stages 2–4). The 48-hour inspection SLA clock starts from the <strong>move-out date field on the Move Out Form</strong> — not from the Regional approval timestamp. This means:</p>
+  <table class="spec-table">
+    <tr><td><strong>Inspection can be completed before approval</strong></td><td>If the manager completes the inspection on the day of move-out, it syncs to SharePoint immediately — the approval process runs in parallel and does not block the inspection.</td></tr>
+    <tr><td><strong>SLA alert fires regardless of approval state</strong></td><td>If 48 hours pass from the move-out date and no inspection has been submitted, A-MO-06 fires whether or not the approval process is complete.</td></tr>
+    <tr><td><strong>Closure requires both tracks complete</strong></td><td>A record cannot reach Stage 7 (Closed) until both <code>RM Export Status = Exported</code> AND <code>Inspection Status = Complete</code>.</td></tr>
+  </table>
+
+  <h3>3.3 RM Status Update After Export</h3>
+  <p>Justin's team processes the RM import and updates the Asset Status in Rent Manager. QB reads the updated Asset Status as a reference-only lookup. When RM Asset Status = <strong>TBD</strong> or <strong>Needs Rehab</strong>, the unit becomes visible in QB as ready for the next Monday WF003 Disposition Meeting. The field recorder manually adds the unit to the WF003 meeting agenda (per D-030).</p>
+  <div class="note"><strong>QB does not write to RM.</strong> All RM record changes — resident status, asset status, financial records, deposit processing — are handled exclusively by Justin's team via the batch CSV import. QB reads RM data for reference only.</div>
+</div>
+
+<!-- SECTION 4: QB TABLE -->
+<div class="section" id="sec-4">
+  <div class="sec-hdr"><span class="num">Section 04</span><span class="ttl">QB Table — Move Out Records</span></div>
+  <p>One new QB table. Shared tables (Communities, Lots) remain as built for WF001/WF002/WF003. Move Out Records are the central QB object for WF004 — each record = one move-out event.</p>
+
+  <h3>4.1 Move Out Records (MO-YYYY-###)</h3>
+  <table class="spec-table">
+    <thead><tr><th style="width:28%">Field</th><th style="width:16%">Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr class="stage-hdr"><td colspan="3">IDENTIFICATION</td></tr>
+      <tr><td><strong>Move Out ID</strong></td><td>Auto-generated</td><td>Format: MO-YYYY-### (e.g., MO-2026-001). QB primary key.</td></tr>
+      <tr><td><strong>Community</strong></td><td>Relationship → Communities</td><td>Cascading dropdown — Community → Lot → Asset. All 68 communities.</td></tr>
+      <tr><td><strong>Lot</strong></td><td>Relationship → Lots</td><td>Filtered by selected Community.</td></tr>
+      <tr><td><strong>Asset ID</strong></td><td>Text</td><td>RM Asset ID — free text entry from FastField form. Matches RM record for import matching.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">RESIDENT</td></tr>
+      <tr><td><strong>Resident Name</strong></td><td>Text</td><td>Full name of departing resident. From FastField Move Out Form.</td></tr>
+      <tr><td><strong>Move-Out Date</strong></td><td>Date</td><td>Confirmed vacancy date. 48-hr inspection SLA clock starts from this date.</td></tr>
+      <tr><td><strong>Notice Date</strong></td><td>Date</td><td>Date written notice was received or lease end date confirmed. Optional for Eviction trigger.</td></tr>
+      <tr><td><strong>Move-Out Reason</strong></td><td>Dropdown</td><td>Values: Voluntary Notice / Lease Non-Renewal / Eviction Outcome</td></tr>
+      <tr><td><strong>Forwarding Address</strong></td><td>Text</td><td>Resident forwarding address. Optional field. Passed to RM in batch export.</td></tr>
+      <tr><td><strong>Resident Notes</strong></td><td>Text (long)</td><td>Manager's notes — condition concerns, key handover, access issues. Optional.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">APPROVAL</td></tr>
+      <tr><td><strong>Form Submitted By</strong></td><td>Text</td><td>FastField user name. Pre-populated from FastField account on submission.</td></tr>
+      <tr><td><strong>Form Submitted Date</strong></td><td>Date/Time</td><td>Auto-populated from FastField webhook timestamp.</td></tr>
+      <tr><td><strong>Regional Approval Status</strong></td><td>Dropdown</td><td>Values: Pending / Approved / Returned. Set via FastField webhook. Default = Pending on record creation.</td></tr>
+      <tr><td><strong>Regional Approver</strong></td><td>Text</td><td>FastField Regional Manager name. Auto-populated from webhook on approval or return.</td></tr>
+      <tr><td><strong>Regional Approval Date</strong></td><td>Date/Time</td><td>Timestamp of Regional approval or return action. From FastField webhook.</td></tr>
+      <tr><td><strong>Regional Notes</strong></td><td>Text (long)</td><td>Regional Manager's notes or reason for return. From FastField webhook. Read-only in QB.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">RM EXPORT</td></tr>
+      <tr><td><strong>RM Export Status</strong></td><td>Dropdown</td><td>Values: Not Queued / Queued / Exported. Set by automations. Default = Not Queued.</td></tr>
+      <tr><td><strong>RM Export Date</strong></td><td>Date/Time</td><td>Timestamp when the batch CSV was generated and sent. Set by A-MO-04.</td></tr>
+      <tr><td><strong>RM Export Batch ID</strong></td><td>Text</td><td>Batch identifier — date-stamped (e.g., BATCH-20260819). Ties this record to a specific CSV export for audit trail.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">INSPECTION</td></tr>
+      <tr><td><strong>Inspection Status</strong></td><td>Dropdown</td><td>Values: Not Started / Pending / Complete / Overdue. Set by automations A-MO-03 and A-MO-05/A-MO-06.</td></tr>
+      <tr><td><strong>Inspection Date</strong></td><td>Date</td><td>Date inspection was completed. From FastField webhook on submission.</td></tr>
+      <tr><td><strong>Inspector Name</strong></td><td>Text</td><td>FastField user name of inspector. From webhook.</td></tr>
+      <tr><td><strong>Inspection SharePoint Link</strong></td><td>URL</td><td>Direct link to the inspection PDF/record stored in SharePoint. Populated by A-MO-05. Read-only; used for quick access during WF003 Monday meeting.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">RM REFERENCE (READ-ONLY)</td></tr>
+      <tr><td><strong>Asset Status (RM)</strong></td><td><span class="fld-ro">Lookup — RM</span></td><td>Current Asset Status from Rent Manager. Read-only in QB. When = TBD or Needs Rehab, unit is eligible for WF003 meeting agenda.</td></tr>
+      <tr><td><strong>Security Deposit (RM)</strong></td><td><span class="fld-ro">Currency — Lookup — RM</span></td><td>Deposit amount from RM for reference. Read-only — all deposit processing remains in RM. Display only; no QB editing.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">STATUS &amp; CALCULATED</td></tr>
+      <tr><td><strong>Record Status</strong></td><td>Dropdown</td><td>Values: Initiated / Pending Regional Approval / Approved / RM Export Sent / Closed. Master status field driving workflow stage display.</td></tr>
+      <tr><td><strong>Days Since Move-Out</strong></td><td><span class="fld-calc">Duration (calculated)</span></td><td>Today − Move-Out Date. Drives A-MO-06 inspection SLA alert at &gt;2 calendar days without inspection.</td></tr>
+      <tr><td><strong>WF003 Ready</strong></td><td><span class="fld-calc">Checkbox (calculated)</span></td><td>True when: Asset Status (RM) = TBD or Needs Rehab AND Record Status = Closed. Surfaces unit in "Units Pending WF003 Review" report.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 5: FASTFIELD FORMS -->
+<div class="section" id="sec-5">
+  <div class="sec-hdr"><span class="num">Section 05</span><span class="ttl">FastField Forms</span></div>
+  <p>WF004 uses two FastField forms — both named under the Parakeet FastField naming convention. Neither form requires QB login; managers complete everything in FastField. QB receives data via webhooks.</p>
+
+  <h3 id="sec-5a">5A. PARAKEET — WF004 — Move Out Form</h3>
+  <p><strong>Replaces:</strong> JotForm #13 (Move In / Move Out Request). Completed by Community Manager. Routes to Regional Manager for approval within FastField. Submitted data syncs to QB via webhook to create the Move Out Record.</p>
+
+  <table class="spec-table">
+    <thead><tr><th style="width:28%">Field</th><th style="width:18%">Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr class="stage-hdr"><td colspan="3">SECTION A — PROPERTY</td></tr>
+      <tr><td>Community</td><td>Dropdown</td><td>All 68 community short names. Cascading parent for Lot.</td></tr>
+      <tr><td>Lot Number</td><td>Dropdown</td><td>Filtered by selected Community.</td></tr>
+      <tr><td>Asset ID</td><td>Text</td><td>RM Asset ID — matches RM record for batch import key. Required.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION B — RESIDENT</td></tr>
+      <tr><td>Resident Name</td><td>Text</td><td>Full name of departing resident. Required.</td></tr>
+      <tr><td>Move-Out Date</td><td>Date</td><td>Confirmed vacancy date. Required. 48-hr inspection SLA starts here.</td></tr>
+      <tr><td>Notice Date</td><td>Date</td><td>Date written notice was received or lease end confirmed. Optional for Eviction.</td></tr>
+      <tr><td>Move-Out Reason</td><td>Dropdown</td><td>Values: Voluntary Notice / Lease Non-Renewal / Eviction Outcome. Required.</td></tr>
+      <tr><td>Forwarding Address</td><td>Text (long)</td><td>Resident's forwarding address. Optional.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION C — NOTES</td></tr>
+      <tr><td>Condition Notes</td><td>Text (long)</td><td>Manager's preliminary notes on unit condition at time of vacancy. Optional. Not the formal inspection.</td></tr>
+      <tr><td>Additional Notes</td><td>Text (long)</td><td>Any other relevant context (keys returned, access issues, occupant disputes). Optional.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION D — SUBMISSION</td></tr>
+      <tr><td>Manager Name</td><td>Text</td><td>Pre-populated from FastField user account. Read-only.</td></tr>
+      <tr><td>Manager Signature</td><td>Signature</td><td>Required before submission.</td></tr>
+      <tr><td>Date Submitted</td><td>Date</td><td>Auto-populated on submission. Read-only.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-blue"><strong>Regional Approval in FastField:</strong> On submission, FastField routes the form to the Regional Manager's FastField queue. Regional reviews the submitted data, adds notes if needed, and approves or returns. No QB login required by Regional Manager. The approval/return action fires a webhook back to QB. See O-WF004-003 for FastField multi-step routing confirmation.</div>
+
+  <h3 id="sec-5b">5B. PARAKEET — WF004 — Move Out Inspection</h3>
+  <p><strong>Replaces:</strong> JotForm #9 (Move Out Inspection). Completed by Community Manager within 48 hours of the move-out date. Submitted form is pushed to SharePoint (not QB). QB stores a link to the SharePoint file. The inspection is referenced during the Monday WF003 Asset Disposition meeting.</p>
+
+  <div class="note-red"><strong>Open Item O-WF004-002:</strong> The actual Move Out Inspection checklist items have not yet been provided by the team. The structure below reflects the form architecture; checklist content is pending team input before the FastField form can be built.</div>
+
+  <table class="spec-table">
+    <thead><tr><th style="width:28%">Field</th><th style="width:18%">Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr class="stage-hdr"><td colspan="3">SECTION A — IDENTIFICATION (Pre-populated from Move Out Record)</td></tr>
+      <tr><td>Community</td><td>Text (read-only)</td><td>Pre-populated from linked Move Out Record.</td></tr>
+      <tr><td>Lot Number</td><td>Text (read-only)</td><td>Pre-populated from linked Move Out Record.</td></tr>
+      <tr><td>Asset ID</td><td>Text (read-only)</td><td>Pre-populated from linked Move Out Record.</td></tr>
+      <tr><td>Move-Out Date</td><td>Date (read-only)</td><td>Reference — pre-populated from Move Out Record.</td></tr>
+      <tr><td>Move Out Record ID</td><td>Text (read-only)</td><td>MO-YYYY-### — links this inspection to its parent Move Out Record in QB.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION B — INSPECTION CHECKLIST (Items TBD — O-WF004-002)</td></tr>
+      <tr><td>Checklist Items</td><td>Pass / Fail / N/A + Photo + Notes</td><td><strong>Pending team input.</strong> Each item = Pass/Fail/N/A dropdown + optional photo capture + optional notes field. Sections expected: Interior · Exterior · Doors &amp; Windows · Appliances · Plumbing · Utilities. Actual items to replace JotForm #9 content.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION C — OVERALL CONDITION</td></tr>
+      <tr><td>Overall Condition</td><td>Dropdown</td><td>Values: Good / Fair / Poor. Manager's summary assessment.</td></tr>
+      <tr><td>Damage Notes</td><td>Text (long)</td><td>Summary of any notable damage or issues requiring attention. Optional.</td></tr>
+      <tr><td>Photos — General</td><td>Photo (multiple)</td><td>General photos of unit condition beyond checklist-specific photos.</td></tr>
+
+      <tr class="stage-hdr"><td colspan="3">SECTION D — SUBMISSION</td></tr>
+      <tr><td>Inspector Name</td><td>Text (read-only)</td><td>Pre-populated from FastField user account.</td></tr>
+      <tr><td>Inspector Signature</td><td>Signature</td><td>Required before submission.</td></tr>
+      <tr><td>Inspection Date</td><td>Date</td><td>Auto-populated on submission.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 6: SHAREPOINT INTEGRATION -->
+<div class="section" id="sec-6">
+  <div class="sec-hdr"><span class="num">Section 06</span><span class="ttl">SharePoint Integration</span></div>
+  <p>Move Out Inspections are stored in SharePoint — not in QB — for central access, retention policy management, and reference during the weekly WF003 Monday meeting.</p>
+
+  <h3>6.1 Storage Architecture</h3>
+  <table class="spec-table">
+    <tr><td><strong>Destination</strong></td><td>SharePoint document library. Path TBD — see O-WF004-004. Expected structure: <em>Parakeet Communities → Operations → Move Out Inspections → [Year] → [Community Name] → MO-YYYY-###_[Community]_[Lot]_Inspection.pdf</em></td></tr>
+    <tr><td><strong>Trigger</strong></td><td>FastField Move Out Inspection submission fires webhook → QB Pipeline (A-MO-05) receives payload → pushes inspection PDF + metadata to SharePoint → QB stores the direct SharePoint link on the Move Out Record.</td></tr>
+    <tr><td><strong>QB Role</strong></td><td>QB stores only the <code>Inspection SharePoint Link</code> (URL field). All file bytes live in SharePoint. QB does not duplicate the file.</td></tr>
+    <tr><td><strong>WF003 Access</strong></td><td>During Monday meeting, the field recorder opens the SharePoint link from the WF003 Disposition Item to pull up the inspection for context before the team sets a disposition.</td></tr>
+    <tr><td><strong>Retention</strong></td><td>SharePoint retention policy to be defined by IT/Ops. Not a QB-managed setting.</td></tr>
+  </table>
+
+  <div class="note-blue"><strong>Build Deliverable:</strong> Power Automate flow or QB Pipeline step to receive FastField webhook payload and push inspection files to SharePoint. IT / QB Admin to configure. Exact SharePoint path confirmed in O-WF004-004.</div>
+</div>
+
+<!-- SECTION 7: RM BATCH EXPORT -->
+<div class="section" id="sec-7">
+  <div class="sec-hdr"><span class="num">Section 07</span><span class="ttl">RM Batch Export</span></div>
+  <p>WF004's primary output to Rent Manager is a daily CSV batch export of all approved move-outs from that day. Justin's team imports this CSV into RM to process all required field updates.</p>
+
+  <h3>7.1 Export Logic</h3>
+  <table class="spec-table">
+    <tr><td><strong>Schedule</strong></td><td>Daily at 6:00 PM ET, every day (including weekends — move-outs occur any day)</td></tr>
+    <tr><td><strong>Included Records</strong></td><td>All Move Out Records where <code>Regional Approval Status = Approved</code> AND <code>RM Export Status = Queued</code> as of 6:00 PM ET</td></tr>
+    <tr><td><strong>Format</strong></td><td>CSV — column spec TBD (O-WF004-001). Expected columns: Asset ID, Community, Lot, Resident Name, Move-Out Date, Move-Out Reason, Forwarding Address, Notice Date, Notes, Batch ID</td></tr>
+    <tr><td><strong>Delivery</strong></td><td>Automated email to Justin + RM team distribution. Email subject: "Parakeet Move Out Export — [Date] — [N] Records." CSV attached.</td></tr>
+    <tr><td><strong>After Send</strong></td><td>QB sets <code>RM Export Status = Exported</code> and <code>RM Export Date</code> on all included records. Sets <code>RM Export Batch ID = BATCH-YYYYMMDD</code>.</td></tr>
+    <tr><td><strong>Empty Batch</strong></td><td>If no records are Queued at 6:00 PM ET, no email is sent. No empty CSV generated.</td></tr>
+    <tr><td><strong>Corrections</strong></td><td>Once exported, a record's RM Export status is immutable in QB. Corrections require a new amended Move Out Record with a note referencing the original MO-ID. The RM team handles the correction in RM directly.</td></tr>
+  </table>
+
+  <div class="note"><strong>Open Item O-WF004-001:</strong> Exact CSV column spec and RM import field mapping must be confirmed with Justin / RM Admin before A-MO-04 can be built. This is the critical build-phase dependency for this workflow.</div>
+</div>
+
+<!-- SECTION 8: AUTOMATIONS -->
+<div class="section" id="sec-8">
+  <div class="sec-hdr"><span class="num">Section 08</span><span class="ttl">Automations</span></div>
+  <p>WF004 uses seven QB Pipelines automations (A-MO-01 through A-MO-07). Automations A-MO-01 through A-MO-03 handle the approval track; A-MO-04 the RM export; A-MO-05 through A-MO-06 the inspection track; A-MO-07 closes the record.</p>
+
+  <table class="spec-table">
+    <thead><tr><th style="width:10%">ID</th><th style="width:22%">Name</th><th style="width:22%">Trigger</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A-MO-01</strong></td>
+        <td>Move Out Form Received</td>
+        <td>FastField Move Out Form submitted (webhook)</td>
+        <td>Creates QB Move Out Record from webhook payload. Sets <code>Record Status = Pending Regional Approval</code>; <code>Regional Approval Status = Pending</code>; <code>Inspection Status = Not Started</code>. Sends notification to Regional Manager: "Move Out form submitted for [Community] Lot [Lot] — [Resident Name]. Review required in FastField."</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-02</strong></td>
+        <td>Regional Approval Received</td>
+        <td>FastField approval or return webhook</td>
+        <td><strong>If Approved:</strong> Sets <code>Regional Approval Status = Approved</code>; <code>RM Export Status = Queued</code>; <code>Record Status = Approved</code>. Confirms to Manager: "Move Out for [Resident] approved by [Regional Name]."<br><strong>If Returned:</strong> Sets <code>Regional Approval Status = Returned</code>; <code>Record Status = Initiated</code>. Notifies Manager: "Move Out form returned by [Regional Name] — [Regional Notes]. Please review and resubmit."</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-03</strong></td>
+        <td>Inspection SLA Clock Start</td>
+        <td>Move-Out Date reached (scheduled daily check)</td>
+        <td>For all records where <code>Move-Out Date = today</code> AND <code>Inspection Status = Not Started</code>: sets <code>Inspection Status = Pending</code>. 48-hour SLA clock now running. Sends reminder to Manager: "Move Out Inspection due within 48 hours for [Community] Lot [Lot]. Please complete in FastField."</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-04</strong></td>
+        <td>Daily RM Batch Export</td>
+        <td>Scheduled daily at 6:00 PM ET</td>
+        <td>Queries all records where <code>RM Export Status = Queued</code>. If count &gt; 0: generates CSV export, assigns <code>RM Export Batch ID = BATCH-YYYYMMDD</code>, emails CSV to Justin + RM team. Sets <code>RM Export Status = Exported</code>; <code>RM Export Date = today</code>; <code>Record Status = RM Export Sent</code> on all included records. If count = 0: no action.</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-05</strong></td>
+        <td>Inspection Submission Received</td>
+        <td>FastField Move Out Inspection submitted (webhook)</td>
+        <td>Receives webhook payload. Identifies parent Move Out Record via Move Out Record ID field. Pushes inspection file to SharePoint (confirmed path — O-WF004-004). Updates QB: <code>Inspection Status = Complete</code>; <code>Inspection Date</code>; <code>Inspector Name</code>; <code>Inspection SharePoint Link</code>. Triggers A-MO-07 check.</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-06</strong></td>
+        <td>Inspection Overdue Alert</td>
+        <td>Scheduled daily at 8:00 AM ET</td>
+        <td>Queries all records where <code>Inspection Status = Pending</code> AND <code>Days Since Move-Out &gt; 2</code>. Sends alert to Community Manager AND Regional Manager: "Move Out Inspection overdue for [Community] Lot [Lot] — [N] days since move-out. Please complete in FastField immediately."</td>
+      </tr>
+      <tr>
+        <td><strong>A-MO-07</strong></td>
+        <td>Record Closure</td>
+        <td>Inspection Status changes to Complete (triggered by A-MO-05)</td>
+        <td>Checks if <code>RM Export Status = Exported</code>. If yes: sets <code>Record Status = Closed</code>. If no (RM export not yet sent — inspection completed before end-of-day export): record remains at current status and A-MO-07 re-evaluates after A-MO-04 fires that evening.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 9: GATE RULES -->
+<div class="section" id="sec-9">
+  <div class="sec-hdr"><span class="num">Section 09</span><span class="ttl">Gate Rules</span></div>
+
+  <table class="spec-table">
+    <thead><tr><th style="width:10%">ID</th><th style="width:22%">Rule Name</th><th style="width:22%">Applies At</th><th>Condition &amp; Error</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="gate-id"><strong>G-MO-01</strong></td>
+        <td>Approval Required for Export</td>
+        <td>RM Export batch generation (A-MO-04)</td>
+        <td><strong>Condition:</strong> <code>Regional Approval Status</code> ≠ Approved.<br><strong>Rule:</strong> Only records with <code>Regional Approval Status = Approved</code> are included in the daily RM CSV export. Pending and Returned records are never exported — they are silently skipped. No error shown; records simply remain in Queued state until approved.</td>
+      </tr>
+      <tr>
+        <td class="gate-id"><strong>G-MO-02</strong></td>
+        <td>Both Tracks Required for Closure</td>
+        <td>Record Status → Closed (A-MO-07)</td>
+        <td><strong>Condition:</strong> <code>RM Export Status</code> ≠ Exported OR <code>Inspection Status</code> ≠ Complete.<br><strong>Rule:</strong> QB will not set <code>Record Status = Closed</code> until both the RM Export and the Inspection are complete. Record remains open and visible in reports until both conditions are met.</td>
+      </tr>
+      <tr>
+        <td class="gate-id"><strong>G-MO-03</strong></td>
+        <td>Inspection Requires Parent Record</td>
+        <td>FastField Inspection form submission</td>
+        <td><strong>Condition:</strong> Move Out Record ID field on Inspection form is blank or does not match an existing QB Move Out Record.<br><strong>Error:</strong> "Inspection cannot be processed — no matching Move Out Record found. Ensure the Move Out Form has been submitted and the Record ID is entered correctly."</td>
+      </tr>
+      <tr>
+        <td class="gate-id"><strong>G-MO-04</strong></td>
+        <td>Export Record Immutability</td>
+        <td>Any edit to an Exported Move Out Record in QB</td>
+        <td><strong>Condition:</strong> User attempts to edit a Move Out Record where <code>RM Export Status = Exported</code>.<br><strong>Rule:</strong> Key fields (Asset ID, Resident Name, Move-Out Date, Move-Out Reason, Forwarding Address) are locked to read-only after export. A note field remains editable for amendments. Corrections require a new Move Out Record referencing the original MO-ID.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 10: REPORTS -->
+<div class="section" id="sec-10">
+  <div class="sec-hdr"><span class="num">Section 10</span><span class="ttl">Reports</span></div>
+  <table class="spec-table">
+    <thead><tr><th style="width:28%">Report Name</th><th style="width:18%">Primary User</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Today's Pending Approvals</strong></td><td>Regional Manager</td><td>All Move Out Records where <code>Regional Approval Status = Pending</code>. Shows Community, Lot, Resident, Move-Out Date, Reason, Days Since Submission. Sorted by submission date ascending (oldest first).</td></tr>
+      <tr><td><strong>Today's RM Export Queue</strong></td><td>Justin / RM Team</td><td>All records where <code>RM Export Status = Queued</code> as of now. Previews what will be in tonight's 6 PM batch. Fields: Community, Lot, Asset ID, Resident, Move-Out Date, Reason, Forwarding Address.</td></tr>
+      <tr><td><strong>Overdue Inspections</strong></td><td>Regional Manager · Ops</td><td>All records where <code>Inspection Status = Pending</code> AND <code>Days Since Move-Out &gt; 2</code>. Shows Community, Manager, Move-Out Date, Days Overdue. Sorted by days overdue descending.</td></tr>
+      <tr><td><strong>Move Out History by Community</strong></td><td>Asset Management · Ops</td><td>All Closed Move Out Records, filterable by Community and date range. Shows Move-Out Reason breakdown, average days to close, inspection completion rate.</td></tr>
+      <tr><td><strong>Units Pending WF003 Review</strong></td><td>Asset Management</td><td>All Move Out Records where <code>WF003 Ready = Yes</code> (Asset Status = TBD or Needs Rehab AND Record Status = Closed) and not yet on a WF003 Disposition Meeting agenda. Feed for the Monday meeting recorder.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 11: WORKFLOW CONNECTIONS -->
+<div class="section" id="sec-11">
+  <div class="sec-hdr"><span class="num">Section 11</span><span class="ttl">Workflow Connections</span></div>
+  <table class="spec-table">
+    <thead><tr><th style="width:18%">Connected Workflow</th><th style="width:12%">Direction</th><th>Connection Point</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WF003 — Asset Disposition Review</strong></td><td>WF004 → WF003</td><td>After move-out is processed in RM, Justin's team sets Asset Status = TBD or Needs Rehab. QB detects this (read-only RM sync) and flags the unit as WF003 Ready. Field recorder adds unit manually to the next Monday WF003 meeting agenda. Move Out Inspection link on the Move Out Record is opened for context during the meeting.</td></tr>
+      <tr><td><strong>WF002 — Rehab</strong></td><td>WF003 → WF002</td><td>Indirect connection. WF004 feeds WF003; WF003 feeds WF002 when the Monday meeting disposition = Rehab. WF004 has no direct connection to WF002.</td></tr>
+      <tr><td><strong>WF005 — Move In (future)</strong></td><td>Downstream</td><td>Not yet designed. When WF005 is built, it will reference the same Lot/Asset after the unit clears WF002 (or is turned for sale). No direct WF004 → WF005 trigger at this stage.</td></tr>
+      <tr><td><strong>Rent Manager</strong></td><td>WF004 → RM</td><td>One-way: QB batch CSV export → Justin imports into RM. RM then writes back Asset Status (read by QB for WF003 feed). Security deposit and all financial processing stays exclusively in RM.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 12: OPEN ITEMS -->
+<div class="section" id="sec-12">
+  <div class="sec-hdr"><span class="num">Section 12</span><span class="ttl">Open Items</span></div>
+  <table class="spec-table">
+    <thead><tr><th style="width:16%">ID</th><th style="width:28%">Description</th><th style="width:14%">Owner</th><th style="width:11%">Target</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="open-badge">OPEN</span> <strong>O-WF004-001</strong></td>
+        <td>RM Batch Import Column Spec</td>
+        <td>Justin / RM Admin</td>
+        <td>TBD</td>
+        <td>The exact CSV column names, data types, and RM field mapping for the daily batch import must be defined before A-MO-04 can be built. Critical path item — no RM update automation is possible without this spec. Build deliverable: CSV template + RM import field map (Justin / RM Admin).</td>
+      </tr>
+      <tr>
+        <td><span class="open-badge">OPEN</span> <strong>O-WF004-002</strong></td>
+        <td>Move Out Inspection Checklist Items</td>
+        <td>Ops / Community Mgmt</td>
+        <td>TBD</td>
+        <td>The actual inspection checklist items to replace JotForm #9 have not been provided. FastField form cannot be built without the item list. Team to supply the inspection criteria (sections and individual check items) before form build begins.</td>
+      </tr>
+      <tr>
+        <td><span class="open-badge">OPEN</span> <strong>O-WF004-003</strong></td>
+        <td>FastField Multi-Step Approval Routing</td>
+        <td>FastField Admin</td>
+        <td>TBD</td>
+        <td>WF004 requires FastField to route the submitted Move Out Form to the Regional Manager for approval or return within FastField. Confirm that FastField supports multi-step routing (submit → review → approve/return webhook) on the current Parakeet FastField plan. If not supported, the Regional approval step may need to move to a QB notification + QB approval button instead.</td>
+      </tr>
+      <tr>
+        <td><span class="open-badge">OPEN</span> <strong>O-WF004-004</strong></td>
+        <td>SharePoint Destination Path</td>
+        <td>IT / Ops</td>
+        <td>TBD</td>
+        <td>The exact SharePoint library and folder path for Move Out Inspection storage must be confirmed before A-MO-05 can be built. Proposed structure: <em>Parakeet Communities → Operations → Move Out Inspections → [Year] → [Community]</em>. IT / Ops to confirm or provide alternate path and confirm permissions for the Power Automate service account.</td>
+      </tr>
+      <tr>
+        <td><span class="open-badge">OPEN</span> <strong>O-WF004-005</strong></td>
+        <td>Returned Form Correction Flow</td>
+        <td>Austin / Ops</td>
+        <td>TBD</td>
+        <td>When Regional returns a Move Out Form, the manager must correct and resubmit. Confirm: Does the manager correct the original FastField submission, or does a new FastField form submission create a new QB record (replacing the original)? If a new submission, how is the original record handled (void/superseded)? Decision needed before A-MO-02 return path is built.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 13: VERSION HISTORY -->
+<div class="section" id="sec-13">
+  <div class="sec-hdr"><span class="num">Section 13</span><span class="ttl">Version History</span></div>
+  <table class="spec-table">
+    <thead><tr><th style="width:10%">Version</th><th style="width:12%">Date</th><th style="width:18%">Author</th><th>Changes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>v1.0</strong></td>
+        <td>08/19/26</td>
+        <td>Parakeet Communities</td>
+        <td>Initial release. Established WF004 scope; 3 triggers (voluntary notice, lease non-renewal, eviction outcome) — same path for all; 2 FastField forms (Move Out Form + Move Out Inspection); QB Move Out Records table (21 fields); SharePoint integration for inspection storage; daily 6 PM RM batch CSV export; 7 automations (A-MO-01 through A-MO-07); 4 gate rules (G-MO-01 through G-MO-04); 5 standard reports; workflow connections to WF003, WF002, RM. 5 open items flagged for build phase.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var observer = new MutationObserver(function(mutations, obs) {
+    var pagedContent = document.querySelector('.pagedjs_pages');
+    if (pagedContent) { obs.disconnect(); setTimeout(resolvePageNumbers, 500); }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  function resolvePageNumbers() {
+    document.querySelectorAll('.page-ref').forEach(function(ref) {
+      var href = ref.getAttribute('data-href');
+      var target = document.getElementById(href.replace('#', ''));
+      if (target) {
+        var page = target.closest('.pagedjs_page');
+        if (page) ref.textContent = page.getAttribute('data-page-number') || '';
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

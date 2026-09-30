@@ -1,0 +1,32 @@
+---
+type: lot
+community: parkwood-mobile-home-park
+lot: "42"
+code: PARK
+status: open
+categories: [rehab]
+open_items: 1
+last_activity: 2026-07-22
+tags: [community/parkwood-mobile-home-park, type/lot, status/open, category/rehab]
+---
+
+# Parkwood Mobile Home Park — Lot 42
+
+> **LOT SHEET** · `PARK-42` · [[60-Communities/parkwood-mobile-home-park\|Parkwood Mobile Home Park]] · **1 open**
+> Last activity 2026-07-22 · owners: Mark Doucette / Natalie Magurne
+
+## Timeline
+
+| Date | Type | Status | What happened | Owner | Source |
+| --- | --- | --- | --- | --- | --- |
+| 2026-07-22 | rehab | **blocked** | Prior contractor left work incomplete, unpainted ceiling and paint on the floor; High Pace asked for direction before scoping as Level 1 | Mark Doucette / Natalie Magurne | email: MH Assessments for Rehabs |
+
+## Open right now
+
+- **blocked**, 40 days old — Prior contractor left work incomplete, unpainted ceiling and paint on the floor; High Pace asked for direction before scoping as Level 1 (owner: Mark Doucette / Natalie Magurne)
+
+## Sources
+
+- [[60-Communities/activity/_sources/2026-08-31-email-activity-raw]] — the email harvest this was built from.
+- [[60-Communities/activity/_sources/2026-08-31-teams-activity-raw]] — the Teams harvest.
+- [[60-Communities/activity/_sources/2026-08-31-transcript-open-items-raw]] — the transcript open-item extraction.

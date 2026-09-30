@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eviction Process — Swim-Lane Flowchart</title>
+<style>
+  :root {
+    --green: #2D8A4E;
+    --navy:  #1B3A5C;
+    --red:   #B91C1C;
+    --amber: #C47F00;
+    --blue:  #1D4ED8;
+    --gray:  #6B7280;
+    --bg:    #F9FAFB;
+    --border:#D1D5DB;
+    --font: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; font-family: var(--font); }
+
+  /* ── PRINT / RENDER LAYOUT ─────────────────────────────────── */
+  .page {
+    width: 2400px;
+    padding: 40px 48px 60px;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────────── */
+  .doc-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid var(--green);
+  }
+  .doc-header h1 { font-size: 28px; color: var(--navy); font-weight: 800; }
+  .doc-header .sub { font-size: 14px; color: var(--gray); margin-top: 4px; }
+  .doc-header .meta { font-size: 12px; color: var(--gray); text-align: right; line-height: 1.8; }
+
+  /* ── LEGEND ──────────────────────────────────────────────────── */
+  .legend {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding: 14px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .leg-box {
+    width: 28px; height: 18px; border-radius: 4px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #fff; font-weight: 700;
+  }
+  .leg-diamond {
+    width: 18px; height: 18px; transform: rotate(45deg); flex-shrink: 0;
+    background: var(--amber);
+  }
+  .leg-pill {
+    height: 18px; padding: 0 8px; border-radius: 9px; flex-shrink: 0;
+    background: var(--blue); color: #fff; font-size: 9px;
+    display: flex; align-items: center; font-weight: 700;
+  }
+  .leg-oval {
+    width: 32px; height: 18px; border-radius: 9px; flex-shrink: 0;
+    background: var(--navy);
+  }
+
+  /* ── SWIMLANE WRAPPER ─────────────────────────────────────────── */
+  .swimlane-wrap {
+    position: relative;
+    display: flex;
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── ROLE LABELS (left column) ───────────────────────────────── */
+  .roles-col {
+    flex-shrink: 0;
+    width: 160px;
+    border-right: 2px solid var(--navy);
+  }
+  .role-header-spacer {
+    height: 56px;
+    background: var(--navy);
+    border-bottom: 2px solid var(--navy);
+  }
+  .role-label {
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 12px; font-weight: 700; color: #fff;
+    line-height: 1.3;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    background: var(--navy);
+  }
+
+  /* ── DIAGRAM CONTENT (right side) ───────────────────────────── */
+  .diagram-scroll {
+    flex: 1;
+    overflow-x: auto;
+  }
+  .diagram-inner {
+    position: relative;
+    min-width: 2180px;
+  }
+
+  /* Phase headers row */
+  .phases-row {
+    display: flex;
+    border-bottom: 2px solid var(--navy);
+    height: 56px;
+  }
+  .phase-header {
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+    letter-spacing: .05em; text-transform: uppercase;
+    padding: 6px 12px;
+    border-right: 2px solid rgba(255,255,255,.2);
+    flex-shrink: 0;
+  }
+  .ph1 { background: #1F5C35; width: 260px; }
+  .ph2 { background: #2D8A4E; width: 520px; }
+  .ph3 { background: #3AA863; width: 480px; }
+  .ph4 { background: #1B3A5C; width: 360px; }
+  .ph5a{ background: #2D4A8A; width: 280px; }
+  .ph5b{ background: #4A1C6E; width: 280px; }
+
+  /* Lane grid */
+  .lanes-grid { display: flex; flex-direction: column; }
+  .lane-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    min-height: 170px;
+  }
+  .lane-row:last-child { border-bottom: none; }
+  .lane-row.alt { background: #F0F4F8; }
+
+  /* Lane phase cells */
+  .cell {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    gap: 8px;
+    padding: 12px 8px;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+    position: relative;
+    min-height: 170px;
+  }
+  .cell.ph1 { width: 260px; }
+  .cell.ph2 { width: 520px; }
+  .cell.ph3 { width: 480px; }
+  .cell.ph4 { width: 360px; }
+  .cell.ph5a { width: 280px; }
+  .cell.ph5b { width: 280px; border-right: none; }
+
+  /* Horizontal divider inside phase 2 to split sub-steps */
+  .cell.ph2 { flex-direction: row; flex-wrap: wrap; gap: 6px; justify-content: space-around; }
+  .cell.ph3 { flex-direction: row; flex-wrap: wrap; gap: 6px; justify-content: space-around; }
+  .cell.ph4 { flex-direction: row; flex-wrap: wrap; gap: 6px; justify-content: space-around; }
+  .cell.ph5a { flex-direction: column; }
+  .cell.ph5b { flex-direction: column; }
+
+  /* Phase path labels in resolution */
+  .path-label {
+    position: absolute;
+    top: 4px; left: 8px;
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 2px 8px; border-radius: 10px;
+    color: #fff;
+  }
+  .path-a { background: #2D4A8A; }
+  .path-b { background: #4A1C6E; }
+
+  /* ── NODE SHAPES ─────────────────────────────────────────────── */
+  .node {
+    font-size: 11px; line-height: 1.35;
+    border-radius: 6px;
+    padding: 7px 10px;
+    text-align: center;
+    position: relative;
+    max-width: 180px;
+    min-width: 110px;
+  }
+  .node-task {
+    background: #fff;
+    border: 1.5px solid var(--navy);
+    color: var(--navy);
+  }
+  .node-task.green-border { border-color: var(--green); }
+  .node-task.deadline {
+    border-color: var(--red);
+    background: #FEF2F2;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .node-start, .node-end {
+    border-radius: 20px;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 16px;
+  }
+  .node-end { background: var(--green); }
+
+  .node-decision {
+    background: var(--amber);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 0;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    width: 130px; height: 130px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; text-align: center; padding: 20px 16px;
+    flex-shrink: 0;
+  }
+
+  .node-handoff {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 5px 12px;
+    letter-spacing: .03em;
+  }
+
+  .step-num {
+    position: absolute;
+    top: -8px; left: -6px;
+    background: var(--green);
+    color: #fff;
+    font-size: 9px; font-weight: 800;
+    border-radius: 10px;
+    padding: 1px 5px;
+    line-height: 1;
+  }
+
+  .deadline-flag {
+    position: absolute; top: -8px; right: -6px;
+    background: var(--red);
+    color: #fff; font-size: 9px;
+    border-radius: 10px; padding: 1px 5px;
+  }
+
+  /* Arrows overlay */
+  .arrows-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  /* ── NOTES ROW ───────────────────────────────────────────────── */
+  .notes-row {
+    margin-top: 20px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .note-box {
+    border-radius: 6px; padding: 10px 14px;
+    font-size: 11px; line-height: 1.5; flex: 1; min-width: 280px;
+  }
+  .note-box strong { display: block; margin-bottom: 4px; font-size: 12px; }
+  .note-imp { background: #FEF2F2; border-left: 4px solid var(--red); color: #7F1D1D; }
+  .note-dec { background: #FFFBEB; border-left: 4px solid var(--amber); color: #78350F; }
+  .note-hnd { background: #EFF6FF; border-left: 4px solid var(--blue); color: #1E3A8A; }
+
+  footer { margin-top: 28px; font-size: 11px; color: var(--gray); text-align: center; padding-top: 16px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div>
+      <div class="sub" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:4px;">Parakeet Communities · Evictions SOP</div>
+      <h1>Eviction Process — Swim-Lane Flowchart</h1>
+      <div class="sub">Role lanes reading left-to-right by time · Handoffs cross lanes · Two resolution paths shown</div>
+    </div>
+    <div class="meta">
+      Process Owner: Operations<br>
+      Effective: August 2026<br>
+      Primary State: Florida
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="leg-oval"></div><span>Start / End (rounded)</span></div>
+    <div class="legend-item"><div class="leg-box" style="background:var(--navy)"></div><span>Task (rectangle)</span></div>
+    <div class="legend-item"><div class="leg-diamond"></div><span style="margin-left:4px;">Decision (diamond)</span></div>
+    <div class="legend-item"><div class="leg-box" style="background:var(--red);">!</div><span>Deadline</span></div>
+    <div class="legend-item"><div class="leg-pill">→ HANDOFF</div><span>Handoff to another SOP</span></div>
+    <div class="legend-item"><div class="leg-box" style="background:var(--blue); border-radius:2px;">✉</div><span>Rework / Return loop</span></div>
+    <div class="legend-item">
+      <div style="display:flex;gap:4px;">
+        <span style="background:#2D4A8A;color:#fff;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;">PATH A</span>
+        <span style="background:#4A1C6E;color:#fff;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;">PATH B</span>
+      </div>
+      <span>Resolution paths</span>
+    </div>
+  </div>
+
+  <!-- SWIMLANE -->
+  <div class="swimlane-wrap">
+
+    <!-- ROLE LABELS -->
+    <div class="roles-col">
+      <div class="role-header-spacer"></div>
+      <div class="role-label" style="height:170px;">Community /<br>District<br>Manager</div>
+      <div class="role-label" style="height:170px;">Regional<br>Manager</div>
+      <div class="role-label" style="height:170px;">Evictions<br>Team</div>
+      <div class="role-label" style="height:110px;font-size:10px;">Ops Coordinator<br>(Melanie)</div>
+      <div class="role-label" style="height:110px;font-size:10px;">Asset Manager<br>(Justin)</div>
+      <div class="role-label" style="height:110px;font-size:10px;">Director of<br>Operations</div>
+      <div class="role-label" style="height:110px; border-bottom:none;">Attorney /<br>Sheriff</div>
+    </div>
+
+    <!-- DIAGRAM CONTENT -->
+    <div class="diagram-scroll">
+    <div class="diagram-inner">
+
+      <!-- PHASE HEADERS ROW -->
+      <div class="phases-row">
+        <div class="phase-header ph1">Phase 1<br><span style="font-size:10px;font-weight:400;">AR Review<br>1st–5th</span></div>
+        <div class="phase-header ph2">Phase 2<br><span style="font-size:10px;font-weight:400;">Demand Notice Issuance &amp; Posting<br>6th–7th</span></div>
+        <div class="phase-header ph3">Phase 3<br><span style="font-size:10px;font-weight:400;">AR Monitoring &amp; Intake Prep<br>8th–25th</span></div>
+        <div class="phase-header ph4">Phase 4<br><span style="font-size:10px;font-weight:400;">Attorney Filing<br>Last week</span></div>
+        <div class="phase-header ph5a">Phase 5A<br><span style="font-size:10px;font-weight:400;">Path A<br>Resident Pays</span></div>
+        <div class="phase-header ph5b">Phase 5B<br><span style="font-size:10px;font-weight:400;">Path B<br>Writ &amp; Auction</span></div>
+      </div>
+
+      <!-- ROW 1: Community/District Manager -->
+      <div class="lane-row">
+        <!-- Ph1 -->
+        <div class="cell ph1">
+          <div class="node node-start" style="font-size:10px;">AR Balance<br>Remains After 5th</div>
+          <div style="font-size:18px;color:var(--navy);">↓</div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">1–3</span>
+            Pull AR report · Enter<br>notes in Rent Manager<br>· Mark past-due accounts
+          </div>
+        </div>
+        <!-- Ph2 -->
+        <div class="cell ph2">
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">7</span>
+            <span class="deadline-flag">6th!</span>
+            Post notice on door<br>+ certified mail<br>Sign Posting Cert.
+          </div>
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">8</span>
+            <span class="deadline-flag">EOD 6th!</span>
+            Email proof of posting<br>+ cert. mail to<br>Regional Manager
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">10</span>
+            Upload demand notice<br>+ posting cert. to<br>Rent Manager History/Notes
+          </div>
+        </div>
+        <!-- Ph3 -->
+        <div class="cell ph3">
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">11</span>
+            Review AR daily<br>+ call residents re:<br>outstanding balance
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">12</span>
+            Document every<br>call in Rent Manager<br>History/Notes
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">15</span>
+            Complete intake packet<br>· Attach: ledger, notice,<br>cert, posting cert, lease<br>Return to Regional Mgr.
+          </div>
+        </div>
+        <!-- Ph4 -->
+        <div class="cell ph4">
+          <!-- empty – CDM waits -->
+          <div style="font-size:11px;color:var(--gray);text-align:center;font-style:italic;">Awaiting<br>attorney update</div>
+        </div>
+        <!-- Ph5A -->
+        <div class="cell ph5a" style="position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="position:relative;margin-top:20px;">
+            <span class="step-num">21</span>
+            Notify Regional Mgr.<br>resident wants to pay
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">23–24</span>
+            Receive cashier's<br>check/money order<br>· Request label from Melanie<br>· Mail to home office<br>· Send photos to RM + EVT
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">25</span>
+            Email Evictions to<br>stop eviction<br>(CC Regional Mgr.)
+          </div>
+        </div>
+        <!-- Ph5B -->
+        <div class="cell ph5b" style="position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task" style="position:relative;margin-top:20px;">
+            <span class="step-num">30</span>
+            Send Writ copy to<br>Evictions + Regional Mgr.
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">32</span>
+            Inspect home<br>· VIN/HUD/decal/tag<br>· Make/Model/Year<br>· Length &amp; Width<br>→ Send to Evictions
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">35</span>
+            Complete auction<br>paperwork → send<br>to Evictions
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">37</span>
+            Mail documents<br>to attorney via<br>label from Evictions
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: Regional Manager -->
+      <div class="lane-row alt">
+        <!-- Ph1 -->
+        <div class="cell ph1">
+          <!-- empty -->
+        </div>
+        <!-- Ph2 -->
+        <div class="cell ph2">
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">5</span>
+            Review demand notices<br>for accuracy
+          </div>
+          <div class="node node-decision" style="width:110px;height:110px;padding:14px 10px;">
+            Accurate?
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">6</span>
+            Forward notices<br>to Comm./Dist. Mgr.<br>with instructions
+          </div>
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">9</span>
+            <span class="deadline-flag">7th!</span>
+            Compile all proofs →<br>send to Natalie +<br>evictions@ email
+          </div>
+        </div>
+        <!-- Ph3 -->
+        <div class="cell ph3">
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">14</span>
+            Review intake packets<br>for completeness
+          </div>
+          <div class="node node-decision" style="width:110px;height:110px;padding:14px 10px;">
+            Complete?
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">16</span>
+            Final call to resident<br>before attorney filing
+          </div>
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">17</span>
+            <span class="deadline-flag">Last wk!</span>
+            Send all intake packets<br>to Natalie + evictions@
+          </div>
+        </div>
+        <!-- Ph4 -->
+        <div class="cell ph4">
+          <div style="font-size:11px;color:var(--gray);text-align:center;font-style:italic;">Monitor case updates<br>from Evictions</div>
+        </div>
+        <!-- Ph5A -->
+        <div class="cell ph5a" style="position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="position:relative;margin-top:20px;">
+            <span class="step-num">22</span>
+            Confirm attorney fees<br>posted before<br>accepting payment
+          </div>
+        </div>
+        <!-- Ph5B -->
+        <div class="cell ph5b" style="position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task" style="position:relative;margin-top:20px;">
+            <span class="step-num">30</span>
+            Alert Director of<br>Operations when<br>Writ received
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: Evictions Team -->
+      <div class="lane-row">
+        <!-- Ph1 -->
+        <div class="cell ph1">
+          <!-- empty -->
+        </div>
+        <!-- Ph2 -->
+        <div class="cell ph2">
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">4</span>
+            <span class="deadline-flag">6th!</span>
+            Run demand notices<br>from AR report →<br>send to Regionals
+          </div>
+        </div>
+        <!-- Ph3 -->
+        <div class="cell ph3">
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">13</span>
+            <span class="deadline-flag">19–23rd!</span>
+            Generate intake forms<br>for all outstanding<br>accounts → send to Regionals
+          </div>
+        </div>
+        <!-- Ph4 -->
+        <div class="cell ph4">
+          <div class="node node-task deadline" style="position:relative;">
+            <span class="step-num">18</span>
+            <span class="deadline-flag">Last wk!</span>
+            Enter Eviction workflow<br>in Rent Manager<br>Upload intake · Lock account
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">19</span>
+            Send intake to attorney<br>(CC Regionals, Natalie,<br>evictions@ email)
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">20</span>
+            Track case in Rent<br>Manager + Main Eviction<br>Cases Sheet
+          </div>
+        </div>
+        <!-- Ph5A -->
+        <div class="cell ph5a" style="position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="position:relative;margin-top:20px;">
+            <span class="step-num">26</span>
+            Email attorney to<br>stop eviction
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">27–28</span>
+            Receive attorney<br>confirmation →<br>Email CDM + RM<br>Close Rent Manager<br>workflow
+          </div>
+          <div class="node node-end" style="font-size:10px;">Process Ends<br>(Path A)</div>
+        </div>
+        <!-- Ph5B -->
+        <div class="cell ph5b" style="position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task deadline" style="position:relative;margin-top:20px;">
+            <span class="step-num">31</span>
+            <span class="deadline-flag">Day of Writ!</span>
+            Upload Writ to<br>Evictions tab in<br>Rent Manager
+          </div>
+          <div class="node node-decision" style="width:120px;height:120px;padding:14px 10px;font-size:9px;">
+            <span class="step-num" style="top:-10px;">33</span>
+            Lien on<br>home?
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+            <div class="node node-task" style="font-size:10px;max-width:120px;border-color:var(--green);">
+              <strong style="color:var(--green);">No lien</strong><br>Florida Fast Title<br>→ Schedule auction<br><em style="color:var(--blue);">→ Post Eviction Title Transfer SOP</em>
+            </div>
+            <div class="node node-task" style="font-size:10px;max-width:120px;border-color:var(--amber);">
+              <strong style="color:var(--amber);">Has lien</strong><br>Vector Law<br>→ Attorney auction
+            </div>
+          </div>
+          <div class="node node-decision" style="width:120px;height:120px;padding:14px 10px;font-size:9px;">
+            <span class="step-num" style="top:-10px;">35</span>
+            Auction<br>result?
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+            <div class="node node-task" style="font-size:10px;max-width:120px;border-color:var(--green);">
+              <strong style="color:var(--green);">Sold</strong><br>Proceed to<br>title receipt
+            </div>
+            <div class="node node-task" style="font-size:10px;max-width:120px;border-color:var(--navy);">
+              <strong style="color:var(--navy);">Not sold</strong><br>Parakeet buys<br>for $1
+            </div>
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">36–38</span>
+            Confirm paperwork<br>→ Send mailing label<br>→ Receive title
+          </div>
+          <div class="node node-task deadline" style="font-size:10px;">
+            <span class="deadline-flag">30 days<br>(or 5–7 mo.)</span>
+            Title received
+          </div>
+          <div class="node node-task" style="position:relative;">
+            <span class="step-num">38</span>
+            Send Writ/Title<br>to Asset Mgr. (Justin)
+          </div>
+          <div class="node node-handoff">→ Post Eviction Title Transfer SOP</div>
+        </div>
+      </div>
+
+      <!-- ROW 4: Ops Coordinator (Melanie) -->
+      <div class="lane-row alt" style="min-height:110px;">
+        <!-- Ph1-4 -->
+        <div class="cell ph1" style="min-height:110px;"></div>
+        <div class="cell ph2" style="min-height:110px;"></div>
+        <div class="cell ph3" style="min-height:110px;"></div>
+        <div class="cell ph4" style="min-height:110px;">
+          <div class="node node-task" style="font-size:10px;position:relative;">
+            Update Main<br>Eviction Cases Sheet<br>with case status
+          </div>
+        </div>
+        <!-- Ph5A -->
+        <div class="cell ph5a" style="min-height:110px;position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="font-size:10px;position:relative;margin-top:20px;">
+            Confirm attorney<br>billing · Send mailing<br>label to CDM
+          </div>
+        </div>
+        <!-- Ph5B -->
+        <div class="cell ph5b" style="min-height:110px;"></div>
+      </div>
+
+      <!-- ROW 5: Asset Manager (Justin) -->
+      <div class="lane-row" style="min-height:110px;">
+        <div class="cell ph1" style="min-height:110px;"></div>
+        <div class="cell ph2" style="min-height:110px;"></div>
+        <div class="cell ph3" style="min-height:110px;"></div>
+        <div class="cell ph4" style="min-height:110px;"></div>
+        <!-- Ph5A -->
+        <div class="cell ph5a" style="min-height:110px;position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="font-size:10px;position:relative;margin-top:20px;">
+            Post attorney fees<br>to resident account<br>in Rent Manager
+          </div>
+        </div>
+        <!-- Ph5B -->
+        <div class="cell ph5b" style="min-height:110px;position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task" style="font-size:10px;position:relative;margin-top:20px;">
+            Move resident<br>out of Rent Manager<br>once Writ/Title received
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 6: Director of Operations -->
+      <div class="lane-row alt" style="min-height:110px;">
+        <div class="cell ph1" style="min-height:110px;"></div>
+        <div class="cell ph2" style="min-height:110px;">
+          <div class="node node-task" style="font-size:10px;position:relative;background:#FEF2F2;border-color:var(--red);">
+            Receive escalation<br>when proof of posting<br>missed → Written<br>warning issued
+          </div>
+        </div>
+        <div class="cell ph3" style="min-height:110px;"></div>
+        <div class="cell ph4" style="min-height:110px;">
+          <div class="node node-task" style="font-size:10px;">
+            Receive all intake<br>packets · Monitor<br>active cases
+          </div>
+        </div>
+        <div class="cell ph5a" style="min-height:110px;"></div>
+        <div class="cell ph5b" style="min-height:110px;position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task" style="font-size:10px;position:relative;margin-top:20px;">
+            Alerted when<br>Writ of Possession<br>is received
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 7: Attorney/Sheriff -->
+      <div class="lane-row" style="min-height:110px;border-bottom:none;">
+        <div class="cell ph1" style="min-height:110px;"></div>
+        <div class="cell ph2" style="min-height:110px;"></div>
+        <div class="cell ph3" style="min-height:110px;"></div>
+        <div class="cell ph4" style="min-height:110px;">
+          <div class="node node-task" style="font-size:10px;">
+            Receive intake<br>· File with courts<br>· Communicate updates<br>to Evictions team
+          </div>
+        </div>
+        <div class="cell ph5a" style="min-height:110px;position:relative;">
+          <span class="path-label path-a">PATH A</span>
+          <div class="node node-task" style="font-size:10px;position:relative;margin-top:20px;">
+            Receive stop order<br>· Confirm eviction<br>stopped with courts
+          </div>
+        </div>
+        <div class="cell ph5b" style="min-height:110px;position:relative;">
+          <span class="path-label path-b">PATH B</span>
+          <div class="node node-task deadline" style="font-size:10px;position:relative;margin-top:20px;">
+            <span class="deadline-flag">30–90 days!</span>
+            Issue Writ of<br>Possession
+          </div>
+          <div class="node node-task" style="font-size:10px;">
+            Manage auction<br>(Vector Law) or<br>Florida Fast Title<br>schedules auction
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end diagram-inner -->
+    </div><!-- end diagram-scroll -->
+  </div><!-- end swimlane-wrap -->
+
+  <!-- NOTES -->
+  <div class="notes-row">
+    <div class="note-box note-imp">
+      <strong>⚠ Key Deadlines</strong>
+      Demand notices sent &amp; posted: 6th · Proof of posting to Regional Mgr: EOD 6th · Regional Mgr compiles &amp; sends: 7th · Intake packets generated: 19th–23rd · CDM completes intake: 25th · Intake to attorney: last week of month · Title receipt: ~30 days (5–7 months if declaratory judgment)
+    </div>
+    <div class="note-box note-dec">
+      <strong>◆ Key Decisions</strong>
+      (1) Demand notice accurate? → Yes: forward / No: redraft, extend cure date by 10 business days · (2) Proof of posting received? → No: escalate to DOO, written warning · (3) Intake complete? → No: return for corrections by end of month · (4) Resident pays? → Path A (stop eviction) / No → Path B (proceed) · (5) Lien on home? → No: Florida Fast Title / Yes: Vector Law · (6) Auction sold? → No: Parakeet buys for $1
+    </div>
+    <div class="note-box note-hnd">
+      <strong>→ Handoffs</strong>
+      This process triggers: <strong>Post Eviction Title Transfer SOP</strong> (once title is received and resident is removed from Rent Manager) · References: <strong>Collection Process 2024.docx</strong> (Phase 1, 1st–5th) · <strong>Marketing a Home SOP</strong> follows after Post Eviction Title Transfer completion
+    </div>
+  </div>
+
+  <footer>Parakeet Communities · Eviction Process SOP · Confidential &amp; Internal Use Only · August 2026</footer>
+</div>
+</body>
+</html>

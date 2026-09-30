@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eviction Process — Swim-Lane Flowchart | Parakeet Communities</title>
+<style>
+  body{margin:0;padding:24px;font-family:Arial,sans-serif;background:#fff;}
+  h1{color:#1F3864;font-size:20px;margin-bottom:4px;}
+  .sub{color:#2E7D32;font-size:14px;font-weight:bold;margin-bottom:4px;}
+  .meta{font-size:11px;color:#666;margin-bottom:18px;}
+  svg{display:block;width:100%;max-width:1100px;margin:0 auto;}
+  @media print{body{padding:8px;}svg{max-width:100%;}}
+</style>
+</head>
+<body>
+<h1>Operational Procedure: Eviction Process</h1>
+<div class="sub">Parakeet Communities · Operations SOP — Swim-Lane Flowchart</div>
+<div class="meta">Process Owner: Natalie Magurne, Director of Operations &nbsp;|&nbsp; Status: DRAFT — Pending Approval</div>
+<svg viewBox="0 0 1100 2600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#C62828" stroke-width="1.5" stroke-linecap="round"/></marker>
+</defs>
+
+<!-- LANE HEADERS -->
+<rect x="22"  y="14" width="200" height="30" fill="#1F3864"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="122" y="33">CM / District Manager</text>
+<rect x="226" y="14" width="200" height="30" fill="#0F6E56"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="326" y="33">Regional Manager</text>
+<rect x="430" y="14" width="200" height="30" fill="#854F0B"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="530" y="33">Evictions Team</text>
+<rect x="634" y="14" width="200" height="30" fill="#72243E"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="734" y="33">Attorney / Legal</text>
+<rect x="838" y="14" width="240" height="30" fill="#1B4F72"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="958" y="33">Director of Ops / Asset Mgmt</text>
+
+<!-- LANE BACKGROUNDS -->
+<rect x="22"  y="44" width="200" height="2540" fill="#1F3864" opacity="0.04"/>
+<rect x="226" y="44" width="200" height="2540" fill="#0F6E56" opacity="0.04"/>
+<rect x="430" y="44" width="200" height="2540" fill="#854F0B" opacity="0.04"/>
+<rect x="634" y="44" width="200" height="2540" fill="#72243E" opacity="0.04"/>
+<rect x="838" y="44" width="240" height="2540" fill="#1B4F72" opacity="0.04"/>
+
+<!-- LANE DIVIDERS -->
+<line x1="222"  y1="14" x2="222"  y2="2584" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="426"  y1="14" x2="426"  y2="2584" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="630"  y1="14" x2="630"  y2="2584" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="834"  y1="14" x2="834"  y2="2584" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+<!-- PHASE SPINES -->
+<rect x="0" y="58"   width="18" height="280" rx="3" fill="#1F3864"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,9,198)"><tspan x="9" y="202">Phase 1 · Demand Notices (1st–7th)</tspan></text>
+<rect x="0" y="352"  width="18" height="130" rx="3" fill="#0F6E56"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,9,417)"><tspan x="9" y="421">Phase 2 · Daily Follow-Up</tspan></text>
+<rect x="0" y="496"  width="18" height="380" rx="3" fill="#854F0B"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,9,686)"><tspan x="9" y="690">Phase 3 · Intake Packets (19th–Last Wk)</tspan></text>
+<rect x="0" y="890"  width="18" height="480" rx="3" fill="#C62828"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,9,1130)"><tspan x="9" y="1134">Phase 4 · Legal Proceedings</tspan></text>
+<rect x="0" y="1384" width="18" height="600" rx="3" fill="#3B6D11"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,9,1684)"><tspan x="9" y="1688">Phase 5 · Writ &amp; Post-Eviction</tspan></text>
+
+<!-- ══ START ══ -->
+<rect x="456" y="50" width="148" height="32" rx="16" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#333" text-anchor="middle" x="530" y="71">START</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="530" y="92">Balance unresolved after collections</text>
+<line x1="530" y1="94" x2="530" y2="108" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="530" y1="108" x2="122" y2="108" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- ══ PHASE 1 ══ -->
+<!-- S1: CM AR Review 1st-5th -->
+<rect x="30" y="112" width="184" height="64" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="130">AR Review &amp; Collections</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="144">1st–5th: Follow Collections SOP</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="156">Log AR · Enter notes in RM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="168">Document all communications</text>
+
+<!-- S2: Evictions run demands on 6th -->
+<rect x="438" y="112" width="184" height="52" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="132">Run Demand Notices</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="148">6th · Based on AR report</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="160">Send to Regional Managers</text>
+<line x1="122" y1="176" x2="122" y2="192" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="192" x2="530" y2="192" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="530" y1="192" x2="530" y2="112" stroke="#888" stroke-width="0.5" stroke-dasharray="3 2"/>
+
+<!-- S3: Regional review -->
+<rect x="234" y="188" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="208">Review Demand Notices</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="222">6th · Verify accuracy</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="234">Correct errors before forwarding</text>
+<line x1="530" y1="164" x2="530" y2="202" stroke="#888" stroke-width="1"/>
+<line x1="530" y1="202" x2="420" y2="202" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S4: Forward to CM -->
+<rect x="234" y="258" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="278">Forward to CM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="292">6th · Include state-specific</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="304">compliance instructions</text>
+<line x1="326" y1="240" x2="326" y2="256" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S5: Post & certify -->
+<rect x="30" y="258" width="184" height="64" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="278">Post &amp; Certify Notice</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="292">6th · Post on door + certified mail</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="306">Sign certification of posting</text>
+<text font-family="Arial" font-size="9" font-weight="600" fill="#C62828" text-anchor="middle" x="122" y="318">Must sign — legally required</text>
+<line x1="326" y1="284" x2="216" y2="284" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S6: Proof to regional EOD 6th -->
+<rect x="30" y="340" width="184" height="52" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="360">Send Proof to Regional</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="374">EOD 6th · Email attachment</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="386">Proof of posting + certified mail</text>
+<line x1="122" y1="322" x2="122" y2="338" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S7: Regional compiles & sends to Natalie -->
+<rect x="234" y="340" width="184" height="64" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="360">Compile &amp; Send Proofs</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="374">By 7th · All properties</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="388">→ Natalie + evictions@</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="400">parakeetcommunities.com</text>
+<line x1="216" y1="366" x2="232" y2="366" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<!-- Send to DOO -->
+<line x1="418" y1="372" x2="846" y2="372" stroke="#888" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- DOO receives -->
+<rect x="846" y="358" width="216" height="40" rx="6" fill="#cce0f5" stroke="#1B4F72" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0B3054" text-anchor="middle" x="954" y="376">Natalie Receives Proofs</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="954" y="390">Director of Operations</text>
+
+<!-- S8: Upload to RM -->
+<rect x="30" y="416" width="184" height="40" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="434">Upload to Rent Manager</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="448">7th · History/Notes tab</text>
+<line x1="122" y1="392" x2="122" y2="414" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- PHASE SEPARATOR -->
+<line x1="22" y1="466" x2="1078" y2="466" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 2 ══ -->
+<rect x="30" y="478" width="184" height="72" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="498">Daily AR Review</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="512">Demand date → cure date</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="524">Call residents daily</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="538">Document ALL calls in RM</text>
+
+<rect x="234" y="486" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="506">Daily AR Review</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="520">Monitor outstanding balances</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="534">Support CM follow-up</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="22" y1="566" x2="1078" y2="566" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 3 ══ -->
+<!-- S10: Evictions send intakes -->
+<rect x="438" y="578" width="184" height="52" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="598">Send Intake Packets</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="612">19th–23rd · Based on cure date</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="624">Send to Regional Managers</text>
+<line x1="122" y1="550" x2="122" y2="560" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="560" x2="530" y2="560" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="530" y1="560" x2="530" y2="576" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S11: Regional review intakes -->
+<rect x="234" y="648" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="668">Review Intake Packets</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="682">19th–23rd · Check completeness</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="694">Forward to CMs</text>
+<line x1="530" y1="630" x2="530" y2="660" stroke="#888" stroke-width="1"/>
+<line x1="530" y1="660" x2="420" y2="660" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="326" y1="660" x2="326" y2="646" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S12: CM complete intakes -->
+<rect x="30" y="716" width="184" height="100" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="736">Complete Intake Packets</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="750">19th–25th</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="764">Attach: ledger, demand, sig page,</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="776">cert mail, lease</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="790">RV demo → circle No on $500 Q</text>
+<text font-family="Arial" font-size="9" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="804">Subj: Intake–Property–Resident</text>
+<line x1="326" y1="700" x2="326" y2="730" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="730" x2="216" y2="730" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S13: Regional follow-up call -->
+<rect x="234" y="834" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="854">Follow-Up Call to Resident</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="868">Prior to attorney submission</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="880">Final attempt to collect</text>
+<line x1="122" y1="816" x2="122" y2="848" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="848" x2="232" y2="848" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S14: Regional sends to Evictions -->
+<rect x="234" y="902" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="922">Forward to Evictions</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="936">Last week of month</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="948">→ Natalie + Evictions dept</text>
+<line x1="326" y1="886" x2="326" y2="900" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- PHASE SEPARATOR -->
+<line x1="22" y1="966" x2="1078" y2="966" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 4 ══ -->
+<!-- S15: Evictions enter RM, lock account -->
+<rect x="438" y="978" width="184" height="64" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="998">Enter Intakes in RM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1012">Last week · Place in eviction workflow</text>
+<text font-family="Arial" font-size="9" font-weight="600" fill="#C62828" text-anchor="middle" x="530" y="1026">Account LOCKED in Rent Manager</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1038">Cashier's check / money order only</text>
+<line x1="326" y1="954" x2="326" y2="1002" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="1002" x2="436" y2="1002" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S16: Send to attorney -->
+<rect x="438" y="1058" width="184" height="52" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="1078">Send to Attorney</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1092">8th · Completed intake packets</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1104">CC: Regionals, Natalie, Evictions</text>
+<line x1="530" y1="1042" x2="530" y2="1056" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="530" y1="1084" x2="632" y2="1084" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Attorney files -->
+<rect x="642" y="1058" width="184" height="52" rx="6" fill="#f5d0e0" stroke="#72243E" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#4B1528" text-anchor="middle" x="734" y="1078">File Eviction with Courts</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1092">Attorney processes case</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1104">Updates relayed to all parties</text>
+
+<!-- DECISION: Resident wants to pay? -->
+<polygon points="530,1132 600,1160 530,1188 460,1160" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="530" y="1156">Resident</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="530" y="1170">wants to pay?</text>
+<line x1="530" y1="1110" x2="530" y2="1130" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- YES path -->
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="460" y="1182">YES</text>
+<line x1="460" y1="1160" x2="216" y2="1160" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- NO path -->
+<text font-family="Arial" font-size="10" fill="#C62828" x="602" y="1182">NO</text>
+<line x1="600" y1="1160" x2="642" y2="1160" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+
+<!-- YES: CM payment process -->
+<rect x="30" y="1174" width="184" height="100" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#1B5E20" text-anchor="middle" x="122" y="1194">Resident Pays</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1208">Cashier's check / money order</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1220">Notify Regional + Evictions</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1232">Contact Melanie for UPS label</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1244">Mail check · Send photo to</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1256">Regional + Evictions</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1266">Email Evictions to STOP eviction</text>
+
+<!-- Evictions stops eviction -->
+<rect x="438" y="1196" width="184" height="64" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#1B5E20" text-anchor="middle" x="530" y="1216">Stop Eviction</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1230">Email attorney to stop w/ courts</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1244">Confirm stop → email CM + RM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1256">Close eviction workflow in RM</text>
+<line x1="216" y1="1228" x2="436" y2="1228" stroke="#2E7D32" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr-g)"/>
+
+<!-- NO: Proceed with eviction -->
+<rect x="642" y="1140" width="184" height="64" rx="6" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#791F1F" text-anchor="middle" x="734" y="1160">Proceed with Eviction</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1176">CM emails Evictions + CC Regional</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1190">to proceed</text>
+
+<!-- Evictions communicates updates -->
+<rect x="438" y="1280" width="184" height="64" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="1300">Ongoing Communication</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1314">Updates from attorney → all parties</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1328">Update Evictions Master Sheet</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1340">Update RM eviction workflow</text>
+<line x1="734" y1="1204" x2="734" y2="1310" stroke="#888" stroke-width="1"/>
+<line x1="734" y1="1310" x2="624" y2="1310" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- PHASE SEPARATOR -->
+<line x1="22" y1="1360" x2="1078" y2="1360" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 5 ══ -->
+<!-- S20: Writ of possession -->
+<rect x="30" y="1372" width="184" height="72" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="1392">Sheriff Posts Writ</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1406">30–90 days after court filing</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1418">CM sends copy to Evictions</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1430">+ Regional Manager</text>
+<line x1="530" y1="1344" x2="530" y2="1396" stroke="#888" stroke-width="1"/>
+<line x1="530" y1="1396" x2="216" y2="1396" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Regional alerts DOO -->
+<rect x="234" y="1380" width="184" height="52" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="1400">Alert Director of Operations</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="1414">Notify Natalie of writ issuance</text>
+<line x1="216" y1="1408" x2="232" y2="1408" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="418" y1="1406" x2="846" y2="1406" stroke="#888" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- DOO notified -->
+<rect x="846" y="1390" width="216" height="40" rx="6" fill="#cce0f5" stroke="#1B4F72" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0B3054" text-anchor="middle" x="954" y="1410">Director of Operations Notified</text>
+
+<!-- S21: Evictions upload writ -->
+<rect x="438" y="1372" width="184" height="52" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="1392">Upload Writ to RM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1406">Day writ is issued</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1418">Evictions tab in Rent Manager</text>
+<line x1="122" y1="1444" x2="122" y2="1456" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="1456" x2="530" y2="1456" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="530" y1="1456" x2="530" y2="1424" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S22: Home inspection -->
+<rect x="30" y="1476" width="184" height="72" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="1496">Home Inspection</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1510">After writ issued</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1522">Send to Evictions:</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1534">VIN/HUD · Make/Model · Yr · Dims</text>
+<line x1="122" y1="1456" x2="122" y2="1474" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- DECISION: Lien? -->
+<polygon points="530,1564 598,1590 530,1616 462,1590" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="530" y="1586">Home has</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="530" y="1600">a lien?</text>
+<line x1="122" y1="1548" x2="122" y2="1580" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="1580" x2="460" y2="1580" stroke="#888" stroke-width="1"/>
+<line x1="460" y1="1580" x2="460" y2="1590" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- NO lien: Florida Fast Title -->
+<text font-family="Arial" font-size="10" fill="#1F3864" x="402" y="1616">NO</text>
+<line x1="462" y1="1590" x2="326" y2="1590" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="1590" x2="326" y2="1626" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- YES lien: Vector Law -->
+<text font-family="Arial" font-size="10" fill="#854F0B" x="600" y="1616">YES</text>
+<line x1="598" y1="1590" x2="642" y2="1590" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- No lien path: Evictions + Florida Fast Title -->
+<rect x="234" y="1626" width="184" height="64" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="1646">Florida Fast Title Auction</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="1660">No lien · Evictions submits docs</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="1674">CM emails if anyone attended</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="326" y="1686">CM does not sign auction docs</text>
+
+<!-- Yes lien: Vector Law -->
+<rect x="642" y="1570" width="184" height="64" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="734" y="1590">Vector Law Auction</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1604">Lien exists · Attorney handles</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1618">CM completes VIN check/apps</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="734" y="1630">Attorney posts + communicates date</text>
+
+<!-- S24: Auction paperwork -->
+<rect x="30" y="1718" width="184" height="64" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="1738">Complete Auction Paperwork</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1752">Fill all required documents</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1764">Email to Evictions for review</text>
+<line x1="326" y1="1690" x2="326" y2="1740" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="1740" x2="216" y2="1740" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="734" y1="1634" x2="734" y2="1750" stroke="#888" stroke-width="1"/>
+<line x1="734" y1="1750" x2="216" y2="1750" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S25: Mail to attorney -->
+<rect x="30" y="1800" width="184" height="64" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0C2754" text-anchor="middle" x="122" y="1820">Mail Paperwork to Attorney</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1834">After Evictions confirms correct</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1846">UPS label provided by Evictions</text>
+<text font-family="Arial" font-size="9" font-style="italic" fill="#555" text-anchor="middle" x="122" y="1858">Title: ~30 days / Decl: 5-7 months</text>
+<line x1="122" y1="1782" x2="122" y2="1798" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- S26: Remove from RM -->
+<rect x="438" y="1882" width="184" height="64" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" text-anchor="middle" x="530" y="1902">Remove Resident from RM</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1916">POH: Send writ → Justin</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1928">Resident-owned: Send title → Justin</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="530" y="1940">Justin moves resident out of RM</text>
+<line x1="122" y1="1864" x2="122" y2="1910" stroke="#888" stroke-width="1"/>
+<line x1="122" y1="1910" x2="436" y2="1910" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Justin (Asset Mgmt) -->
+<rect x="846" y="1882" width="216" height="52" rx="6" fill="#cce0f5" stroke="#1B4F72" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#0B3054" text-anchor="middle" x="954" y="1902">Asset Mgmt (Justin)</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="954" y="1916">Moves resident out of</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="954" y="1928">Rent Manager</text>
+<line x1="624" y1="1908" x2="844" y2="1908" stroke="#888" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- S27: Advertise for sale -->
+<rect x="30" y="1964" width="184" height="52" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#1B5E20" text-anchor="middle" x="122" y="1984">Advertise Home for Sale</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="1998">After title received</text>
+<text font-family="Arial" font-size="9" fill="#333" text-anchor="middle" x="122" y="2008">All available channels</text>
+<line x1="530" y1="1946" x2="530" y2="1980" stroke="#888" stroke-width="1"/>
+<line x1="530" y1="1980" x2="216" y2="1980" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- END -->
+<rect x="448" y="2040" width="164" height="34" rx="17" fill="#2E7D32"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="530" y="2062">PROCESS COMPLETE</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="530" y="2086">Resident removed · Home listed</text>
+<line x1="122" y1="2016" x2="122" y2="2057" stroke="#2E7D32" stroke-width="1"/>
+<line x1="122" y1="2057" x2="446" y2="2057" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- Footer -->
+<line x1="22" y1="2110" x2="1078" y2="2110" stroke="#2E7D32" stroke-width="1"/>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="550" y="2128">Parakeet Communities, LLC · Confidential Internal Document · Not for External Distribution</text>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="550" y="2144">Process Owner: Natalie Magurne, Director of Operations · evictions@parakeetcommunities.com</text>
+</svg>
+</body>
+</html>

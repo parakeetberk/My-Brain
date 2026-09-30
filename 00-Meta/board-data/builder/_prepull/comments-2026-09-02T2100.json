@@ -1,0 +1,199 @@
+{
+ "CM-15": [
+  {
+   "ts": "2026-09-01 14:10",
+   "text": "Really assigned to Berman, however I think this needs to be assigned ot Jon and I to make sure it is set up before handing off to anyone else.",
+   "state": "actioned"
+  }
+ ],
+ "CM-20": [
+  {
+   "ts": "2026-09-01 14:11",
+   "text": "Pending response from legal",
+   "state": "actioned"
+  }
+ ],
+ "CM-23": [
+  {
+   "ts": "2026-09-01 14:11",
+   "text": "Follow up with Natalie to get Zach Wallacks thought to make sure we need and should go",
+   "state": "actioned"
+  }
+ ],
+ "CM-06": [
+  {
+   "ts": "2026-09-01 14:15",
+   "text": "What is the issue here?",
+   "state": "actioned"
+  },
+  {
+   "ts": "2026-09-01 17:27",
+   "text": "What is needed.  Since this is important @claude, tell me what I need to do to rectify this",
+   "state": "actioned"
+  }
+ ],
+ "CM-12": [
+  {
+   "ts": "2026-09-01 14:16",
+   "text": "Where is the excel tracker?",
+   "state": "actioned"
+  }
+ ],
+ "PF-0005": [
+  {
+   "ts": "2026-09-01 15:12",
+   "text": "Kick off coming.  Couple of bids coming in.  Follow up end of week on EOS",
+   "state": "actioned"
+  }
+ ],
+ "PF-0086": [
+  {
+   "ts": "2026-09-01 15:16",
+   "text": "Duplicate of PF-0085.  Let's remove this one.",
+   "state": "actioned"
+  }
+ ],
+ "PD-14": [
+  {
+   "ts": "2026-09-01 15:20",
+   "text": "Price out but not realistic.",
+   "state": "actioned"
+  }
+ ],
+ "PR-0014": [
+  {
+   "ts": "2026-09-01 15:33",
+   "text": "This is handled by the onsite team.",
+   "state": "actioned"
+  }
+ ],
+ "PR-0019": [
+  {
+   "ts": "2026-09-01 15:35",
+   "text": "She has move forward with traction here.  Reminder to follow up the end of next week",
+   "state": "actioned"
+  }
+ ],
+ "PR-0029": [
+  {
+   "ts": "2026-09-01 15:38",
+   "text": "This is when the mothers in the community are planning events.",
+   "state": "actioned"
+  }
+ ],
+ "PR-0033": [
+  {
+   "ts": "2026-09-01 15:40",
+   "text": "Follow up with Alex to see how this was handled",
+   "state": "actioned"
+  }
+ ],
+ "PR-0034": [
+  {
+   "ts": "2026-09-01 15:40",
+   "text": "Completed",
+   "state": "actioned"
+  }
+ ],
+ "PR-0035": [
+  {
+   "ts": "2026-09-01 15:40",
+   "text": "Completed",
+   "state": "actioned"
+  }
+ ],
+ "CM-19": [
+  {
+   "ts": "2026-09-01 19:55",
+   "text": "To: Melanie@parakeetcommunities.com\nSubject: Royal Oaks titles - where are we\n\nMelanie,\n\nChecking in on the nine Royal Oaks titles so I know what to tell Brokaw.\n\nWhere do the transfers stand under option 1? The nine are ROYAL-4, 6, 7, 11, 14, 22, 25, 28 and 37. If any of them are done I'd like to say so specifically rather than \"in progress.\"\n\nTwo things I need to understand on Titan. Is the reinstatement actually live right now, and is there a window on it? If that lapses before the signed titles transfer we're back to square one, and I'd rather know that this week than find out later. Lots 83, 115 and 256 were the ones hanging on Titan.\n\nSeparately, Sunstone still shows leases 4, 8, 10 and 34 as missing. That's a different problem from the titles and I don't think anyone has picked it up. Is that yours or should I put it somewhere else?\n\nLast one. When you found the Twin Lakes titles they were in a folder labeled Twin Lakes, which is why nobody could find them. Once these nine are cleared I want to talk about where titles live going forward so this doesn't happen again.\n\nNo rush on a long reply. Bullet points are fine.\n\nThanks,\nAustin",
+   "state": "reply",
+   "by": "claude"
+  },
+  {
+   "ts": "2026-09-01 17:32",
+   "text": "Larry has reinstated the entity and now Melanie is working on this with FTT.",
+   "state": "actioned"
+  },
+  {
+   "ts": "2026-09-02 07:40",
+   "text": "To: Melanie@parakeetcommunities.com\nSubject: Royal Oaks titles - two things\n\nMelanie,\n\nGood news on Larry getting Titan reinstated. Two things I need from you so I know what to tell Brokaw.\n\nFirst, where do the nine transfers stand with FTT? The nine are ROYAL-4, 6, 7, 11, 14, 22, 25, 28 and 37. If any are done I'd rather say so specifically than \"in progress.\"\n\nSecond, and this is the one that worries me. Does the reinstatement have an expiration on it? If Titan lapses again before the signed titles transfer we're back to the start, and I'd rather know that now than in three weeks. If there's a window, tell me the date and I'll treat it as the deadline for all nine.\n\nOne other thing that's separate from the titles. Sunstone still shows leases 4, 8, 10 and 34 as missing. Nobody has picked that up as far as I can tell. Is that yours or should I route it elsewhere?\n\nBullet points are fine.\n\nThanks,\nAustin",
+   "state": "reply",
+   "by": "claude"
+  }
+ ],
+ "PR-0004": [
+  {
+   "ts": "2026-09-01 16:46",
+   "text": "Remove item.  This was just a converstion with maintenance that is moving with girlfirend to michigan",
+   "state": "actioned"
+  }
+ ],
+ "CM-01": [
+  {
+   "ts": "2026-09-01 17:22",
+   "text": "This has been resolved.  Completed",
+   "state": "actioned"
+  }
+ ],
+ "CM-02": [
+  {
+   "ts": "2026-09-01 17:23",
+   "text": "This is left alone as transcripts are private and the utility spreadsheet is needed for log in.  we will migrate that to keeper for compliance once we get better organized with that information",
+   "state": "actioned"
+  }
+ ],
+ "CM-03": [
+  {
+   "ts": "2026-09-01 17:25",
+   "text": "How do we unblock these items and remove the constraint as this was a draft manual not to be put into place yet",
+   "state": "actioned"
+  }
+ ],
+ "CM-05": [
+  {
+   "ts": "2026-09-01 17:26",
+   "text": "What was the intent here?  Nothing from my knowledge was needed.  From my perspective it is just the file compiling for the memorialization of Bedrock MHC Fund II.",
+   "state": "actioned"
+  }
+ ],
+ "CM-13": [
+  {
+   "ts": "2026-09-01 17:28",
+   "text": "Need to finish this process and reconcile all balance sheets by the end of September",
+   "state": "actioned"
+  }
+ ],
+ "PD-06": [
+  {
+   "ts": "2026-09-01 20:55",
+   "text": "send a draft letting Zave know that we are not moving forward more because we aren't set on our ways yet",
+   "state": "actioned"
+  },
+  {
+   "ts": "2026-09-02 07:40",
+   "text": "To: Zayv\nSubject: Corner IQ - not moving forward right now\n\nZayv,\n\nThanks for the time on this, and for the trial batch. I want to be straight with you rather than let it drift.\n\nWe're not moving forward at the moment. It isn't the product. It's us. Our own processes aren't settled enough right now for me to evaluate what you've built fairly, and if we brought it in on top of what we're currently sorting out internally I don't think either of us would learn much from it.\n\nI'd rather come back to you when we've got our side in order and give it a real look than string this out and waste your time.\n\nAppreciate you and Luke both being easy to deal with through this. I'll reach back out.\n\nAustin",
+   "state": "reply",
+   "by": "claude"
+  }
+ ],
+ "PD-16": [
+  {
+   "ts": "2026-09-01 23:07",
+   "text": "Whats the story with occupancy?  Sounded like its going well when we were there.",
+   "state": "actioned"
+  },
+  {
+   "ts": "2026-09-02 07:40",
+   "by": "claude",
+   "state": "actioned",
+   "text": "Gulf Breeze MHC, 2026-08 warehouse snapshot: 39 units, 74.4% occupied, $22,230 in-place rent, 63.4% NOI margin.\n\nSo the level is below the de-duplicated portfolio average of 77.67%. But the direction is what you were picking up on the visit: Gulf Breeze is one of the named real-absorption properties in the same snapshot, +5 units. Soft level, good trend.\n\nThat makes this decision more urgent rather than less. At 74% there is vacancy the company could be leasing itself, and a resident renting their unit out is competing for the same tenant. The portfolio-wide investor-application policy is already moving; this row is the carve-out that never got ruled on.\n\nOne caveat on any occupancy number for this property: an archived xGulf Breeze MHP record also carries 39 units, so a figure pulled without de-duplicating will be wrong."
+  }
+ ],
+ "TD-0401": [
+  {
+   "ts": "2026-09-02 10:35",
+   "text": "1) No this was not formed and going to be formed at some point.\n2) Crystal Acres - Kippy Single Asset\n3) HSRC was Parakeets property.  Sold to HSMHC which is Kippy and has a seller note from HSRC",
+   "state": "actioned"
+  }
+ ]
+}

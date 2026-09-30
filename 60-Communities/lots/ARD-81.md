@@ -1,0 +1,32 @@
+---
+type: lot
+community: auburn-ridge
+lot: "81"
+code: ARD
+status: open
+categories: [delivery]
+open_items: 1
+last_activity: 2026-06-19
+tags: [community/auburn-ridge, type/lot, status/open, category/delivery]
+---
+
+# Auburn Ridge — Lot 81
+
+> **LOT SHEET** · `ARD-81` · [[60-Communities/auburn-ridge\|Auburn Ridge]] · **1 open**
+> Last activity 2026-06-19 · owners: Leslie Croft
+
+## Timeline
+
+| Date | Type | Status | What happened | Owner | Source |
+| --- | --- | --- | --- | --- | --- |
+| 2026-06-19 | delivery | **in-progress** | Leslie shared the Auburn Ridge Lot 107 and Lot 81 PN28764C home specs | Leslie Croft | teams: Teams Parakeet Dream Team |
+
+## Open right now
+
+- **in-progress**, 73 days old — Leslie shared the Auburn Ridge Lot 107 and Lot 81 PN28764C home specs (owner: Leslie Croft)
+
+## Sources
+
+- [[60-Communities/activity/_sources/2026-08-31-email-activity-raw]] — the email harvest this was built from.
+- [[60-Communities/activity/_sources/2026-08-31-teams-activity-raw]] — the Teams harvest.
+- [[60-Communities/activity/_sources/2026-08-31-transcript-open-items-raw]] — the transcript open-item extraction.

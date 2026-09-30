@@ -1,0 +1,313 @@
+==============================================================================================================
+dw_PDS.xlsx — COMPLETE STRUCTURAL AUDIT
+Source: Parakeet Birdcage - Data & Analytics\DataWarehouse Feeds\dw_PDS.xlsx
+==============================================================================================================
+
+WORKBOOK: 1 tab ('Sheet1'), 68 rows × 41 columns
+Every row = one community/property. 68 communities total. Zero nulls on most columns.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 1: ALL 41 COLUMN HEADERS + DATA TYPES
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    1. Reportable                                dtype=object           non-null=68/68
+    2. Short Name                                dtype=object           non-null=68/68
+    3. Property Name                             dtype=object           non-null=68/68
+    4. Community                                 dtype=object           non-null=68/68
+    5. Vehicle                                   dtype=object           non-null=68/68
+    6. Address                                   dtype=object           non-null=68/68
+    7. Street1                                   dtype=object           non-null=68/68
+    8. City                                      dtype=object           non-null=68/68
+    9. State                                     dtype=object           non-null=68/68
+   10. Postal Code                               dtype=int64            non-null=68/68
+   11. County                                    dtype=object           non-null=68/68
+   12. MH Lots                                   dtype=int64            non-null=68/68
+   13. RV Lots                                   dtype=int64            non-null=68/68
+   14. Other Units                               dtype=int64            non-null=68/68
+   15. Total Units                               dtype=int64            non-null=68/68
+   16. Purchase Date                             dtype=object           non-null=68/68
+   17. Purchase Year                             dtype=int64            non-null=68/68
+   18. Purchase Price                            dtype=object           non-null=68/68
+   19. Deal Profile                              dtype=object           non-null=68/68
+   20. Seller Profile                            dtype=object           non-null=68/68
+   21. Water Service                             dtype=object           non-null=68/68
+   22. Water Paid By                             dtype=object           non-null=68/68
+   23. Sewer Service                             dtype=object           non-null=68/68
+   24. Sewer Paid By                             dtype=object           non-null=68/68
+   25. Trash Paid By                             dtype=object           non-null=68/68
+   26. 2026 MH Lot Rent (Gross)                  dtype=object           non-null=68/68
+   27. 2026 RV Lot Rent (Gross)                  dtype=object           non-null=68/68
+   28. Occupancy %                               dtype=object           non-null=68/68
+   29. POH                                       dtype=int64            non-null=68/68
+   30. Acres                                     dtype=float64          non-null=68/68
+   31. Flood Zone                                dtype=object           non-null=68/68
+   32. Age Category                              dtype=object           non-null=68/68
+   33. Property Type                             dtype=object           non-null=67/68
+   34. Latitude                                  dtype=float64          non-null=68/68
+   35. Longitude                                 dtype=float64          non-null=68/68
+   36. Sale Date                                 dtype=float64          non-null=0/68
+   37. Sale Price                                dtype=float64          non-null=0/68
+   38. Email                                     dtype=object           non-null=68/68
+   39. Source Phone #                            dtype=object           non-null=22/68
+   40. Rent Increase Month                       dtype=object           non-null=67/68
+   41. Phone Number                              dtype=object           non-null=68/68
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 2: ALL 68 COMMUNITIES (master list)
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    #  Short         Community                                           State   Total    MH    RV  Age Category     Property Type            
+  ───  ────────────  ──────────────────────────────────────────────────  ─────  ──────  ────  ────  ───────────────  ─────────────────────────
+    1  AMER          American                                            MA         40    40     0  All-Ages         ManufacturedHousing      
+    2  APPLE         Applegate                                           FL         88    87     0  All-Ages         ManufacturedHousing      
+    3  ARD           Auburn Ridge                                        GA        157   133     0  All-Ages         ManufacturedHousing      
+    4  BOVIPO        Bay Oaks Village I                                  FL         87    87     0  All-Ages         ManufacturedHousing      
+    5  BOVIIPO       Bay Oaks Village II                                 FL         34    34     0  All-Ages         ManufacturedHousing      
+    6  BELL          Belle Haven                                         FL         93    59    34  55+              ManufacturedHousing      
+    7  BRUN          Brunswick Estates                                   GA         62    57     0  All-Ages         ManufacturedHousing      
+    8  CAMMHC        Cambridge                                           WV         92    92     0  All-Ages         ManufacturedHousing      
+    9  CARL          Carley's                                            FL         75    74     0  All-Ages         ManufacturedHousing      
+   10  CENT          Central                                             FL         64    64     0  All-Ages         ManufacturedHousing      
+   11  CONG          Congress                                            FL         31    30     0  All-Ages         ManufacturedHousing      
+   12  CA            Crystal Acres                                       FL         48    31    17  All-Ages         ManufacturedHousing      
+   13  DO            Druid Oaks                                          GA        127   127     0  All-Ages         ManufacturedHousing      
+   14  EG            Everglades Mobile Home Park                         FL         55    55     0  All-Ages         ManufacturedHousing      
+   15  FOX           Fox Creek                                           SC        129   129     0  All-Ages         nan                      
+   16  GEIGRV        Geiger Key                                          FL         58     0    36  All-Ages         RVCampground             
+   17  GO            Great Oak                                           FL        198     0   198  All-Ages         ManufacturedHousing      
+   18  GPT           Greene Pointe MHC                                   SC         95    95     0  All-Ages         ManufacturedHousing      
+   19  GULFPO        Gulf Breeze                                         FL         39    39     0  All-Ages         ManufacturedHousing      
+   20  HARB          Harbour                                             FL         46    46     0  All-Ages         ManufacturedHousing      
+   21  HENDS         Hendersons                                          FL         62    50     7  All-Ages         ManufacturedHousing      
+   22  HP            Hershey Park                                        SC         76    75     0  All-Ages         ManufacturedHousing      
+   23  HSMHC         Hunter Springs                                      FL         25    25     0  All-Ages         ManufacturedHousing      
+   24  JBJ           J Bar J Estates                                     FL         99    97     0  All-Ages         ManufacturedHousing      
+   25  LS            Lake Saunders                                       FL         47    45     0  55+              ManufacturedHousing      
+   26  LWPO          Lake Wales, MHC                                     FL         47    47     0  All-Ages         ManufacturedHousing      
+   27  LLMHC         Lamberton Lake                                      MI         53    53     0  All-Ages         ManufacturedHousing      
+   28  LUCK          Lucky Clover                                        FL        121   119     0  All-Ages         ManufacturedHousing      
+   29  MAY           Mayflower                                           MA         50    50     0  All-Ages         ManufacturedHousing      
+   30  MCG           Mcgregor                                            SC        232   232     0  All-Ages         ManufacturedHousing      
+   31  MWMHP         Meadow Woods                                        MA         69    69     0  All-Ages         ManufacturedHousing      
+   32  MON           Monson                                              MA         61    61     0  55+              ManufacturedHousing      
+   33  NALLS         Nalls Court                                         FL         19    19     0  All-Ages         ManufacturedHousing      
+   34  NGMH          Northgate MH                                        FL        173   172     0  55+              ManufacturedHousing      
+   35  OAK           Oakside                                             SC         93    93     0  All-Ages         ManufacturedHousing      
+   36  OCEANPO       Oceanaire                                           FL         50    50     0  All-Ages         ManufacturedHousing      
+   37  OBOPO         Ormond Beach                                        FL         62    61     0  All-Ages         ManufacturedHousing      
+   38  PPH           Palm Haven Estates                                  FL         60    60     0  All-Ages         ManufacturedHousing      
+   39  PSEPO         Palm Spring                                         FL         44    44     0  All-Ages         ManufacturedHousing      
+   40  PL            Paradise Lakes                                      FL        178     0   175  55+              ManufacturedHousing      
+   41  PP            Paradise Palms                                      FL         50    50     0  55+              ManufacturedHousing      
+   42  PARK          Parkwood Mobile Home Park                           SC         90    89     0  All-Ages         ManufacturedHousing      
+   43  RED           Redlands                                            FL         81    81     0  All-Ages         ManufacturedHousing      
+   44  REG           Regency I & II                                      GA        424   424     0  All-Ages         ManufacturedHousing      
+   45  RO            River Oaks                                          FL        110     0   110  All-Ages         RVCampground             
+   46  RW            Riverwalk                                           FL        181   168    12  All-Ages         ManufacturedHousing      
+   47  RIV           Riviera                                             FL        162   162     0  All-Ages         ManufacturedHousing      
+   48  ROYAL         Royal Oaks                                          FL         39    37     0  55+              ManufacturedHousing      
+   49  RP            Royal Palm                                          FL         51    51     0  All-Ages         ManufacturedHousing      
+   50  SS            Sea Shells                                          FL        100   100     0  55+              ManufacturedHousing      
+   51  SA            Shady Acres                                         GA        213   212     0  All-Ages         ManufacturedHousing      
+   52  SO            Shady Oaks                                          FL         37    37     0  All-Ages         ManufacturedHousing      
+   53  SP            Shelle Pointe MHC                                   FL         65    60     3  55+              ManufacturedHousing      
+   54  SILVER        Silver Breeze                                       FL         56    26    30  All-Ages         ManufacturedHousing      
+   55  SH            Silver Hill MHC                                     SC        126   124     0  All-Ages         ManufacturedHousing      
+   56  SOUTH         Southgate                                           FL        102   100     0  55+              ManufacturedHousing      
+   57  SUR           Su-Rene                                             FL         79    79     0  55+              ManufacturedHousing      
+   58  TC            Terrace Crossings                                   FL         65    65     0  All-Ages         ManufacturedHousing      
+   59  TO            The Oaks                                            FL        190   190     0  All-Ages         ManufacturedHousing      
+   60  TCMHCPO       Town & Country                                      FL         36    36     0  All-Ages         ManufacturedHousing      
+   61  TRADE         Tradewinds                                          FL         73    52    17  All-Ages         ManufacturedHousing      
+   62  SSS           Triple S                                            NC        234   123    56  All-Ages         ManufacturedHousing      
+   63  VO            Vantage Oaks                                        FL        233    59   174  50+              ManufacturedHousing      
+   64  WWPO          Westwood                                            FL         44    44     0  All-Ages         ManufacturedHousing      
+   65  WPMA          Whispering Pines                                    MA         53    53     0  55+              ManufacturedHousing      
+   66  WPMH          Whispering Pines FL                                 FL        201   137    64  55+              ManufacturedHousing      
+   67  WIND          Windward Knoll                                      FL        154   130    24  55+              ManufacturedHousing      
+   68  WOLFPO        Wolf Bay                                            AL         45    45     0  All-Ages         ManufacturedHousing      
+
+  TOTAL COMMUNITIES: 68
+  TOTAL UNITS ACROSS PORTFOLIO: 6,533
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 3: DISTINCT VALUES — ALL CATEGORY/STATUS/CLASSIFICATION FIELDS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Reportable (1 distinct):
+    Yes                                                 n=68
+
+  Vehicle (Investment Entity) (8 distinct):
+    Baker                                               n=3
+    Fund II                                             n=1
+    Harpreet                                            n=2
+    JREFI                                               n=22
+    JREFII                                              n=22
+    Kippy                                               n=3
+    Origins                                             n=10
+    Single Asset                                        n=5
+
+  State (8 distinct):
+    AL                                                  n=1
+    FL                                                  n=47
+    GA                                                  n=5
+    MA                                                  n=5
+    MI                                                  n=1
+    NC                                                  n=1
+    SC                                                  n=7
+    WV                                                  n=1
+
+  Deal Profile (2 distinct):
+    Listed                                              n=8
+    Off-Market                                          n=60
+
+  Seller Profile (3 distinct):
+    Investor                                            n=5
+    Mom & Pop                                           n=60
+    Operator                                            n=3
+
+  Water Service (3 distinct):
+    Hybrid                                              n=1
+    Public                                              n=54
+    Well                                                n=13
+
+  Water Paid By (2 distinct):
+    Community                                           n=20
+    Resident                                            n=48
+
+  Sewer Service (5 distinct):
+    Hybrid                                              n=2
+    Lagoon                                              n=1
+    Public                                              n=41
+    Septic                                              n=13
+    WWTP                                                n=11
+
+  Sewer Paid By (2 distinct):
+    Community                                           n=31
+    Resident                                            n=37
+
+  Trash Paid By (2 distinct):
+    Community                                           n=43
+    Resident                                            n=25
+
+  Flood Zone (7 distinct):
+    No                                                  n=1
+    No (X)                                              n=37
+    No (X)                                              n=1
+    Partial (A)                                         n=2
+    Partial (AE)                                        n=17
+    Yes (AE)                                            n=8
+    Yes (AH)                                            n=2
+
+  Age Category (3 distinct):
+    50+                                                 n=1
+    55+                                                 n=14
+    All-Ages                                            n=53
+
+  Property Type (2 distinct):
+    ManufacturedHousing                                 n=65
+    RVCampground                                        n=2
+
+  Rent Increase Month (13 distinct):
+    Apr                                                 n=3
+    Aug                                                 n=1
+    Feb                                                 n=6
+    Jan                                                 n=34
+    Jul                                                 n=1
+    Jun                                                 n=1
+    Mar                                                 n=6
+    March                                               n=1
+    May                                                 n=4
+    Nov                                                 n=2
+    Oct                                                 n=5
+    Rolling                                             n=1
+    Sep                                                 n=2
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 4: FINANCIAL / COST FIELDS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Purchase Price (stored as text, all 68 populated):
+    Sample: $4,300,000 | $1,086,500 | $3,500,000 | $1,360,000 | $1,040,000
+
+  2026 MH Lot Rent (Gross) (stored as text, all 68 populated):
+    Range: $0 to $1,340 | Most common: $500-$700 range
+
+  2026 RV Lot Rent (Gross) (stored as text, 17 distinct):
+    Values: $0, $1,200, $2,275, $600, $705, $751, $785, $790, $794, $800, $825, $850, $875, $910, $955, $975, --
+
+  Sale Price: ALL NULL (68/68 empty — no dispositions recorded)
+  Sale Date:  ALL NULL (68/68 empty)
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 5: DATE FIELDS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Purchase Date  — stored as text (MM/DD/YYYY), all 68 populated
+    Range: 07/02/2017 → latest acquisition
+  Purchase Year  — integer, range: 2017–2026
+  Sale Date      — ALL NULL
+  Rent Increase Month — text (Jan, Feb, Mar, etc.), 67/68 populated
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 6: ASSET / HOME / LOT IDENTIFIERS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Short Name  — unique 2–8 char code per community (e.g., CAMMHC, LLMHC, MAY, ROYAL)
+  Property Name — full legal/marketing name (e.g., 'Cambridge MHC', 'Mayflower Hills')
+  Community    — operational name used in forms (e.g., 'Cambridge', 'Mayflower')
+  NOTE: This file has NO lot-level or unit-level identifiers.
+         Each row = one community, not one lot. Lot/unit data lives in Rent Manager.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 7: CONTACT / COMMUNICATION FIELDS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Email         — community-specific @parakeetcommunities.com addresses (all 68)
+  Phone Number  — mixed formats: (XXX)XXX-XXXX and XXX-XXX-XXXX (all 68)
+  Source Phone # — sparse (22/68 populated), different from Phone Number
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 8: GEO / LOCATION FIELDS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Address    — full address string (all 68)
+  Street1    — street portion only
+  City       — 47 distinct cities
+  State      — 8 states: FL(47), SC(7), GA(5), MA(5), MI(1), NC(1), WV(1), AL(1)
+  Postal Code — integer (note: MA zips starting with 0 lose leading zero)
+  County     — 32 distinct counties
+  Latitude   — float, all 68 populated
+  Longitude  — float, all 68 populated
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 9: NUMERIC PORTFOLIO STATS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  MH Lots:      min=0, max=424, sum=5,435
+  RV Lots:      min=0, max=198, sum=957
+  Other Units:  min=0, max=55, sum=141
+  Total Units:  min=19, max=424, sum=6,533
+  POH:          min=0, max=109, sum=693  (park-owned homes)
+  Acres:        min=1.5, max=87.0, sum=961.4
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 10: DATA QUALITY FLAGS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  1. Flood Zone has a whitespace variant: 'No (X)' appears as both 'No (X)' and 'No (X) ' — needs trim
+  2. Rent Increase Month: 'Mar' (n=6) and 'March' (n=1) — inconsistent abbreviation
+  3. Property Type: 1 null value (row with blank Property Type)
+  4. Postal Code stored as integer — Massachusetts zips (02360, etc.) lose leading zero
+  5. Purchase Price and lot rents stored as text with $ and commas — need parsing for calculations
+  6. Phone Number formats inconsistent: '(304)725-4955' vs '616-406-4783' vs '863-623-3135'
+  7. Occupancy % stored as text with % sign — needs conversion for calculations
+  8. Age Category: '50+' appears once vs '55+' (14 times) — confirm if 50+ is intentional or typo
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SECTION 11: QUICKBASE BUILD IMPLICATIONS
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  • This file IS the master community list — 68 communities, the source of truth
+  • The JotForm audit workbook references '65-community dropdown' — actual count is 68
+  • No lot/unit-level data here — that granularity comes from Rent Manager
+  • Short Name can serve as the QB Record ID / unique key per community
+  • Vehicle (investment entity) field is critical for financial reporting segregation
+  • Utility service fields (Water/Sewer/Trash + who pays) map to the Utility Request form
+  • Age Category (All-Ages / 55+ / 50+) maps to Listing Request form's Community Type field
+  • Community emails follow pattern: <name>@parakeetcommunities.com — can auto-populate
+
+==============================================================================================================
+END OF AUDIT
+==============================================================================================================

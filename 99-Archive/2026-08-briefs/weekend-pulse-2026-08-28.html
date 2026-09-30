@@ -1,0 +1,738 @@
+<title>Weekend Pulse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+  :root {
+    --paper:#F4F6F7; --card:#FFFFFF; --ink:#12171B; --muted:#5C666E; --rule:#D8DEE2;
+    --signal:#B45309; --critical:#A32036; --ok:#16794A; --slate:#2F4858; --wash:#EDF1F3;
+    --sans:"IBM Plex Sans Condensed","Helvetica Neue",Arial,sans-serif;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8; --rule:#29333B;
+      --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4; --wash:#1C242B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8; --rule:#29333B;
+    --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4; --wash:#1C242B;
+  }
+
+  * { box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:18px; line-height:1.55; margin:0; padding:28px 18px 90px; -webkit-text-size-adjust:100%; }
+  .wrap { max-width:880px; margin:0 auto; display:flex; flex-direction:column; gap:26px; }
+
+  .mast { display:flex; flex-direction:column; gap:8px; border-bottom:2px solid var(--ink); padding-bottom:14px; }
+  .mast h1 { font-family:var(--sans); font-weight:700; font-size:38px; line-height:1.02; letter-spacing:-0.01em; margin:0; text-wrap:balance; }
+  .mast .date { font-family:var(--mono); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .mast .standfirst { font-size:17px; color:var(--muted); margin:2px 0 0; font-style:italic; }
+
+  .toc { position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--rule); padding:9px 0 8px; }
+  .toc .tocrow { display:flex; flex-wrap:wrap; gap:4px 13px; align-items:baseline; }
+  .toc a { font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--muted); text-decoration:none; border-bottom:1px solid transparent; }
+  .toc a:hover, .toc a:focus { color:var(--ink); border-bottom-color:var(--signal); outline:none; }
+  .toc .n { font-family:var(--mono); color:var(--signal); font-size:11px; }
+  .ctl { margin-left:auto; display:flex; gap:8px; }
+  .ctl button { font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate); background:var(--wash); border:1px solid var(--rule); border-radius:2px; padding:4px 9px; cursor:pointer; }
+  .ctl button:hover { color:var(--ink); border-color:var(--signal); }
+
+  /* collapsible sections */
+  details.sec { border-top:1px solid var(--rule); scroll-margin-top:60px; }
+  details.sec > summary {
+    list-style:none; cursor:pointer; padding:13px 0 11px; display:flex; align-items:baseline; gap:10px;
+    font-family:var(--sans); font-weight:700; font-size:13.5px; letter-spacing:0.13em; text-transform:uppercase; color:var(--slate);
+  }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary::before { content:"▸"; font-family:var(--mono); color:var(--signal); font-size:12px; transition:transform .15s ease; display:inline-block; }
+  details.sec[open] > summary::before { transform:rotate(90deg); }
+  details.sec > summary:hover { color:var(--ink); }
+  details.sec > summary .num { font-family:var(--mono); color:var(--signal); }
+  details.sec > summary .count { margin-left:auto; font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--muted); text-transform:none; }
+  details.sec > .body { padding:2px 0 26px; display:flex; flex-direction:column; gap:14px; }
+
+  h3.sub { font-family:var(--sans); font-weight:700; font-size:14px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink); margin:14px 0 2px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  h3.sub:first-child { margin-top:0; }
+  p { margin:0 0 10px; } p:last-child { margin-bottom:0; }
+
+  .card { background:var(--card); border:1px solid var(--rule); border-left:4px solid var(--rule); border-radius:2px; padding:15px 17px; display:flex; flex-direction:column; gap:8px; }
+  .card.crit { border-left-color:var(--critical); }
+  .card.warn { border-left-color:var(--signal); }
+  .card.good { border-left-color:var(--ok); }
+  .card.flat { border-left-color:var(--slate); }
+  .card h4 { font-family:var(--sans); font-weight:600; font-size:19px; line-height:1.22; margin:0; text-wrap:balance; }
+  .card p { font-size:16.5px; margin:0; } .card p + p { margin-top:6px; }
+
+  blockquote { margin:2px 0; padding:8px 0 8px 13px; border-left:2px solid var(--rule); font-size:16px; font-style:italic; }
+  blockquote cite { display:block; margin-top:6px; font-style:normal; font-family:var(--mono); font-size:11.5px; letter-spacing:0.03em; color:var(--muted); }
+
+  .do { font-family:var(--sans); font-size:16px; font-weight:500; line-height:1.4; background:var(--wash); border-radius:2px; padding:9px 11px; }
+  .do b { font-weight:700; }
+
+  .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .tag { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; border:1px solid var(--rule); border-radius:2px; padding:2px 6px; color:var(--muted); white-space:nowrap; }
+  .tag.v { color:var(--ok); border-color:var(--ok); }
+  .tag.s { color:var(--signal); border-color:var(--signal); }
+  .tag.x { color:var(--critical); border-color:var(--critical); }
+
+  .scroller { overflow-x:auto; border:1px solid var(--rule); border-radius:2px; background:var(--card); }
+  table { border-collapse:collapse; width:100%; min-width:620px; font-size:15px; }
+  thead th { position:sticky; top:0; background:var(--wash); font-family:var(--sans); font-weight:700; font-size:11.5px; letter-spacing:0.09em; text-transform:uppercase; color:var(--slate); text-align:left; padding:9px 11px; border-bottom:1px solid var(--rule); white-space:nowrap; }
+  tbody td { padding:9px 11px; border-bottom:1px solid var(--rule); vertical-align:top; }
+  tbody tr:nth-child(even) { background:var(--wash); }
+  tbody tr:last-child td { border-bottom:none; }
+  td.num, th.num { font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right; }
+  td.dt { font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td b { font-family:var(--sans); font-weight:600; }
+  .days { font-family:var(--mono); font-weight:600; font-variant-numeric:tabular-nums; text-align:right; }
+  .days.hot { color:var(--critical); } .days.warm { color:var(--signal); }
+
+  ul.todo { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px; }
+  ul.todo li { font-size:16px; padding-left:16px; position:relative; }
+  ul.todo li::before { content:""; position:absolute; left:0; top:0.65em; width:7px; height:1px; background:var(--muted); }
+  ul.todo b { font-family:var(--sans); font-weight:600; }
+
+  .src { font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:0.01em; }
+  .src a { color:var(--slate); text-decoration:none; border-bottom:1px dotted var(--muted); }
+  .src a:hover { color:var(--signal); border-bottom-color:var(--signal); }
+
+  .dec { list-style:none; margin:0; padding:0; }
+  .dec li { display:grid; grid-template-columns:24px 1fr; gap:9px; align-items:start; padding:12px 0; border-bottom:1px solid var(--rule); font-size:16.5px; }
+  .dec li:first-child { border-top:1px solid var(--rule); }
+  .dec .box { font-family:var(--mono); font-size:19px; color:var(--slate); line-height:1.35; }
+  .dec .lede { font-family:var(--sans); font-weight:600; display:block; }
+  .dec .subl { display:block; color:var(--muted); font-size:15px; margin-top:2px; }
+
+  .closed { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .closed li { display:grid; grid-template-columns:20px 1fr; gap:9px; font-size:16px; }
+  .closed .mark { color:var(--ok); font-family:var(--sans); font-weight:700; line-height:1.5; }
+  .closed b { font-family:var(--sans); font-weight:600; }
+  .closed .why { display:block; color:var(--muted); font-size:15px; margin-top:1px; }
+
+  .person { background:var(--card); border:1px solid var(--rule); border-radius:2px; padding:13px 15px; }
+  .person .who { font-family:var(--sans); font-weight:700; font-size:17px; }
+  .person .role { font-family:var(--mono); font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); margin-left:8px; }
+  .person dl { margin:8px 0 0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:15.5px; }
+  .person dt { font-family:var(--sans); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate); padding-top:4px; white-space:nowrap; }
+  .person dd { margin:0; }
+
+  .note { font-size:15.5px; color:var(--muted); border:1px dashed var(--rule); border-radius:2px; padding:12px 14px; }
+  .note b { font-family:var(--sans); font-weight:600; color:var(--ink); }
+  .kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+  .kpi .k { background:var(--card); border:1px solid var(--rule); border-radius:2px; padding:11px 13px; }
+  .kpi .k .lab { font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:var(--muted); }
+  .kpi .k .val { font-family:var(--mono); font-size:23px; font-weight:600; font-variant-numeric:tabular-nums; margin-top:3px; }
+  .kpi .k .val.bad { color:var(--critical); }
+  .kpi .k .sub2 { font-size:13px; color:var(--muted); margin-top:2px; }
+  code { font-family:var(--mono); font-size:0.86em; background:var(--wash); padding:1px 4px; border-radius:2px; word-break:break-all; }
+  footer { border-top:1px solid var(--rule); padding-top:14px; font-family:var(--mono); font-size:11.5px; line-height:1.7; color:var(--muted); }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="date">Two weeks · 14 – 28 August 2026 · v2, rebuilt 29 Aug 12:20 AM ET · with Rent Manager + Ramp verification</div>
+    <h1>Weekend Pulse</h1>
+    <p class="standfirst">Grouped by department. Every section collapses. Every claim carries a source you can open.</p>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <div class="tocrow">
+      <a href="#read"><span class="n">01</span> Read first</a>
+      <a href="#corr"><span class="n">02</span> Corrections</a>
+      <a href="#numbers"><span class="n">03</span> Verified numbers</a>
+      <a href="#safety"><span class="n">04</span> Safety</a>
+      <a href="#fin"><span class="n">05</span> Finance</a>
+      <a href="#ops"><span class="n">06</span> Operations</a>
+      <a href="#con"><span class="n">07</span> Construction</a>
+      <a href="#sales"><span class="n">08</span> Sales</a>
+      <a href="#hr"><span class="n">09</span> People</a>
+      <a href="#sys"><span class="n">10</span> Systems</a>
+      <a href="#cap"><span class="n">11</span> Capital &amp; Legal</a>
+      <a href="#pers"><span class="n">12</span> Personal</a>
+      <a href="#closed"><span class="n">13</span> Closed</a>
+      <a href="#ahead"><span class="n">14</span> Week ahead</a>
+      <a href="#sources"><span class="n">15</span> Sources</a>
+      <span class="ctl"><button type="button" data-all="open">Expand all</button><button type="button" data-all="close">Collapse all</button></span>
+    </div>
+  </nav>
+
+  <!-- 01 -->
+  <details class="sec" id="read" open>
+    <summary><span class="num">01</span> Read this first <span class="count">5 min</span></summary>
+    <div class="body">
+      <div class="card flat">
+        <p>Two weeks that split in half. The road trip (8/18–8/24) was the best operating work of the year — 19 properties walked, hundreds of specific defects found. The second half was the bill: everything it surfaced landed at once, on a finance function being dismantled.</p>
+        <p><b>The Berman decision is made.</b> A 93-minute session on 8/28 covered termination rationale, severance benchmarking, MIP forfeiture, a legal hold and a six-month IT forensic review. Everything in Finance now sequences behind it — including the entity list with EINs that gates the whole intercompany programme.</p>
+        <p><b>The floorplan problem is bigger than the duplicates.</b> Jon found 46 duplicate submissions. Cavco independently confirmed the same day that dupes inside the lenders' own systems make capacity look 50–60 units light. The capacity number has been asked for since roughly March.</p>
+        <p><b>And now the number the last version couldn't give you.</b> Rent Manager says open receivables are <b>$596,936</b>, of which <b>$346,357 — 58% — is more than 90 days old</b>. Nobody raised collections once in two weeks of meetings, email or recordings. It is the largest unattended number in the business.</p>
+        <p><b>Three things that would change the most this weekend:</b> (1) name owners for Great Oaks and Lucky Clover — day 10, and both are now confirmed from your own recordings; (2) send Tim McNamara the ND contribution confirmation you promised "in the morning" on 8/27 — one email, unblocks three 2025 returns; (3) decide G1 sequencing before the termination lands, because afterwards nobody can sign the entity list.</p>
+        <p>Worth holding onto: <b>130 homes delivered, 40 listed, ahead of plan</b>, with 43–44 more between 8/31 and 9/14. The operating business works. The back office is the constraint.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- 02 -->
+  <details class="sec" id="corr" open>
+    <summary><span class="num">02</span> Corrections <span class="count">5 items</span></summary>
+    <div class="body">
+      <div class="card crit">
+        <h4>The recording I called "the Jadian call" was not the Jadian call</h4>
+        <p>This morning's brief attributed Plaud <code>9b64c1e9…</code> (8/27, 15:01 ET, 45 min) to the Jadian check-in, inferred from the calendar slot while the file was unprocessed. Its actual title: <b>"Sales Infrastructure Buildout, Unity AI Launch, CRM Hygiene, Pricing Policy, and Home Delivery Schedule."</b></p>
+        <p><b>So the 8/27 Jadian check-in has no record at all.</b> No Plaud file covers that hour; Teams transcripts are disabled. That matters because DR-035 — a mislabelled hard-costs subtotal in the Riverwalk and McGregor FINALs already delivered to Jadian — is the top item on your ledger. <b>Next contact: Pipeline Review, Thu 3 Sept, 10:00 ET.</b></p>
+        <div class="src">Source · Plaud <code>9b64c1e98f14ed23eeb07e92d570dac0</code> · calendar event "Parakeet x Jadian Weekly Check-in" 2026-08-27 19:00Z</div>
+      </div>
+
+      <div class="card warn">
+        <h4>"Karen" is not a new name — she has been in the record since 13 August</h4>
+        <p>Flagged this morning as unidentified. She appears two weeks earlier in Demetria's 8/13 email <b>"Trip Log Final Answer form Karen,"</b> which you answered 8/14: <em>"Great. Let's discuss how to roll this out. Nothing to do immediately."</em> An existing HR-side policy advisor, not a new engagement. Whether she is employment counsel remains <b>inferred</b>.</p>
+        <div class="src">Source · <a href="https://outlook.office365.com/owa/?ItemID=AAMkADM5NmY0ZmQ1LWI2ZDUtNGFjYy1hN2M3LTcxNGZmNjkxNDgwNwBGAAAAAAAdz1OD1IrqRaFRepAlyYk2BwCVkYasAQi2QqY2To5b8ObuAAAAAAEJAACVkYasAQi2QqY2To5b8ObuAAjPC%2BXLAAA%3D&exvsurl=1&viewmodel=ReadMessageItem">Re: Trip Log Final Answer form Karen — open in Outlook</a></div>
+      </div>
+
+      <div class="card warn">
+        <h4>The Berman file opened 14 August, not 27 August</h4>
+        <p>The vault dates the personnel-file activity to 8/27. The first entry is a fortnight earlier and it is yours — 2026-08-14 15:28 ET to <code>hr@parakeetcommunities.com</code>, cc Jon:</p>
+        <blockquote>File for Berman. Why is he choosing what bills he will pay and not pay. This is destroying vendor relationships.
+          <cite>Austin Berk → HR · 2026-08-14 · forwarding "Greater than 90-day invoices"</cite></blockquote>
+        <p>The documentation effort is two weeks old and started over AP behaviour, not the floorplan tie-out.</p>
+        <div class="src">Source · <a href="https://outlook.office365.com/owa/?ItemID=AAMkADM5NmY0ZmQ1LWI2ZDUtNGFjYy1hN2M3LTcxNGZmNjkxNDgwNwBGAAAAAAAdz1OD1IrqRaFRepAlyYk2BwCVkYasAQi2QqY2To5b8ObuAAAAAAEJAACVkYasAQi2QqY2To5b8ObuAAjPC%2BXSAAA%3D&exvsurl=1&viewmodel=ReadMessageItem">Fw: Greater than 90-day invoices — open in Outlook</a></div>
+      </div>
+
+      <div class="card good">
+        <h4>Great Oaks and Lucky Clover are no longer single-source</h4>
+        <p>Both have been carried as SINGLE-SOURCE since 8/26 because they came only from the compiled road-trip document. Your own recordings now confirm them.</p>
+        <p><b>Great Oaks, 8/21:</b> <em>"Team on a boil water notice due to the aerator pump being out; system described as 'wide open.'"</em> Same recording flags the storage area standing open.</p>
+        <p><b>Lucky Clover, 8/20:</b> <em>"significant safety risks such as residents pointing guns at them."</em></p>
+        <p>Both upgrade to <b>VERIFIED</b>. Neither has an owner.</p>
+        <div class="src">Source · Plaud <code>164cc68621f0e93bce67318c0cd69904</code> (Great Oaks Site Visit) · <code>9532e6eba522ac6125b40946762a628d</code> (Lucky Clover Site Visit)</div>
+      </div>
+
+      <div class="card crit">
+        <h4>And a correction to what I told you an hour ago about resources</h4>
+        <p>I said Rent Manager was live and I had simply failed to use it. Half right. The connector <b>is</b> authenticated and entity lookups work — but <b>seven of the eight reports I tried return HTTP 500 from Rent Manager itself.</b> Only Aged Receivables runs. Vacancy, Unit Availability, Unit List, Rent Roll, Delinquency, Asset Listing and Filtered Issue List all fail.</p>
+        <p>So the honest position: the verification layer exists but is currently one report deep. That is a Rent Manager–side fault to raise with them or with Dan at RentViewer, not something more sweep time fixes.</p>
+        <div class="src">Source · 8 <code>run_report</code> calls, 2026-08-29 00:05–00:15 ET · 1 success, 7 × HTTP 500</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 03 -->
+  <details class="sec" id="numbers" open>
+    <summary><span class="num">03</span> Verified numbers — new this version <span class="count">Rent Manager + Ramp</span></summary>
+    <div class="body">
+      <div class="kpi">
+        <div class="k"><div class="lab">Open receivables</div><div class="val">$596,936</div><div class="sub2">54 of 82 properties</div></div>
+        <div class="k"><div class="lab">Aged &gt; 90 days</div><div class="val bad">$346,357</div><div class="sub2">58% of the book</div></div>
+        <div class="k"><div class="lab">Current (0–30)</div><div class="val">$123,303</div><div class="sub2">21%</div></div>
+        <div class="k"><div class="lab">Properties in RM</div><div class="val bad">82</div><div class="sub2">all flagged inactive</div></div>
+      </div>
+
+      <div class="card crit">
+        <h4>58% of receivables are more than 90 days old, and nobody mentioned collections once in two weeks</h4>
+        <p>Across every meeting, recording, email and Teams thread in the window, collections came up only as scattered per-property remarks — Riverwalk "has its own challenges with accounts receivable and evictions," and a resident dispute at Belle Haven. There was no portfolio view. This is it.</p>
+        <div class="scroller">
+          <table>
+            <thead><tr><th>Property</th><th class="num">Total open</th><th class="num">&gt;90 days</th><th class="num">% aged</th></tr></thead>
+            <tbody>
+              <tr><td><b>Parakeet Communities</b> (PC)</td><td class="num">$85,975.26</td><td class="num">$76,214.91</td><td class="num">89%</td></tr>
+              <tr><td><b>American</b> (AMER)</td><td class="num">$82,407.38</td><td class="num">$62,646.10</td><td class="num">76%</td></tr>
+              <tr><td><b>Mayflower Hills</b> (MAY)</td><td class="num">$54,268.08</td><td class="num">$38,908.08</td><td class="num">72%</td></tr>
+              <tr><td><b>Monson</b> (MON)</td><td class="num">$53,008.10</td><td class="num">$33,580.55</td><td class="num">63%</td></tr>
+              <tr><td>Meadow Woods (MWMHP)</td><td class="num">$33,835.82</td><td class="num">$9,498.22</td><td class="num">28%</td></tr>
+              <tr><td>Palm Spring Estates (PSEPO)</td><td class="num">$30,785.73</td><td class="num">$18,978.71</td><td class="num">62%</td></tr>
+              <tr><td>McGregor Downs (MCG)</td><td class="num">$29,534.00</td><td class="num">$9,005.00</td><td class="num">30%</td></tr>
+              <tr><td>Riverwalk (RW)</td><td class="num">$23,335.31</td><td class="num">$5,765.78</td><td class="num">25%</td></tr>
+              <tr><td><b>Great Oak</b> (GO)</td><td class="num">$21,687.73</td><td class="num">$21,687.73</td><td class="num">100%</td></tr>
+              <tr><td>Wolf Bay (WOLFPO)</td><td class="num">$15,377.64</td><td class="num">$11,847.42</td><td class="num">77%</td></tr>
+              <tr><td>Shady Acres (SA)</td><td class="num">$12,514.42</td><td class="num">$6,528.80</td><td class="num">52%</td></tr>
+              <tr><td>Greene Pointe (GPT)</td><td class="num">$11,250.00</td><td class="num">$8,880.00</td><td class="num">79%</td></tr>
+              <tr><td>Windward Knoll (WIND)</td><td class="num">$11,167.00</td><td class="num">$8,410.00</td><td class="num">75%</td></tr>
+              <tr><td>Applegate Water (AW)</td><td class="num">$9,422.03</td><td class="num">$8,166.51</td><td class="num">87%</td></tr>
+              <tr><td>Lucky Clover (LUCK)</td><td class="num">$6,692.04</td><td class="num">$0.00</td><td class="num">0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><b>Great Oak is the one to look at.</b> Every dollar of its $21,688 is over 90 days — the only property in the portfolio at 100%. It is also the property with the active boil water notice, the absent vendor and no named owner. Operational neglect and collections neglect sitting on the same asset.</p>
+        <p>Lucky Clover is the opposite and worth noting: <b>$6,692 open, none of it aged.</b> Whatever Angel is doing on collections is working, which makes the ten days of silence on her safety incident harder to look at.</p>
+        <div class="tags"><span class="tag v">Verified · Rent Manager AgedReceivables, 320 rows, as of 2026-08-28</span></div>
+      </div>
+
+      <div class="card crit">
+        <h4>All 82 properties in Rent Manager are flagged inactive</h4>
+        <p>The property master returns <code>IsActive: false</code> for every single record — Lucky Clover, Riverwalk, Vantage Oaks, all of them. Almost certainly an unmaintained flag rather than reality, but the consequence is real: <b>any downstream system that filters on active status gets nothing.</b></p>
+        <p>That matters right now because Uniti, MAV, RentViewer and the data warehouse all pull from Rent Manager, and Uniti is contracting on a 6,000-home-site basis with a go-live 34 days out. Worth one check before that integration is built on top of it.</p>
+        <div class="tags"><span class="tag v">Verified · RM Properties entity, 82 records</span></div>
+      </div>
+
+      <div class="card warn">
+        <h4>Ramp reports 85 users with open items — but the flags contradict themselves</h4>
+        <p>Ramp returns 85 users carrying "missing items," including some very large counts: <b>8,014 transactions</b> on the <code>austin@a2zcp.com</code> account, 623 on Auzzi's, 118 on Alexandra Booton's, some dating to 2022–23. But every sampled transaction shows <code>missing_receipt: false</code> and <code>missing_memo: false</code>.</p>
+        <p>So either the counts are historical rather than outstanding, or the flags are unreliable. This matches the known Ramp data-quality problems already on file (blank assignees, Employee Reference not being the cardholder, role-based pseudo-users). <b>Do not act on the 85 number.</b> It needs a real audit before it means anything.</p>
+        <div class="tags"><span class="tag s">Single-source · flags internally inconsistent</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 04 -->
+  <details class="sec" id="safety" open>
+    <summary><span class="num">04</span> Safety &amp; compliance <span class="count">13 items · 2 with no owner</span></summary>
+    <div class="body">
+      <div class="scroller">
+        <table>
+          <thead><tr><th>Item</th><th>Property</th><th>Owner</th><th class="num">Days</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr><td><b>Resident pointed a gun at contractors</b>; manager alone on site. Second resident threatened self-harm.</td><td>Lucky Clover</td><td class="days hot">NO OWNER</td><td class="days hot">10</td><td>8/20 site-visit recording. Absent from email, Teams, the 8/26 construction call and the 8/28 L10. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Active boil water notice</b>; aerator pump out; system "wide open"; vendor absent</td><td>Great Oaks</td><td class="days hot">NO OWNER</td><td class="days hot">10</td><td>8/21 site-visit recording. Never appears in any written channel. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Storm drain covered with two-by-fours and metal sheathing</b></td><td>8/18 property</td><td class="days hot">Unassigned</td><td class="days warm">11</td><td>Flagged as an immediate safety risk. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Active EPD violation</b> — broken pond wall, seepage; two alligators in the pond</td><td>Shady / Druid</td><td class="days hot">No plan, no owner</td><td class="days warm">10</td><td>"There is time to fix it" — nothing scheduled. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Broken gate used as a night shortcut to the dumpster</b></td><td>Paradise Lakes</td><td class="days warm">Barriers proposed</td><td class="days warm">10</td><td>You pressed the highlight button on this moment. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Storage area standing open</b></td><td>Great Oaks</td><td class="days warm">Unassigned</td><td class="days warm">8</td><td>8/21 recording; "needs verification." <span class="tag v">V</span></td></tr>
+            <tr><td><b>Grill/hibachi assessed as a fire hazard</b></td><td>Great Oaks</td><td class="days warm">Undecided</td><td class="days warm">8</td><td>Removal vs relocation not decided. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Unsanded handrails</b> — splinter hazard</td><td>Belmart</td><td class="days warm">Site team</td><td class="days warm">9</td><td>8/20 walkthrough. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Employee back injury</b>, workers' comp pending</td><td>Belmart lot 35</td><td class="days warm">Unassigned</td><td class="days warm">~10</td><td>Road-trip review. <span class="tag s">S</span></td></tr>
+            <tr><td><b>Unfenced new drain field</b> — vehicles can drive onto it</td><td>Paradise Palms</td><td class="days warm">Unassigned</td><td class="days warm">7</td><td>8/22 recording. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Pool closed</b>; can't open until fence meets code; untrained staff proposed for chlorine</td><td>8/18 property</td><td class="days warm">Unassigned</td><td class="days warm">11</td><td>Three estimates pending. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Crew lead does not speak English</b>, phone translation during excavation</td><td>Paradise Lakes</td><td class="days warm">Noted only</td><td class="days warm">10</td><td>Raised as an injury-response risk. <span class="tag v">V</span></td></tr>
+            <tr><td><b>Mayflower testing noncompliance</b></td><td>Mayflower</td><td>Natalie → Richmonds</td><td class="days">2</td><td><b>Handled</b> 8/27 17:21. <span class="tag v">V</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="do"><b>The move:</b> the Friday 9/4 L10 has Natalie, Zach, Leslie, John Clark and Albert in one room. Two names, thirty seconds each, in writing. Nothing else on this list costs less.</div>
+    </div>
+  </details>
+
+  <!-- 05 FINANCE -->
+  <details class="sec" id="fin">
+    <summary><span class="num">05</span> Finance &amp; Accounting <span class="count">Berman · Moe · Citrin · floorplan · tax</span></summary>
+    <div class="body">
+      <h3 class="sub">People</h3>
+      <div class="person"><span class="who">David Berman</span><span class="role">CFO — termination in preparation · sensitive</span>
+        <dl>
+          <dt>On</dt><dd>Management liability binder ($43,090.21), monthly Origins distributions (9/3), Citrin tax coordination, JPM signature requests.</dd>
+          <dt>Owes</dt><dd>Line capacities. Entity list with EINs (gate G1). Written elimination-ledger answer ($2.7M of $5.4M). D-4 EKEET ownership. Six BOA closures.</dd>
+          <dt>Status</dt><dd>8/28 session covered termination rationale, severance benchmarks (~6 months + prorated bonus to 9/30), MIP vesting and forfeiture, legal hold, and a six-month IT forensic review of email and logins. Recorded absent 8/28 including the weekly executive meeting.</dd>
+          <dt>Calendar</dt><dd>On the 9/3 Jadian Pipeline Review <b>and</b> the 9/3 Finance EOS, which he chairs.</dd>
+        </dl>
+      </div>
+      <div class="person"><span class="who">Moe Mehmood</span><span class="role">Accounting</span>
+        <dl>
+          <dt>On</dt><dd>Payables analysis — Crystal Acres delivered with the $40k reclass broken out and invoices attached; Royal Oaks in final review; consolidated pivot across all three properties next.</dd>
+          <dt>Watch</dt><dd>Proposed as working owner of the intercompany AR/AP programme but <b>never actually asked.</b> Capacity unverified.</dd>
+        </dl>
+      </div>
+      <div class="person"><span class="who">Citrin Cooperman</span><span class="role">Tim McNamara · Lisa Timbrook</span>
+        <dl><dt>Live</dt><dd>2025 returns portfolio-wide; ND equity history (waiting on you); Golf K-1 V1-vs-V2 question; Royal Palm and Gulf Breeze cleared 8/27; business extensions pending from you.</dd></dl>
+      </div>
+
+      <h3 class="sub">Waiting on</h3>
+      <div class="scroller"><table>
+        <thead><tr><th>What</th><th>Who</th><th class="num">Since</th><th class="num">Days</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><b>Floor line capacities</b></td><td>Berman</td><td class="dt">~2026-03</td><td class="days hot">~150</td><td>Jon 8/28: <em>"asking for since Austin brought it up 5 months ago. Still don't have it."</em></td></tr>
+          <tr><td><b>A2Z ND equity schedule</b></td><td>Now you → Citrin</td><td class="dt">2026-03-23</td><td class="days hot">159</td><td>Blocks final 2025 returns for ND, Cambridge, Mayflower</td></tr>
+          <tr><td><b>$108,919 A&amp;A invoice</b></td><td>AP</td><td class="dt">2026-04</td><td class="days hot">~147</td><td>Unassigned in AvidXchange</td></tr>
+          <tr><td><b>Cambridge final-return branch</b></td><td>You + Berman + Citrin</td><td class="dt">2026-07-13</td><td class="days hot">47</td><td>$242,942.16 payable; has a filing calendar</td></tr>
+          <tr><td><b>Golf K-1 — 50/50 vs 49/51</b></td><td>Lisa Timbrook</td><td class="dt">2026-08-24</td><td class="days warm">5</td><td>Possible wrong draft filed. Highest technical risk in the tax set.</td></tr>
+          <tr><td><b>Mayfair/733 distribution quantification</b></td><td class="days hot">NO OWNER</td><td class="dt">2026-08-24</td><td class="days warm">5</td><td>No property-level debt per Annie at Post — years of "debt service" were distributions. Other partners likely owed. Asset slated for sale.</td></tr>
+          <tr><td><b>Inception-to-date LP capital activity, A2Z ND</b></td><td class="days hot">NO OWNER</td><td class="dt">2026-08-24</td><td class="days warm">5</td><td>Accounting group waiting</td></tr>
+          <tr><td><b>Updated tax status tracker</b></td><td>Tim McNamara</td><td class="dt">2026-08-24</td><td class="days warm">5</td><td>Committed on the SPV call</td></tr>
+          <tr><td><b>Insurance schedule tie-out</b></td><td>Berman, Bennett, Moe</td><td class="dt">2026-08-27</td><td class="days warm">2</td><td>You assigned it; Berman replied on mechanics but did not accept</td></tr>
+          <tr><td><b>Jon's three floorplan assignments</b></td><td class="days hot">Nobody</td><td class="dt">2026-08-27</td><td class="days warm">2</td><td>Written as open questions, not instructions</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="sub">Open items</h3>
+      <ul class="todo">
+        <li><b>Floorplan tie-out remainder</b> — 46 duplicate submissions to withdraw; 13 add-on approvals on funded serials; 29 "cash — verify"; 16 lender disagreements; 14 park/lot label errors; SS-284/304/342 missing from the RM master; unidentifiable serials 71825/26/27/29 and 72012; RO-2704/2706 shared serial; NGRV-99 typo; BELL-23 / RO-2732 shared Tiny Heirloom serial.</li>
+        <li><b>Collections</b> — no owner, no cadence, no portfolio view. $346k over 90 days. <span class="tag x">New — surfaced by this report</span></li>
+        <li><b>Intercompany AR/AP</b> — G1 entity list with EINs; elimination-ledger ruling; D-4 EKEET $1,147,531 unowned; D-3 Lucky Clover $541,680; the 12100/21100 counterparty crosswalk; what came out of the 7/29 2:00 PM call.</li>
+        <li><b>Monthly close at 30–45 days in arrears</b> — the reason Rillet is being evaluated. Ramp booked monthly rather than weekly.</li>
+        <li><b>Six BOA closures</b> — Parakeet Communities, Parakeet MHC, Town &amp; Country, Wolf Bay, Wolf Bay II, "NA 5000." Appointment was 8/28; outcome unconfirmed.</li>
+        <li><b>Wire cutoff at 3:00 PM</b> proposed as policy after a protocol breach.</li>
+        <li><b>Entity count disputed</b> — 288 / 235 / neither, per Berman. ~78 LLCs.</li>
+        <li><b>Delinquent mortgage fee waiver</b> — asked 8/14, never answered. <span class="tag">UNVERIFIED</span></li>
+        <li><b>FL $50K Mobile Home Dealer Bond</b> invoice 868622 — forwarded to Melanie and Berman 8/14, status unknown. <span class="tag">UNVERIFIED</span></li>
+        <li><b>Application fees off</b> for a one-month trial from 8/26 — needs a review date.</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>107df9b07d4e34e158984b67c5fc9af7</code> (8/28, 93 min) · <code>ee743a9512cf03ac3de57a8690a7354f</code> (Fund II SPV Tax Review, 8/24) · <code>20854412e030c44664af7eecfc2f6263</code> (Rellit, 8/21) · RM AgedReceivables 2026-08-28 · Floorplan thread 8/27–8/28</div>
+    </div>
+  </details>
+
+  <!-- 06 OPERATIONS -->
+  <details class="sec" id="ops">
+    <summary><span class="num">06</span> Operations &amp; Property <span class="count">Natalie · 19 properties walked</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">Natalie Magurne</span><span class="role">Operations</span>
+        <dl>
+          <dt>On</dt><dd>L10 chair, rehab tracker (ready to circulate), demo-to-infill form (in use, awaiting sign-off), Mayflower noncompliance (sent 8/27), Royal Oaks DD, permits pressure.</dd>
+          <dt>Constraint</dt><dd>Massachusetts rent-control meeting 9/14 collides with the original budgets week.</dd>
+        </dl>
+      </div>
+      <div class="person"><span class="who">Angel</span><span class="role">Lucky Clover manager</span>
+        <dl><dt>Context</dt><dd>Brand new, alone on site, applied through the website after visiting. Subject of the armed-resident incident. Runs the cleanest receivables book in the portfolio — $6,692 open, zero aged. Owed: shuffleboard shade decision, flags, cable rigging, visible backing.</dd></dl>
+      </div>
+
+      <h3 class="sub">Property-level open items, by community</h3>
+      <ul class="todo">
+        <li><b>Lucky Clover</b> — shuffleboard resurface or pickleball; permanent metal roof for the sagging shades; common-area lighting off the dumpster photocell; replace rotting perimeter fence; glass bulletin boards behind every mailbox cluster; remove three tires; resident notice on engineering/septic.</li>
+        <li><b>Great Oaks</b> — clubhouse grey oak vinyl; replace lamp post; move bulletin board to the mailbox units; grill/hibachi fire-hazard decision; redo bocce; metal roof over grill/bocce; secure the storage area; solar light that never turns off; electrical rerouting plan, budget and owner.</li>
+        <li><b>Riverwalk / Terrace Crossings / The Oaks</b> — 12-ft PVC fence around the wastewater plant before listings; individual trash cans (~$15k, tied to rent increases); tough shed on a slab plus a tool package; UTV; re-stripe basketball with double hoops; screened pavilion with electrical; three rehabs; renter-to-owner conversions and LOP buyouts; new-home pricing unset; refreshments for the resident committee; rent credit for the Facebook moderator.</li>
+        <li><b>Belle Haven</b> — custom windows at ~$13,000/house (six-week lead; standard-window workaround found); full roof replacements at $5–7k each; back section on one master meter; inadequate streetlights; pickleball on the basketball court; dog park; covered grill area; "block and blast" Facebook campaign for RV tenants; buy/skirt/list one RV to test the market; flyer flags; resident water-leak dispute.</li>
+        <li><b>River Oaks</b> — restore power to the pier (George started, unfinished); fish-cleaning station; used bingo machine; clubhouse microwave, windows, leak and structural lean; outdoor furniture; movie nights; resident amenity survey; new well to reclaim 6–8 lots; 15% discount for current RV residents; fountain/aerator not running; <b>homes not listed in Rent Manager at all.</b></li>
+        <li><b>Paradise Lakes</b> — pause excavation until the ~$30k utility locate is done; temporary barriers at the roadside pole and broken gate; orange construction fencing; new gate system into next year's budget; damaged rubber boots to dig out and reconnect.</li>
+        <li><b>Shady &amp; Druid</b> — resident memo; second sign at the back of Druid; solar camera on the broken-into mailboxes; standardise mailboxes to white PVC with reflective numbers (consult USPS); Gator; John's collapsed pipe; streetlights; three-rail fence; vinyl privacy fence at the lift station; speed bumps; benches, playground, bus shelter; pond overgrowth and duckweed; sheds programme; ~$15k/acre land clearing.</li>
+        <li><b>Auburn Ridge</b> — paint three speed bumps; entrance sign near lots 6 and 114; golf cart; repurpose the old office (undecided); Metron meter after the city meter; Path Kids Club flooring donation.</li>
+        <li><b>Regency I</b> — install the new sign (city easement); tree trimming before hurricane season; Green Oak road patching; ADA bathroom; mailbox replacement; remove the dumpster ($395/mo) and tire container, convert to trailer storage; <b>sinkholes forming near a speed bump and mid-road with no action assigned</b>; problem landlord "Larry" (~20 units).</li>
+        <li><b>Whispering Pines</b> — Camp Spot minimum-stay policy and lot blocking with Alex; Daisy Lane, Perry Winkle and 366 Lily Mora rehabs; street signs; Fernando on graveling; community-wide electrical upgrade affecting ~64 of 100 sites with no budget or timeline.</li>
+        <li><b>Paradise Palms</b> — full punch-list walk with lot numbers and photos; standardise door-swing-dictates-stair-orientation and skirt exposed wood; fence the drain field; fix broken entry codes; replace the missing post cap (ref 1923); paint the office front door; root damage from trenching; online scheduling bug.</li>
+        <li><b>Applegate</b> — units 227 (delivered 7/23), 248 and one from 7/22 sitting unprocessed; Champion no-show blocking two homes; unenclosed wellhead; $10 gift-card programme for residents who maintain lots.</li>
+        <li><b>Gulf Breeze</b> — water company won't connect new buyers (one bought four homes); two FEMA homes of unknown permit status; three park models (39/40/41) with water damage; underperforming landscaper; ~$700 roof quote needs a second.</li>
+        <li><b>Portfolio-wide</b> — centralise landscaping (bundle into rent for rentals; "trim it or we remove it" for owners); standardise mailboxes; resident grass-cutting schedule; enforce tie-downs on sideways doubles.</li>
+      </ul>
+      <div class="src">Sources · 19 site-visit recordings, Plaud, 2026-08-18 → 08-22. IDs listed in section 15.</div>
+    </div>
+  </details>
+
+  <!-- 07 CONSTRUCTION -->
+  <details class="sec" id="con">
+    <summary><span class="num">07</span> Construction &amp; Supply Chain <span class="count">John Clark · Champion · Cavco</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">John Clark</span><span class="role">Construction</span>
+        <dl><dt>On</dt><dd>Volunteered 8/28 to take point on Trade Winds and Silver tie-ins (Auzzi lacks capacity). Champion QC. New Home Checklist rollout. Oakside asphalt meeting Monday 8/31.</dd></dl>
+      </div>
+      <div class="person"><span class="who">Cavco</span><span class="role">Ross Mueller · Jason Calvert · Emina Hebib</span>
+        <dl><dt>Live</dt><dd>Freight recovery after the Bennett truck shortage; Perico line rename; 1425 engineering pending at Ocala; storm-door hinge standard; Douglas offline mid-November making October "slim"; lender dupe audit of 50–60 units.</dd></dl>
+      </div>
+
+      <h3 class="sub">Open items</h3>
+      <ul class="todo">
+        <li><b>Infill cycle time</b> — historical average 261 days issue-to-setup; proposed target 169. Budget model simplifies to 60 days order→delivery and 60 delivery→ready-to-list. Build the overrun tracker; define who owns the weekly report and escalation.</li>
+        <li><b>Champion QC standard</b> — scissor doors on all future orders; existing doors flipped or replaced; steps skirted; white PVC railings not metal; New Home Checklist into the lot file; weekly QA visit to every property with active sets.</li>
+        <li><b>Oakside</b> — thin bubbling asphalt, plugged storm drains, yard ponding. Contractor meeting 8/31. Fix: bore the curb, PVC to street, correct crowning.</li>
+        <li><b>Trade Winds lot 46</b> — permit denied (lot never developed); order pivoted to Harbor. Legal challenge mentioned, never decided.</li>
+        <li><b>Lucky Clover permitting cap</b> — only 22 more HUD homes until January 2027; 17 in hand.</li>
+        <li><b>Vantage Oaks</b> — KUA meeting on 29-lot upgrades; 200-amp pedestal requirement (inspector will not budge); generator workaround prohibited (~$12k, unpermittable); Okeechobee permits must be collected in person within 72 hours.</li>
+        <li><b>Deliveries</b> — 43–44 homes 8/31–9/14. River Oaks 9/2 (2702/2710/2712) and 9/3 (2714/2716/2726/2728). Trade Winds 9/4. Seashells 9/4. Windward Knoll 9/8. The Oaks lot 37 on 9/8.</li>
+        <li><b>Serial anomaly</b> — River Oaks SN 28632 on lot 2712 breaks an otherwise consecutive sequence; possible typo for 28652. <span class="tag">UNVERIFIED</span></li>
+        <li><b>Storage transport</b> — depends on a Champion/Bennett meeting; no contingency.</li>
+        <li><b>Train the internal team</b> (via Champion) to measure buildable envelopes, cutting the outsourced site-eval step.</li>
+        <li><b>Titusville</b> — assemble the 54-site argument (DOH permit, ~$1M infrastructure, SORL grant). Mark Jones is the obstacle; Eddie Galindo receptive.</li>
+        <li><b>Bellhaven</b> — pull mid-1980s DOH permits to substantiate 91 sites; unclear whether the 65 agreed MH permits can proceed before the count dispute resolves.</li>
+        <li><b>Champion + Cavco joint improvement call</b> — proposed 8/3, still unscheduled at <b>26 days</b>. The 9/4 Cavco weekly is the room.</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>c191906cbf36d4de57540400bb3d1b2b</code> (Cavco 8/28) · <code>9d97fab1d8c2edad1e900a2cfbaf9ba1</code> (Construction QC 8/25) · <code>c27bbc61324143a8e9dcb744a85a4ea6</code> (Project Status 8/26) · <code>4c03ae6cda8fe18d717cdc77afd67911</code> (Vantage Oaks 8/21)</div>
+    </div>
+  </details>
+
+  <!-- 08 SALES -->
+  <details class="sec" id="sales">
+    <summary><span class="num">08</span> Sales &amp; Marketing <span class="count">Leslie · Auzzi · Unity · 1 Oct</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">Leslie Croft</span><span class="role">Sales / CRM</span>
+        <dl>
+          <dt>On</dt><dd>Regional sales structure with Natalie, loan-coordinator hire, Unity implementation, MAV/CRM, listing audit tool, RentViewer warehouse.</dd>
+          <dt>Owes</dt><dd>Regional Customer Sales &amp; Growth Rep job description + comp — due 8/27–8/28 to Demetria for posting.</dd>
+          <dt>Constraint</dt><dd>Must be home by 9/23.</dd>
+        </dl>
+      </div>
+      <div class="person"><span class="who">Auzzi Dixon ("Ozzy")</span><span class="role">CRM administration · open personnel matter</span>
+        <dl>
+          <dt>On</dt><dd>CRM hygiene, dedup workflows, Unity nurture bucket.</dd>
+          <dt>Issue</dt><dd>Expects a flat commission on every deal regardless of involvement; company position is this converts to a performance bonus. Review found 700 aged-out prospects and 84 miscategorised tours. You planned to observe him in Miami and asked Zach for his read. <b>Fit decision pending.</b></dd>
+        </dl>
+      </div>
+
+      <h3 class="sub">Open items</h3>
+      <ul class="todo">
+        <li><b>Unity go-live 1 October</b> — 33 days. Needs from you: agent name and email, Twilio registration (EIN, IRS business name, privacy + ToS URLs), FAQ knowledge base, web chat snippet, Rent Manager integration keys, CampSpot CSV feed (~400 sites), KPI set, Zach added to the dashboard, twice-weekly implementation meetings from the week of 8/31.</li>
+        <li><b>Regional sales build</b> — three regional managers, on-site sales at Lucky, Great Oak, River Oaks, Panhandle, Vantage, Paradise Lakes/Applegate, Cape Canaveral; assistant managers reframed as sales/leasing; four-week hiring window to be in seats for October.</li>
+        <li><b>Loan coordinator</b> — Demetria to post; Anthony Perez discussed but placement undecided.</li>
+        <li><b>Call centre</b> — replace Joiner; "better English speaking" is the only stated criterion; no sourcing plan.</li>
+        <li><b>Google Ads</b> — launch ~1 September, gated on CallRail/RingCentral webhook fixes and sales readiness. No go/no-go criteria or budget set.</li>
+        <li><b>CRM hygiene</b> — 700 aged-out prospects, 84 miscategorised tours, Rent Manager duplicating profiles on restarted applications, guest-card/application flow, closing-doc generation.</li>
+        <li><b>Missing CRM trigger</b> — manager sends offer to Leslie → move to prospect stage. Undefined technically.</li>
+        <li><b>Listing audit tool</b> — first version to the team; scrape My State MLS and Realtor.com to verify syndication; Tanya to review 5–10 listings; add city and state to the community dropdown.</li>
+        <li><b>Secret shopper</b> — you applied at two communities and were never approved. Findings to be used for training; a second run under a different identity was proposed.</li>
+        <li><b>Pricing</b> — remove all fees; hold prices (MH Village data says homes are underpriced); Friday inquiry-volume report so cuts only go to units with zero traction.</li>
+        <li><b>Deposits</b> — accept credit cards via the existing Rent Manager / TWA flow on a prospect's phone rather than a new Stripe account; collect at PSA signing.</li>
+        <li><b>Brunswick Estates address</b> — correct to 221 Robarts Road across website, Rent Manager, Google and signage. Justin owns it.</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>18ea75b2d7eb7c5b1faf1c3d1878adf1</code> (Sales Ops restructuring 8/26) · <code>9b64c1e98f14ed23eeb07e92d570dac0</code> (Sales infrastructure 8/27) · <code>d5d633624ad19ccc68104899544e611c</code> (Uniti pilot 8/26) · <code>b36cdf6624e480af193da7a23c4fbe65</code> (Leslie call re Auzzi 8/22)</div>
+    </div>
+  </details>
+
+  <!-- 09 HR -->
+  <details class="sec" id="hr">
+    <summary><span class="num">09</span> People &amp; HR <span class="count">Demetria · hiring · two personnel matters</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">Demetria Loukas</span><span class="role">HR / recruiting</span>
+        <dl><dt>On</dt><dd>Berman personnel file (two documents in two days), payroll 8/28, loan-coordinator and regional sales postings, workers' comp audit history, trip-log policy with Karen.</dd>
+        <dt>Owes</dt><dd>Nothing overdue. Executing fast.</dd></dl>
+      </div>
+      <ul class="todo">
+        <li><b>Berman</b> — severance package draft, MIP forfeiture confirmation ("for cause" question), over-40 review compliance, IT forensics, access cutoff plan, Jadian communication script, timeline documentation. <b>Karen call to be booked.</b></li>
+        <li><b>Auzzi</b> — commission-to-bonus policy in writing; job description signature; fit decision.</li>
+        <li><b>Melanie interview</b> — reclaim the licenses &amp; permits register, AHJ contacts and renewal routines she ran before Berman. Could collapse Phase 1 from three weeks to one. <b>Still unbooked.</b></li>
+        <li><b>Maintenance hiring</b> — fifth attempt at Shady/Druid; prior hires didn't want outdoor work; equipment proposed as retention.</li>
+        <li><b>Recognition owed</b> — Lucky Clover maintenance lead (works Saturdays, repainted everything); Julie at Belle Haven (sourced windows and blinds herself); Liz's region most improved.</li>
+        <li><b>Ashlyn's region</b> — cleanliness flagged "unacceptable" with no follow-up assigned.</li>
+        <li><b>Justin Minkoff</b> — wants deeper finance/asset-management/acquisitions work; one of four named "lifers." Explicit note: stop having him clean up other departments' issues.</li>
+        <li><b>Payroll</b> — you asked for average car insurance and gas cost to see the full mileage effect. Unanswered.</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>107df9b07d4e34e158984b67c5fc9af7</code> (8/28) · <code>7776b6ec62efd98f00faca37321b79dc</code> (Post River Oaks 8/22) · payroll thread 8/27</div>
+    </div>
+  </details>
+
+  <!-- 10 SYSTEMS -->
+  <details class="sec" id="sys">
+    <summary><span class="num">10</span> Systems &amp; Data <span class="count">Albert · Quickbase · RentViewer</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">Albert Gano</span><span class="role">SharePoint migration</span>
+        <dl>
+          <dt>On</dt><dd>Wave 0 restructure, 2,876 GB. Acknowledged the work order 8/17; you replied <em>"This is the backbone."</em></dd>
+          <dt>Blocked</dt><dd>DECISION 0; 21 unnamed security-group members across 6 groups; the <code>_Errors</code> freeze over ~2,000 single-copy files (recorded mortgages, UCC filings, title policies); the unsent risk brief.</dd>
+          <dt>New</dt><dd>Northgate retained-parcel mapping, assigned 8/28.</dd>
+        </dl>
+      </div>
+      <ul class="todo">
+        <li><b>Quickbase + FastField</b> — 12 auto-created tasks on record save; storage branch at "delivery scheduled"; risk levels on checklist items; correction/reinspection forms listing only failed items; approver checkboxes that auto-create work orders; vendor scheduling and reminders; replace JotForms; circulate the 8-wave scope.</li>
+        <li><b>Data warehouse</b> — MAV into RentViewer; <b>GL data still not loaded</b>; prospects report on daily snapshots from 8/25; no approval process for changing calculations.</li>
+        <li><b>Rent Manager report API</b> — 7 of 8 reports return HTTP 500. Raise with Rent Manager or Dan at RentViewer. <span class="tag x">New</span></li>
+        <li><b>RM property master</b> — all 82 properties flagged inactive. <span class="tag x">New</span></li>
+        <li><b>Ramp data quality</b> — 85 users with "missing items" whose flags say nothing is missing. Needs a real audit before the number means anything. <span class="tag x">New</span></li>
+        <li><b>Corner IQ</b> — one-month executive trial offered; onboarding batch was the week of 8/26. No decision recorded. <span class="tag">UNVERIFIED — may have lapsed</span></li>
+        <li><b>Power Automate server accounts</b> — move off individual drive access. Assigned to you 8/20.</li>
+        <li><b>Teams transcripts disabled tenant-wide</b> and <b>mail connector cannot send</b> — two console changes, one admin, unblocks the whole capture layer.</li>
+        <li><b>Plaud speaker profiles</b> — configure voice profiles so recordings return names instead of "[Speaker 4]". Would make every site-visit action item assignable.</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>cacb09c9926284db9647c1aa1ac78d49</code> (Home ordering workflow 8/27) · <code>cf6d6e6cbe20f7d5ee44db18294010f3</code> (RentViewer MCP 8/24) · <code>e9006917b555cb88ad3dc2a47705f2ed</code> (Systems integration 8/18) · this session's connector tests</div>
+    </div>
+  </details>
+
+  <!-- 11 CAPITAL -->
+  <details class="sec" id="cap">
+    <summary><span class="num">11</span> Capital, Deals &amp; Legal <span class="count">Zach · Jadian · litigation</span></summary>
+    <div class="body">
+      <div class="person"><span class="who">Zach Schwartz</span><span class="role">Asset management / capital</span>
+        <dl><dt>On</dt><dd>Jadian Pipeline Review (he organises it), occupancy dashboard, audit ownership-waiver letter.</dd>
+        <dt>Signal</dt><dd>On the E&amp;O/D&amp;O surprise: <em>"Guy operates in his own world."</em> Aligned with you on the governance breach.</dd></dl>
+      </div>
+      <div class="person"><span class="who">Jadian Capital</span><span class="role">Joe Cridge · Toby Nelson · Matt Hennessy</span>
+        <dl><dt>Live</dt><dd>Pipeline Review 9/3, 10:00 ET. DR-035 disclosure posture undecided. The 8/27 check-in is unrecorded. You agreed on 8/28 to brief them proactively ahead of the Berman narrative.</dd></dl>
+      </div>
+      <h3 class="sub">Deals</h3>
+      <ul class="todo">
+        <li><b>Lamberton Lake</b> — 26 days since handoff to Dustin Wilmer; no listing, no BOV. Price unchanged at $2M since May 2025 with no 2026 opinion of value. He never declined and never committed. LP syndication records may be single-copy in Dropbox.</li>
+        <li><b>Hershey front parcel</b> — $960,000 offer received 8/27. No decision recorded.</li>
+        <li><b>Northgate ag land</b> — sold 8/26; retained parcel needs mapping and fencing.</li>
+        <li><b>Core-plus deals + comps</b> — call with Matt the week of 8/31.</li>
+        <li><b>Bay Area deal</b> — reserve $20M; equity commitment 5% → 3.5% undecided.</li>
+        <li><b>Royal Oaks</b> — eminent domain disclosure (FPID 441692-1-22-02); Sunstone DD thread; loan extension pending Andrew via Brokaw, asked 8/17.</li>
+        <li><b>Audit &amp; capital raise documentation</b> — being organised proactively for American, Whispering Pines and Parkey.</li>
+      </ul>
+      <h3 class="sub">Legal &amp; insurance</h3>
+      <ul class="todo">
+        <li><b>Belle Haven litigation</b> — plaintiffs' counsel asked for a call about staying the litigation while the rent-increase piece is negotiated. Wallack 8/27: <em>"It appears to be — but let's see how the call goes."</em> Outcome not captured.</li>
+        <li><b>Management liability $43,090.21</b> — bind or hold; and establish whether Jadian was consulted, as you said it required.</li>
+        <li><b>Habitat subpoena</b> — all email correspondence requested; attorney reviewing; holdback from the GP portion needed before distribution.</li>
+        <li><b>Massachusetts matter</b> — indemnity question; Berman contacted Citrin about it without authorisation.</li>
+        <li><b>Roadwork warranty claim</b> — gather communications, confirm warranty terms, get national-vendor quotes; legal action possible.</li>
+        <li><b>Home title issues from prior management</b> — a prior manager registered resident titles in her own name, blocking insurance. No owner.</li>
+        <li><b>Nantucket HOA</b> — formal letter on the approval dispute.</li>
+        <li><b>Conflict check</b> — deal attorney Brian Action moved to Paul Hastings, same office as Berman's brother.</li>
+        <li><b>Four unsent <code>.eml</code> drafts</b> in Birdcage Corporate, one concerning Belle Haven, filenames reading "DRAFT - open and hit send."</li>
+      </ul>
+      <div class="src">Sources · Plaud <code>23ba959b4eb50c45cd213f06bb304ecc</code> (Car convo with Joe 8/20) · <code>500401821e7748dce3417a4da4b34512</code> (Shady &amp; Druid 8/19, Habitat subpoena) · Eckert Seamans thread 8/27 · Sunstone thread 8/27</div>
+    </div>
+  </details>
+
+  <!-- 12 PERSONAL -->
+  <details class="sec" id="pers">
+    <summary><span class="num">12</span> Personal &amp; Admin <span class="count">Belmart · Hensdale · exposures</span></summary>
+    <div class="body">
+      <div class="card warn">
+        <h4>The Belmart build is the live one</h4>
+        <p>The contractor relationship with Rick has broken down. He is a month behind, publicly attributing the delay to your decision latency, resistant to invoice documentation, and defers every call to his father Keith. The 8/20 recording's own read: he is <em>"in over his head"</em> and rushing to limit risk exposure on a $5.5M house you are paying him to manage.</p>
+        <p><b>Open:</b> the $3,900 doorknob decision (you received the revised invoice at 6 PM the night before he called you the holdup); whether to pay Keith for an extra month of breathing room; concrete and decking remediation — credit vs having Landry's team do it; whether to reuse the existing stairs; unsanded handrails; failing weed barriers; call routing so on-site inquiries reach the right person.</p>
+        <p>Mark's advice, recorded: sleep on it and don't send a reactive reply.</p>
+        <div class="src">Source · Plaud <code>134d3688ca64dd50abf66a47918fb284</code> (Belmart, 2026-08-20, 30 min)</div>
+      </div>
+      <ul class="todo">
+        <li><b>Hensdale Club</b> — membership application still open; deposit confirmed 8/13.</li>
+        <li><b>Spartan invoice / draw 9</b> — funded in good faith; documentation still to be cleaned up; awaiting Argueta invoices.</li>
+        <li><b>Bank package for Belmart to lenders</b> — carried from before this window.</li>
+        <li><b>Plaud Visa exposure</b> — full card number, expiry and gate/house code 8518 read aloud in the Post River Oaks recording. Trim or delete that recording; reissue the card if still active. <b>No movement.</b></li>
+        <li><b>A2Z Utility Logins.xlsx</b> — plaintext credential store on company storage. Rotate then delete. <b>No movement.</b></li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 13 CLOSED -->
+  <details class="sec" id="closed">
+    <summary><span class="num">13</span> Closed in the last two weeks <span class="count">19 items</span></summary>
+    <div class="body">
+      <ul class="closed">
+        <li><span class="mark">✓</span><span><b>The road trip</b> — 19 properties walked 8/18–8/24, every one recorded. <span class="why">Regency I &amp; II, Auburn Ridge, Shady &amp; Druid, Applegate, Paradise Lakes, Whispering Pines, Belmart, Lucky Clover, Vantage Oaks, Great Oaks, Gulf Breeze, Palm Spring Estates, Belle Haven, The Oaks, Riverwalk, River Oaks, Paradise Palms.</span></span></li>
+        <li><span class="mark">✓</span><span><b>130 homes delivered, 40 listed</b> — ahead of an aggressive plan.</span></li>
+        <li><span class="mark">✓</span><span><b>Floorplan tie-out completed</b> — 198 homes, serial-first, cross-checked against the Cavco order sheet and NHP data tape. <span class="why">The explanation for a year of apparent capital constraint.</span></span></li>
+        <li><span class="mark">✓</span><span><b>Five capex approvals cleared</b> — Triple S sewer, Parkwood trees, Hershey signage, Harbour streetlights, Lucky Clover water leak. <span class="why">Jon 8/28: "Nothing is held up."</span></span></li>
+        <li><span class="mark">✓</span><span><b>Sales reorganisation designed end-to-end</b> — regional managers, on-site agents, Unity at top of funnel, four territories, 1 October target.</span></li>
+        <li><span class="mark">✓</span><span><b>Uniti contract and scope agreed</b> — 6,000-unit basis, DocuSign reissued with an 8/25 start.</span></li>
+        <li><span class="mark">✓</span><span><b>Home-ordering workflow fully specified</b> with the FastField vendor — stage gates, deficiency routing, risk levels, reinspection triggers.</span></li>
+        <li><span class="mark">✓</span><span><b>RentViewer connectors live</b>; prospects report moved to daily snapshots.</span></li>
+        <li><span class="mark">✓</span><span><b>2025 tax review across the portfolio</b> — P&amp;L splits verified against the cap table for PSE, Town &amp; Country, Wolf Bay, Bay Oaks 1 &amp; 2, Lake Wales.</span></li>
+        <li><span class="mark">✓</span><span><b>Royal Palm and Gulf Breeze drafts cleared</b>; A2Z Community Partners 2024 signed off.</span></li>
+        <li><span class="mark">✓</span><span><b>Mayflower operating licence</b> answered on Nora Gosselin's second chase.</span></li>
+        <li><span class="mark">✓</span><span><b>Mayflower testing noncompliance</b> routed to Richmonds by Natalie.</span></li>
+        <li><span class="mark">✓</span><span><b>MHVillage charges</b> moved to a Ramp virtual card so they stop hitting Leslie's and Melanie's individual spend.</span></li>
+        <li><span class="mark">✓</span><span><b>Six BOA account closures scheduled</b> for 8/28, inside Berman's window. <span class="why">Visit outcome not yet confirmed.</span></span></li>
+        <li><span class="mark">✓</span><span><b>Email to George at Capital Point Insurance</b> — the two-unknown item the vault refused to guess at.</span></li>
+        <li><span class="mark">✓</span><span><b>Royal Oaks eminent domain identified</b> — Brokaw supplied FPID 441692-1-22-02 himself.</span></li>
+        <li><span class="mark">✓</span><span><b>Northgate ag land sold</b>, parcel partially retained.</span></li>
+        <li><span class="mark">✓</span><span><b>Champion QC escalated and fixed at source</b> — daily dump trailers, steps scheduled for demo and repour, scissor doors specified going forward.</span></li>
+        <li><span class="mark">✓</span><span><b>Plaud library reprocessed</b> — 30 recordings now carry full summaries, including the 8/19 10:59 file the road-trip document flagged as never transcribed. <span class="why">By you, 8/28.</span></span></li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 14 WEEK AHEAD -->
+  <details class="sec" id="ahead">
+    <summary><span class="num">14</span> The week ahead <span class="count">31 Aug – 4 Sept</span></summary>
+    <div class="body">
+      <div class="scroller"><table>
+        <thead><tr><th class="num">When (ET)</th><th>What</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td class="dt">Mon 8/31 08:30</td><td>Monday catch-up — Jon</td><td>Where the Karen call and budgets week get settled</td></tr>
+          <tr><td class="dt">Mon 8/31 09:00</td><td>AI convo — Jon, Zach</td><td>—</td></tr>
+          <tr><td class="dt">Mon 8/31 10:00</td><td>RentViewer weekly sync</td><td>Raise the RM report 500s and the IsActive flag here</td></tr>
+          <tr><td class="dt">Mon 8/31 14:00</td><td>Rillet intro</td><td>The "live close" answer to 30–45 day books</td></tr>
+          <tr><td class="dt">Mon 8/31</td><td>Oakside asphalt contractor</td><td>Drainage and storm-drain failures</td></tr>
+          <tr><td class="dt">Tue 9/1 10:00</td><td>Silver Breeze payment due — Stacy</td><td>—</td></tr>
+          <tr><td class="dt">Tue 9/1 14:00</td><td>LC/AB/JW weekly — Leslie</td><td>Regional sales JD and comp</td></tr>
+          <tr><td class="dt">Tue 9/1 15:00</td><td>JC/AB/JW weekly — John Clark</td><td>Tie-ins, QC checklist, Oakside</td></tr>
+          <tr><td class="dt">Wed 9/2</td><td>River Oaks deliveries — 2702, 2710, 2712</td><td>Note the 28632 serial anomaly</td></tr>
+          <tr><td class="dt">Wed 9/2 09:00</td><td>ZS/AB/JW weekly — Zach</td><td>Jadian prep</td></tr>
+          <tr><td class="dt">Wed 9/2 10:00</td><td>Weekly Rehabs — with Mark Doucette</td><td>—</td></tr>
+          <tr><td class="dt">Wed 9/2 11:00</td><td>Champion construction update</td><td>QC standard + the joint Cavco call</td></tr>
+          <tr><td class="dt">Wed 9/2 16:00</td><td>NM/AB/JW weekly — Natalie</td><td>Permits owner and weekly aging number</td></tr>
+          <tr><td class="dt">Thu 9/3 10:00</td><td><b>Jadian Pipeline Review</b> — Cridge, Nelson, Hennessy, Berman</td><td>First contact since the unrecorded 8/27 call. DR-035 posture undecided, and Berman is in the room.</td></tr>
+          <tr><td class="dt">Thu 9/3 16:30</td><td>Finance &amp; Accounting EOS — Berman chairs</td><td>—</td></tr>
+          <tr><td class="dt">Fri 9/4 10:00</td><td>Weekly HR — Demetria</td><td>—</td></tr>
+          <tr><td class="dt">Fri 9/4 13:00</td><td>Cavco weekly</td><td>Schedule the Champion + Cavco joint call — 26 days overdue</td></tr>
+          <tr><td class="dt">Fri 9/4 14:00</td><td>L10 — full leadership incl. Albert and Berman</td><td><b>The room to name owners for Great Oaks and Lucky Clover</b></td></tr>
+          <tr><td class="dt">~Sept 1</td><td>Google Ads launch target</td><td>No go/no-go criteria set</td></tr>
+          <tr><td class="dt">Sept 7</td><td>Lucky Clover sewer wrap-up</td><td>—</td></tr>
+          <tr><td class="dt">Sept 14</td><td>Natalie's Massachusetts rent-control meeting</td><td>Collides with the 9/14–9/17 budgets option</td></tr>
+          <tr><td class="dt">Oct 1</td><td>Unity go-live + new sales structure</td><td>33 days. Hiring must be in seats.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <!-- 15 SOURCES -->
+  <details class="sec" id="sources">
+    <summary><span class="num">15</span> Sources &amp; backup <span class="count">where to find everything</span></summary>
+    <div class="body">
+      <h3 class="sub">Where the backup lives</h3>
+      <ul class="todo">
+        <li><b>This report</b> — <code>C:\Users\AustinBerk\Documents\Claude\Code\brain\06-reference\weekend-pulse-2026-08-28.html</code></li>
+        <li><b>Commitment ledger</b> — <code>brain\01-now\open-loops.md</code> (items 1–18)</li>
+        <li><b>Ranked catch-up list</b> — <code>brain\01-now\catchup\PRIORITY-LIST.md</code></li>
+        <li><b>Closed items with provenance</b> — <code>brain\99-archive\</code> (6 files)</li>
+        <li><b>Berman function inventory</b> — <code>brain\01-now\berman-function-extraction.md</code></li>
+        <li><b>Migration risks for Albert</b> — <code>brain\01-now\albert-migration-risks.md</code></li>
+        <li><b>Road-trip task tracker</b> — <code>brain\06-reference\parakeet-road-trip-tracker-2026-08.xlsx</code></li>
+        <li><b>Prior daily briefs</b> — <code>brain\06-reference\brief-2026-08-27.html</code>, <code>brief-2026-08-28.html</code></li>
+        <li><b>Raw Aged Receivables pull</b> (320 rows, 380 KB) — <code>...\tool-results\mcp-f539c9cd-...-run_report-1788002306046.txt</code></li>
+      </ul>
+
+      <h3 class="sub">Plaud recordings read — 30 of 49 in the window</h3>
+      <div class="scroller"><table>
+        <thead><tr><th class="dt">Date</th><th>Recording</th><th class="num">Mins</th><th>File ID</th></tr></thead>
+        <tbody>
+          <tr><td class="dt">08-28 15:30</td><td>Untitled — personnel / termination planning</td><td class="num">93</td><td><code>107df9b07d4e34e158984b67c5fc9af7</code></td></tr>
+          <tr><td class="dt">08-28 14:02</td><td>Weekly: Project Status, Budget Planning, Process Optimization (L10)</td><td class="num">57</td><td><code>0e5b566e325f21e018f874bb846364d1</code></td></tr>
+          <tr><td class="dt">08-28 13:00</td><td>Freight, Home Line Renaming, 1425 Specs, Lender Capacity Audit (Cavco)</td><td class="num">24</td><td><code>c191906cbf36d4de57540400bb3d1b2b</code></td></tr>
+          <tr><td class="dt">08-28 15:01</td><td>Weekly: CRM Integration, AI Sales Funnel, Data Strategy (MAV)</td><td class="num">29</td><td><code>83aef237850237579d7df03a65de4f42</code></td></tr>
+          <tr><td class="dt">08-27 15:01</td><td>Sales Infrastructure, Unity Launch, CRM Hygiene, Pricing</td><td class="num">45</td><td><code>9b64c1e98f14ed23eeb07e92d570dac0</code></td></tr>
+          <tr><td class="dt">08-27 09:00</td><td>Home Ordering Process and Workflow Automation</td><td class="num">68</td><td><code>cacb09c9926284db9647c1aa1ac78d49</code></td></tr>
+          <tr><td class="dt">08-26 11:03</td><td>Project Status — Great Oaks, Harbor, Lucky and more</td><td class="num">121</td><td><code>c27bbc61324143a8e9dcb744a85a4ea6</code></td></tr>
+          <tr><td class="dt">08-26 15:01</td><td>Strategy: Sales Operations and Org Restructuring</td><td class="num">120</td><td><code>18ea75b2d7eb7c5b1faf1c3d1878adf1</code></td></tr>
+          <tr><td class="dt">08-26 17:03</td><td>AI Sales Agent Pilot (Uniti)</td><td class="num">39</td><td><code>d5d633624ad19ccc68104899544e611c</code></td></tr>
+          <tr><td class="dt">08-26 10:33</td><td>Titusville / Bellhaven site-plan disputes</td><td class="num">16</td><td><code>e19e692147a9ba6e4bf61b8af70ada38</code></td></tr>
+          <tr><td class="dt">08-25 15:18</td><td>Construction Quality Control, Project Updates, Budget</td><td class="num">50</td><td><code>9d97fab1d8c2edad1e900a2cfbaf9ba1</code></td></tr>
+          <tr><td class="dt">08-25 16:11</td><td>Listing Audit Tool, Data Syndication, Applications</td><td class="num">37</td><td><code>89febfe5c02095c1de05a82dcf2a6e99</code></td></tr>
+          <tr><td class="dt">08-24 13:11</td><td>Berman Fund II SPV Tax Review</td><td class="num">36</td><td><code>ee743a9512cf03ac3de57a8690a7354f</code></td></tr>
+          <tr><td class="dt">08-24 14:30</td><td>SAM Brainstorming</td><td class="num">29</td><td><code>b5965aec949089b8278eb1c356bb01a2</code></td></tr>
+          <tr><td class="dt">08-24 15:35</td><td>Uniti &amp; Parakeet Pre-Launch</td><td class="num">19</td><td><code>b03dabf77a5442ca93c5c7cb5eaed69f</code></td></tr>
+          <tr><td class="dt">08-24 16:02</td><td>RentViewer MCP Installation</td><td class="num">25</td><td><code>cf6d6e6cbe20f7d5ee44db18294010f3</code></td></tr>
+          <tr><td class="dt">08-22 19:12</td><td>Post River Oaks Discussion</td><td class="num">49</td><td><code>7776b6ec62efd98f00faca37321b79dc</code></td></tr>
+          <tr><td class="dt">08-22 13:48</td><td>Leslie Call re: Auzzi</td><td class="num">46</td><td><code>b36cdf6624e480af193da7a23c4fbe65</code></td></tr>
+          <tr><td class="dt">08-22 13:04</td><td>Belle Haven Site Visit</td><td class="num">43</td><td><code>3381cfc319e872c0ba2197abd1625020</code></td></tr>
+          <tr><td class="dt">08-22 17:18</td><td>Riverwalk Site Visit</td><td class="num">30</td><td><code>207810566e46f67855ecd3d24751bd30</code></td></tr>
+          <tr><td class="dt">08-22 18:41</td><td>River Oaks Site Visit</td><td class="num">26</td><td><code>eab4d7777a4f7ac220325ec466b35058</code></td></tr>
+          <tr><td class="dt">08-22 15:10</td><td>The Oaks Site Visit</td><td class="num">23</td><td><code>8681709872b61174ae06278d4b62eb6a</code></td></tr>
+          <tr><td class="dt">08-22 20:01</td><td>Paradise Palms Visit</td><td class="num">21</td><td><code>8c0634fc8d6f29965cdc5178106a8ed7</code></td></tr>
+          <tr><td class="dt">08-21 09:46</td><td>Vantage Oaks Site Visit</td><td class="num">205</td><td><code>4c03ae6cda8fe18d717cdc77afd67911</code></td></tr>
+          <tr><td class="dt">08-21 17:54</td><td>Gulf Breeze Site Visit</td><td class="num">35</td><td><code>4ef0e991818472d514fd06a4c0ef240d</code></td></tr>
+          <tr><td class="dt">08-21 14:22</td><td>Great Oaks Site Visit</td><td class="num">18</td><td><code>164cc68621f0e93bce67318c0cd69904</code></td></tr>
+          <tr><td class="dt">08-21 18:50</td><td>Rellit Conversation (live-close pitch)</td><td class="num">12</td><td><code>20854412e030c44664af7eecfc2f6263</code></td></tr>
+          <tr><td class="dt">08-20 16:03</td><td>Lucky Clover Site Visit</td><td class="num">137</td><td><code>9532e6eba522ac6125b40946762a628d</code></td></tr>
+          <tr><td class="dt">08-20 12:24</td><td>Belmart</td><td class="num">30</td><td><code>134d3688ca64dd50abf66a47918fb284</code></td></tr>
+          <tr><td class="dt">08-20 11:09</td><td>Car Convo with Joe</td><td class="num">58</td><td><code>23ba959b4eb50c45cd213f06bb304ecc</code></td></tr>
+          <tr><td class="dt">08-20 10:25</td><td>Whispering Pines MH &amp; RV Site Visit</td><td class="num">39</td><td><code>85fc73f52544a3eb97bdc25a51288755</code></td></tr>
+          <tr><td class="dt">08-19 19:07</td><td>Paradise Lakes Site Visit</td><td class="num">27</td><td><code>6bf73044c0a8e217b45086ab39da8c51</code></td></tr>
+          <tr><td class="dt">08-19 12:36</td><td>Shady &amp; Druid</td><td class="num">89</td><td><code>500401821e7748dce3417a4da4b34512</code></td></tr>
+          <tr><td class="dt">08-19 09:09</td><td>Regency I Site Visit</td><td class="num">47</td><td><code>a067205a69314060a316638bb4d6dd18</code></td></tr>
+          <tr><td class="dt">08-19 10:12</td><td>Regency II Visit</td><td class="num">23</td><td><code>71debd373a372359848f351495a8c0ab</code></td></tr>
+          <tr><td class="dt">08-19 18:22</td><td>Applegate Site Visit</td><td class="num">7</td><td><code>26975b73a3b820c0b579d23cfd75d7bf</code></td></tr>
+          <tr><td class="dt">08-19 09:59</td><td>Centralize Landscaping strategy</td><td class="num">2</td><td><code>9b013a1f90f69a9f1ec1b5cb20f8ad56</code></td></tr>
+          <tr><td class="dt">08-18 08:46</td><td>Property Ops, Roadwork Warranty, System Integration</td><td class="num">162</td><td><code>e9006917b555cb88ad3dc2a47705f2ed</code></td></tr>
+          <tr><td class="dt">08-18 13:20</td><td>Property Management and Strategic AI Integration Review</td><td class="num">96</td><td><code>8a88342eb972ff212870870362bb9c28</code></td></tr>
+          <tr><td class="dt">08-18 16:31</td><td>Auburn Ridge Visit</td><td class="num">175</td><td><code>83e8cec4a406e53171d741709a79724f</code></td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">Not read: 6 clips under 30 seconds, 2 casual/personal recordings, and the 8/19 10:59 file (<code>a2d600ee50827c00a8636d325d1ab3fd</code>, 44 min) which still returns no note.</p>
+
+      <h3 class="sub">Blind spots</h3>
+      <ul class="todo">
+        <li><b>The 8/27 Jadian check-in has no record of any kind.</b> No Plaud file, no Teams transcript.</li>
+        <li><b>Teams meeting transcripts disabled tenant-wide</b> (<code>GraphAccessToTranscriptsDisabled</code>). Any Teams meeting without a Plaud recording is invisible.</li>
+        <li><b>Mail connector cannot send</b> — three days of <code>403 ErrorAccessDenied</code> on <code>Mail.Send</code>. No brief has ever reached the mailbox, so no disposition has ever been captured from a reply.</li>
+        <li><b>Rent Manager reports are 1-for-8.</b> Only Aged Receivables runs; the rest return HTTP 500.</li>
+        <li><b>Plaud speaker attribution is generic.</b> Every name here comes from email, Teams, calendar or explicit in-recording naming — never from diarization. Where a recording says "[Speaker 4]," this report says unassigned.</li>
+        <li><b>The sent-mail window is sampled.</b> 207 messages 8/14–8/27; roughly the first and last 50 read in full, plus everything from 8/27–8/28.</li>
+        <li><b>At least one mail folder was never enumerated</b> — Gunster/Belle Haven, Walton Street, some payment replies.</li>
+        <li><b>Teams chat coverage is capped</b> at 50 chats × 50 messages when date-filtered; channel messages not covered.</li>
+        <li><b>Nothing verified against AvidXchange or the lender platforms.</b> Those figures are as stated in correspondence.</li>
+        <li><b>The 8/28 BOA branch outcome is unknown.</b> The appointment existed; whether six accounts closed is unconfirmed.</li>
+      </ul>
+    </div>
+  </details>
+
+  <footer>
+    v2 built 2026-08-29 00:20 ET · window 2026-08-14 → 2026-08-28 · 30 Plaud recordings · Outlook mail both directions · Teams · calendar to 9/4 · Rent Manager AgedReceivables + Properties · Ramp missing-items · vault <code>brain/</code> incl. <code>99-archive/</code>.<br>
+    V = verified against a primary source · S = single-source · UNVERIFIED = worth a look. Every candidate was diffed against the archive; closed items appear in section 13 labelled closed, never as open.
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.ctl button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.dataset.all === 'open';
+      document.querySelectorAll('details.sec').forEach(function (d) { d.open = open; });
+    });
+  });
+  function openTarget() {
+    var h = location.hash;
+    if (!h) return;
+    var el = document.querySelector(h);
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
+</script>

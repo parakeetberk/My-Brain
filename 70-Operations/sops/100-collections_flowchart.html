@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collections SOP — Swim-Lane Flowchart | Parakeet Communities</title>
+<style>
+  body { margin: 0; padding: 24px; font-family: Arial, sans-serif; background: #fff; color: #333; }
+  h1 { color: #1F3864; font-size: 20px; margin-bottom: 4px; }
+  .sub { color: #2E7D32; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+  .meta { font-size: 11px; color: #666; margin-bottom: 18px; }
+  svg { display: block; width: 100%; max-width: 960px; margin: 0 auto; }
+  @media print { body { padding: 8px; } svg { max-width: 100%; } }
+</style>
+</head>
+<body>
+<h1>Operational Procedure: Collections</h1>
+<div class="sub">Parakeet Communities · Operations SOP — Swim-Lane Flowchart</div>
+<div class="meta">Process Owner: Natalie Magurne, Director of Operations &nbsp;|&nbsp; Status: DRAFT — Pending Approval</div>
+
+<svg viewBox="0 0 960 2080" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+  </marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#C62828" stroke-width="1.5" stroke-linecap="round"/>
+  </marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/>
+  </marker>
+</defs>
+
+<!-- LANE HEADERS -->
+<rect x="28" y="14" width="222" height="30" fill="#1F3864"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="139" y="33">CM / District Manager</text>
+<rect x="254" y="14" width="222" height="30" fill="#0F6E56"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="365" y="33">Operations Coordinator</text>
+<rect x="480" y="14" width="222" height="30" fill="#854F0B"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="591" y="33">Regional Manager</text>
+<rect x="706" y="14" width="236" height="30" fill="#72243E"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="824" y="33">Eviction / Legal</text>
+
+<!-- LANE BACKGROUNDS -->
+<rect x="28"  y="44" width="222" height="2020" fill="#1F3864" opacity="0.04"/>
+<rect x="254" y="44" width="222" height="2020" fill="#0F6E56" opacity="0.04"/>
+<rect x="480" y="44" width="222" height="2020" fill="#854F0B" opacity="0.04"/>
+<rect x="706" y="44" width="236" height="2020" fill="#72243E" opacity="0.04"/>
+
+<!-- LANE DIVIDERS -->
+<line x1="250" y1="14" x2="250" y2="2064" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="476" y1="14" x2="476" y2="2064" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="702" y1="14" x2="702" y2="2064" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+<!-- STEP SPINE LABELS -->
+<rect x="0" y="58"   width="20" height="100" rx="3" fill="#1F3864"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,108)"><tspan x="10" y="112">Step 1 · 1st</tspan></text>
+<rect x="0" y="172"  width="20" height="100" rx="3" fill="#1F3864" opacity="0.85"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,222)"><tspan x="10" y="226">Step 2 · 1st</tspan></text>
+<rect x="0" y="286"  width="20" height="100" rx="3" fill="#1F3864" opacity="0.7"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,336)"><tspan x="10" y="340">Step 3 · 3rd</tspan></text>
+<rect x="0" y="400"  width="20" height="110" rx="3" fill="#854F0B" opacity="0.85"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,455)"><tspan x="10" y="459">Step 4 · 5th</tspan></text>
+<rect x="0" y="524"  width="20" height="140" rx="3" fill="#854F0B"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,594)"><tspan x="10" y="598">Step 5 · 6th</tspan></text>
+<rect x="0" y="678"  width="20" height="130" rx="3" fill="#C62828" opacity="0.7"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,743)"><tspan x="10" y="747">Step 6 · Pre-Deadline</tspan></text>
+<rect x="0" y="822"  width="20" height="110" rx="3" fill="#C62828" opacity="0.85"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,877)"><tspan x="10" y="881">Step 7 · Pre-Intake</tspan></text>
+<rect x="0" y="946"  width="20" height="130" rx="3" fill="#C62828"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,1011)"><tspan x="10" y="1015">Step 8 · Deadline+1</tspan></text>
+
+<!-- START -->
+<rect x="390" y="50" width="120" height="32" rx="16" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#333" text-anchor="middle" x="450" y="71">START</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="450" y="92">1st of the month</text>
+
+<!-- ── STEP 1 ── AR Report -->
+<rect x="36" y="102" width="198" height="56" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#0C2754" text-anchor="middle" x="135" y="122">Pull AR Report</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="140">Identify outstanding balances</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="154">Check TWA / auto-pay settings</text>
+
+<!-- IMPORTANT: TWA -->
+<rect x="488" y="102" width="200" height="56" rx="4" fill="#fff9c4" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="588" y="120">⚠ Auto-pay failure does not</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="588" y="136">pause collections cadence.</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="588" y="152">Resident must update TWA.</text>
+
+<!-- ── STEP 2 ── Reminder Email -->
+<rect x="36" y="176" width="198" height="56" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#0C2754" text-anchor="middle" x="135" y="196">Send Reminder Email</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="214">Friendly tone · payment methods</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="228">Document in Rent Manager</text>
+
+<!-- ── STEP 3 ── Follow-up Email -->
+<rect x="36" y="290" width="198" height="56" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#0C2754" text-anchor="middle" x="135" y="310">Send Follow-Up Email</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="328">Reiterate urgency · offer assistance</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="342">Document in Rent Manager</text>
+
+<!-- ── STEP 4 ── Email + Text -->
+<rect x="36" y="404" width="198" height="70" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="135" y="424">Email + Text Reminder</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="442">Urgent tone · simultaneous</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="458">email and text message</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="470">Document both in Rent Manager</text>
+
+<!-- Check note -->
+<rect x="488" y="404" width="200" height="56" rx="4" fill="#fff9c4" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="588" y="422">⚠ Check by mail?</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="588" y="438">Confirm receipt and process</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="588" y="454">promptly. Document date</text>
+
+<!-- ── STEP 5 ── Demand Notices -->
+<rect x="262" y="528" width="198" height="100" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#085041" text-anchor="middle" x="361" y="548">Produce Demand Notices</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="361" y="566">State-specific notice in Rent Mgr</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="361" y="582">FL/SC: 5 days · GA: 3 days</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="361" y="598">NC: 10 days · MA: 30 days</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="361" y="614">Confirm state before producing</text>
+
+<rect x="36" y="558" width="198" height="56" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="135" y="578">Post / Mail Notices</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="596">Deliver per state requirements</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="610">Document delivery in Rent Mgr</text>
+
+<!-- MA warning -->
+<rect x="714" y="528" width="214" height="70" rx="4" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="821" y="548">⛔ MA: 30-day notice required</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="821" y="564">before any eviction action.</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="821" y="580">Wrong notice = invalid eviction.</text>
+
+<!-- ── STEP 6 ── Proactive Follow-Up -->
+<rect x="36" y="682" width="198" height="84" rx="6" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#791F1F" text-anchor="middle" x="135" y="702">Proactive Follow-Up</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="720">Call / contact residents</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="736">Prepare Stipulation Agreement</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="752">if appropriate · send to RM</text>
+
+<!-- RM: Approve stipulation -->
+<rect x="488" y="682" width="198" height="84" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="702">Review Stipulation</text>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="718">Agreement</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="587" y="736">Only RM can approve.</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="587" y="752">Approve or return for revision.</text>
+
+<!-- Stipulation arrow CM → RM -->
+<line x1="234" y1="724" x2="486" y2="724" stroke="#854F0B" stroke-width="1.5" marker-end="url(#arr)"/>
+<text font-family="Arial" font-size="10" fill="#633806" text-anchor="middle" x="360" y="718">Submit for approval</text>
+
+<!-- DECISION: Payment plan approved? -->
+<polygon points="587,778 637,800 587,822 537,800" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="587" y="797">Plan</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="587" y="809">approved?</text>
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="542" y="832">YES</text>
+<line x1="537" y1="800" x2="460" y2="800" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+<text font-family="Arial" font-size="10" fill="#C62828" x="638" y="832">NO</text>
+<line x1="637" y1="800" x2="700" y2="800" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+
+<!-- YES: Stipulation active -->
+<rect x="262" y="780" width="194" height="40" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#085041" text-anchor="middle" x="359" y="797">Stipulation Active</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="359" y="812">Document &amp; monitor payments</text>
+
+<!-- NO: Proceed to Step 7 -->
+<rect x="702" y="780" width="216" height="40" rx="6" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="810" y="797">Proceed to Step 7</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="810" y="812">No plan — prepare for intake</text>
+
+<!-- ── STEP 7 ── Personal Call -->
+<rect x="36" y="838" width="198" height="70" rx="6" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#791F1F" text-anchor="middle" x="135" y="858">Personal Call</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="876">Call each resident still outstanding</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="135" y="892">Document all attempts + outcomes</text>
+
+<!-- RM: Weekly review -->
+<rect x="488" y="838" width="198" height="70" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="858">Weekly Escalation</text>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="874">Review</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="587" y="892">Monitor all outstanding cases</text>
+
+<!-- CM notifies RM -->
+<line x1="234" y1="873" x2="486" y2="873" stroke="#854F0B" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<text font-family="Arial" font-size="10" fill="#633806" text-anchor="middle" x="360" y="867">Notify RM of open cases</text>
+
+<!-- ── STEP 8 ── Intake -->
+<rect x="36" y="950" width="198" height="84" rx="6" fill="#C62828" stroke="#A31515" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="135" y="970">Submit Intake Forms</text>
+<text font-family="Arial" font-size="11" fill="#fcc" text-anchor="middle" x="135" y="988">Complete intake for all</text>
+<text font-family="Arial" font-size="11" fill="#fcc" text-anchor="middle" x="135" y="1004">non-responsive residents</text>
+<text font-family="Arial" font-size="11" fill="#fcc" text-anchor="middle" x="135" y="1018">Document in Rent Manager</text>
+
+<!-- RM: Confirm eviction -->
+<rect x="488" y="950" width="198" height="84" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="970">Confirm Intake &amp;</text>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#633806" text-anchor="middle" x="587" y="986">Initiate Eviction SOP</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="587" y="1004">Notified by CM/DM.</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="587" y="1020">Confirms process triggers.</text>
+
+<!-- Eviction -->
+<rect x="714" y="950" width="214" height="84" rx="6" fill="#f5d0e0" stroke="#72243E" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#4B1528" text-anchor="middle" x="821" y="970">Eviction SOP</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="821" y="988">Initiated by RM after</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="821" y="1004">intake submission.</text>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="821" y="1020">See Eviction SOP.</text>
+
+<!-- Intake → RM → Eviction arrows -->
+<line x1="234" y1="992" x2="486" y2="992" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr-r)"/>
+<line x1="686" y1="992" x2="712" y2="992" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr-r)"/>
+
+<!-- ── STATE TABLE BLOCK ── -->
+<rect x="28" y="1090" width="906" height="30" fill="#1F3864" rx="4"/>
+<text font-family="Arial" font-size="13" font-weight="600" fill="white" text-anchor="middle" x="481" y="1110">STATE-BY-STATE DEMAND NOTICE CURE PERIODS</text>
+
+<!-- Table header -->
+<rect x="28" y="1124" width="220" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" text-anchor="middle" x="138" y="1142">State</text>
+<rect x="250" y="1124" width="160" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" text-anchor="middle" x="330" y="1142">Cure Period</text>
+<rect x="412" y="1124" width="260" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" text-anchor="middle" x="542" y="1142">Notice Type</text>
+<rect x="674" y="1124" width="260" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" text-anchor="middle" x="804" y="1142">Legal Authority</text>
+
+<!-- Rows -->
+<rect x="28" y="1152" width="220" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="138" y="1170">Florida</text>
+<rect x="250" y="1152" width="160" height="28" fill="#fff9c4" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#333" text-anchor="middle" x="330" y="1170">5 business days</text>
+<rect x="412" y="1152" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="542" y="1170">5-Day Notice to Pay or Vacate</text>
+<rect x="674" y="1152" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="804" y="1170">FL Stat. § 723.061</text>
+
+<rect x="28" y="1180" width="220" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="138" y="1198">South Carolina</text>
+<rect x="250" y="1180" width="160" height="28" fill="#fff9c4" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#333" text-anchor="middle" x="330" y="1198">5 days from due date</text>
+<rect x="412" y="1180" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="542" y="1198">Written Demand Notice</text>
+<rect x="674" y="1180" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="804" y="1198">SC Code § 27-47-530</text>
+
+<rect x="28" y="1208" width="220" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="138" y="1226">Georgia</text>
+<rect x="250" y="1208" width="160" height="28" fill="#fce8e8" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#C62828" text-anchor="middle" x="330" y="1226">3 business days</text>
+<rect x="412" y="1208" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="542" y="1226">Notice to Pay or Quit</text>
+<rect x="674" y="1208" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="804" y="1226">O.C.G.A. § 44-7-50 (2024)</text>
+
+<rect x="28" y="1236" width="220" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="138" y="1254">Massachusetts</text>
+<rect x="250" y="1236" width="160" height="28" fill="#E8F5E9" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#2E7D32" text-anchor="middle" x="330" y="1254">30 days (14-day cure)</text>
+<rect x="412" y="1236" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="542" y="1254">30-Day Termination Notice</text>
+<rect x="674" y="1236" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="804" y="1254">MGL c. 140 § 32J</text>
+
+<rect x="28" y="1264" width="220" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="138" y="1282">North Carolina</text>
+<rect x="250" y="1264" width="160" height="28" fill="#fff9c4" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#333" text-anchor="middle" x="330" y="1282">10 days</text>
+<rect x="412" y="1264" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="542" y="1282">10-Day Notice to Pay or Quit</text>
+<rect x="674" y="1264" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#333" text-anchor="middle" x="804" y="1282">NCGS § 42-3</text>
+
+<!-- END -->
+<rect x="390" y="1310" width="120" height="32" rx="16" fill="#2E7D32"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="450" y="1331">RESOLVED</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="450" y="1355">Account off AR report</text>
+
+<!-- VERTICAL FLOW ARROWS (CM lane) -->
+<line x1="135" y1="82" x2="135" y2="100" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="158" x2="135" y2="174" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="232" x2="135" y2="288" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="346" x2="135" y2="402" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="474" x2="135" y2="514" stroke="#888" stroke-width="1"/>
+<line x1="135" y1="514" x2="361" y2="514" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="474" x2="135" y2="556" stroke="#888" stroke-width="0.5" stroke-dasharray="3 3"/>
+<line x1="135" y1="628" x2="135" y2="680" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="361" y1="628" x2="135" y2="628" stroke="#888" stroke-width="1"/>
+<line x1="135" y1="766" x2="135" y2="836" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="908" x2="135" y2="948" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="135" y1="1034" x2="135" y2="1086" stroke="#888" stroke-width="1"/>
+<line x1="135" y1="1086" x2="450" y2="1086" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="450" y1="1308" x2="450" y2="1086" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- START to AR -->
+<line x1="450" y1="82" x2="450" y2="100" stroke="#888" stroke-width="1"/>
+<line x1="450" y1="100" x2="137" y2="100" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Footer -->
+<line x1="28" y1="1380" x2="934" y2="1380" stroke="#2E7D32" stroke-width="1"/>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="481" y="1396">Parakeet Communities, LLC · Confidential Internal Document · Not for External Distribution</text>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="481" y="1410">Process Owner: Natalie Magurne, Director of Operations · Status: DRAFT — Pending Approval</text>
+</svg>
+</body>
+</html>

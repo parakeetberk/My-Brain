@@ -1,0 +1,1326 @@
+# Parakeet Communities — Master QB + FastField Build Gameplan Generator
+# Generates parakeet_master_build_gameplan_v1.0.html
+
+html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parakeet Communities — Master QB + FastField Build Gameplan v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #4ABA81;
+    --red: #F16262;
+    --yellow: #FFCC3B;
+    --navy: #2F4E65;
+    --navy-light: #3d6382;
+    --bg: #f5f7fa;
+    --white: #ffffff;
+    --border: #dde2e8;
+    --text: #1a2533;
+    --muted: #6b7280;
+    --green-light: #e8f7ef;
+    --red-light: #fef0f0;
+    --yellow-light: #fffbec;
+    --navy-light-bg: #eef3f7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Red Hat Display', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+  
+  /* PAGE HEADER */
+  .doc-header { background: var(--navy); color: white; padding: 40px 60px 32px; }
+  .doc-header .logo-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .doc-header .logomark { width: 48px; height: 48px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: white; }
+  .doc-header .brand { font-size: 22px; font-weight: 700; color: white; }
+  .doc-header .brand span { color: var(--green); }
+  .doc-header h1 { font-size: 30px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 8px; }
+  .doc-header .subtitle { font-size: 15px; color: rgba(255,255,255,0.65); font-weight: 400; margin-bottom: 20px; }
+  .doc-header .meta-row { display: flex; gap: 32px; }
+  .doc-header .meta-item { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+  .doc-header .meta-item strong { display: block; font-size: 14px; color: rgba(255,255,255,0.85); text-transform: none; letter-spacing: 0; font-weight: 600; }
+  
+  /* CONTENT LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 40px; }
+  
+  /* SECTION */
+  .section { margin-bottom: 48px; }
+  .section-title { font-size: 20px; font-weight: 800; color: var(--navy); border-left: 5px solid var(--green); padding-left: 16px; margin-bottom: 20px; }
+  .section-subtitle { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 12px; margin-top: 24px; }
+  
+  /* STAT BAR */
+  .stat-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; }
+  .stat-card .num { font-size: 32px; font-weight: 900; color: var(--green); line-height: 1; margin-bottom: 4px; }
+  .stat-card .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; }
+  
+  /* CALLOUT BOX */
+  .callout { border-radius: 10px; padding: 18px 22px; margin: 16px 0; }
+  .callout.green { background: var(--green-light); border-left: 4px solid var(--green); }
+  .callout.red { background: var(--red-light); border-left: 4px solid var(--red); }
+  .callout.yellow { background: var(--yellow-light); border-left: 4px solid var(--yellow); }
+  .callout.navy { background: var(--navy-light-bg); border-left: 4px solid var(--navy); }
+  .callout-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .callout.green .callout-title { color: #1a7a52; }
+  .callout.red .callout-title { color: #c0392b; }
+  .callout.yellow .callout-title { color: #8a6d00; }
+  .callout.navy .callout-title { color: var(--navy); }
+  .callout p, .callout li { font-size: 13.5px; color: var(--text); }
+  .callout ul { margin-left: 18px; margin-top: 6px; }
+  .callout ul li { margin-bottom: 3px; }
+  
+  /* WAVE CARDS */
+  .wave-grid { display: flex; flex-direction: column; gap: 20px; }
+  .wave-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .wave-header { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+  .wave-badge { width: 52px; height: 52px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+  .wave-badge .wnum { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.8; }
+  .wave-badge .wlabel { font-size: 22px; font-weight: 900; line-height: 1; }
+  .wave-header-info h3 { font-size: 16px; font-weight: 800; color: var(--navy); }
+  .wave-header-info .w-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .wave-body { padding: 18px 22px; }
+  .wave-rationale { font-size: 13px; color: var(--text); margin-bottom: 14px; font-style: italic; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+  .wf-list { display: flex; flex-direction: column; gap: 8px; }
+  .wf-item { display: grid; grid-template-columns: 80px 200px 1fr auto; gap: 12px; align-items: start; padding: 10px 12px; background: var(--bg); border-radius: 8px; }
+  .wf-item .wf-num { font-size: 12px; font-weight: 800; color: var(--navy); font-family: monospace; }
+  .wf-item .wf-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .wf-item .wf-sop { font-size: 12px; color: var(--muted); }
+  .wf-item .wf-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+  .tag-locked { background: var(--green-light); color: #1a7a52; }
+  .tag-draft { background: var(--yellow-light); color: #7a5a00; }
+  .tag-new { background: var(--navy-light-bg); color: var(--navy); }
+  .tag-ff { background: #f0e8ff; color: #5b2d8e; }
+  .tag-qbonly { background: #e8f0ff; color: #1d3d8e; }
+  .tag-foundation { background: #ffe8e8; color: #8e1d1d; }
+  
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; background: var(--white); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  thead { background: var(--navy); color: white; }
+  thead th { padding: 10px 12px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  tbody tr:nth-child(even) { background: var(--bg); }
+  tbody tr:hover { background: var(--green-light); }
+  tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td.sop-num { font-family: monospace; font-weight: 700; color: var(--navy); white-space: nowrap; }
+  td.wf-num { font-family: monospace; font-weight: 800; color: var(--green); white-space: nowrap; }
+  td.tier-1 { color: var(--red); font-weight: 700; }
+  td.tier-2 { color: #d97706; font-weight: 600; }
+  td.tier-3 { color: var(--muted); font-weight: 500; }
+  td.tier-r { color: #6b46c1; font-weight: 600; }
+  .pill { display: inline-block; padding: 2px 7px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+  .pill-ff { background: #f0e8ff; color: #5b2d8e; }
+  .pill-qb { background: #e8f0ff; color: #1d3d8e; }
+  .pill-locked { background: var(--green-light); color: #1a7a52; }
+  .pill-draft { background: var(--yellow-light); color: #7a5a00; }
+  .pill-new { background: var(--navy-light-bg); color: var(--navy); }
+  .pill-policy { background: #f5f5f5; color: #555; }
+  .pill-merged { background: #fff0e0; color: #8a4000; }
+  
+  /* DEPENDENCY MAP */
+  .dep-tree { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .dep-chain { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .dep-chain:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .dep-chain-title { font-size: 13px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .dep-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .dep-node { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+  .dep-node.done { background: var(--green-light); color: #1a7a52; border: 1px solid #4ABA81; }
+  .dep-node.planned { background: var(--navy-light-bg); color: var(--navy); border: 1px solid var(--navy); }
+  .dep-node.trigger { background: var(--yellow-light); color: #7a5a00; border: 1px solid #FFCC3B; }
+  .dep-arrow { font-size: 16px; color: var(--muted); }
+  
+  /* SHARED TABLES SECTION */
+  .table-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; }
+  .table-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .table-card-name { font-size: 15px; font-weight: 800; color: var(--navy); }
+  .table-card-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+  .badge-critical { background: var(--red-light); color: var(--red); }
+  .badge-high { background: var(--yellow-light); color: #7a5a00; }
+  .table-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .table-card-feeds { font-size: 12px; color: var(--text); }
+  .table-card-feeds strong { color: var(--navy); }
+  
+  /* OPEN ITEMS */
+  .oi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .oi-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .oi-id { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+  .oi-q { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .oi-ctx { font-size: 12px; color: var(--muted); }
+  .oi-ctx strong { color: var(--text); }
+  
+  /* FOOTER */
+  .doc-footer { background: var(--navy); color: rgba(255,255,255,0.5); text-align: center; padding: 24px; font-size: 12px; margin-top: 60px; }
+  .doc-footer strong { color: rgba(255,255,255,0.8); }
+  
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .container { padding: 20px; }
+    .doc-header { padding: 30px 40px 24px; }
+    .wave-card, table, .table-card { page-break-inside: avoid; }
+    .section { page-break-inside: avoid; }
+  }
+  
+  /* PAGE BREAK DIVIDER */
+  .section-divider { border: none; border-top: 2px solid var(--border); margin: 40px 0; }
+  
+  /* TOC */
+  .toc { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 40px; }
+  .toc-title { font-size: 14px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  .toc ol { margin-left: 20px; }
+  .toc li { font-size: 13.5px; color: var(--text); margin-bottom: 5px; }
+  .toc a { color: var(--navy); text-decoration: none; font-weight: 500; }
+  .toc a:hover { color: var(--green); }
+  
+  .highlight-green { color: var(--green); font-weight: 700; }
+  .highlight-red { color: var(--red); font-weight: 700; }
+  .highlight-navy { color: var(--navy); font-weight: 700; }
+  
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  
+  /* WAVE COLOR CODES */
+  .wave-0 .wave-badge { background: var(--green); color: white; }
+  .wave-1 .wave-badge { background: var(--navy); color: white; }
+  .wave-2 .wave-badge { background: var(--red); color: white; }
+  .wave-3 .wave-badge { background: #8B5CF6; color: white; }
+  .wave-4 .wave-badge { background: #D97706; color: white; }
+  .wave-5 .wave-badge { background: #0891B2; color: white; }
+  .wave-6 .wave-badge { background: #059669; color: white; }
+  .wave-7 .wave-badge { background: #7C3AED; color: white; }
+  .wave-8 .wave-badge { background: #6B7280; color: white; }
+  
+  .wave-label-0 { color: var(--green); }
+  .wave-label-1 { color: var(--navy); }
+  .wave-label-2 { color: var(--red); }
+  .wave-label-3 { color: #8B5CF6; }
+  .wave-label-4 { color: #D97706; }
+  .wave-label-5 { color: #0891B2; }
+  .wave-label-6 { color: #059669; }
+  .wave-label-7 { color: #7C3AED; }
+  .wave-label-8 { color: #6B7280; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  p { margin-bottom: 10px; }
+  ul { margin-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+  
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- DOCUMENT HEADER -->
+<div class="doc-header">
+  <div class="logo-row">
+    <div class="logomark">P</div>
+    <div class="brand"><span>parakeet</span> communities</div>
+  </div>
+  <h1>QB + FastField Master Build Gameplan</h1>
+  <p class="subtitle">Priority-ordered, interconnection-aware build roadmap &mdash; all 91 SOPs mapped to workflows, waves, and shared data architecture</p>
+  <div class="meta-row">
+    <div class="meta-item">Document<strong>parakeet_master_build_gameplan_v1.0</strong></div>
+    <div class="meta-item">Version<strong>1.0 &mdash; Working Draft</strong></div>
+    <div class="meta-item">Prepared<strong>August 2026</strong></div>
+    <div class="meta-item">Owner<strong>Austin &mdash; CEO / Owner</strong></div>
+    <div class="meta-item">Status<strong>&#9711; Active Planning</strong></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <ol>
+    <li><a href="#exec-summary">Executive Summary</a></li>
+    <li><a href="#principles">Foundation Principles &mdash; Why Order Matters</a></li>
+    <li><a href="#current-state">Current State &mdash; What&rsquo;s Already Specced</a></li>
+    <li><a href="#shared-tables">Shared Reference Tables (Pre-Work)</a></li>
+    <li><a href="#wave-plan">Build Wave Plan (Waves 0&ndash;8)</a></li>
+    <li><a href="#sop-mapping">Full SOP-to-Workflow Mapping (91 SOPs)</a></li>
+    <li><a href="#interconnection">Interconnection &amp; Dependency Map</a></li>
+    <li><a href="#open-items">Open Items &amp; Decisions Needed</a></li>
+    <li><a href="#wf-registry">Appendix: Full Workflow Registry</a></li>
+  </ol>
+</div>
+
+<!-- ─── 1. EXECUTIVE SUMMARY ─── -->
+<div class="section" id="exec-summary">
+  <div class="section-title">1. Executive Summary</div>
+  
+  <div class="stat-bar">
+    <div class="stat-card"><div class="num">91</div><div class="lbl">Total SOPs</div></div>
+    <div class="stat-card"><div class="num">46</div><div class="lbl">QB Workflows</div></div>
+    <div class="stat-card"><div class="num">5</div><div class="lbl">Already Specced</div></div>
+    <div class="stat-card"><div class="num">9</div><div class="lbl">Build Waves</div></div>
+    <div class="stat-card"><div class="num">5</div><div class="lbl">Shared Tables (Pre-Build)</div></div>
+  </div>
+  
+  <p>This gameplan organizes all 91 Parakeet Communities SOPs into a sequenced, interconnection-aware build roadmap for the QB + FastField operational OS. It extends the approach established in WF001&ndash;WF003 (Home Ordering, Rehab, Disposition Review) across the full operational surface area &mdash; from resident move-in to eviction, from acquisitions to accounting, from field inspections to legal compliance.</p>
+  
+  <p>The document answers three questions that an ad hoc sprint approach would not:</p>
+  <ul>
+    <li><strong>What shared data tables must exist before any dependent workflow is built</strong> &mdash; so you never have to rebuild a workflow because its data model wasn&rsquo;t ready (the most expensive mistake in QB builds).</li>
+    <li><strong>Which workflows must precede others</strong> &mdash; because workflow B pulls records created by workflow A, or workflow B&rsquo;s automation fires based on a status set by workflow A.</li>
+    <li><strong>What requires a FastField form vs. what lives entirely in QB</strong> &mdash; so field staff have exactly the tools they need, and the back-office team has everything automated behind the scenes.</li>
+  </ul>
+  
+  <div class="callout green">
+    <div class="callout-title">&#10003; What&rsquo;s Already Done (Wave 0)</div>
+    <p><strong>5 workflows are already specced</strong> and represent the first deployable layer of the OS: WF001 Home Ordering (LOCKED v1.2), WF002 Rehab (LOCKED v1.3), WF003 Disposition Review (LOCKED v1.1), WF004 Move Out (DRAFT v1.0), and WF006 Listings (DRAFT v1.0). These represent approximately $3M&ndash;$5M in annual asset movement handled by the system.</p>
+  </div>
+  
+  <div class="callout yellow">
+    <div class="callout-title">&#9888; Critical Pre-Work Before Any New Build</div>
+    <p>Before Waves 1&ndash;8 can begin, <strong>five shared QB reference tables must be built first</strong>. Without them, every downstream workflow will be designed around missing data and will require retroactive rebuilding. This pre-work is estimated to take 1&ndash;2 weeks but prevents 3&ndash;6 weeks of rework later. See Section 4.</p>
+  </div>
+  
+  <div class="callout navy">
+    <div class="callout-title">&#9432; How to Use This Document</div>
+    <p>Work through the waves in order. Each wave section identifies: which SOP(s) it covers, what WF number it is assigned, whether it needs a FastField form, what QB tables it reads from and writes to, what automations it fires, and what decisions are needed before speccing can begin. The full SOP-to-WF mapping table in Section 6 is the master reference for all 91 SOPs.</p>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 2. FOUNDATION PRINCIPLES ─── -->
+<div class="section" id="principles">
+  <div class="section-title">2. Foundation Principles &mdash; Why Order Matters</div>
+  
+  <div class="two-col">
+    <div>
+      <div class="section-subtitle">Principle 1: Shared Tables First, Workflows Second</div>
+      <p>Every QB workflow either <em>creates</em> records in shared tables or <em>reads</em> records from them. If you build WF019 (Eviction Pipeline) before WF005 (Move In) creates Resident records, the eviction workflow has nothing to look up. You cannot auto-populate &ldquo;resident name,&rdquo; &ldquo;lease start date,&rdquo; or &ldquo;community&rdquo; &mdash; the very fields that make automation possible instead of just digital paperwork.</p>
+      <p>The rule: <strong>shared tables and the workflows that populate them must be built before any workflow that reads from them</strong>. This is why the Residents table, Lease Records table, and Work Orders table are pre-work, not Wave 1 tasks.</p>
+      
+      <div class="section-subtitle">Principle 2: Revenue Protection Before Operations Optimization</div>
+      <p>Collections, Stipulations, and the Eviction Pipeline are Wave 2 &mdash; right after the resident lifecycle workflows that create the data. A single 30-day delay in an eviction pipeline due to missing documentation or missed cure period deadlines can cost $1,500&ndash;$3,000 in lost rent plus legal fees. The system needs to protect revenue before it optimizes field operations.</p>
+      
+      <div class="section-subtitle">Principle 3: State-Specific Rules Are Not Edge Cases</div>
+      <p>Parakeet operates in 8 states (AL, FL, GA, MA, MI, NC, SC, WV). FL Chapter 723 lot rent increase rules, MA&rsquo;s 30-day eviction notice requirement, and GA&rsquo;s 60-day rent increase notice are <em>hard deadlines</em> &mdash; not preferences. Any workflow that touches rent increases, evictions, or lease renewals must encode state-specific logic as QB conditional rules or automation triggers. This is not optional and must be designed in from the start.</p>
+    </div>
+    <div>
+      <div class="section-subtitle">Principle 4: FastField = Field Capture, QB = Workflow Engine, RM = System of Record</div>
+      <p>This three-system architecture was established in WF001 and governs every subsequent workflow:</p>
+      <ul>
+        <li><strong>FastField:</strong> Any form completed by a CM or field staff person on-site or on a mobile device. Condition inspections, move-in/move-out reports, site visit checklists, utility verification. FastField handles the data collection; QB handles the resulting workflow steps.</li>
+        <li><strong>QB:</strong> Workflow stages, gate rules, automations, approval routing, record creation, and reporting. QB never replaces RM &mdash; it operates in the gaps between RM capabilities and field reality.</li>
+        <li><strong>RM (Rent Manager):</strong> Financial ledger, charge schedules, lease records, security deposits. QB may display RM data for context but never writes financial records to RM directly &mdash; all RM updates flow through the daily batch CSV sync at 6 PM ET.</li>
+      </ul>
+      
+      <div class="section-subtitle">Principle 5: No Rebuild Debt</div>
+      <p>Rebuild debt is what happens when a workflow is designed in isolation and later needs to be rewired because a dependency wasn&rsquo;t anticipated. Examples of rebuild debt to avoid:</p>
+      <ul>
+        <li>Building Eviction (WF019) before Residents table &rarr; must rebuild the lookup relationships later</li>
+        <li>Building Collections (WF017) without Lease Records &rarr; can&rsquo;t auto-pull balance due or cure period deadline</li>
+        <li>Building Utility Activation (WF027) without community-level Utility Accounts table &rarr; can&rsquo;t auto-assign utility provider</li>
+        <li>Building Rent Increase (WF021) without state field in community record &rarr; can&rsquo;t apply state-specific notice requirements</li>
+      </ul>
+      <p>The wave sequencing in this document is designed specifically to prevent these scenarios.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 3. CURRENT STATE ─── -->
+<div class="section" id="current-state">
+  <div class="section-title">3. Current State &mdash; What&rsquo;s Already Specced (Wave 0)</div>
+  
+  <p>The following workflows have completed specification documents. WF001&ndash;WF003 are locked and ready to build. WF004 and WF006 are in draft status with open items that need resolution before those specs can be locked.</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>WF #</th><th>Workflow Name</th><th>SOP(s)</th><th>Version</th><th>Status</th>
+        <th>QB Tables</th><th>FastField Forms</th><th>Outstanding</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="wf-num">WF001</td>
+        <td><strong>Home Ordering, Delivery &amp; Set</strong></td>
+        <td class="sop-num">001</td>
+        <td>v1.2</td>
+        <td><span class="pill pill-locked">&#10003; LOCKED</span></td>
+        <td>7 tables (Home Orders, Delivery, Construction Inspection, Ops Readiness, Communities, Lots, Vendors)</td>
+        <td>4 forms (Home Order Request, Construction Inspection, Ops &amp; Sales Readiness, Utility Verification)</td>
+        <td>None &mdash; ready to build</td>
+      </tr>
+      <tr>
+        <td class="wf-num">WF002</td>
+        <td><strong>Rehab</strong></td>
+        <td class="sop-num">105a/b</td>
+        <td>v1.3</td>
+        <td><span class="pill pill-locked">&#10003; LOCKED</span></td>
+        <td>5 tables (Rehab Records, Rehab Tasks, Budget Line Items, Vendors, Communities)</td>
+        <td>1 form (Rehab Walkthrough Punchlist)</td>
+        <td>None &mdash; ready to build</td>
+      </tr>
+      <tr>
+        <td class="wf-num">WF003</td>
+        <td><strong>Asset Disposition Review</strong></td>
+        <td class="sop-num">104</td>
+        <td>v1.1</td>
+        <td><span class="pill pill-locked">&#10003; LOCKED</span></td>
+        <td>2 tables (Disposition Meeting Records, Disposition Items)</td>
+        <td>None (QB-only)</td>
+        <td>None &mdash; ready to build</td>
+      </tr>
+      <tr>
+        <td class="wf-num">WF004</td>
+        <td><strong>Move Out</strong></td>
+        <td class="sop-num">102</td>
+        <td>v1.0</td>
+        <td><span class="pill pill-draft">&#9711; DRAFT</span></td>
+        <td>2 tables (Move Out Records, Move Out Inspections)</td>
+        <td>2 forms (Move Out Form w/ Regional approval; Move Out Inspection)</td>
+        <td>5 open items (O-WF004-001 through 005): RM CSV mapping, inspection checklist items, FastField approval routing, SharePoint path, rejected form SLA</td>
+      </tr>
+      <tr>
+        <td class="wf-num">WF006</td>
+        <td><strong>Listings</strong></td>
+        <td class="sop-num">002/003</td>
+        <td>v1.0</td>
+        <td><span class="pill pill-draft">&#9711; DRAFT</span></td>
+        <td>2 tables (Listing Records, Price History)</td>
+        <td>1 form (Listing Request Form)</td>
+        <td>5 open items (O-WF006-001 through 005): listing platforms, RM UDF field names, RM status values, SharePoint folder structure, listing review SLA</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="callout red" style="margin-top: 20px;">
+    <div class="callout-title">&#9888; WF004 &amp; WF006: Lock These Before Wave 1 Begins</div>
+    <p>WF004 (Move Out) feeds directly into Wave 1 (Move In &mdash; the Residents table). And WF006 (Listings) feeds into Wave 3 (Offer to Purchase / WF007). Both specs need their open items resolved and locked before the next wave can be fully designed. The 10 combined open items are documented in Section 8.</p>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 4. SHARED REFERENCE TABLES ─── -->
+<div class="section" id="shared-tables">
+  <div class="section-title">4. Shared Reference Tables &mdash; Pre-Work (Must Build Before Wave 1)</div>
+  
+  <p>These five QB tables are read by <strong>three or more workflows each</strong>. Building them once, correctly, before any downstream workflow is specced prevents the most common and expensive form of rebuild debt. These are not workflow tables &mdash; they are the data foundation the entire OS sits on.</p>
+  
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="table-card-name">&#128101; Residents Table</div>
+      <div class="table-card-badge badge-critical">CRITICAL &mdash; Build First</div>
+    </div>
+    <div class="table-card-desc">Master registry of all current and former residents across all 68 communities. One record per resident. This is the single most important missing table in the current QB build.</div>
+    <div class="table-card-feeds">
+      <strong>Core Fields:</strong> Resident ID (RES-YYYY-###), Full Name, Community (lookup), Lot # (lookup), RM Resident ID, Phone, Email, Status (Active / Former / Evicted / Deceased), Move-In Date, Expected Move-Out Date, Resident Type (POH Owner / Rental / LTP / RTO / Promissory Note)<br><br>
+      <strong>Feeds Into:</strong> WF005 Move In, WF004 Move Out, WF016 Lease Renewal, WF017 Collections, WF018 Stipulation, WF019 Eviction, WF020 Post-Eviction Title, WF021 Rent Increase, WF028 Rental Inspections, WF013 Incident Report, WF029 Violations &mdash; <em>21 workflows total</em><br><br>
+      <strong>RM Sync:</strong> Resident records originate in RM; QB Residents table imports via daily batch CSV. QB writes back status changes via automation (not manually).
+    </div>
+  </div>
+  
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="table-card-name">&#128195; Lease Records Table</div>
+      <div class="table-card-badge badge-critical">CRITICAL &mdash; Build With Residents</div>
+    </div>
+    <div class="table-card-desc">One record per active or historical lease. Tracks lease type, term, rent amount, renewal status, and expiration date. Required for Collections, Eviction, and Lease Renewal to auto-populate key dates and amounts.</div>
+    <div class="table-card-feeds">
+      <strong>Core Fields:</strong> Lease ID (LS-YYYY-###), Resident (lookup → Residents), Community (lookup), Lot #, Lease Type (Standard / LTP / Rental / RTO), Monthly Rent, Lease Start, Lease End, State (FL/GA/SC/MA/NC/AL/MI/WV), Status (Active / Expired / Month-to-Month / Evicted / Renewed), RM Charge Schedule ID<br><br>
+      <strong>Feeds Into:</strong> WF004 Move Out (lease end date), WF005 Move In (creates record), WF016 Lease Renewal (trigger + notice period calc), WF017 Collections (balance due + state cure period), WF018 Stipulation (payment plan terms), WF019 Eviction (lease type determines POH vs rental path), WF021 Rent Increase (state-specific notice period) &mdash; <em>12 workflows total</em><br><br>
+      <strong>State Logic Required:</strong> Cure period by state (FL: 5 bd, SC: 5 days, GA: 3 bd, NC: 10 days, MA: 30 days) must be stored or derivable from the State field on the Lease record.
+    </div>
+  </div>
+  
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="table-card-name">&#128296; Work Orders Table</div>
+      <div class="table-card-badge badge-high">HIGH PRIORITY</div>
+    </div>
+    <div class="table-card-desc">Master log of all maintenance, repair, and infrastructure work orders across all communities. Shared by Site Visit Follow-Up, Rental Inspections, and Month-End reporting.</div>
+    <div class="table-card-feeds">
+      <strong>Core Fields:</strong> Work Order ID (WO-YYYY-###), Community (lookup), Lot # (optional lookup), Category (Electrical / Plumbing / HVAC / Grounds / Infrastructure / General), Description, Priority (Emergency / Urgent / Standard), Status (Open / In Progress / Complete / Deferred), Assigned To (vendor or staff), Date Opened, Date Completed, Cost<br><br>
+      <strong>Feeds Into:</strong> WF008 Site Visit Inspection (generates WOs), WF009 Weekly Maintenance, WF010 Monthly Equipment, WF028 Rental Inspections (generates WOs on fails), WF011 Month End (open WO count), WF029 Violations (WO may accompany notice) &mdash; <em>6 workflows total</em>
+    </div>
+  </div>
+  
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="table-card-name">&#127968; Title &amp; Document Records Table</div>
+      <div class="table-card-badge badge-high">HIGH PRIORITY</div>
+    </div>
+    <div class="table-card-desc">Tracks the chain of title for all community-owned homes (POH) and homes in process. Required before any title transfer workflow can be built. Prevents duplicate records and conflicting title actions on the same asset.</div>
+    <div class="table-card-feeds">
+      <strong>Core Fields:</strong> Title Record ID (TTL-YYYY-###), Asset / Home (lookup → Lots), Current Owner (Parakeet / Resident / Lender / Estate), Title Status (Clear / Pending Transfer / Liened / Deceased Owner / In Process), HUD Label #, Serial Number, Year, Make/Model, State, County, Legal Description, Current Lender (if liened), Attorney File # (Vector Law / FL Fast Title)<br><br>
+      <strong>Feeds Into:</strong> WF020 Post-Eviction Title, WF022 Home Closing, WF023 POH Sales Title Transfer, WF024 Asset Title Transfer, WF005 Move In (closing docs), WF039 Acquisitions Transition &mdash; <em>8 workflows total</em>
+    </div>
+  </div>
+  
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="table-card-name">&#9889; Utility Accounts Table</div>
+      <div class="table-card-badge badge-high">HIGH PRIORITY</div>
+    </div>
+    <div class="table-card-desc">Registry of all utility accounts at the community level (electric, water/sewer, gas, trash) and lot level where individual metering applies. Required before any utility activation or transfer workflow can be built.</div>
+    <div class="table-card-feeds">
+      <strong>Core Fields:</strong> Utility Account ID (UTL-YYYY-###), Community (lookup), Lot # (optional), Utility Type (Electric / Water / Sewer / Gas / Trash / Submetered), Provider Name, Account Number, Account Holder (Parakeet / Resident), Status (Active / Inactive / Pending), Billing Type (Master-metered / Individual / RUBS / Sub-metered), Setup Date<br><br>
+      <strong>Feeds Into:</strong> WF005 Move In (utility transfer to resident), WF004 Move Out (utility transfer back to Parakeet), WF027 Utility Activation New Home, WF027 Utility Activation Rehab, WF035 Utility Recapture Reporting, WF040 Utility Onboarding Acquisitions &mdash; <em>7 workflows total</em>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 5. WAVE PLAN ─── -->
+<div class="section" id="wave-plan">
+  <div class="section-title">5. Build Wave Plan &mdash; Waves 0 Through 8</div>
+  
+  <div class="callout navy" style="margin-bottom: 24px;">
+    <div class="callout-title">Wave Sequencing Logic</div>
+    <p>Waves are ordered by data dependency first, business criticality second. A workflow in Wave 3 cannot be specced until all Wave 1 and Wave 2 workflows are at least in draft, because Wave 3 workflows reference records created by Wave 1&ndash;2. Within each wave, workflows can be specced in parallel. Waves are not calendar weeks &mdash; they are logical dependency layers. Expect 2&ndash;4 weeks per wave depending on complexity and available input from Operations, Legal, and Accounting.</p>
+  </div>
+  
+  <div class="wave-grid">
+
+    <!-- WAVE 0 -->
+    <div class="wave-card wave-0">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">0</span></div>
+        <div class="wave-header-info">
+          <h3>Already Specced &mdash; In Progress</h3>
+          <div class="w-meta">5 workflows &bull; WF001&ndash;WF004, WF006 &bull; 3 LOCKED, 2 DRAFT</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">The foundation layer. Covers the asset delivery-to-listing pipeline and the move-out handoff. These were prioritized correctly: WF001 (ordering) and WF002 (rehab) generate the assets that WF003 decides on, WF006 lists, and WF004 closes out when a resident leaves. Lock WF004 and WF006 before advancing.</div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF001</div><div class="wf-name">Home Ordering, Delivery &amp; Set</div><div class="wf-sop">SOP 001 &bull; 12 stages &bull; 4 FastField forms &bull; 14 automations</div><div><span class="wf-tag tag-locked">LOCKED v1.2</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF002</div><div class="wf-name">Rehab</div><div class="wf-sop">SOP 105a/b &bull; 9 stages &bull; 1 FastField form &bull; 12 automations &bull; Bid approval tiers confirmed</div><div><span class="wf-tag tag-locked">LOCKED v1.3</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF003</div><div class="wf-name">Asset Disposition Review (TBD)</div><div class="wf-sop">SOP 104 &bull; 2 QB tables &bull; QB-only &bull; Weekly Monday meeting trigger</div><div><span class="wf-tag tag-locked">LOCKED v1.1</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF004</div><div class="wf-name">Move Out</div><div class="wf-sop">SOP 102 &bull; 2 QB tables &bull; 2 FastField forms (CM + Regional approval) &bull; 48-hr inspection SLA &bull; 5 open items</div><div><span class="wf-tag tag-draft">DRAFT v1.0</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF006</div><div class="wf-name">Listings</div><div class="wf-sop">SOP 002/003 &bull; 2 QB tables &bull; 1 FastField form &bull; Leslie &amp; Tanya as listing team &bull; 5 open items</div><div><span class="wf-tag tag-draft">DRAFT v1.0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 1 -->
+    <div class="wave-card wave-1">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">1</span></div>
+        <div class="wave-header-info">
+          <h3>Resident Lifecycle Core</h3>
+          <div class="w-meta">3 workflows &bull; WF005, WF015, WF016 &bull; Highest daily frequency &bull; Creates all resident records</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">Wave 1 is the most important wave in the entire build, because it establishes the Residents table and Lease Records table that every subsequent resident-facing workflow depends on. Move In creates the Resident record. Lease Renewal updates it. Resident Info Sheet captures the onboarding profile. Without Wave 1, Waves 2&ndash;5 have no resident data to automate against. <strong>Dependency: 5 shared foundation tables from pre-work must be complete before Wave 1 spec begins.</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF005</div><div class="wf-name">Move In</div>
+            <div class="wf-sop">SOP 103 &bull; Two paths: POH Owner vs. Rental/Community-Owned &bull; FastField Move-In Condition Report &bull; Creates Resident record + Lease record in QB &bull; Triggers Utility Transfer automation &bull; Uploads lease &amp; closing docs to SharePoint &bull; RM sync: daily batch (charge schedule, deposit)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF015</div><div class="wf-name">Resident Information Sheet</div>
+            <div class="wf-sop">SOP 105 (Handoff) &bull; FastField form capturing resident profile at move-in: vehicle info, pets, emergency contacts, communication preferences &bull; Feeds Residents table &bull; Replaces paper onboarding packet &bull; Connects to Violations, Incident Report, and Lease Renewal workflows</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF016</div><div class="wf-name">Lease Renewal Process</div>
+            <div class="wf-sop">SOP 101 &bull; Asset Mgmt issues notices (FL/SC: 90 days, GA/MA/NC: 60 days) &bull; CM generates via RM Express &ldquo;Renew Lease&rdquo; (NOT &ldquo;New Lease&rdquo;) &bull; Digital (e-sig) or manual path &bull; MA: extra 72-hr disclosure package required &bull; QB tracks renewal status &amp; notice period compliance &bull; If resident states intent to vacate: triggers WF004 Move Out &bull; Asset Mgmt updates billing schedule post-activation</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 2 -->
+    <div class="wave-card wave-2">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">2</span></div>
+        <div class="wave-header-info">
+          <h3>Revenue Protection</h3>
+          <div class="w-meta">5 workflows &bull; WF017&ndash;WF021 &bull; Highest financial impact &bull; Depends on Wave 1 Residents + Lease Records</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">The revenue protection pipeline covers the full arc from late payment to eviction to title recovery and rent increase compliance. This wave has the highest financial impact per workflow of any wave: a single missed cure period can cost $2,000&ndash;$5,000; a missed rent increase notice can cost $15,000+/year in FL alone at scale. State-specific logic for all 8 states must be built in from day one &mdash; no retrofitting. <strong>Dependency: Wave 1 complete (Residents + Lease Records tables populated).</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF017</div><div class="wf-name">Collections / AR</div>
+            <div class="wf-sop">SOP 100 &bull; Monthly cadence, 8 steps &bull; CM/DM, Ops Coordinator, Regional Manager, DOO (Natalie) roles &bull; Demand notices by state: FL 5 bd, SC 5 days, GA 3 bd, NC 10 days, MA 30 days &bull; QB auto-calculates cure period deadline from state on Lease record &bull; UPS certified mail via Melanie (Ops Coordinator) &bull; If cured: record closed; if not: triggers WF018 or WF019 &bull; Stipulation Agreement requires Regional Manager approval only</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF018</div><div class="wf-name">Stipulation Process</div>
+            <div class="wf-sop">SOP 118 &bull; Payment plan agreement when resident cannot pay in full &bull; Regional Manager approval required &bull; QB tracks payment schedule compliance &bull; Missed payment auto-triggers escalation &bull; If compliant: record closed; if defaulted: triggers WF019 Eviction &bull; Connects to Lease Records (for terms) and Residents (for history)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF019</div><div class="wf-name">Eviction Pipeline</div>
+            <div class="wf-sop">SOP 800 &bull; 5 phases, 27 steps &bull; Roles: CM/DM, Evictions Team (evictions@parakeetcommunities.com), Regional Manager, DOO (Natalie), Asset Mgmt (Justin), Attorney (Vector Law for liened / FL Fast Title for non-liened) &bull; POH vs. rental path diverge post-filing &bull; Writ → Home Inspection → Auction → Title Transfer path &bull; Post-writ: triggers WF020 Post-Eviction Title &bull; QB tracks filing dates, hearing dates, writ dates by state &bull; Lot Status auto-updates to Lot-Evicted or Lot-Evicted (Rental) via automation</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF020</div><div class="wf-name">Post-Eviction Title Process</div>
+            <div class="wf-sop">SOP 805 &bull; Triggered by WF019 when writ of possession granted on POH home &bull; Depends on: Title Records table (existing lien status), Asset Mgmt (Justin) for title processing &bull; Paths: liened (Vector Law) vs. non-liened (FL Fast Title) &bull; Connects to WF003 Disposition Review once title clears &bull; QB tracks title status through Title Records table</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF021</div><div class="wf-name">Rent Increase &amp; Tax Pass-Throughs</div>
+            <div class="wf-sop">SOP 806 &bull; State-specific notice requirements: FL Ch. 723 (90-day, prospectus may need amending), GA (60-day), MA (most restrictive &mdash; landlord-tenant law governs), NC/SC (60-day) &bull; QB auto-calculates notice deadline from current date + state rule &bull; Tracks annual tax pass-through calculations by community &bull; RM billing schedule updated post-approval &bull; Regional Manager approval required before notices sent</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 3 -->
+    <div class="wave-card wave-3">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">3</span></div>
+        <div class="wave-header-info">
+          <h3>Asset Sales Pipeline</h3>
+          <div class="w-meta">4 workflows &bull; WF007, WF022&ndash;WF024 &bull; Completes the listing-to-closed arc &bull; Depends on WF006 Listings</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">WF006 (Listings) ends when an offer is received. Wave 3 picks up from that point and carries the deal through offer, closing, and title transfer. These workflows also handle the homeowner-title-transfer scenario (POH resident purchases their lot-rented home) and asset-level title corrections. <strong>Dependency: WF006 locked and WF002 (Rehab) complete; Title Records table built in pre-work.</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF007</div><div class="wf-name">Offer to Purchase / Rent</div>
+            <div class="wf-sop">SOP 002 (expanded) &bull; Triggered by WF006 when offer received; WF006 locks into &ldquo;Pending Offer&rdquo; &bull; Tracks offer terms, financing type (cash / dealer loan / in-house loan), buyer background check (AMRENT) &bull; Approved offer → triggers WF022 Home Closing &bull; Rejected offer → WF006 returns to Active &bull; Loan application path → WF045 Online Loan Application</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF022</div><div class="wf-name">Home Closing Process</div>
+            <div class="wf-sop">SOP 003 &bull; Full closing checklist: title search, lien clearance, HUD label verification, settlement statement, deed/title preparation &bull; Attorney coordination &bull; QB tracks closing milestones and document status &bull; Closing package uploaded to SharePoint &bull; Triggers WF023 (if POH sale) or WF005 Move In (if rental/LTP) &bull; RM updated with sale record via daily batch</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF023</div><div class="wf-name">POH Sales Title Transfer</div>
+            <div class="wf-sop">SOP 005 &bull; Specific to POH (Parakeet-owned home) sales where title transfers to buyer &bull; Coordinates with Asset Mgmt (Justin) &bull; Depends on: Title Records table (lien status, HUD label, serial number) &bull; State DMV/HCD filings for manufactured home title &bull; QB tracks submission and receipt of recorded title documents &bull; Asset Status auto-updates to &ldquo;Sold&rdquo; on title confirmation</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF024</div><div class="wf-name">Asset Title Transfer &amp; Title Work</div>
+            <div class="wf-sop">SOPs 801/808 &bull; Handles all non-sale title transfers: estate titles, deceased owner titles, abandoned home titles, lender repo titles, and mid-portfolio title corrections &bull; Requires Title Records table for chain-of-title tracking &bull; Vector Law or FL Fast Title as applicable &bull; QB tracks all document submissions and state agency responses &bull; Asset Status updates via automation when title confirmed</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 4 -->
+    <div class="wave-card wave-4">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">4</span></div>
+        <div class="wave-header-info">
+          <h3>Field Operations &amp; Construction</h3>
+          <div class="w-meta">7 workflows &bull; WF008&ndash;WF010, WF025&ndash;WF028 &bull; Highest FastField usage &bull; Depends on WF001/WF002 + Work Orders table</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">This wave covers what happens on the ground: site visits, rental inspections, utility activation, demolition, and lot preparation. These workflows generate the most FastField usage because CMs and construction staff are capturing data on-site. They also generate the most Work Orders, which feed into the Month-End close (Wave 6). <strong>Dependency: WF001/WF002 locked (for delivery and rehab references); Work Orders table and Utility Accounts table built in pre-work.</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF008</div><div class="wf-name">Community Site Visit Inspection</div>
+            <div class="wf-sop">SOP 117 / 106 &bull; Regional Manager monthly site visit to each community &bull; FastField checklist: grounds, signage, amenities, infrastructure, common areas, vendor work quality &bull; Rating scale: Good / Monitor / Repair / N/A &bull; Items rated &ldquo;Repair&rdquo; auto-generate Work Orders in QB &bull; 30-day follow-up workflow triggered for open items &bull; QB stores visit record; SharePoint receives PDF report &bull; Connects to WF009/WF010 for maintenance tracking</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF009</div><div class="wf-name">Weekly Maintenance Checklist</div>
+            <div class="wf-sop">SOP 123 (Equipment &amp; Inventory) &bull; CM-completed FastField form weekly: pool/spa, gates, common area equipment, generator, water systems &bull; Rating: Good / Monitor / Repair / N/A &bull; Repair items auto-generate Work Orders &bull; Connects to WF010 for monthly rollup &bull; QB stores summary record per community per week</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF010</div><div class="wf-name">Monthly Equipment &amp; Inventory</div>
+            <div class="wf-sop">SOP 123 (monthly variant) &bull; CM-completed FastField form monthly: full equipment inventory count, PPE stock, chemical supplies, capital equipment condition &bull; QB rolls up from weekly checklists &bull; Flagged items auto-generate procurement or repair Work Orders &bull; Feeds into WF011 Month End reporting</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF025</div><div class="wf-name">Demo to Infill</div>
+            <div class="wf-sop">SOP 200 &bull; Triggered by WF003 when Disposition = Demo &bull; 4 phases: Pre-Demo Approval, Demolition Execution, Lot Clearance, Infill Prep &bull; Permit coordination by state &bull; QB tracks all phases, costs, permit status &bull; Lot Status auto-updates to &ldquo;Lot-Demo&rdquo; on initiation, &ldquo;Lot-Not Ready&rdquo; on demo completion, then transitions based on infill decision &bull; Connects to WF026 (Lot Prep) and WF001 (new home ordering) on completion</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF026</div><div class="wf-name">Lot Prep</div>
+            <div class="wf-sop">SOP 205 &bull; Lot preparation between home removal and new home delivery &bull; Covers utility stub-outs, concrete pad, underpinning prep, ground leveling &bull; FastField lot inspection form before and after &bull; Feeds into WF001 Home Ordering (lot must be &ldquo;Lot-Not Ready&rdquo; → &ldquo;Lot-Pending(POH)&rdquo; cleared) &bull; QB tracks tasks, costs, and permit status by lot</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF027</div><div class="wf-name">Utility Activation</div>
+            <div class="wf-sop">SOP 303a (New Home) &amp; 303b (Rehab) &bull; Physical and account-level utility verification before any home goes live &bull; FastField form: meter read, account activation confirmation, provider confirmation per utility type &bull; Reads from Utility Accounts table &bull; New Home path: triggered by WF001 Stage 8 (Utility Verification) &bull; Rehab path: triggered by WF002 on completion &bull; QB updates Utility Account record status to Active on confirmation</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF028</div><div class="wf-name">Rental Inspections</div>
+            <div class="wf-sop">SOP 116 &bull; Annual or move-in/move-out inspection of rental homes (community-owned) &bull; FastField checklist: interior (kitchen, bath, HVAC, appliances, flooring, walls), exterior (siding, skirting, steps, roof) &bull; Rating: Excellent / Good / Fair / Poor / N/A (matching WF001 condition scale) &bull; Items rated Poor or Fail auto-generate WF002 Rehab record OR Work Order depending on severity &bull; QB tracks inspection record linked to Resident and Lot</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 5 -->
+    <div class="wave-card wave-5">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">5</span></div>
+        <div class="wave-header-info">
+          <h3>Compliance &amp; Legal</h3>
+          <div class="w-meta">5 workflows &bull; WF013, WF029&ndash;WF032 &bull; Includes all state compliance SOPs &bull; Can run in parallel with Wave 4</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">Compliance workflows are largely independent of resident data, making them a natural parallel track to Wave 4. The Violation Process (WF029) is the one exception &mdash; it reads Resident records &mdash; but can be designed in Wave 5 once Wave 1&rsquo;s Residents table is confirmed. License/Permit and Insurance renewals are calendar-triggered workflows, not event-triggered, so they are relatively simpler to build. <strong>Dependency: Residents table (for WF029 only); otherwise independent.</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF013</div><div class="wf-name">Incident Report</div>
+            <div class="wf-sop">SOP 108 / 125 &bull; Covers property-level incidents: injuries, property damage, emergency infrastructure, break-ins, environmental &bull; FastField form submitted by CM immediately at incident &bull; Auto-routes to Regional Manager and DOO for review &bull; QB tracks incident record, follow-up actions, insurance claim status &bull; Elevated incidents auto-flag to legal team &bull; Replaces JotForm incident reports &bull; Connects to Work Orders for physical remediation</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF029</div><div class="wf-name">Violation Process</div>
+            <div class="wf-sop">SOP 809 &bull; Covers lease and community rules violations: parking, pet, noise, property condition, unauthorized occupants &bull; QB-only workflow (no FastField form needed &mdash; CM enters violation details in QB) &bull; Notice generation and delivery tracking &bull; Cure period tracking by violation type &bull; Progressive discipline: 1st notice → 2nd notice → legal action &bull; Reads Resident record and Lease record for contact info and lease terms &bull; Connects to WF019 Eviction if uncured</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF030</div><div class="wf-name">License &amp; Permit Renewals</div>
+            <div class="wf-sop">SOP 804 &bull; Calendar-triggered workflow: annual MH community licenses, business licenses, pool permits, electrical permits, water/sewer permits by state &bull; QB tracks renewal date, license number, issuing agency, responsible person, and status per community &bull; Automations: 90-day, 60-day, 30-day, 14-day, and 7-day email reminders before expiration &bull; Expired license = hard block flagged to leadership</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF031</div><div class="wf-name">Fair Housing &amp; Annual Training Tracking</div>
+            <div class="wf-sop">SOP 802 &bull; Tracks annual Fair Housing training completion for all CMs, RMs, and staff &bull; QB record per employee per year &bull; Completion date, training provider, certificate number &bull; Automations: 60-day reminder, 14-day escalation to HR if incomplete &bull; Connects to HR onboarding (WF042) for new-hire training requirement</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF032</div><div class="wf-name">Insurance Renewals</div>
+            <div class="wf-sop">SOP 803 &bull; Tracks all property and liability insurance policies by community &bull; QB record per policy: carrier, policy number, coverage type, premium, expiration date &bull; Automations: 90-day and 30-day reminders to Asset Management &bull; Certificate of Insurance upload to SharePoint per renewal &bull; Links to WF013 (Incident Report) for claims tracking</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 6 -->
+    <div class="wave-card wave-6">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">6</span></div>
+        <div class="wave-header-info">
+          <h3>Accounting &amp; Financial Operations</h3>
+          <div class="w-meta">6 workflows &bull; WF011, WF033&ndash;WF037 &bull; Depends on Wave 1 (resident data) &amp; Wave 3 (sale data)</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">Most accounting workflows need resident-level data (security deposits, utility recapture) or asset-sale data (WIP closeouts, lender repo) that comes from earlier waves. Month End Ops Close Out (WF011) is the integrating workflow &mdash; it reads from Work Orders (Wave 4), Listing Records (WF006), and Lease Records (Wave 1) to produce the monthly summary. Build Wave 6 once Wave 1 and Wave 3 are functional. <strong>Dependency: Waves 1, 3 in draft or complete. Note: RM remains the system of record for all financial data; QB tracks workflow status and triggers syncs.</strong></div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF011</div><div class="wf-name">Month End Ops Close Out</div>
+            <div class="wf-sop">SOP 110 &bull; Monthly QB rollup: open Work Orders, active rehabs, listing status, move-in/move-out counts, eviction status, open collections &bull; CM/RM/Regional sign-off on checklist items &bull; Connects to Financial Reporting (WF037) &bull; QB-only &bull; Generates month-end summary record per community</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF033</div><div class="wf-name">AP / Avid Exchange Process</div>
+            <div class="wf-sop">SOPs 300/303 &bull; Accounts payable workflow: invoice receipt, coding, approval routing, Avid Exchange submission &bull; QB tracks invoice record: vendor, community, GL code, amount, approval status &bull; Approval tiers: &lt;$2,500.00 = Regional Manager; $2,500.00&ndash;$5,000.00 = Director; &gt;$5,000.00 = Austin &bull; Approved invoices pushed to Avid Exchange queue &bull; Reads Vendors reference table (from WF002 pre-work)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF034</div><div class="wf-name">Security Deposit Refund</div>
+            <div class="wf-sop">SOP 312 &bull; Triggered by WF004 Move Out when move-out is confirmed &bull; RM = system of record for security deposit ledger &bull; QB tracks refund request record: resident (lookup), deposit amount (from RM sync), deductions, final refund amount, approval status &bull; Regional Manager approval required for deductions &bull; State-specific refund timeline requirements (FL: 15 days if deductions; 30 days if full refund)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF035</div><div class="wf-name">Utility Recapture Reporting</div>
+            <div class="wf-sop">SOPs 314/315 &bull; Tracks utility billing vs. recapture from residents for sub-metered and RUBS communities &bull; Reads Utility Accounts table for account types and rates &bull; QB produces monthly recapture report per community: total billed, total collected, variance &bull; Flags communities where utility expenses exceed resident recapture &bull; Connects to WF037 Financial Reporting</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF036</div><div class="wf-name">Home Lender Repo Process</div>
+            <div class="wf-sop">SOP 302 &bull; Process when a resident defaults on their manufactured home loan (separate from lot rent) &bull; Lender contacts Parakeet; Parakeet coordinates access &bull; QB tracks repo notice date, lender contact, home status during repo &bull; If Parakeet acquires title post-repo: triggers WF024 Title Transfer &bull; If lender removes home: triggers lot status update and WF025/WF001 path &bull; Asset Mgmt (Justin) owns this process</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF037</div><div class="wf-name">Financial Reporting (P&amp;L / Rent Roll / Quarterly)</div>
+            <div class="wf-sop">SOPs 307/309/311 &bull; QB-level reporting dashboards pulling from: Lease Records (rent roll), Work Orders (maintenance costs), Rehab Records (capex), Listing Records (sales pipeline), Collections Records (delinquency) &bull; Monthly P&amp;L view per community &bull; Quarterly summary for leadership &bull; RM remains primary financial GL; QB provides operational-metric overlay &bull; No financial data written to RM from this workflow</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 7 -->
+    <div class="wave-card wave-7">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">7</span></div>
+        <div class="wave-header-info">
+          <h3>Acquisitions &amp; New Community Onboarding</h3>
+          <div class="w-meta">4 workflows &bull; WF038&ndash;WF041 &bull; Feeds all prior waves with new community data &bull; Can begin speccing in parallel with Wave 5/6</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">Acquisitions workflows are standalone processes that bring new communities into the system &mdash; they don&rsquo;t depend on resident data the way operational workflows do. However, Utility Onboarding for acquisitions (WF040) must align with the Utility Accounts table design from the pre-work phase. And Acquisitions Transition (WF039) feeds ALL prior waves by populating Communities, Lots, and Residents records for newly acquired communities. Wave 7 can be designed in parallel with Waves 5&ndash;6 but should not be built before the shared tables are established.</div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF038</div><div class="wf-name">Due Diligence &amp; Acquisition</div>
+            <div class="wf-sop">SOP 402 &bull; Multi-department process: legal (title search, HUD label verification), finance (rent roll review, operating statements), construction (infrastructure audit), ops (management assessment) &bull; QB tracks due diligence task list: status per department, outstanding items, key dates &bull; FastField potential: on-site infrastructure inspection form (electric, water/sewer, roads) &bull; Gate: DD cleared → Board/Austin approval → move to WF039</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF039</div><div class="wf-name">Acquisitions Transition</div>
+            <div class="wf-sop">SOP 401 &bull; Full community takeover: staff, systems, residents, vendors &bull; QB creates: new Community record, all Lot records, initial Resident records (from RM import), Utility Account records &bull; FastField: transition inspection per lot &bull; Connects to WF040 (utility onboarding), WF005 (resident move-in records for incoming residents), WF027 (utility activation per lot) &bull; Most complex single workflow in the OS &mdash; touches every shared table</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-ff">FastField</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF040</div><div class="wf-name">Utility Onboarding (Acquisitions)</div>
+            <div class="wf-sop">SOP 403 &bull; MH-specific utility setup: sub-metering installation, master-metered conversion, RUBS calculation setup &bull; Reads and populates Utility Accounts table for new community &bull; QB tracks account transfer status per utility type per community &bull; Coordinates with utility providers for account name changes &bull; Connects to WF027 (activation) and WF035 (recapture reporting setup)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF041</div><div class="wf-name">Acq-OPS Transition Recaps</div>
+            <div class="wf-sop">SOP 400 &bull; Post-acquisition handoff documentation from Acquisitions team to Operations &bull; QB record: 90-day recap of outstanding transition items, committed repairs, pending title issues, utility changes &bull; Regional Manager assigned to new community at this stage &bull; Connects to WF039 (source data) and WF008 (first site visit within 30 days of acquisition close)</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 8 -->
+    <div class="wave-card wave-8">
+      <div class="wave-header">
+        <div class="wave-badge"><span class="wnum">Wave</span><span class="wlabel">8</span></div>
+        <div class="wave-header-info">
+          <h3>HR, Training &amp; Operational Cadence</h3>
+          <div class="w-meta">5 workflows &bull; WF042&ndash;WF046 &bull; Operational support layer &bull; Does not block any prior wave</div>
+        </div>
+      </div>
+      <div class="wave-body">
+        <div class="wave-rationale">HR, training, and cadence workflows are the last wave because they support the team that runs the other workflows &mdash; they don&rsquo;t depend on any operational data and don&rsquo;t block any core process. However, Manager Onboarding (WF042) should be done before new CMs start, and Prospect Screening (WF045) should be done before WF007 (Offer to Purchase) goes live. The Wave 8 label means &ldquo;build last,&rdquo; not &ldquo;unimportant.&rdquo;</div>
+        <div class="wf-list">
+          <div class="wf-item">
+            <div class="wf-num">WF042</div><div class="wf-name">Manager Onboarding</div>
+            <div class="wf-sop">SOP 700 &bull; New CM/RM onboarding checklist in QB &bull; Tracks: system access setup (RM, QB, FastField, Teams, SharePoint), keys/codes, property walkthrough, training completion &bull; Connects to WF031 (Fair Housing training record creation) &bull; 30-day, 60-day, 90-day milestone check-ins &bull; HR owns; Regional Manager executes</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF043</div><div class="wf-name">Team Onboarding &amp; Training Tracking</div>
+            <div class="wf-sop">SOP 702 &bull; Broader training log: all staff, all training programs &bull; QB record per training event per employee &bull; Connects to WF031 (Fair Housing) and WF042 (Manager Onboarding) &bull; Compliance training completion tracked for legal audit purposes</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF044</div><div class="wf-name">Property Business Plan</div>
+            <div class="wf-sop">SOP 109 &bull; Monthly/quarterly community business plan: occupancy targets, revenue goals, capex priorities, delinquency thresholds &bull; CM and Regional Manager complete in QB &bull; QB pulls live data from Lease Records, Work Orders, and Listing Records to pre-populate metrics &bull; Regional approval before submission to leadership</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF045</div><div class="wf-name">Prospect Screening &amp; Background Check</div>
+            <div class="wf-sop">SOPs 005/006 (AMRENT) &bull; Screening workflow initiated with WF007 Offer to Purchase &bull; QB tracks AMRENT order status, results, approval/denial decision &bull; Approval criteria consistent across all states &bull; Denial requires documented reason (Fair Housing compliance) &bull; Approved: moves to WF007 next step; Denied: WF007 rejected path</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+          <div class="wf-item">
+            <div class="wf-num">WF046</div><div class="wf-name">Online Loan Application Process</div>
+            <div class="wf-sop">SOP 7 &bull; Parakeet in-house financing or lender referral process &bull; QB tracks loan application status: submitted, under review, approved, denied &bull; Reads Offer record from WF007 for loan amount and home details &bull; Connects to WF022 Home Closing on approval &bull; Denial returns to WF007 for cash or alternative financing path</div>
+            <div><span class="wf-tag tag-new">NEW</span> <span class="wf-tag tag-qbonly">QB-Only</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wave-grid -->
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 6. SOP MAPPING TABLE ─── -->
+<div class="section" id="sop-mapping">
+  <div class="section-title">6. Full SOP-to-Workflow Mapping (91 SOPs)</div>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#F16262"></div> Tier 1 &mdash; Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D97706"></div> Tier 2 &mdash; High</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6B7280"></div> Tier 3 &mdash; Standard</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div> Recommended Addition</div>
+    <div class="legend-item"><span class="pill pill-ff">FF</span> FastField form required</div>
+    <div class="legend-item"><span class="pill pill-qb">QB</span> QB-only workflow</div>
+    <div class="legend-item"><span class="pill pill-locked">LOCKED</span> Spec locked</div>
+    <div class="legend-item"><span class="pill pill-draft">DRAFT</span> Spec in draft</div>
+    <div class="legend-item"><span class="pill pill-new">PLANNED</span> New workflow assigned</div>
+    <div class="legend-item"><span class="pill pill-policy">POLICY</span> Document only &mdash; no QB workflow needed</div>
+    <div class="legend-item"><span class="pill pill-merged">MERGED</span> Absorbed into another WF</div>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>SOP #</th><th>Process / SOP Name</th><th>Department</th><th>Tier</th>
+        <th>WF #</th><th>Wave</th><th>Form</th><th>Status</th><th>Key Dependencies</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- ACQUISITIONS -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Acquisitions / Asset Management</td></tr>
+      <tr><td class="sop-num">400</td><td>Acq-OPS Transition Recaps</td><td>Acquisitions</td><td class="tier-2">Tier 2</td><td class="wf-num">WF041</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>WF039 (source), WF008 (first site visit)</td></tr>
+      <tr><td class="sop-num">401</td><td>Acquisitions Transitions</td><td>Acquisitions</td><td class="tier-1">Tier 1</td><td class="wf-num">WF039</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>All shared tables, WF040, WF027, WF005</td></tr>
+      <tr><td class="sop-num">402</td><td>Due Diligence &amp; Acquisition Process</td><td>Acquisitions</td><td class="tier-1">Tier 1</td><td class="wf-num">WF038</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Legal, Finance, Construction coordination</td></tr>
+      <tr><td class="sop-num">403</td><td>Utility Onboarding (Acquisitions)</td><td>Acquisitions</td><td class="tier-1">Tier 1</td><td class="wf-num">WF040</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Utility Accounts table, WF027, WF035</td></tr>
+      
+      <!-- ACCOUNTING -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Accounting / Finance</td></tr>
+      <tr><td class="sop-num">300</td><td>Avid Exchange Process</td><td>Accounting</td><td class="tier-3">Tier 3</td><td class="wf-num">WF033</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Vendors table, approval tiers</td></tr>
+      <tr><td class="sop-num">301</td><td>Rent Roll &amp; Vacancy Reporting</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF037</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Lease Records, Listing Records</td></tr>
+      <tr><td class="sop-num">302</td><td>Home Lender Repo Process</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF036</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Title Records, WF024, Asset Mgmt (Justin)</td></tr>
+      <tr><td class="sop-num">303</td><td>AP Process</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF033</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF033</span></td><td>Merged with Avid Exchange workflow</td></tr>
+      <tr><td class="sop-num">303a-b</td><td>Utility Activation &amp; Physical Verification</td><td>Accounting/Ops/Const</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF027</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Utility Accounts table, WF001 (new home), WF002 (rehab)</td></tr>
+      <tr><td class="sop-num">304</td><td>Budgets</td><td>Accounting</td><td class="tier-2">Tier 2</td><td>—</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Feeds WF037 Financial Reporting; process doc only</td></tr>
+      <tr><td class="sop-num">305</td><td>Corporate Model</td><td>Accounting</td><td class="tier-2">Tier 2</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Financial model doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">306</td><td>Debt Payment</td><td>Accounting</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Treasury/banking SOP; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">307</td><td>Financial Reporting</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF037</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>All operational QB tables as data sources</td></tr>
+      <tr><td class="sop-num">308</td><td>Fixed Assets</td><td>Accounting</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Asset register in RM; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">309</td><td>P&amp;L Reporting</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF037</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF037</span></td><td>Merged with Financial Reporting</td></tr>
+      <tr><td class="sop-num">310</td><td>Payroll Process</td><td>Accounting</td><td class="tier-2">Tier 2</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Payroll platform (ADP/Gusto); no QB workflow needed</td></tr>
+      <tr><td class="sop-num">311</td><td>Quarterly Reporting</td><td>Accounting</td><td class="tier-2">Tier 2</td><td class="wf-num">WF037</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF037</span></td><td>Merged with Financial Reporting</td></tr>
+      <tr><td class="sop-num">312</td><td>Security Deposit Refund Request</td><td>Accounting</td><td class="tier-3">Tier 3</td><td class="wf-num">WF034</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF004 Move Out; Residents + Lease Records</td></tr>
+      <tr><td class="sop-num">313</td><td>Tax Process</td><td>Accounting</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>External CPA process; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">314</td><td>Utility Recapture Reporting</td><td>Accounting</td><td class="tier-1">Tier 1</td><td class="wf-num">WF035</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Utility Accounts table, sub-metering setup</td></tr>
+      <tr><td class="sop-num">315</td><td>Utility Recapture Review</td><td>Accounting</td><td class="tier-1">Tier 1</td><td class="wf-num">WF035</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF035</span></td><td>Merged with Utility Recapture Reporting</td></tr>
+      <tr><td class="sop-num">316</td><td>WIP Close Outs</td><td>Accounting</td><td class="tier-3">Tier 3</td><td>—</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Process feeds WF037; no separate QB workflow needed</td></tr>
+      
+      <!-- OPERATIONS -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Operations</td></tr>
+      <tr><td class="sop-num">100</td><td>AR and Collections</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF017</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents, Lease Records (state + cure period logic)</td></tr>
+      <tr><td class="sop-num">100</td><td>Collections (sub-process)</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF017</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF017</span></td><td>Merged with AR and Collections</td></tr>
+      <tr><td class="sop-num">101</td><td>Lease Renewal Process</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF016</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents, Lease Records; triggers WF004 if vacating</td></tr>
+      <tr><td class="sop-num">102</td><td>Move Out Process</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF004</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-draft">DRAFT v1.0</span></td><td>5 open items; feeds WF034 Security Deposit Refund</td></tr>
+      <tr><td class="sop-num">103</td><td>Move In Process</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF005</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Creates Residents + Lease Records; Utility Accounts</td></tr>
+      <tr><td class="sop-num">104</td><td>TBD Unit Review and Allocate</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF003</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-locked">LOCKED v1.1</span></td><td>Triggers WF002 (Rehab), WF025 (Demo), WF006 (Listing)</td></tr>
+      <tr><td class="sop-num">105</td><td>Rehab Handoff Checklist</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF015</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Feeds Residents table (onboarding profile)</td></tr>
+      <tr><td class="sop-num">105a</td><td>External Rehab Process</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF002</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-locked">LOCKED v1.3</span></td><td>Part of WF002 spec</td></tr>
+      <tr><td class="sop-num">105b</td><td>Internal Rehab Process</td><td>Operations</td><td>—</td><td class="wf-num">WF002</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF002</span></td><td><span class="pill pill-locked">LOCKED v1.3</span></td><td>Merged into WF002 spec</td></tr>
+      <tr><td class="sop-num">106</td><td>30-Day Regional Site Visit Follow-Up</td><td>Operations</td><td class="tier-3">Tier 3</td><td class="wf-num">WF008</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Merged with WF008 Site Visit (follow-up sub-process)</td></tr>
+      <tr><td class="sop-num">106</td><td>Site Visit and Follow-Up Process</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF008</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-merged">MERGED → WF008</span></td><td>Merged with WF008</td></tr>
+      <tr><td class="sop-num">107</td><td>Collections / Demand / Eviction Pipeline</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF017&ndash;WF019</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF017/018/019</span></td><td>The full pipeline: WF017 → WF018 → WF019</td></tr>
+      <tr><td class="sop-num">108</td><td>Incident Reporting</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF013</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents (lookup); routes to RM + DOO + Legal</td></tr>
+      <tr><td class="sop-num">109</td><td>Mo/Qtr Property Business Plan</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF044</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Reads live QB metrics across all tables</td></tr>
+      <tr><td class="sop-num">110</td><td>Month End Ops Close Out</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF011</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Reads Work Orders, Lease Records, Listings, Rehabs</td></tr>
+      <tr><td class="sop-num">111</td><td>Occupancy Recovery / Problem Asset Review</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td>—</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Process doc; reporting view in QB pulls from WF037</td></tr>
+      <tr><td class="sop-num">112</td><td>Ops/Const Weekly Updates</td><td>Operations</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Meeting cadence doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">113</td><td>Property Email / Communication Inclusion</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Communication standards doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">114</td><td>Rehab-to-Listing Readiness</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td>—</td><td>—</td><td><span class="pill pill-merged">MERGED → WF002/WF006</span></td><td><span class="pill pill-new">PLANNED</span></td><td>WF002 completion triggers WF006 listing request</td></tr>
+      <tr><td class="sop-num">115</td><td>Rent Manager Issue Ownership &amp; Update Standards</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>RM data governance doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">116</td><td>Rental Inspections</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF028</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents, Lots; triggers WF002 or Work Order on fail</td></tr>
+      <tr><td class="sop-num">117</td><td>Site Visit Inspection</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF008</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Work Orders table; Community record</td></tr>
+      <tr><td class="sop-num">118</td><td>Stipulation Process</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF018</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF017 Collections; Residents, Leases</td></tr>
+      <tr><td class="sop-num">119</td><td>Utility Onboarding (Current Communities)</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF027</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-merged">MERGED → WF027</span></td><td>Merged with Utility Activation workflow</td></tr>
+      <tr><td class="sop-num">120</td><td>Utility Transfers</td><td>Operations</td><td class="tier-2">Tier 2</td><td class="wf-num">WF014</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Utility Accounts table; triggered by WF005 (move-in) and WF004 (move-out)</td></tr>
+      <tr><td class="sop-num">121</td><td>Weekly Cross-Dept Project Review</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Meeting cadence doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">122</td><td>PPE</td><td>Operations</td><td>—</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td>—</td><td>Safety compliance doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">123</td><td>Equipment and Inventory Checklist</td><td>Operations</td><td class="tier-3">Tier 3</td><td class="wf-num">WF009/WF010</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Weekly (WF009) + Monthly (WF010) FastField forms</td></tr>
+      <tr><td class="sop-num">124</td><td>Emergency Infrastructure Escalation</td><td>Operations</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF013</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-merged">MERGED → WF013</span></td><td>High-severity path within WF013 Incident Report</td></tr>
+      <tr><td class="sop-num">125</td><td>Emergency Property Level Issue Reporting</td><td>Operations</td><td class="tier-1">Tier 1</td><td class="wf-num">WF013</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-merged">MERGED → WF013</span></td><td>Merged with WF013 Incident Report (same FastField form, different routing)</td></tr>
+      
+      <!-- CONSTRUCTION -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Construction / Operations</td></tr>
+      <tr><td class="sop-num">200</td><td>Demo to Infill Process</td><td>Construction</td><td class="tier-1">Tier 1</td><td class="wf-num">WF025</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF003 (Demo); feeds WF026, WF001</td></tr>
+      <tr><td class="sop-num">201</td><td>New Home Delivery</td><td>Construction</td><td>—</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>Fully covered in WF001 spec</td></tr>
+      <tr><td class="sop-num">202</td><td>Site Approval Checklist</td><td>Construction</td><td>—</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>Fully covered in WF001 spec</td></tr>
+      <tr><td class="sop-num">203</td><td>New Home Delivery / Set / Utility / Sales Release</td><td>Construction</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>Fully covered in WF001 spec</td></tr>
+      <tr><td class="sop-num">204</td><td>In-House Construction Projects</td><td>Construction</td><td class="tier-2">Tier 2</td><td>—</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Project scoping/planning doc; tracked via Work Orders</td></tr>
+      <tr><td class="sop-num">205</td><td>Lot Prep</td><td>Construction</td><td class="tier-1">Tier 1</td><td class="wf-num">WF026</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Feeds WF001 (lot readiness gate); Utility Accounts table</td></tr>
+      <tr><td class="sop-num">206</td><td>Make Ready Board Flow</td><td>Construction</td><td class="tier-1">Tier 1</td><td class="wf-num">WF003</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF003</span></td><td><span class="pill pill-locked">LOCKED v1.1</span></td><td>MRB is retired (E-001). Disposition Review (WF003) replaces MRB entirely.</td></tr>
+      <tr><td class="sop-num">207</td><td>Construction Roles &amp; Responsibilities</td><td>Construction</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Org chart / RACI doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">208</td><td>Construction-to-Operations Handoff</td><td>Construction</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>WF001 two-stage inspection = construction handoff to Ops</td></tr>
+      <tr><td class="sop-num">209</td><td>Construction Onboarding</td><td>Construction</td><td class="tier-3">Tier 3</td><td>—</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>HR/onboarding doc; consider adding to WF043</td></tr>
+      <tr><td class="sop-num">210</td><td>Construction Preventative Checklist</td><td>Construction</td><td class="tier-2">Tier 2</td><td class="wf-num">WF009</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF</span></td><td><span class="pill pill-merged">MERGED → WF009</span></td><td>Weekly maintenance checklist covers preventative items</td></tr>
+      <tr><td class="sop-num">211</td><td>New Home Walkthrough Checklist</td><td>Construction</td><td class="tier-2">Tier 2</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>89-item Construction Inspection form in WF001 spec</td></tr>
+      <tr><td class="sop-num">212</td><td>Project Coordination (Ops/Const Weekly)</td><td>Construction</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Meeting cadence doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">213</td><td>Project Planning and Scope</td><td>Construction</td><td class="tier-2">Tier 2</td><td>—</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Project scoping process; tracked in WF002 or Work Orders</td></tr>
+      <tr><td class="sop-num">214</td><td>Project Sign Off</td><td>Construction</td><td class="tier-2">Tier 2</td><td class="wf-num">WF002</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF002</span></td><td><span class="pill pill-locked">LOCKED v1.3</span></td><td>WF002 Stage 9 = Completion / Sign-Off gate</td></tr>
+      <tr><td class="sop-num">215</td><td>Property Future Cap Ex</td><td>Construction</td><td class="tier-2">Tier 2</td><td>—</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>CapEx planning doc; feeds WF037 Financial Reporting</td></tr>
+      <tr><td class="sop-num">216</td><td>Vendor Start / Stop / Access Process</td><td>Construction</td><td class="tier-r">Rec. Addition</td><td>—</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Vendor management policy; tracked in QB Vendors table</td></tr>
+      
+      <!-- SALES / MARKETING -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Sales / Marketing</td></tr>
+      <tr><td class="sop-num">001</td><td>New Home Purchase Process (Dealer)</td><td>Sales</td><td class="tier-2">Tier 2</td><td class="wf-num">WF001</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-merged">MERGED → WF001</span></td><td><span class="pill pill-locked">LOCKED v1.2</span></td><td>WF001 covers dealer home ordering</td></tr>
+      <tr><td class="sop-num">002</td><td>Home Sales Process</td><td>Sales</td><td class="tier-1">Tier 1</td><td class="wf-num">WF007</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF006 offer received; Title Records, Residents</td></tr>
+      <tr><td class="sop-num">003</td><td>Home Closing Process</td><td>Sales</td><td class="tier-1">Tier 1</td><td class="wf-num">WF022</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF007 approved offer; Title Records; SharePoint docs</td></tr>
+      <tr><td class="sop-num">004</td><td>Day of Closing Process</td><td>Sales</td><td>—</td><td class="wf-num">WF022</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-merged">MERGED → WF022</span></td><td>—</td><td>Merged into Home Closing Process (WF022)</td></tr>
+      <tr><td class="sop-num">005</td><td>POH Sales Title Transfer</td><td>Sales</td><td class="tier-1">Tier 1</td><td class="wf-num">WF023</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Title Records table; state DMV/HCD filings</td></tr>
+      <tr><td class="sop-num">005</td><td>Prospect Screening / AMRENT</td><td>Sales</td><td class="tier-2">Tier 2</td><td class="wf-num">WF045</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Sub-process of WF007 Offer to Purchase</td></tr>
+      <tr><td class="sop-num">006</td><td>AMRENT Background Check &amp; Income Verification</td><td>Legal/Sales</td><td class="tier-2">Tier 2</td><td class="wf-num">WF045</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF045</span></td><td>Merged with Prospect Screening</td></tr>
+      <tr><td class="sop-num">7</td><td>Online Loan Application Process</td><td>Sales</td><td class="tier-2">Tier 2</td><td class="wf-num">WF046</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Sub-process of WF007; feeds WF022 Closing</td></tr>
+      <tr><td class="sop-num">8</td><td>Open House Process</td><td>Sales</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Marketing process doc; connects to WF006 listing record</td></tr>
+      <tr><td class="sop-num">9</td><td>Marketing Photography</td><td>Sales</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Marketing SOP; photos upload to SharePoint per WF006 listing</td></tr>
+      <tr><td class="sop-num">10</td><td>Sales Application-to-Lease Execution</td><td>Sales</td><td class="tier-r">Rec. Addition</td><td class="wf-num">WF007</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF007</span></td><td>Application → approval → lease = WF007 → WF005 path</td></tr>
+      <tr><td class="sop-num">11</td><td>Sales Rep Property Walk</td><td>Sales</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Sales training/process doc; no QB workflow needed</td></tr>
+      
+      <!-- LEGAL / COMPLIANCE -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Legal / Compliance</td></tr>
+      <tr><td class="sop-num">800</td><td>Eviction Process</td><td>Legal</td><td class="tier-1">Tier 1</td><td class="wf-num">WF019</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents, Lease Records, Title Records; 5 phases, 27 steps</td></tr>
+      <tr><td class="sop-num">800</td><td>Evictions (sub-SOP)</td><td>Legal</td><td class="tier-1">Tier 1</td><td class="wf-num">WF019</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF019</span></td><td>Merged with main Eviction workflow</td></tr>
+      <tr><td class="sop-num">801</td><td>Asset Title Transfer</td><td>Legal</td><td class="tier-2">Tier 2</td><td class="wf-num">WF024</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Title Records table; Vector Law / FL Fast Title</td></tr>
+      <tr><td class="sop-num">802</td><td>Fair Housing Annual Training</td><td>Legal</td><td class="tier-2">Tier 2</td><td class="wf-num">WF031</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>All staff; connects to WF042 Onboarding</td></tr>
+      <tr><td class="sop-num">803</td><td>Insurance Renewals</td><td>Legal</td><td class="tier-2">Tier 2</td><td class="wf-num">WF032</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Calendar-triggered; COI uploaded to SharePoint</td></tr>
+      <tr><td class="sop-num">804</td><td>License / Permit Renewals</td><td>Legal</td><td class="tier-2">Tier 2</td><td class="wf-num">WF030</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Calendar-triggered; per community per license type</td></tr>
+      <tr><td class="sop-num">805</td><td>Post-Eviction Title Process</td><td>Legal</td><td class="tier-1">Tier 1</td><td class="wf-num">WF020</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Triggered by WF019; Title Records; Vector Law or FL Fast Title</td></tr>
+      <tr><td class="sop-num">806</td><td>Rent Increase &amp; Tax Pass-Throughs</td><td>Legal</td><td class="tier-1">Tier 1</td><td class="wf-num">WF021</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>State-specific notice periods; FL Ch. 723 rules; Lease Records</td></tr>
+      <tr><td class="sop-num">807</td><td>Resident Notice / Legal Document Distribution</td><td>Legal</td><td class="tier-r">Rec. Addition</td><td>—</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Document distribution standards; process doc; feeds WF017&ndash;WF021</td></tr>
+      <tr><td class="sop-num">808</td><td>Title Work Process</td><td>Legal</td><td class="tier-1">Tier 1</td><td class="wf-num">WF024</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-merged">MERGED → WF024</span></td><td>Merged with Asset Title Transfer workflow</td></tr>
+      <tr><td class="sop-num">809</td><td>Violation Process</td><td>Legal</td><td class="tier-2">Tier 2</td><td class="wf-num">WF029</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Residents, Lease Records; connects to WF019 Eviction if uncured</td></tr>
+      
+      <!-- HR / TRAINING -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">HR / Training</td></tr>
+      <tr><td class="sop-num">700</td><td>Manager Onboarding</td><td>HR</td><td class="tier-2">Tier 2</td><td class="wf-num">WF042</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Connects to WF031 (Fair Housing training)</td></tr>
+      <tr><td class="sop-num">701</td><td>Online Onboarding</td><td>HR</td><td class="tier-3">Tier 3</td><td class="wf-num">WF042</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-merged">MERGED → WF042</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Merged with Manager Onboarding</td></tr>
+      <tr><td class="sop-num">702</td><td>Team Onboarding &amp; Training</td><td>HR</td><td class="tier-2">Tier 2</td><td class="wf-num">WF043</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB</span></td><td><span class="pill pill-new">PLANNED</span></td><td>All staff; connects to WF031 training compliance</td></tr>
+      <tr><td class="sop-num">703</td><td>TripLog Training</td><td>HR</td><td class="tier-3">Tier 3</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>Tool training SOP; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">704</td><td>Disciplinary Action Forms</td><td>HR</td><td>—</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td>—</td><td>HR policy doc; no QB workflow needed</td></tr>
+      <tr><td class="sop-num">705</td><td>Hiring / Onboarding Process</td><td>HR</td><td>—</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td>—</td><td>HR/recruiting process; no QB workflow needed</td></tr>
+      
+      <!-- SYSTEMS -->
+      <tr><td colspan="9" style="background:#eef3f7; font-weight:800; color:#2F4E65; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; padding:8px 12px;">Systems / Reporting</td></tr>
+      <tr><td class="sop-num">90</td><td>JotForm Process</td><td>Systems</td><td class="tier-2">Tier 2</td><td>—</td><td>—</td><td><span class="pill pill-policy">POLICY</span></td><td>RETIRING</td><td>All 13 JotForms being retired and replaced by FastField + QB per D-008</td></tr>
+      <tr><td class="sop-num">91</td><td>Rent Manager Express Docs</td><td>Systems</td><td class="tier-2">Tier 2</td><td>—</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-policy">POLICY</span></td><td><span class="pill pill-new">PLANNED</span></td><td>RM Express doc library governance doc; needed before WF016 (Lease Renewal)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 7. INTERCONNECTION MAP ─── -->
+<div class="section" id="interconnection">
+  <div class="section-title">7. Interconnection &amp; Dependency Map</div>
+  
+  <p>This section shows the full trigger chains across all workflows &mdash; where one workflow&rsquo;s outcome automatically starts another. Understanding these chains is critical for testing order (you can&rsquo;t test WF019 Eviction without WF017 Collections having an open record) and for designing QB automations correctly.</p>
+  
+  <div class="dep-tree">
+  
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#128178; Revenue Protection Chain (the most critical path in the OS)</div>
+      <div class="dep-flow">
+        <div class="dep-node planned">WF005 Move In → creates Resident + Lease record</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF017 Collections (late payment)</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF018 Stipulation (payment plan)</div>
+        <div class="dep-arrow">→ default →</div>
+        <div class="dep-node planned">WF019 Eviction Pipeline</div>
+        <div class="dep-arrow">→ POH writ granted →</div>
+        <div class="dep-node planned">WF020 Post-Eviction Title</div>
+        <div class="dep-arrow">→ title cleared →</div>
+        <div class="dep-node done">WF003 Disposition Review</div>
+        <div class="dep-arrow">→ Rehab →</div>
+        <div class="dep-node done">WF002 Rehab</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node done">WF006 Listings</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF007 Offer</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF022 Closing</div>
+      </div>
+    </div>
+    
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#127968; Asset Delivery Chain (New Home Lifecycle)</div>
+      <div class="dep-flow">
+        <div class="dep-node done">WF001 Home Ordering</div>
+        <div class="dep-arrow">→ delivery confirmed →</div>
+        <div class="dep-node planned">WF026 Lot Prep</div>
+        <div class="dep-arrow">→ lot cleared →</div>
+        <div class="dep-node planned">WF027 Utility Activation</div>
+        <div class="dep-arrow">→ utilities live →</div>
+        <div class="dep-node done">WF006 Listings</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF007 Offer</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF045 Screening</div>
+        <div class="dep-arrow">→ approved →</div>
+        <div class="dep-node planned">WF005 Move In</div>
+      </div>
+    </div>
+    
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#128682; Move Out → What Happens Next</div>
+      <div class="dep-flow">
+        <div class="dep-node planned">WF016 Lease Renewal (resident states intent to vacate)</div>
+        <div class="dep-arrow">→ triggers →</div>
+        <div class="dep-node done">WF004 Move Out</div>
+        <div class="dep-arrow">→ inspected →</div>
+        <div class="dep-node planned">WF034 Security Deposit Refund</div>
+      </div>
+      <div class="dep-flow" style="margin-top: 8px;">
+        <div class="dep-node done">WF004 Move Out</div>
+        <div class="dep-arrow">→ unit vacated →</div>
+        <div class="dep-node done">WF003 Disposition Review</div>
+        <div class="dep-arrow">→ Rehab →</div>
+        <div class="dep-node done">WF002 Rehab</div>
+        <div class="dep-node done" style="margin-left: 6px;">or → Demo →</div>
+        <div class="dep-node planned">WF025 Demo to Infill</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF026 Lot Prep</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node done">WF001 New Home Order</div>
+      </div>
+    </div>
+    
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#127968; Acquisitions → System Onboarding</div>
+      <div class="dep-flow">
+        <div class="dep-node planned">WF038 Due Diligence</div>
+        <div class="dep-arrow">→ approved →</div>
+        <div class="dep-node planned">WF039 Acquisitions Transition</div>
+        <div class="dep-arrow">→ creates all QB records →</div>
+        <div class="dep-node planned">WF040 Utility Onboarding</div>
+      </div>
+      <div class="dep-flow" style="margin-top: 8px;">
+        <div class="dep-node planned">WF039 Acquisitions Transition</div>
+        <div class="dep-arrow">→ residents imported →</div>
+        <div class="dep-node planned">WF005 Move In (for incoming residents)</div>
+        <div class="dep-arrow">→ existing leases →</div>
+        <div class="dep-node planned">WF016 Lease Renewal</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF041 Transition Recaps</div>
+        <div class="dep-arrow">→</div>
+        <div class="dep-node planned">WF008 First Site Visit (within 30 days)</div>
+      </div>
+    </div>
+    
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#128200; Reporting Rollup Chain</div>
+      <div class="dep-flow">
+        <div class="dep-node planned">WF009 Weekly Maintenance</div>
+        <div class="dep-arrow">→ feeds →</div>
+        <div class="dep-node planned">WF010 Monthly Equipment</div>
+        <div class="dep-arrow">→ feeds →</div>
+        <div class="dep-node planned">WF011 Month End Close</div>
+        <div class="dep-arrow">→ feeds →</div>
+        <div class="dep-node planned">WF037 Financial Reporting</div>
+        <div class="dep-arrow">→ feeds →</div>
+        <div class="dep-node planned">WF044 Business Plan</div>
+      </div>
+    </div>
+    
+    <div class="dep-chain">
+      <div class="dep-chain-title">&#9889; Utility Lifecycle Chain</div>
+      <div class="dep-flow">
+        <div class="dep-node planned">WF040 Utility Onboarding (Acquisitions)</div>
+        <div class="dep-arrow">→ accounts established →</div>
+        <div class="dep-node planned">WF027 Utility Activation</div>
+        <div class="dep-arrow">→ resident moves in →</div>
+        <div class="dep-node planned">WF014 Utility Transfer (to resident)</div>
+        <div class="dep-arrow">→ move-out →</div>
+        <div class="dep-node planned">WF014 Utility Transfer (back to Parakeet)</div>
+        <div class="dep-arrow">→ feeds →</div>
+        <div class="dep-node planned">WF035 Utility Recapture</div>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 8. OPEN ITEMS ─── -->
+<div class="section" id="open-items">
+  <div class="section-title">8. Open Items &amp; Decisions Needed Before Each Wave</div>
+  
+  <p>The following decisions must be made before speccing can begin on each wave. Items marked &ldquo;BLOCKING&rdquo; mean the wave cannot be designed until that decision is made. Items marked &ldquo;ADVISORY&rdquo; mean speccing can begin but the item must be resolved before the spec is locked.</p>
+  
+  <div class="section-subtitle">Pre-Work &amp; Wave 0 Lock Items (BLOCKING)</div>
+  <div class="oi-grid">
+    <div class="oi-card">
+      <div class="oi-id">O-PRE-001 &mdash; BLOCKING</div>
+      <div class="oi-q">Who owns the QB Residents table build &mdash; Austin or Justin (Asset Mgmt)?</div>
+      <div class="oi-ctx">Residents table is the single most critical pre-work item. It feeds 21 workflows. Someone must own the RM-to-QB mapping for resident records before Wave 1 can spec.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF004-001 &mdash; BLOCKING (WF004 lock)</div>
+      <div class="oi-q">RM batch CSV column mapping for Move Out sync &mdash; what are the exact RM field names?</div>
+      <div class="oi-ctx">Justin / RM Admin must provide the exact RM field names that map to QB Move Out record fields. Required to lock WF004 spec.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF004-002 &mdash; BLOCKING (WF004 lock)</div>
+      <div class="oi-q">What are the Move Out Inspection checklist items?</div>
+      <div class="oi-ctx">Austin / Ops must provide the actual inspection checklist. The WF004 FastField form cannot be built without the item list. A starting draft can come from the Home Readiness Checklist (Ops) document.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF006-001 &mdash; ADVISORY (WF006 lock)</div>
+      <div class="oi-q">What listing platforms does Parakeet use (MHVillage, Zillow, Facebook, other)?</div>
+      <div class="oi-ctx">Leslie to confirm. Determines whether WF006 includes platform-specific fields or just a general &ldquo;listed on&rdquo; field.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF006-002 &mdash; BLOCKING (WF006 lock)</div>
+      <div class="oi-q">Exact RM UDF field names for Listing Status, Listed By, Listing Date, Listing Price?</div>
+      <div class="oi-ctx">Justin / RM Admin must provide UDF names so the daily 6 PM batch CSV can map correctly to RM fields.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-PRE-002 &mdash; BLOCKING</div>
+      <div class="oi-q">FastField multi-step approval routing: is it configured at the form level or the account level?</div>
+      <div class="oi-ctx">WF004 (Move Out), WF005 (Move In), WF013 (Incident Report), and WF028 (Rental Inspection) all require multi-step FastField approval routing (CM → Regional Manager → Regional Director). Must confirm FastField account supports this before designing any of these forms.</div>
+    </div>
+  </div>
+  
+  <div class="section-subtitle" style="margin-top: 24px;">Wave 1 Design Inputs Needed</div>
+  <div class="oi-grid">
+    <div class="oi-card">
+      <div class="oi-id">O-WF005-001 &mdash; BLOCKING</div>
+      <div class="oi-q">Move-In Condition Report: what does the form need to capture?</div>
+      <div class="oi-ctx">Ops / Austin must define the Move-In Condition Report items (room-by-room? exterior-only? appliances?). Starting point: Home Readiness Checklist Ops document. This drives the WF005 FastField form design.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF005-002 &mdash; ADVISORY</div>
+      <div class="oi-q">Does MA require digital or wet signature on move-in leases?</div>
+      <div class="oi-ctx">MA has the strictest tenant laws. The 72-hr disclosure package requirement (WF016) must also be determined to apply at move-in for new leases. Justin / Legal must confirm.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF016-001 &mdash; ADVISORY</div>
+      <div class="oi-q">What is the lease renewal SLA from notice issuance to signature required?</div>
+      <div class="oi-ctx">Needed to set the QB automation reminder schedule for WF016. Austin / Ops to confirm. Suggested: 14-day reminder, 7-day escalation to Regional Manager, 3-day escalation to DOO.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF014-001 &mdash; BLOCKING</div>
+      <div class="oi-q">Utility Transfer process: does Parakeet call the utility company directly, or does the resident?</div>
+      <div class="oi-ctx">WF014 Utility Request and WF005 Move In both need this confirmed. In some communities, Parakeet manages utility transfers; in others, the resident calls. May be community-specific. Justin / Ops to confirm.</div>
+    </div>
+  </div>
+  
+  <div class="section-subtitle" style="margin-top: 24px;">Wave 2 Design Inputs Needed</div>
+  <div class="oi-grid">
+    <div class="oi-card">
+      <div class="oi-id">O-WF017-001 &mdash; BLOCKING</div>
+      <div class="oi-q">Who generates and physically sends the demand notices &mdash; Melanie (Ops Coordinator) only, or Regional Manager for some states?</div>
+      <div class="oi-ctx">From SOP 100: Melanie handles UPS certified mail. But does the Regional Manager sign the notice, or is it generic? The QB automation needs to know who to notify and whether a signature field is required.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF019-001 &mdash; ADVISORY</div>
+      <div class="oi-q">Does the Eviction Pipeline differ meaningfully by state beyond the cure period (e.g., hearing timing, writ timeline, auction requirements)?</div>
+      <div class="oi-ctx">WF019 is the most state-sensitive workflow in the OS. The SOP covers FL in detail. GA, MA, NC, SC process steps may differ significantly. Vector Law or outside counsel should document state-specific variations before WF019 is specced.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF021-001 &mdash; BLOCKING</div>
+      <div class="oi-q">For FL Ch. 723 rent increases: when was each community&rsquo;s prospectus last updated, and does an increase require a prospectus amendment?</div>
+      <div class="oi-ctx">FL communities under Ch. 723 may require prospectus amendments for rent increases above a certain threshold. WF021 must know which communities are Ch. 723 vs. standard lot rental to apply the correct rules. Asset Mgmt (Justin) to provide list.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF018-001 &mdash; ADVISORY</div>
+      <div class="oi-q">Stipulation agreement template: is there a standard Parakeet template, or does it vary by state?</div>
+      <div class="oi-ctx">The WF018 spec will need to reference the actual Stipulation Agreement template. If state-specific, that affects the QB form fields. Regional Manager approval is confirmed (from SOP 100).</div>
+    </div>
+  </div>
+  
+  <div class="section-subtitle" style="margin-top: 24px;">Wave 3&ndash;8 Advisory Items</div>
+  <div class="oi-grid">
+    <div class="oi-card">
+      <div class="oi-id">O-WF022-001 &mdash; ADVISORY</div>
+      <div class="oi-q">Does the Home Closing workflow need title company integration, or is it fully internally managed?</div>
+      <div class="oi-ctx">WF022 Home Closing may involve a title company, attorney, or be fully self-managed by Asset Mgmt. The workflow design differs significantly based on this. Justin / Legal to confirm for each sale type.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF027-001 &mdash; ADVISORY</div>
+      <div class="oi-q">Which communities are sub-metered vs. master-metered vs. RUBS, and does that list already exist in RM?</div>
+      <div class="oi-ctx">WF027 Utility Activation and WF035 Utility Recapture both need utility type per community. If this is already in RM, it can be imported into the Utility Accounts table. Justin / Accounting to confirm.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-WF038-001 &mdash; ADVISORY</div>
+      <div class="oi-q">Is there a standard Due Diligence checklist Parakeet uses today, and what is the approval path for acquisition go/no-go?</div>
+      <div class="oi-ctx">WF038 Due Diligence needs the actual DD checklist items and the approval structure (Austin only? Board vote?). Asset Mgmt to provide the current DD process documentation.</div>
+    </div>
+    <div class="oi-card">
+      <div class="oi-id">O-GEN-001 &mdash; ADVISORY</div>
+      <div class="oi-q">SharePoint folder structure: where does each workflow type store its documents?</div>
+      <div class="oi-ctx">Multiple workflows (WF004, WF005, WF022, WF028, WF038) push documents to SharePoint. A consistent, pre-defined SharePoint folder structure must be established before any of these workflows are built. IT / Austin to define the structure once and apply it across all workflows.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ─── 9. WORKFLOW REGISTRY ─── -->
+<div class="section" id="wf-registry">
+  <div class="section-title">9. Appendix &mdash; Full Workflow Registry (WF001&ndash;WF046)</div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>WF #</th><th>Workflow Name</th><th>SOP(s)</th><th>Wave</th><th>Form</th>
+        <th>QB Tables (Primary)</th><th>Key Automations</th><th>Spec Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="wf-num">WF001</td><td>Home Ordering, Delivery &amp; Set</td><td class="sop-num">001, 201, 202, 211</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF ×4</span></td><td>Home Orders, Delivery, Const Inspection, Ops Readiness, Communities, Lots, Vendors</td><td>14 automations; 9 gate rules; A-HO-01 to A-HO-14</td><td><span class="pill pill-locked">LOCKED v1.2</span></td></tr>
+      <tr><td class="wf-num">WF002</td><td>Rehab</td><td class="sop-num">105a, 105b, 214</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF ×1</span></td><td>Rehab Records, Tasks, Budget Lines, Vendors, Communities</td><td>12 automations; 8 gate rules; bid approval &lt;$2.5K/$2.5K&ndash;$5K/&gt;$5K</td><td><span class="pill pill-locked">LOCKED v1.3</span></td></tr>
+      <tr><td class="wf-num">WF003</td><td>Asset Disposition Review</td><td class="sop-num">104, 206</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-qb">QB-only</span></td><td>Disposition Meeting Records, Disposition Items</td><td>5 automations; 3 gate rules; Monday soft-check; Hold requires notes</td><td><span class="pill pill-locked">LOCKED v1.1</span></td></tr>
+      <tr><td class="wf-num">WF004</td><td>Move Out</td><td class="sop-num">102</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF ×2</span></td><td>Move Out Records, Move Out Inspections</td><td>48-hr SLA; 24-hr reminder; CM → Regional approval routing; RM daily batch sync</td><td><span class="pill pill-draft">DRAFT v1.0 — 5 open</span></td></tr>
+      <tr><td class="wf-num">WF005</td><td>Move In</td><td class="sop-num">103</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-ff">FF ×1</span></td><td>Move In Records, Residents (creates), Lease Records (creates), Utility Accounts</td><td>Creates Resident + Lease record; triggers WF014 Utility Transfer; uploads to SharePoint; RM batch sync</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF006</td><td>Listings</td><td class="sop-num">002, 003</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF ×1</span></td><td>Listing Records, Price History</td><td>6 automations; 4 gate rules; Leslie &amp; Tanya notified; RM UDF daily sync</td><td><span class="pill pill-draft">DRAFT v1.0 — 5 open</span></td></tr>
+      <tr><td class="wf-num">WF007</td><td>Offer to Purchase / Rent</td><td class="sop-num">002, 10</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB-only</span></td><td>Offer Records, Residents, Listing Records</td><td>Locks WF006 in Pending Offer; triggers WF045 Screening; triggers WF022 on approval</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF008</td><td>Community Site Visit Inspection</td><td class="sop-num">106, 117</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Site Visit Records, Work Orders</td><td>Repair items auto-generate Work Orders; 30-day follow-up trigger; PDF report to SharePoint</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF009</td><td>Weekly Maintenance Checklist</td><td class="sop-num">123, 210</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Weekly Maintenance Records, Work Orders</td><td>Repair ratings auto-generate Work Orders; feeds WF010 monthly rollup</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF010</td><td>Monthly Equipment &amp; Inventory</td><td class="sop-num">123</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Monthly Equipment Records, Work Orders</td><td>Rollup from weekly; procurement Work Orders for shortfalls; feeds WF011</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF011</td><td>Month End Ops Close Out</td><td class="sop-num">110</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Month End Records; reads: Work Orders, Leases, Listings, Rehabs</td><td>Monthly rollup; CM/RM/Regional sign-off; feeds WF037</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF012</td><td>Move Out Inspection</td><td class="sop-num">102</td><td class="wave-label-0">Wave 0</td><td><span class="pill pill-ff">FF ×1</span></td><td>Move Out Inspections (part of WF004)</td><td>48-hr SLA from move-out date; result saves to SharePoint; QB stores link</td><td><span class="pill pill-draft">DRAFT v1.0 (sub of WF004)</span></td></tr>
+      <tr><td class="wf-num">WF013</td><td>Incident Report</td><td class="sop-num">108, 124, 125</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-ff">FF ×1</span></td><td>Incident Records, Work Orders</td><td>Immediate routing: CM → Regional Manager → DOO; legal team flag for elevated incidents; Work Order for physical remediation</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF014</td><td>Utility Transfer Request</td><td class="sop-num">120</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-qb">QB-only</span></td><td>Utility Transfer Records, Utility Accounts</td><td>Triggered by WF005 (move-in transfer to resident) and WF004 (move-out transfer to Parakeet); updates Utility Account status</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF015</td><td>Resident Information Sheet</td><td class="sop-num">105</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-ff">FF ×1</span></td><td>Residents (updates); Vehicle Records, Pet Records</td><td>Completed at move-in; feeds Residents table with vehicle, pet, emergency contact data; connects to WF029 Violations</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF016</td><td>Lease Renewal Process</td><td class="sop-num">101</td><td class="wave-label-1">Wave 1</td><td><span class="pill pill-qb">QB-only</span></td><td>Lease Renewal Records, Lease Records, Residents</td><td>Notice period calc by state; RM Express &ldquo;Renew Lease&rdquo; trigger; MA 72-hr disclosure flag; triggers WF004 if vacating; Asset Mgmt updates billing post-activation</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF017</td><td>Collections / AR</td><td class="sop-num">100, 107</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB-only</span></td><td>Collections Records, Residents, Lease Records</td><td>State-specific cure period calc; demand notice generation; triggers WF018 or WF019; Stipulation requires RM approval only</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF018</td><td>Stipulation Process</td><td class="sop-num">118</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB-only</span></td><td>Stipulation Records, Residents, Lease Records</td><td>RM approval required; payment schedule tracking; missed payment triggers WF019</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF019</td><td>Eviction Pipeline</td><td class="sop-num">800</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB-only</span></td><td>Eviction Records, Residents, Lease Records, Title Records</td><td>27 steps; 5 phases; POH vs rental path; auto-updates Lot Status; triggers WF020 on writ granted</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF020</td><td>Post-Eviction Title Process</td><td class="sop-num">805</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB-only</span></td><td>Title Records, Eviction Records</td><td>Triggered by WF019 POH writ; liened (Vector Law) vs. non-liened (FL Fast Title) path; triggers WF003 on title clear</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF021</td><td>Rent Increase &amp; Tax Pass-Throughs</td><td class="sop-num">806</td><td class="wave-label-2">Wave 2</td><td><span class="pill pill-qb">QB-only</span></td><td>Rent Increase Records, Lease Records, Communities</td><td>State notice calc (FL 90-day Ch.723, GA 60-day, MA strictest); RM billing schedule update; RM approval before notices sent</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF022</td><td>Home Closing Process</td><td class="sop-num">003, 004</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB-only</span></td><td>Closing Records, Offer Records, Title Records</td><td>Triggered by WF007; closing milestones tracked; closing package to SharePoint; triggers WF023 (POH sale) or WF005 (rental/LTP); RM sale record via batch</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF023</td><td>POH Sales Title Transfer</td><td class="sop-num">005</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB-only</span></td><td>Title Records, Closing Records</td><td>State DMV/HCD filings tracked; Asset Status auto-updates to &ldquo;Sold&rdquo; on title confirm</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF024</td><td>Asset Title Transfer &amp; Title Work</td><td class="sop-num">801, 808</td><td class="wave-label-3">Wave 3</td><td><span class="pill pill-qb">QB-only</span></td><td>Title Records, Asset Records</td><td>Estate / deceased / abandoned / lender repo / mid-portfolio corrections; Vector Law or FL Fast Title; state agency response tracking</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF025</td><td>Demo to Infill</td><td class="sop-num">200</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-qb">QB-only</span></td><td>Demo Records, Lots, Communities</td><td>Triggered by WF003 Demo disposition; 4 phases; permit tracking; Lot Status &ldquo;Lot-Demo&rdquo; → &ldquo;Lot-Not Ready&rdquo;; connects to WF026 and WF001</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF026</td><td>Lot Prep</td><td class="sop-num">205</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Lot Prep Records, Lots</td><td>Before/after FastField lot inspection; utility stub-out task tracking; Lot Status gate for WF001</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF027</td><td>Utility Activation</td><td class="sop-num">303a-b, 119</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Utility Activation Records, Utility Accounts</td><td>New Home (WF001 Stage 8) and Rehab (WF002 completion) paths; meter read captured in FastField; Utility Account status updated to Active</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF028</td><td>Rental Inspections</td><td class="sop-num">116</td><td class="wave-label-4">Wave 4</td><td><span class="pill pill-ff">FF ×1</span></td><td>Rental Inspection Records, Residents, Lots</td><td>Annual or event-triggered; Poor/Fail auto-generates WF002 Rehab or Work Order; Excellent/Good/Fair/Poor/N/A scale</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF029</td><td>Violation Process</td><td class="sop-num">809</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB-only</span></td><td>Violation Records, Residents, Lease Records</td><td>Progressive discipline: 1st → 2nd → legal action; cure period tracking; uncured triggers WF019</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF030</td><td>License &amp; Permit Renewals</td><td class="sop-num">804</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB-only</span></td><td>License Records, Communities</td><td>Calendar-triggered; 90/60/30/14/7-day reminders; expired = hard block to leadership</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF031</td><td>Fair Housing Annual Training</td><td class="sop-num">802</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB-only</span></td><td>Training Records, Employee Records</td><td>60-day reminder; 14-day escalation to HR; connects to WF042 for new hires</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF032</td><td>Insurance Renewals</td><td class="sop-num">803</td><td class="wave-label-5">Wave 5</td><td><span class="pill pill-qb">QB-only</span></td><td>Insurance Records, Communities</td><td>90-day and 30-day reminders; COI upload to SharePoint; links to WF013 for claims</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF033</td><td>AP / Avid Exchange Process</td><td class="sop-num">300, 303</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Invoice Records, Vendors, Communities</td><td>Approval tiers: &lt;$2,500 = RM; $2,500&ndash;$5,000 = Director; &gt;$5,000 = Austin; approved → Avid Exchange queue</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF034</td><td>Security Deposit Refund</td><td class="sop-num">312</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Deposit Refund Records, Residents, Lease Records</td><td>Triggered by WF004 Move Out; RM = financial SOT; RM approval for deductions; FL state-specific refund timeline (15-day if deductions; 30-day if full)</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF035</td><td>Utility Recapture Reporting</td><td class="sop-num">314, 315</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Utility Recapture Records, Utility Accounts, Communities</td><td>Monthly report per community: billed vs. collected vs. variance; flags under-recapture communities; feeds WF037</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF036</td><td>Home Lender Repo Process</td><td class="sop-num">302</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Repo Records, Title Records, Lots</td><td>Lender notification; access coordination; title path if Parakeet acquires (→ WF024); lot status update if home removed (→ WF025/WF001)</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF037</td><td>Financial Reporting (P&amp;L / Rent Roll / Quarterly)</td><td class="sop-num">301, 307, 309, 311</td><td class="wave-label-6">Wave 6</td><td><span class="pill pill-qb">QB-only</span></td><td>Reporting Views; reads all operational QB tables</td><td>QB operational metrics overlay; RM = financial GL; monthly P&amp;L view per community; quarterly leadership summary</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF038</td><td>Due Diligence &amp; Acquisition</td><td class="sop-num">402</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-ff">FF ×1</span></td><td>DD Records, Communities (creates on approval)</td><td>Multi-dept task tracking (legal, finance, ops, construction); DD cleared → Austin/Board approval gate; triggers WF039</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF039</td><td>Acquisitions Transition</td><td class="sop-num">401</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-ff">FF ×1</span></td><td>Creates: Community, Lots, Residents, Utility Accounts records</td><td>Most complex single workflow; touches all shared tables; connects to WF040, WF005, WF027; feeds WF041</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF040</td><td>Utility Onboarding (Acquisitions)</td><td class="sop-num">403</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-qb">QB-only</span></td><td>Utility Accounts (populates for new community)</td><td>Sub-metering / master-metered / RUBS setup; account transfer tracking; connects to WF027 and WF035</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF041</td><td>Acq-OPS Transition Recaps</td><td class="sop-num">400</td><td class="wave-label-7">Wave 7</td><td><span class="pill pill-qb">QB-only</span></td><td>Transition Recap Records, Communities</td><td>90-day outstanding items log; RM assigned at this stage; triggers WF008 first site visit within 30 days of close</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF042</td><td>Manager Onboarding</td><td class="sop-num">700, 701</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB-only</span></td><td>Onboarding Records, Employee Records</td><td>System access checklist; 30/60/90-day milestones; creates WF031 Fair Housing training record</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF043</td><td>Team Onboarding &amp; Training Tracking</td><td class="sop-num">702</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB-only</span></td><td>Training Records, Employee Records</td><td>All staff / all programs; connects to WF031; compliance training for legal audit</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF044</td><td>Property Business Plan</td><td class="sop-num">109</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB-only</span></td><td>Business Plan Records; reads: Lease Records, Work Orders, Listing Records</td><td>QB pre-populates metrics from live data; CM + RM completion; Regional Manager approval before leadership submission</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF045</td><td>Prospect Screening &amp; Background Check</td><td class="sop-num">005, 006</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB-only</span></td><td>Screening Records, Offer Records (WF007)</td><td>AMRENT order tracking; approval/denial with documented reason (Fair Housing); approved → WF007 next step; denied → WF007 rejected path</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+      <tr><td class="wf-num">WF046</td><td>Online Loan Application</td><td class="sop-num">7</td><td class="wave-label-8">Wave 8</td><td><span class="pill pill-qb">QB-only</span></td><td>Loan Application Records, Offer Records</td><td>Reads WF007 offer for loan amount/home details; approved → WF022 Closing; denied → WF007 alternative financing path</td><td><span class="pill pill-new">PLANNED</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <strong>Parakeet Communities &mdash; Internal Build Document</strong><br>
+  parakeet_master_build_gameplan_v1.0 &bull; August 2026 &bull; Confidential<br>
+  QB + FastField Build Gameplan covering 91 SOPs &rarr; 46 Workflows across 9 Build Waves
+</div>
+
+</body>
+</html>"""
+
+with open('/home/ubuntu/parakeet_master_build_gameplan_v1.0.html', 'w') as f:
+    f.write(html)
+
+print("HTML written successfully.")
+print(f"File size: {len(html):,} bytes")

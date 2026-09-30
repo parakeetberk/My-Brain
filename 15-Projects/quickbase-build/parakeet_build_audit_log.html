@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parakeet Communities — Build Audit Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+      onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+  <style>
+    /* ===== PAGE SETUP ===== */
+    @page {
+      size: A4;
+      margin: 2.2cm 1.8cm 2.4cm 1.8cm;
+      @top-left   { content: element(running-hdr); }
+      @bottom-center {
+        content: "Parakeet Communities \B7 Build Audit Log \B7 Living Document \B7 v1.0 \B7 August 2026 \B7 Confidential";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7pt;
+        color: #999;
+        border-top: 0.5pt solid #ddd;
+        padding-top: 4pt;
+        width: 100%;
+        text-align: center;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7.5pt;
+        color: #999;
+        border-top: 0.5pt solid #ddd;
+        padding-top: 4pt;
+      }
+    }
+    @page :first {
+      margin: 0;
+      @top-left   { content: none; }
+      @bottom-center { content: none; }
+      @bottom-right  { content: none; }
+    }
+
+    /* ===== RUNNING HEADER ===== */
+    #running-hdr {
+      position: running(running-hdr);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding-bottom: 5pt;
+      border-bottom: 2pt solid #2F4E65;
+      font-family: 'Red Hat Display', sans-serif;
+    }
+    #running-hdr .brand { font-size: 9pt; font-weight: 700; }
+    #running-hdr .brand .g { color: #4ABA81; }
+    #running-hdr .brand .n { color: #2F4E65; }
+    #running-hdr .doctag { font-size: 7.5pt; color: #777; font-weight: 400; }
+
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: 9pt;
+      color: #222;
+      line-height: 1.45;
+      string-set: doctitle "";
+    }
+
+    /* ===== COVER ===== */
+    .cover {
+      width: 210mm; height: 297mm;
+      margin: 0; padding: 0;
+      position: relative; overflow: hidden;
+      page-break-after: always;
+      background: linear-gradient(155deg, #1b2f40 0%, #2F4E65 42%, #3a6275 68%, #1b2f40 100%);
+      color: #fff;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .cover-stripe-top {
+      position: absolute; top: 0; left: 0; right: 0; height: 7px;
+      background: linear-gradient(90deg, #4ABA81 0% 33%, #FFCC3B 33% 66%, #F16262 66% 100%);
+    }
+    .cover-stripe-bot {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+      background: #4ABA81;
+    }
+    .cover-wordmark {
+      font-size: 11pt; font-weight: 700;
+      letter-spacing: 3px; text-transform: lowercase;
+      margin-bottom: 55px;
+    }
+    .cover-wordmark .g { color: #4ABA81; }
+    .cover-wordmark .n { color: #a8cede; }
+    .cover-eyebrow {
+      font-size: 8.5pt; font-weight: 600;
+      letter-spacing: 3.5px; text-transform: uppercase;
+      color: #4ABA81; margin-bottom: 16px;
+    }
+    .cover h1 {
+      font-size: 42pt; font-weight: 800;
+      color: #fff; text-align: center;
+      line-height: 1.05; margin: 0 0 16px 0;
+      padding: 0 40px; max-width: 100%;
+      white-space: normal; overflow-wrap: break-word;
+      string-set: doctitle "";
+    }
+    .cover-subtitle {
+      font-size: 11.5pt; font-weight: 400;
+      color: #bdd4e3; line-height: 1.45;
+      margin-bottom: 10px; padding: 0 50px;
+    }
+    .cover-tagline {
+      font-size: 9pt; color: #7ea5be;
+      margin-bottom: 40px;
+    }
+    .cover-divider {
+      width: 55px; height: 2px;
+      background: #4ABA81; margin: 0 auto 36px;
+    }
+    .cover-meta {
+      display: flex; gap: 36px;
+      margin-bottom: 44px;
+    }
+    .cover-meta-item .lbl {
+      font-size: 7pt; color: #7ea5be;
+      text-transform: uppercase; letter-spacing: 1.8px;
+      display: block; margin-bottom: 5px;
+    }
+    .cover-meta-item .val {
+      font-size: 10.5pt; font-weight: 600; color: #fff;
+    }
+    .cover-notice {
+      background: rgba(255,255,255,0.08);
+      border-left: 3px solid #4ABA81;
+      padding: 14px 20px;
+      margin: 0 55px;
+      font-size: 8.5pt; color: #bdd4e3;
+      line-height: 1.55; font-style: italic;
+      text-align: left;
+    }
+    .cover-footer {
+      position: absolute; bottom: 20px;
+      font-size: 7.5pt; color: #6a92a8;
+      letter-spacing: 0.8px;
+      left: 0; right: 0; text-align: center;
+    }
+
+    /* ===== SECTION HEADER BAR ===== */
+    .sec-hdr {
+      background: #2F4E65;
+      color: #fff;
+      padding: 7px 12px;
+      margin: 0 0 13px 0;
+      display: flex; align-items: baseline; gap: 10px;
+      page-break-after: avoid;
+    }
+    .sec-hdr .num {
+      font-size: 7.5pt; font-weight: 700;
+      color: #4ABA81; text-transform: uppercase;
+      letter-spacing: 1.5px; white-space: nowrap;
+    }
+    .sec-hdr .ttl { font-size: 12.5pt; font-weight: 700; color: #fff; }
+    .sec-hdr .sub { font-size: 7.5pt; color: #a8cede; margin-left: auto; white-space: nowrap; }
+
+    /* ===== SUB-HEADERS ===== */
+    h3 {
+      font-size: 10pt; font-weight: 700; color: #2F4E65;
+      margin: 18px 0 7px 0;
+      border-bottom: 1.5px solid #2F4E65;
+      padding-bottom: 4px;
+      page-break-after: avoid;
+    }
+
+    /* ===== NOTICE BOX ===== */
+    .notice-critical {
+      background: #fffbeb;
+      border-left: 4px solid #FFCC3B;
+      border: 1px solid #FFCC3B;
+      border-left-width: 4px;
+      padding: 9px 14px;
+      margin: 0 0 12px 0;
+      font-size: 8.5pt; font-weight: 600; color: #444;
+      line-height: 1.5;
+    }
+    .notice-critical strong { color: #2F4E65; }
+
+    /* ===== TABLES ===== */
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 8.5pt; margin-bottom: 16px;
+      max-width: 100%;
+    }
+    th {
+      background: #2F4E65; color: #fff;
+      font-weight: 600; font-size: 7.5pt;
+      text-transform: uppercase; letter-spacing: 0.4px;
+      padding: 6px 8px; text-align: left;
+    }
+    td {
+      padding: 5px 8px;
+      border-bottom: 0.5pt solid #e4e4e4;
+      vertical-align: top; line-height: 1.4;
+    }
+    tr:nth-child(even) td { background: #F2F2F2; }
+    tr:nth-child(odd)  td { background: #fff; }
+    tr { page-break-inside: avoid; }
+
+    /* ===== STATUS BADGES ===== */
+    .b {
+      display: inline-block;
+      padding: 2px 6px; border-radius: 2px;
+      font-size: 7pt; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      white-space: nowrap; line-height: 1.4;
+    }
+    .b-green  { background: #4ABA81; color: #fff; }
+    .b-yellow { background: #FFCC3B; color: #5a4a00; }
+    .b-red    { background: #F16262; color: #fff; }
+    .b-navy   { background: #2F4E65; color: #fff; }
+    .b-gray   { background: #9e9e9e; color: #fff; }
+
+    /* ===== CODE / MONO ===== */
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 7.5pt; background: #eef2f5;
+      padding: 1px 4px; border-radius: 2px; color: #2F4E65;
+    }
+
+    /* ===== TECH BLOCK ===== */
+    .tech-block {
+      background: #eef2f5;
+      border: 1px solid #c5d8e8;
+      border-left: 4px solid #2F4E65;
+      padding: 9px 13px; margin: 10px 0 14px 0;
+      font-size: 8.5pt; line-height: 1.5;
+    }
+    .tech-block h4 {
+      margin: 0 0 6px 0; font-size: 9pt;
+      color: #2F4E65; font-weight: 700;
+      page-break-after: avoid;
+    }
+
+    /* ===== EXAMPLE BLOCK ===== */
+    .ex-block {
+      background: #f0f4f8;
+      border-left: 3px solid #2F4E65;
+      padding: 8px 12px; margin: 7px 0 12px 0;
+      font-size: 8pt; line-height: 1.7;
+    }
+    .ex-block strong { color: #2F4E65; }
+
+    /* ===== LISTS ===== */
+    ul.rules {
+      margin: 5px 0 10px 0;
+      padding-left: 17px;
+      font-size: 8.5pt; line-height: 1.6;
+    }
+    ul.rules li { margin-bottom: 3px; }
+
+    /* ===== NOTE / CAPTION ===== */
+    .note {
+      font-size: 7.5pt; color: #666;
+      font-style: italic; margin: 4px 0 10px 0;
+      line-height: 1.4;
+    }
+
+    /* ===== SECTION BLOCK ===== */
+    .section-block { margin-bottom: 22px; }
+
+    /* ===== OVERFLOW PREVENTION ===== */
+    pre, table, figure, img, svg, blockquote, .equation, code {
+      max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;
+    }
+    pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+    a   { word-break: break-all; }
+    .katex-display { overflow-x: auto; }
+
+    /* ===== PAGE BREAKS ===== */
+    h3, h4 { page-break-after: avoid; }
+    .sec-hdr { page-break-after: avoid; }
+    figure { page-break-inside: avoid; max-height: 70vh; height: auto; width: 100%; object-fit: contain; }
+  </style>
+</head>
+<body>
+
+<!-- Running header element (Paged.js pulls this into @top-left margin) -->
+<div id="running-hdr">
+  <div class="brand"><span class="g">parakeet</span>&nbsp;<span class="n">communities</span></div>
+  <div class="doctag">Build Audit Log &nbsp;·&nbsp; Living Document &nbsp;·&nbsp; v1.0</div>
+</div>
+
+<!-- ═══════════════════════════════ COVER ═══════════════════════════════ -->
+<div class="cover">
+  <div class="cover-stripe-top"></div>
+
+  <div class="cover-wordmark"><span class="g">parakeet</span>&nbsp;<span class="n">communities</span></div>
+
+  <div class="cover-eyebrow">Internal Document</div>
+  <h1>Build Audit Log</h1>
+  <div class="cover-subtitle">Quickbase + FastField Operational OS<br>Running Decision &amp; Standards Register</div>
+  <div class="cover-tagline">Parakeet Communities &nbsp;·&nbsp; Internal &nbsp;·&nbsp; Confidential</div>
+
+  <div class="cover-divider"></div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item"><span class="lbl">Started</span><span class="val">August 2026</span></div>
+    <div class="cover-meta-item"><span class="lbl">Version</span><span class="val">Current</span></div>
+    <div class="cover-meta-item"><span class="lbl">Classification</span><span class="val">Confidential</span></div>
+  </div>
+
+  <div class="cover-notice">
+    This document is a living record. Every decision, correction, formatting rule, brand guideline, open question, and answered question related to this build is logged here. When in doubt, consult this first.
+  </div>
+
+  <div class="cover-footer">Parakeet Communities &nbsp;·&nbsp; Internal &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; Not for external distribution</div>
+  <div class="cover-stripe-bot"></div>
+</div>
+
+<!-- ═══════════════════ SECTION 1 — PROJECT IDENTITY ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 01</span>
+    <span class="ttl">Project Identity</span>
+  </div>
+  <table>
+    <colgroup><col style="width:33%"><col style="width:67%"></colgroup>
+    <thead><tr><th>Field</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Project Name</strong></td><td>Parakeet Communities Operational OS</td></tr>
+      <tr><td><strong>Build Approach</strong></td><td>Quickbase (workflow engine) + FastField (field capture)</td></tr>
+      <tr><td><strong>System of Record</strong></td><td>Rent Manager — asset records, financial data</td></tr>
+      <tr><td><strong>Supporting Systems</strong></td><td>Microsoft 365, Teams, SharePoint</td></tr>
+      <tr><td><strong>Process Owner</strong></td><td>Austin (CEO / Owner)</td></tr>
+      <tr><td><strong>Lead Contact</strong></td><td>austin@parakeetcommunities.com</td></tr>
+      <tr><td><strong>Portfolio Scale</strong></td><td>65+ manufactured housing communities</td></tr>
+      <tr><td><strong>Build Start</strong></td><td>August 2026</td></tr>
+      <tr><td><strong>Current Phase</strong></td><td>Phase 0 — Design &amp; Spec</td></tr>
+      <tr><td><strong>First Workflow Built</strong></td><td>Workflow #001: Home Ordering, Delivery &amp; Set</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 2 — FORMATTING STANDARDS ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 02</span>
+    <span class="ttl">Formatting &amp; Data Standards</span>
+  </div>
+  <div class="notice-critical">
+    <strong>CRITICAL — These standards apply everywhere in this build:</strong> Quickbase field formats, FastField form fields, Excel deliverables, and all other outputs. No exceptions.
+  </div>
+  <table>
+    <colgroup><col style="width:22%"><col style="width:24%"><col style="width:16%"><col style="width:38%"></colgroup>
+    <thead>
+      <tr><th>Data Type</th><th>Standard</th><th>Example</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Percentages</strong></td>
+        <td>1 decimal place</td>
+        <td><code>12.5%</code></td>
+        <td>Never 12% or 12.50%</td>
+      </tr>
+      <tr>
+        <td><strong>Dollar Amounts / Currency</strong></td>
+        <td>$ prefix, comma separator, 2 decimal places</td>
+        <td><code>$1,234.56</code></td>
+        <td>Never $1234.56 or $1,234</td>
+      </tr>
+      <tr>
+        <td><strong>All Other Numbers</strong></td>
+        <td>Comma separator, 2 decimal places</td>
+        <td><code>1,234.56</code></td>
+        <td>Exception: counts/IDs are whole numbers — no decimals</td>
+      </tr>
+      <tr>
+        <td><strong>Dates</strong></td>
+        <td>mm/dd/yy</td>
+        <td><code>08/18/26</code></td>
+        <td>Never YYYY-MM-DD or spelled-out months in fields</td>
+      </tr>
+      <tr>
+        <td><strong>Phone Numbers</strong></td>
+        <td>(000) 000-0000</td>
+        <td><code>(941) 555-1234</code></td>
+        <td>Standard across all forms</td>
+      </tr>
+      <tr>
+        <td><strong>Record IDs / Auto-numbers</strong></td>
+        <td>Formatted prefix + year + sequence</td>
+        <td><code>HO-2026-001</code></td>
+        <td>One defined format per table type — see Section 9</td>
+      </tr>
+      <tr>
+        <td><strong>Ratings — Inspection (Field)</strong></td>
+        <td>Pass / Fail / N/A</td>
+        <td><code>Pass</code></td>
+        <td>FastField forms: Construction, Ops Readiness, Delivery</td>
+      </tr>
+      <tr>
+        <td><strong>Ratings — Condition (Office)</strong></td>
+        <td>Excellent / Good / Fair / Poor / N/A</td>
+        <td><code>Good</code></td>
+        <td>QB-facing inspections: Move Out Inspection</td>
+      </tr>
+      <tr>
+        <td><strong>Ratings — Site Visit</strong></td>
+        <td>Good / Monitor / Repair / N/A</td>
+        <td><code>Monitor</code></td>
+        <td>Community Site Visit form</td>
+      </tr>
+      <tr>
+        <td><strong>Status — Readiness</strong></td>
+        <td>Approved / Needs Attention / Not Ready</td>
+        <td><code>Approved</code></td>
+        <td>Rehab Punchlist and readiness forms</td>
+      </tr>
+      <tr>
+        <td><strong>Status — Tasks</strong></td>
+        <td>Not Started / In Progress / Complete / Blocked</td>
+        <td><code>Complete</code></td>
+        <td>Standard across all QB Workflow Task records</td>
+      </tr>
+      <tr>
+        <td><strong>Status — Home Orders</strong></td>
+        <td>12-stage list — see Workflow #001 spec</td>
+        <td><code>In Production</code></td>
+        <td>Defined in Build Spec v1.1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 3 — BRAND STANDARDS ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 03</span>
+    <span class="ttl">Brand Standards</span>
+    <span class="sub">Applied to This Build</span>
+  </div>
+
+  <h3>Color Palette</h3>
+  <table>
+    <colgroup><col style="width:30%"><col style="width:18%"><col style="width:12%"><col style="width:40%"></colgroup>
+    <thead><tr><th>Role in Build</th><th>Color Name</th><th>Hex</th><th>Where Used</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Primary UI / Headers / Active States</strong></td>
+        <td><span class="b b-green">Brand Green</span></td>
+        <td><code>#4ABA81</code></td>
+        <td>Nav, buttons, completed stage indicators, Required = Yes cells</td>
+      </tr>
+      <tr>
+        <td><strong>Headings / Dark UI / Sidebar</strong></td>
+        <td><span class="b b-navy">Navy Blue</span></td>
+        <td><code>#2F4E65</code></td>
+        <td>Section headers, table headers, QB sidebar backgrounds</td>
+      </tr>
+      <tr>
+        <td><strong>Error / Overdue / Retired / Blocked</strong></td>
+        <td><span class="b b-red">Coral Red</span></td>
+        <td><code>#F16262</code></td>
+        <td>Overdue tasks, blocked states, retired forms, failed items</td>
+      </tr>
+      <tr>
+        <td><strong>Warning / Approaching Deadline / Open</strong></td>
+        <td><span class="b b-yellow">Yellow</span></td>
+        <td><code>#FFCC3B</code></td>
+        <td>TBD items, open questions, storage aging alerts, approaching due dates</td>
+      </tr>
+      <tr>
+        <td><strong>Background</strong></td>
+        <td><span class="b b-gray">White</span></td>
+        <td><code>#FFFFFF</code></td>
+        <td>Default page and card background</td>
+      </tr>
+      <tr>
+        <td><strong>Light Alternate Rows</strong></td>
+        <td><span class="b b-gray">Gray</span></td>
+        <td><code>#F2F2F2</code></td>
+        <td>Table row banding throughout all documents</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Typography</h3>
+  <table>
+    <colgroup><col style="width:32%"><col style="width:34%"><col style="width:34%"></colgroup>
+    <thead><tr><th>Use</th><th>Font</th><th>Weight</th></tr></thead>
+    <tbody>
+      <tr><td>Headlines &amp; Subheadlines</td><td>Red Hat Display</td><td>Bold (700) / Semi-Bold (600)</td></tr>
+      <tr><td>Body Text</td><td>Red Hat Display</td><td>Regular (400)</td></tr>
+      <tr><td>Labels / Captions</td><td>Red Hat Display</td><td>Regular (400), smaller size</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><strong>Note:</strong> Red Hat Display is available free on Google Fonts. Use in all branded documents, spec PDFs, and web-facing output for this project.</p>
+
+  <h3>Logo Notes</h3>
+  <ul class="rules">
+    <li>Primary wordmark: "parakeet communities" in lowercase — <strong>"parakeet"</strong> in Brand Green (#4ABA81), <strong>"communities"</strong> in Navy Blue (#2F4E65)</li>
+    <li>Use text-only representation in documents when the logo image is not available</li>
+    <li>Do not use all caps. Do not alter the assigned colors.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════ SECTION 4 — DECISION LOG ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 04</span>
+    <span class="ttl">Decision Log</span>
+  </div>
+  <p class="note">Every decision made during the build is recorded here in order. When a pending item is resolved it is updated in place with the answer noted.</p>
+  <table>
+    <colgroup><col style="width:7%"><col style="width:9%"><col style="width:49%"><col style="width:14%"><col style="width:21%"></colgroup>
+    <thead><tr><th>#</th><th>Date</th><th>Decision</th><th>Made By</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>D-001</strong></td>
+        <td>Aug 2026</td>
+        <td>Architecture: Quickbase as workflow engine + FastField as field capture layer. Rent Manager stays as system of record. No replication of RM data — QB complements it.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-002</strong></td>
+        <td>Aug 2026</td>
+        <td>Clean slate approach: all existing Quickbase and FastField account data to be ignored or deleted. Build from zero.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-003</strong></td>
+        <td>Aug 2026</td>
+        <td>MRB (Make Ready Board) is fully retired. No references to MRB in any form, workflow, table, or documentation going forward. The MRB concept is replaced by direct QB workflow tracking.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Impl. Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-004</strong></td>
+        <td>Aug 2026</td>
+        <td>Workflow #001 is Home Ordering, Delivery &amp; Set. This is the first workflow to be built.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-005</strong></td>
+        <td>Aug 2026</td>
+        <td>Inspection process is a two-stage sequential handoff: (1) Construction Inspection — technical sign-off by Director of Construction; (2) Ops &amp; Sales Readiness — show-readiness sign-off by Facility Manager + Community Manager/Sales Rep. Construction sign-off must be on file before Ops form can be started. Listing requires both sign-offs.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Impl. Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-006</strong></td>
+        <td>Aug 2026</td>
+        <td>Punch list forms replaced with actual team-submitted checklists: Construction Inspection (89 items, 7 sections) and Ops &amp; Sales Readiness (71 items, 10 sections). Scaffolded generic checklist removed from spec.</td>
+        <td>John Clark / Team</td>
+        <td><span class="b b-green">Confirmed — Impl. Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-007</strong></td>
+        <td>Aug 2026</td>
+        <td>Quickbase gate rules are hard stops — a record cannot advance to the next stage without required fields or child records. No exceptions.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-008</strong></td>
+        <td>Aug 2026</td>
+        <td>JotForm is the current form platform but is being fully retired and replaced by QB + FastField. All 13 active JotForms have been audited and mapped to their migration targets.</td>
+        <td>Austin</td>
+        <td><span class="b b-yellow">In Progress</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-009</strong></td>
+        <td>08/18/26</td>
+        <td>Workflow #002 = Rehab. Applies to existing homes in the portfolio (vacant, acquired, or otherwise flagged) requiring rehab before re-listing. Independent of Workflow #001 (Home Ordering), which covers new homes from manufacturers. The Rehab Walkthrough Punchlist (37 items, 7 sections) from the JotForm audit is the FastField form for this workflow. Spec v1.0 built 08/18/26.</td>
+        <td>Austin (confirmed 08/18/26)</td>
+        <td><span class="b b-green">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-010</strong></td>
+        <td>Aug 2026</td>
+        <td>Community dropdown master list must be standardized across all forms. Multiple inconsistent lists identified in JotForm audit. A single master community list will be defined once and used everywhere.</td>
+        <td>Sys Admin / Asset Mgmt</td>
+        <td><span class="b b-yellow">Open — Needs Master List</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-011</strong></td>
+        <td>08/18/26</td>
+        <td>All Community, Lot, and Asset selections throughout the system use dynamic cascading QB relationship fields — never free-text or static picklists. Hierarchy: Community → Lot (filtered to community) → Asset (filtered to lot + asset status). Context-specific filters: New Home Order and Move In show Available lots only; Move Out shows Occupied lots only; Offer to Purchase shows lots with Listed assets only; Rehab Walkthrough shows lots with In-Rehab assets only. FastField field forms use pre-populated launch links from QB records — field crews tap a button and forms open with Community, Lot, and Asset pre-filled. Lot Status (Available / Occupied / Reserved / Demo) is maintained by QB automations and drives all filters. Communities requires its own QB table (O-012) to enable relationship-based cascading.</td>
+        <td>Austin (directed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.2</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-012</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 trigger = TBD Report disposition result = Rehab (auto-trigger) OR manual creation by Ops. The "TBD Report" is a separate reporting/workflow process not yet designed that evaluates vacant or acquired homes and assigns a disposition. WF002 is triggered when that disposition = Rehab. Manual trigger also always available (for acquisitions, existing damage, etc.).</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-013</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 includes full cost/budget/financial tracking. Rehab Records: Estimated Total Cost, Budget by category (Interior / Doors &amp; Hardware / Kitchen / Bathrooms / Utilities / Exterior / Other), Actual Cost (calculated rollup from Rehab Tasks), Budget Variance (calculated). Rehab Tasks: Estimated Cost and Actual Cost per task.</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-014</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 vendors are a mix of in-house staff and external vendors. Vendor list is maintained in SharePoint (not duplicated natively in QB). A QB Vendors reference table will be populated via SharePoint sync — integration method TBD (Q-034). Rehab Tasks have Assignment Type = In-House / External Vendor. In-house assignments are text fields; external vendor assignments link to the Vendors reference table.</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-015</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 listing handoff = notification only. When Rehab is Approved, QB sends a notification to the listing team to complete a Listing Request form manually. QB does not auto-create a listing record. Listing team initiates WF001 listing stage independently.</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-016</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 FastField form uses the 37-item, 7-section Rehab Walkthrough Punchlist from the JotForm audit as the confirmed current checklist. No additional items added.</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-017</strong></td>
+        <td>08/18/26</td>
+        <td>Lot Status and Asset Status are implemented as separate QB reference tables — not static picklists. When a home is assigned a Rehab disposition, BOTH Lot Status and Asset Status are updated to their respective Rehab values via QB automation. This dual-status architecture applies across all workflows. Reference table values are pending Austin confirmation (Q-035, Q-036).</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-018</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 FastField Rehab Walkthrough form includes one optional photo capture field per checklist item (37 photos total). Photos are optional by default. Whether photos become required on "No" answers is pending decision (Q-WF002-NEW-06).</td>
+        <td>Austin (confirmed)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-019</strong></td>
+        <td>08/18/26</td>
+        <td>Master community data source = dw_PDS.xlsx (SharePoint: Parakeet Birdcage - Data &amp; Analytics\DataWarehouse Feeds\dw_PDS.xlsx). 68 active communities. Short Name = primary QB key. QB Communities table is populated from PDS. Investment Vehicles: Baker / Fund II / Harpreet / JREFI / JREFII / Kippy / Origins / Single Asset. States: AL, FL, GA, MA, MI, NC, SC, WV. Total: 6,533 units, 693 POH. This resolves O-012 and Q-021.</td>
+        <td>Austin (PDS upload)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-020</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 upstream trigger source identified: weekly Monday Asset Management meeting ("Asset Disposition Review"). Participants: Asset Management, Ops, Construction, Sales. Reviews all recently vacated units/lots. Dispositions assigned: Rehab / Demo / Turn for Sale. Currently runs outside QB. When disposition = Rehab is entered in QB, automation A-RH-01 fires and creates a Rehab Record. WF003 (Asset Disposition Review) proposed to bring this meeting into QB — pending Q-037 decision.</td>
+        <td>Austin (Q-033 answer)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.2</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-021</strong></td>
+        <td>08/18/26</td>
+        <td>Vendor SharePoint sync method confirmed: Power Automate (Option A). A Power Automate flow monitors the SharePoint Vendor Master list and automatically pushes changes to the QB Vendors reference table. SharePoint = source of truth; QB = consumer. Replaces the open item O-WF002-NEW-05.</td>
+        <td>Austin (Q-034 answer)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.2</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-022</strong></td>
+        <td>08/18/26</td>
+        <td>Lot Status reference table values confirmed from Unit Type Listing.xlsx (RM-aligned). 16 Lot-X values: Lot / Lot-Avail(POH) / Lot-Rental / Lot-LTP / Lot-RV / Lot-RV(Transient) / Lot-RV(Seasonal) / Lot-In Rehab / Lot-Need Rehab / Lot-Pending(POH) / Lot-Evicted / Lot-Evicted (Rental) / Lot-Demo / Lot-Abandoned / Lot-Not Ready / Lot-Unusable. These mirror RM Unit Types for lot-type records.</td>
+        <td>Austin (Q-035 / Unit Type Listing.xlsx upload)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.2</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-023</strong></td>
+        <td>08/18/26</td>
+        <td>Asset Status reference table values confirmed from Asset Status.xlsx (RM-aligned). 25 values: &lt;UNASSIGNED&gt; / Abandoned / Declaratory Judgement / Delivered / Eviction Filed / For Sale / In Storage / In Use / Lease Option (LOP) / Needs Rehab / Ordered / Pending Sale / Permit Pending / Promissory Note / Rehab in Process / Rent to Own Agreement / Rental / Setting Needed / Sold / TBD / Title in Deceased Owners Name / Title Pending Transfer to Buyer / Title Pending Transfer to Parakeet / To Be Demoed / Waiting on Title.</td>
+        <td>Austin (Q-036 / Asset Status.xlsx upload)</td>
+        <td><span class="b b-green">Confirmed — Built in Spec v1.2</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-024</strong></td>
+        <td>08/18/26</td>
+        <td>Unit Type Listing.xlsx uploaded — 36 unit types covering lots, POH, RV, SFH, APT, COMM, STOR, marine infrastructure, and utility types. Candidate for a QB Unit Types reference table. Decision pending (Q-039). Source file: /home/ubuntu/Uploads/Unit Type Listing.xlsx.</td>
+        <td>Austin (file upload)</td>
+        <td><span class="b b-green">Resolved 08/19/26 — see D-027</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-025</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 Asset Disposition Review will be designed now (not deferred). WF003 formalizes the weekly Monday AM Asset Management meeting in QB, tracks disposition decisions (Rehab / Demo / Turn for Sale) per unit, and auto-triggers downstream workflows: WF002 when disposition = Rehab, Demo workflow when disposition = Demo, and listing path when disposition = Turn for Sale.</td>
+        <td>Austin (Q-037 answer)</td>
+        <td><span class="b b-green">Confirmed — WF003 spec in progress</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-026</strong></td>
+        <td>08/19/26</td>
+        <td>QB Lot Status and Asset Status labels will use RM-exact names throughout — e.g., "Lot-In Rehab", "Rehab in Process", "Lot-Avail(POH)". This applies to all QB dropdowns, views, reports, and reference tables. No simplified labels. RM-exact naming ensures frictionless cross-reference between QB and Rent Manager without a translation layer.</td>
+        <td>Austin (Q-038 answer)</td>
+        <td><span class="b b-green">Confirmed — Spec v1.2 already uses RM-exact names; no changes required</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-027</strong></td>
+        <td>08/19/26</td>
+        <td>Unit Type = Lot Status — they are the same field in QB. No separate "Unit Type" reference table will be created. The 16 Lot Status values extracted from Unit Type Listing.xlsx serve as both the lot status and the unit type designation on each lot record. Unit Type Listing.xlsx sourced these values; the Lot Status (LS) reference table in QB is the canonical source going forward.</td>
+        <td>Austin (Q-039 answer)</td>
+        <td><span class="b b-green">Confirmed — simplifies QB data model; no additional table needed</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-028</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 — Hold disposition requires Disposition Notes. Disposition Notes is a required field when Disposition = Hold. QB hard validation: record cannot be saved in Hold status without a written reason and expected re-review date. Error message: "Disposition Notes are required when Disposition = Hold." G-DR-01 in Spec v1.1 updated to reflect this rule.</td>
+        <td>Austin (O-WF003-001 answer)</td>
+        <td><span class="b b-green">Confirmed — Built in WF003 Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-029</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 — Meeting Date validation is a soft warning, not a hard block. QB warns recorder if Meeting Date is not a Monday but allows proceeding. Warning text: "This date is not a Monday. Asset Disposition meetings are typically held on Mondays. Confirm to proceed." Covers holiday weeks and schedule exceptions. Meeting Date field in Spec v1.1 updated.</td>
+        <td>Austin (O-WF003-002 answer)</td>
+        <td><span class="b b-green">Confirmed — Built in WF003 Spec v1.1</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-030</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 — Move Out agenda trigger confirmed as Asset Status / Lot Status change (e.g., status → TBD or Needs Rehab after move-out completion), NOT the move-out event itself. Units are not auto-added to the meeting agenda; the meeting recorder adds them manually after observing the status change in QB. The future Move Out WF will set the appropriate status on asset; WF003 recorder then creates the Disposition Item. O-WF003-003 resolved.</td>
+        <td>Austin (O-WF003-003 answer)</td>
+        <td><span class="b b-green">Confirmed — Design intent logged; Move Out WF integration point noted</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-031</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 — Notifications: no individual per-disposition alerts (Demo → Ops, Turn for Sale → Listing team). Replaced with a single meeting recap email sent to the full leadership group when the meeting closes (A-DR-04). Recipients: Austin, Jon, John, Zach, Natalie, Leslie, Justin. Email lists all units reviewed with disposition outcomes. Full email addresses to be confirmed in build phase. A-DR-02, A-DR-03, and A-DR-04 updated in Spec v1.1.</td>
+        <td>Austin (O-WF003-004 answer)</td>
+        <td><span class="b b-green">Confirmed — Built in WF003 Spec v1.1. Email addresses TBD (build phase)</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-032</strong></td>
+        <td>08/19/26</td>
+        <td>WF003 — Duplicate Rehab unit handling: QB hard blocks a new Disposition Item when the selected unit already has an active WF002 Rehab Record. Warning message: "This unit already has an active Rehab record in progress ([RH-ID]). Contact Ops if an exception is required." Future build: exception approval workflow (recorder requests override → Ops Director approves). G-DR-03 in Spec v1.1 updated.</td>
+        <td>Austin (O-WF003-005 answer)</td>
+        <td><span class="b b-green">Confirmed — Block built in WF003 Spec v1.1. Exception approval = future build.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-033</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — Escalation path for overdue Rehab records confirmed. 7 days past any SLA milestone → Ops Director notified. 30 calendar days without Completion → Austin escalation. 60-day threshold eliminated. A-RH-12 updated in WF002 Spec v1.3. Closes Q-030.</td>
+        <td>Austin (Q-030 answer)</td>
+        <td><span class="b b-green">Confirmed — A-RH-12 updated in WF002 Spec v1.3.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-034</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — Bid approval thresholds confirmed: &lt;$2,500.00 = no approval required; $2,500.00–$5,000.00 = Regional Manager approval; &gt;$5,000.00 = Austin approval. A-RH-06 updated in WF002 Spec v1.3. Closes O-WF002-NEW-03.</td>
+        <td>Austin (O-WF002-NEW-03 answer)</td>
+        <td><span class="b b-green">Confirmed — A-RH-06 updated in WF002 Spec v1.3.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-035</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — SLA thresholds confirmed: Walkthrough Scheduling = 3 business days from Rehab record creation; Individual Task Completion = 5 business days from assignment; Full Project Completion = 30 calendar days from Rehab record creation. Implemented in A-RH-12. Closes O-WF002-NEW-04.</td>
+        <td>Austin (O-WF002-NEW-04 answer)</td>
+        <td><span class="b b-green">Confirmed — A-RH-12 SLA thresholds set in WF002 Spec v1.3.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-036</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — Photo storage architecture confirmed: Option D — QB file attachment field (quick access alongside the Rehab Record) + SharePoint document library push (archival and compliance). FastField webhook delivers photo URLs; A-RH-03 pipeline writes photos to both QB and SharePoint. Power Automate or QB Pipeline step to handle SharePoint push is a build deliverable. Closes O-WF002-NEW-07.</td>
+        <td>Austin (O-WF002-NEW-07 answer)</td>
+        <td><span class="b b-green">Confirmed — Option D built into WF002 Spec v1.3.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-037</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — Listing handoff notification recipients confirmed: Leslie and Tanya. A-RH-11 sends to both on Rehab Status = Complete. Full email addresses to be provided at build phase. Closes O-WF002-NEW-08.</td>
+        <td>Austin (O-WF002-NEW-08 answer)</td>
+        <td><span class="b b-green">Confirmed — A-RH-11 updated in WF002 Spec v1.3.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-038</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 Move Out — All three triggers (voluntary notice, lease non-renewal, eviction outcome) follow the same workflow path. No separate process per trigger type.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-039</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Move Out Form is FastField (replaces JotForm #13). Community Manager completes form on move-out date. FastField is the system of record for this form.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-040</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Regional approval happens inside FastField (not QB). FastField multi-step routing handles the CM → Regional Manager approval flow.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0. Multi-step routing detail flagged O-WF004-003.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-041</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Rent Manager data sync is a daily batch CSV export from QB at 6 PM ET. Justin / RM admin team imports. No live API. Column mapping spec to be confirmed at build phase (O-WF004-001).</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-042</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Move Out Inspection SLA = 48 hours from move-out date. QB automation triggers reminder at 24 hrs and escalation at 48 hrs if inspection not uploaded.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-043</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Move Out Inspection report saves to SharePoint only (not QB). QB stores a link to the SharePoint document. Inspection checklist items to be provided (O-WF004-002). SharePoint path to be confirmed (O-WF004-004).</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-044</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Community Manager does NOT update any QB or Rent Manager status fields. All status changes in QB are triggered by automation (form submissions, batch imports). CM role is form completion only.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-045</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Security deposit stays in Rent Manager only. QB reads the deposit amount for reference display but does not store or edit it. RM is the system of record for all financial data.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF004 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-046</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 Listings — Single trigger: Community Manager submits the FastField Listing Request Form. This is independent of WF002 completion — any CM can initiate a listing for any eligible asset at any time. Replaces JotForm #2 (Home Listing Request Form).</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF006 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-047</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — FastField Listing Request Form confirmed. Form name: PARAKEET — WF006 — Listing Request Form. Completed by CM. Submission fires A-LS-01: creates QB Listing Record + notifies Leslie and Tanya.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF006 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-048</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — Listing team = Leslie and Tanya only. They review all listing requests in QB, set Official Listing Price, Listing Date, and Listed By, and approve or reject. Full email addresses to be confirmed at build phase.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF006 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-049</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — RM has user-defined fields for Listing Status, Listed By, Listing Date, Listing Price, and related data. QB syncs these fields to RM UDFs via the daily 6 PM ET batch CSV export (A-LS-05). Exact RM UDF field names and allowed values to be confirmed by Justin / RM admin (O-WF006-002, O-WF006-003).</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF006 Spec v1.0.</span></td>
+      </tr>
+      <tr>
+        <td><strong>D-050</strong></td>
+        <td>08/19/26</td>
+        <td>WF007 Offer to Purchase/Rent is a separate workflow from WF006. When an offer is received on an Active listing, WF007 is initiated independently. WF006 Listing Status → Pending Offer (locked via G-LS-04). If WF007 offer accepted → WF006 auto-closes as Sold. If rejected → WF006 returns to Active.</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Confirmed — Built into WF006 Spec v1.0.</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 5 — CORRECTIONS & REMOVALS ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 05</span>
+    <span class="ttl">Corrections &amp; Removals Log</span>
+  </div>
+  <p class="note">Every time something is changed, corrected, or removed from a deliverable, it is logged here.</p>
+  <table>
+    <colgroup><col style="width:7%"><col style="width:9%"><col style="width:15%"><col style="width:30%"><col style="width:21%"><col style="width:18%"></colgroup>
+    <thead>
+      <tr><th>#</th><th>Date</th><th>Deliverable</th><th>What Was Changed</th><th>Why</th><th>Applied In</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>C-001</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>MRB removed entirely — all references scrubbed from workflow steps, fields, forms, gate rules, and FAQs</td>
+        <td>Austin directed: MRB is retired, no references to remain</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-002</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>Generic scaffolded punch list replaced with actual 89-item Construction Inspection and 71-item Ops &amp; Sales Readiness checklists</td>
+        <td>Team submitted actual forms via uploaded DOCX documents</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-003</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>Workflow stages updated from 11 to 12 — two inspection stages (Construction + Ops/Sales) replace single "Home Set" stage</td>
+        <td>Two-stage sequential inspection model confirmed</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-004</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>FastField forms updated from 3 to 4 — separate Construction Inspection form and Ops &amp; Sales Readiness form added</td>
+        <td>Two-stage inspection model</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-005</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>QB tables updated from 6 to 7 — Construction Inspection Records and Ops Readiness Records added as separate tables</td>
+        <td>Two-stage inspection model</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-006</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>Pre-listing gate updated from 6 items to 7 — Construction Inspection Approved and Ops &amp; Sales Readiness Approved added as separate required checks</td>
+        <td>Two-stage inspection model</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-007</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>Automations expanded from 11 (A1–A11) to 14 (A1–A14) — added A10/A11 for Construction Inspection outcomes, A12/A13 for Ops Readiness outcomes</td>
+        <td>Two-stage inspection model</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-008</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0</td>
+        <td>Gate rules expanded from 8 (G1–G8) to 9 (G1–G9) — added G8 for Construction→Ops transition, renumbered final gate</td>
+        <td>Two-stage inspection model</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-009</strong></td>
+        <td>Aug 2026</td>
+        <td>Open Items</td>
+        <td>O2 (Construction punch list) and O3 (Ops punch list) marked Resolved — actual forms received from team</td>
+        <td>Team submitted DOCX checklists</td>
+        <td>Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>C-010</strong></td>
+        <td>Aug 2026</td>
+        <td>Open Items</td>
+        <td>O9 added — JotForm utility alert reference in Ops Readiness form needs decision: retire in favor of QB task, or keep as parallel channel</td>
+        <td>JotForm audit surfaced this item</td>
+        <td>Spec v1.1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 6 — OPEN QUESTIONS REGISTER ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 06</span>
+    <span class="ttl">Open Questions Register</span>
+  </div>
+  <p class="note">Every unresolved question is logged here. When answered, it is moved to the Decision Log (Section 4) and closed here with the answer noted.</p>
+  <table>
+    <colgroup><col style="width:7%"><col style="width:9%"><col style="width:32%"><col style="width:16%"><col style="width:10%"><col style="width:8%"><col style="width:18%"></colgroup>
+    <thead>
+      <tr><th>#</th><th>Date Raised</th><th>Question</th><th>Form / Area</th><th>Owner</th><th>Status</th><th>Answer</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Q-001</strong></td>
+        <td>Aug 2026</td>
+        <td>Is the Home Listing Confirmation (Form 1, 4 fields) intentionally minimal or a placeholder? What downstream action does it trigger?</td>
+        <td>Home Listing Confirmation</td>
+        <td>Sales</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-002</strong></td>
+        <td>Aug 2026</td>
+        <td>Home Listing Request: Both Suggested Monthly Rental Price and Suggested Sale Price are required. Should one be hidden based on "For Rent" vs "For Sale" selection to reduce confusion?</td>
+        <td>Home Listing Request</td>
+        <td>Sales</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-003</strong></td>
+        <td>Aug 2026</td>
+        <td>Offer Submission: Where does "Upload Signed PSA" file go? QB attachment, SharePoint, or Rent Manager document upload?</td>
+        <td>Offer to Purchase/Rent</td>
+        <td>Sales / Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-004</strong></td>
+        <td>Aug 2026</td>
+        <td>Is the Utility Request Application the form replacing the JotForm utility alert referenced in the Ops Readiness checklist? If yes, confirm it moves to QB.</td>
+        <td>Utility Request / Ops</td>
+        <td>Ops / Accounting</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-005</strong></td>
+        <td>Aug 2026</td>
+        <td>Weekly Maintenance Checklist uses a completely different community name list than all other forms. Is this a different region or an error? Needs reconciliation with master list.</td>
+        <td>Weekly Maintenance</td>
+        <td>Ops / Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-006</strong></td>
+        <td>Aug 2026</td>
+        <td>Monthly Equipment &amp; Inventory Checklist community dropdown shows "Community 1, 2, 3, 4, Other" — is this a placeholder? Needs real community names.</td>
+        <td>Monthly Equipment</td>
+        <td>Ops / Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-007</strong></td>
+        <td>Aug 2026</td>
+        <td>Month End Checklist references Rent Manager in multiple items. Which of these items will be QB-tracked vs. staying purely RM-side?</td>
+        <td>Month End</td>
+        <td>Operations</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-008</strong></td>
+        <td>Aug 2026</td>
+        <td>Move Out Inspection uses Excellent/Good/Fair/Poor. Home Ordering uses Pass/Fail/N/A. Rehab uses Yes/No/N/A. Standardize across all inspections or keep distinct scales per context?</td>
+        <td>All Inspection Forms</td>
+        <td>Austin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-009</strong></td>
+        <td>Aug 2026</td>
+        <td>Resident Information Sheet: Is this becoming a QB intake that syncs or notifies RM admin, or will it remain a standalone capture form?</td>
+        <td>Resident Info Sheet</td>
+        <td>Asset Mgmt / Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-010</strong></td>
+        <td>Aug 2026</td>
+        <td>Community Site Visit Inspection: Who is the primary owner — Regional Manager, Director of Ops, or both? What is the expected frequency?</td>
+        <td>Community Site Visit</td>
+        <td>Operations</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-011</strong></td>
+        <td>Aug 2026</td>
+        <td>Will Rehab be built as Workflow #002 using the Rehab Walkthrough Punchlist as the starting point?</td>
+        <td>Rehab Workflow</td>
+        <td>Austin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-012</strong></td>
+        <td>Aug 2026</td>
+        <td>Move In/Move Out Request: Is QB the submission layer that then notifies the RM admin for entry, or will there be a direct RM workflow? How does the handoff work?</td>
+        <td>Move In/Move Out</td>
+        <td>Ops / Accounting</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-013</strong></td>
+        <td>Aug 2026</td>
+        <td>Master community list: Multiple inconsistent dropdown lists exist across JotForms. A single canonical list needs to be created. Who owns it and what is the authoritative source (Rent Manager property list)?</td>
+        <td>All Forms</td>
+        <td>Austin / Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-014</strong></td>
+        <td>Aug 2026</td>
+        <td>Complete list of all Parakeet community names for the master dropdown — needed for all QB and FastField forms.</td>
+        <td>All QB/FastField Forms</td>
+        <td>Austin / Asset Mgmt</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-015</strong></td>
+        <td>Aug 2026</td>
+        <td>Complete list of all active manufacturers used in home ordering (beyond Cavco / Clayton / Skyline / Champion).</td>
+        <td>Home Orders Table</td>
+        <td>Sales</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-016</strong></td>
+        <td>Aug 2026</td>
+        <td>Will QB automations send notifications via email, Teams, or both? Teams integration requires additional setup.</td>
+        <td>QB Automations</td>
+        <td>Sys Admin / Austin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-017</strong></td>
+        <td>Aug 2026</td>
+        <td>Date change notification email for production tracking — does Sales have a draft template, or does it need to be written as part of the build?</td>
+        <td>Home Orders — Date Mgmt</td>
+        <td>Sales</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-018</strong></td>
+        <td>Aug 2026</td>
+        <td>FastField ↔ Quickbase integration: direct webhook (preferred) or manual CSV bridge for initial launch?</td>
+        <td>Integration</td>
+        <td>Sys Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-019</strong></td>
+        <td>Aug 2026</td>
+        <td>Serial number field: can it be marked required when the home reaches "Delivery Scheduled" stage? Or does it need to remain optional with a warning flag only, given manufacturer timing variability?</td>
+        <td>Home Orders</td>
+        <td>Sales / Asset Mgmt</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-020</strong></td>
+        <td>Aug 2026</td>
+        <td>For the Ops Readiness form — the JotForm version references submitting a form "immediately if a utility is off." In QB, is this handled by a task assignment, a QB notification, or a separate utility request form trigger?</td>
+        <td>Ops Readiness / Utility</td>
+        <td>Operations</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-021</strong></td>
+        <td>08/18/26</td>
+        <td>Master community list needed for Communities QB table (O-012 — build blocker for cascading dropdown architecture). Required: community name, state/region if tracked, any grouping by market or region. This list defines the top level of the Community → Lot → Asset cascade and must be provided before the Communities table can be configured.</td>
+        <td>Communities Table / Cascading Dropdowns</td>
+        <td>Austin / Asset Mgmt</td>
+        <td><span class="b b-red">Open — Build Blocker</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>Q-022</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Trigger: Is Workflow #002 always triggered automatically by a completed Move Out record? Or can it also be triggered manually (e.g., for acquired homes or homes with existing damage)?</td>
+        <td>WF002 / Trigger</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Trigger = TBD Report disposition result = Rehab. Also can be triggered manually. Not solely from Move Out. See D-012.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-023</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Cost/Budget: Is there a cost or budget tracking component to Rehab? Should Rehab Records include estimated cost, actual cost, or vendor invoice fields?</td>
+        <td>WF002 / Scope</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Yes — full cost/budget/financial tracking. Estimated cost, budget by category, actual cost rolled up from tasks. See D-013. Invoice storage TBD (O-WF002-NEW-05).</td>
+      </tr>
+      <tr>
+        <td><strong>Q-024</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Work Orders: Should Rehab Tasks be simple QB task records, or do we need a formal Work Order that can be sent to vendors?</td>
+        <td>WF002 / Vendors</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Vendors are external. Work completed in-house and by external vendors. Vendor list via SharePoint integration. See D-014.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-025</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Vendors Table: Do we need a dedicated Vendors table in QB?</td>
+        <td>WF002 / Vendors</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Vendor list maintained in SharePoint — not a native QB table. QB Vendors reference table will be synced from SharePoint. Integration method TBD (O-WF002-NEW-02). See D-014.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-026</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Listing Handoff: When Rehab is Approved → does QB auto-create a Listing Request or does the listing team manually initiate it?</td>
+        <td>WF002 / Listing</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Notification only — QB sends alert to listing team to complete Listing Request form manually. No auto-create. See D-015.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-027</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Checklist: Is the 37-item JotForm punchlist the current field checklist?</td>
+        <td>WF002 / FastField Form</td>
+        <td>Austin / Ops</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Confirmed — 37-item punchlist (7 sections) is the current working checklist. Built into spec v1.1.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-028</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Asset Status Values: Confirm full set of Asset Status values.</td>
+        <td>WF002 / Data Model</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Asset Status is a separate QB reference table (not static dropdown). Values proposed: Available / In Rehab / Ready to List / Listed / Occupied / Demo / Abandoned. Confirm (O-WF002-NEW-08). See D-017.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-029</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Lot Status for Rehab: Separate Lot Status = Rehab, or track at Asset Status level only?</td>
+        <td>WF002 / Data Model</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Both Lot Status AND Asset Status are set to Rehab status when rehab is decided. Two separate QB reference tables — one for Lot Status, one for Asset Status. See D-017.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-030</strong></td>
+        <td>08/19/26</td>
+        <td>WF002 — Escalation: What is the correct escalation path for overdue Rehab records?</td>
+        <td>WF002 / Automations</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/19/26 — D-033</span></td>
+        <td><strong>Resolved.</strong> Escalation path: 7 days past any SLA milestone → Ops Director notified; 30 calendar days without Completion → Austin escalation. 60-day threshold eliminated — "nothing should ever reach 60 days." A-RH-12 updated in WF002 Spec v1.3.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-031</strong></td>
+        <td>08/18/26</td>
+        <td>WF002 — Photo Documentation: Should the FastField form include photo capture fields?</td>
+        <td>WF002 / FastField Form</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Answered 08/18/26</span></td>
+        <td>Yes — optional photo per question if applicable. 37 optional photo fields added to FastField form (one per checklist item). See D-018. Whether photos are required on "No" answers is still open (O-WF002-NEW-06).</td>
+      </tr>
+      <tr>
+        <td><strong>Q-032</strong></td>
+        <td>08/18/26</td>
+        <td>PDS / Communities: 68 active communities confirmed from dw_PDS.xlsx (SharePoint: Parakeet Birdcage - Data &amp; Analytics\DataWarehouse Feeds\dw_PDS.xlsx). Short Name is the primary key. This resolves O-012 and Q-021 for the Communities table schema. Investment Vehicles: Baker / Fund II / Harpreet / JREFI / JREFII / Kippy / Origins / Single Asset. States: AL, FL, GA, MA, MI, NC, SC, WV. Property Types: ManufacturedHousing / RVCampground. Total units: 6,533 | Total POH: 693.</td>
+        <td>Communities Table / PDS</td>
+        <td>Austin (PDS upload)</td>
+        <td><span class="b b-green">Resolved 08/18/26</span></td>
+        <td>Communities QB table built from PDS. Short Name = primary key. 68 communities loaded into spec. O-012 and Q-021 closed.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-033</strong></td>
+        <td>08/18/26</td>
+        <td>TBD Report: WF002 is triggered by a "TBD Report" when disposition = Rehab. What is this report? What are all disposition outcomes? Who runs it and on what cadence?</td>
+        <td>WF002 / Trigger</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/18/26</span></td>
+        <td>Weekly Monday Asset Management meeting ("Asset Disposition Review"). Participants: Asset Mgmt, Ops, Construction, Sales. Dispositions: Rehab / Demo / Turn for Sale. Currently outside QB. Logged as D-020. WF003 proposed — see Q-037.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-034</strong></td>
+        <td>08/18/26</td>
+        <td>Vendor SharePoint Integration: What method for syncing vendor list from SharePoint to QB?</td>
+        <td>WF002 / Vendors</td>
+        <td>Austin / IT</td>
+        <td><span class="b b-green">Resolved 08/18/26</span></td>
+        <td>Option A — Power Automate. Flow monitors SharePoint Vendor Master and auto-pushes changes to QB Vendors table. Logged as D-021. Built in Spec v1.2 §6.4.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-035</strong></td>
+        <td>08/18/26</td>
+        <td>Lot Status full value set — confirm or modify before reference table is built.</td>
+        <td>WF002 / Lot Status Table</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/18/26</span></td>
+        <td>16 RM-aligned Lot-X values confirmed from Unit Type Listing.xlsx. Logged as D-022. Full value set in Spec v1.2 §4A.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-036</strong></td>
+        <td>08/18/26</td>
+        <td>Asset Status full value set — confirm or modify before reference table is built.</td>
+        <td>WF002 / Asset Status Table</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/18/26</span></td>
+        <td>25 RM-aligned values confirmed from Asset Status.xlsx. Logged as D-023. Full value set in Spec v1.2 §4B.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-037</strong></td>
+        <td>08/18/26</td>
+        <td>WF003 Asset Disposition Review: Should the Monday Asset Management meeting be brought into QB now as WF003, or kept outside QB for now (with WF002 using manual triggers only)? Bringing it into QB enables the auto-trigger for WF002, tracks all disposition decisions per unit, and creates a full audit trail. Recommended: design WF003 now.</td>
+        <td>WF003 / Planning</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/19/26</span></td>
+        <td>Design WF003 now. Logged as D-025. WF003 spec in progress.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-038</strong></td>
+        <td>08/18/26</td>
+        <td>Status value naming convention: Should QB Lot Status and Asset Status use the exact RM names (e.g., "Lot-In Rehab", "Rehab in Process") to maintain RM alignment, or simplified/clean QB labels (e.g., "In Rehab")? Affects RM cross-reference accuracy and user clarity in QB.</td>
+        <td>WF002 / Status Tables</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/19/26</span></td>
+        <td>RM-exact names confirmed for all QB status labels (Lot Status and Asset Status). Logged as D-026. No changes to Spec v1.2 required — already uses RM-exact names.</td>
+      </tr>
+      <tr>
+        <td><strong>Q-039</strong></td>
+        <td>08/18/26</td>
+        <td>Unit Type Listing.xlsx uploaded with 36 unit types (Lot, POH, RV, SFH, APT, COMM, STOR, marine, utility types). Should this become a QB "Unit Types" reference table linked to each Asset record? If yes, adds one QB table and affects Lots / Assets table design and cascade logic.</td>
+        <td>QB Architecture / Reference Tables</td>
+        <td>Austin</td>
+        <td><span class="b b-green">Resolved 08/19/26</span></td>
+        <td>Unit Type = Lot Status — they are the same field. No separate Unit Type reference table. The 16 Lot Status values extracted from Unit Type Listing.xlsx serve both purposes. Logged as D-027.</td>
+      </tr>
+      <tr>
+        <td><strong>O-WF004-001</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — RM batch CSV import column mapping spec not yet confirmed. Which QB Move Out Record fields map to which RM import columns? Required before build phase to ensure the 6 PM ET daily export is correctly formatted for Justin / RM admin team import.</td>
+        <td>WF004 / RM Integration</td>
+        <td>Justin / RM Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF004-002</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Move Out Inspection checklist items not yet provided. What are the specific line items for the inspection form (interior, exterior, appliances, etc.)? Required to build the FastField Move Out Inspection form.</td>
+        <td>WF004 / FastField Inspection Form</td>
+        <td>Austin / Ops</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF004-003</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — FastField multi-step approval routing detail not confirmed. How does the CM → Regional Manager approval flow work in FastField? Does the RM receive a notification to review, can they reject and return to CM, or is it a countersignature only?</td>
+        <td>WF004 / FastField Approval</td>
+        <td>Austin / FastField Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF004-004</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — SharePoint destination path for Move Out Inspection reports not confirmed. What is the folder structure / naming convention in SharePoint where completed inspection PDFs are saved? (e.g., /Communities/[Community Name]/Move Outs/[Year]/)</td>
+        <td>WF004 / SharePoint</td>
+        <td>Austin / IT</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF004-005</strong></td>
+        <td>08/19/26</td>
+        <td>WF004 — Returned / rejected form correction flow not defined. If Regional Manager rejects the Move Out Form in FastField, does the CM receive a notification and correct in FastField, or is a new form submission required? What is the correction SLA?</td>
+        <td>WF004 / FastField Approval</td>
+        <td>Austin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF006-001</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — Listing platforms not confirmed. Where does Parakeet post listings? (e.g., MHVillage, Zillow, internal website, Realtor.com, other?) Austin confirmed this needs to come from Leslie.</td>
+        <td>WF006 / Listing Platforms</td>
+        <td>Leslie</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF006-002</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — Exact RM user-defined field names for Listing Status, Listed By, Listing Date, Listing Price, and any additional listing UDFs not confirmed. Required to build the A-LS-05 batch CSV column mapping for RM import.</td>
+        <td>WF006 / RM UDF Mapping</td>
+        <td>Justin / RM Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF006-003</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — Allowed values for the RM Listing Status user-defined field not confirmed. QB Listing Status values must map 1:1 to RM UDF values. What are the accepted RM values for Listing Status?</td>
+        <td>WF006 / RM Listing Status Values</td>
+        <td>Justin / RM Admin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF006-004</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — SharePoint folder path and naming convention for listing marketing materials not confirmed. (e.g., /Communities/[Community Name]/Listings/[LST-YYYY-###]/) Required to configure the SharePoint Marketing Folder Link field in QB.</td>
+        <td>WF006 / SharePoint</td>
+        <td>Austin / IT</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF006-005</strong></td>
+        <td>08/19/26</td>
+        <td>WF006 — Listing review SLA not defined. Is there a target for Leslie/Tanya to review and approve/reject a listing request after submission? If yes, should QB trigger a reminder or escalation if the request sits in "Under Review" past the SLA?</td>
+        <td>WF006 / Review SLA</td>
+        <td>Austin</td>
+        <td><span class="b b-yellow">Open</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 7 — ERRORS & LESSONS ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 07</span>
+    <span class="ttl">Errors &amp; Lessons Learned</span>
+  </div>
+  <p class="note">Log of mistakes, wrong assumptions, or things that caused rework — so they are not repeated.</p>
+  <table>
+    <colgroup><col style="width:7%"><col style="width:8%"><col style="width:24%"><col style="width:20%"><col style="width:20%"><col style="width:21%"></colgroup>
+    <thead>
+      <tr><th>#</th><th>Date</th><th>Description</th><th>Root Cause</th><th>Resolution</th><th>Future Rule</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>E-001</strong></td>
+        <td>Aug 2026</td>
+        <td>Build Spec v1.0 included MRB references throughout — steps, fields, forms, gate rules, and FAQ section</td>
+        <td>MRB was assumed to be an active part of the workflow based on the SOP document</td>
+        <td>Full scrub of all MRB references in Spec v1.1</td>
+        <td>Before publishing any spec or document, confirm with Austin which legacy processes are retired vs. active</td>
+      </tr>
+      <tr>
+        <td><strong>E-002</strong></td>
+        <td>Aug 2026</td>
+        <td>Punch list in Spec v1.0 was scaffolded from generic manufactured home inspection templates rather than actual Parakeet checklists</td>
+        <td>Actual checklists were not yet provided at spec time</td>
+        <td>Replaced in Spec v1.1 with actual team-submitted DOCX checklists</td>
+        <td>Always wait for team-provided forms/checklists before speccing field-level detail. Use "[Pending team input]" placeholders instead of generic stand-ins</td>
+      </tr>
+      <tr>
+        <td><strong>E-003</strong></td>
+        <td>Aug 2026</td>
+        <td>Spec v1.0 treated inspection as a single step with a single FastField form and single QB table</td>
+        <td>Two-stage inspection process (Construction then Ops) was not yet defined at spec time</td>
+        <td>Expanded to two forms, two tables, updated stages and gate rules in Spec v1.1</td>
+        <td>When a handoff has multiple signatories, confirm whether they sign sequentially or concurrently before designing the table/form architecture</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 8 — FILE & DOCUMENT REGISTRY ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 08</span>
+    <span class="ttl">File &amp; Document Registry</span>
+  </div>
+  <p class="note">Every document created for this build, in order.</p>
+  <table>
+    <colgroup><col style="width:7%"><col style="width:23%"><col style="width:25%"><col style="width:7%"><col style="width:8%"><col style="width:9%"><col style="width:21%"></colgroup>
+    <thead>
+      <tr><th>#</th><th>Document Name</th><th>File</th><th>Version</th><th>Date</th><th>Status</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>R-001</strong></td>
+        <td>Home Ordering SOP</td>
+        <td><code>001-home_ordering_sop_FINAL.pdf</code></td>
+        <td>Final</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-green">Active</span></td>
+        <td>Source document. MRB references exist — treated as retired per D-003</td>
+      </tr>
+      <tr>
+        <td><strong>R-002</strong></td>
+        <td>Construction Inspection Checklist</td>
+        <td><code>Home Rediness Checklist_Construction.docx</code></td>
+        <td>Final</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-green">Active</span></td>
+        <td>89 items, 7 sections. Incorporated into Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>R-003</strong></td>
+        <td>Ops &amp; Sales Readiness Checklist</td>
+        <td><code>Home Rediness Checklist_Ops.docx</code></td>
+        <td>Final</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-green">Active</span></td>
+        <td>71 items, 10 sections. Incorporated into Spec v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>R-004</strong></td>
+        <td>QB + FastField Build Spec</td>
+        <td><code>parakeet_home_ordering_build_spec.pdf</code></td>
+        <td>v1.0</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-red">Superseded</span></td>
+        <td>Original spec — replaced by v1.1</td>
+      </tr>
+      <tr>
+        <td><strong>R-005</strong></td>
+        <td>WF001 Home Ordering Build Spec</td>
+        <td><code>parakeet_home_ordering_build_spec_v1.1.pdf</code></td>
+        <td>v1.1</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-red">Superseded</span></td>
+        <td>Actual checklists included, MRB removed, 2-stage inspection model. Replaced by v1.2.</td>
+      </tr>
+      <tr>
+        <td><strong>R-006</strong></td>
+        <td>JotForm Audit Workbook</td>
+        <td><code>parakeet_jotform_audit.xlsx</code></td>
+        <td>v1.0</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-green">Current</span></td>
+        <td>13 forms audited, field-by-field mapping, migration targets, open items</td>
+      </tr>
+      <tr>
+        <td><strong>R-007</strong></td>
+        <td>Build Audit Log</td>
+        <td><code>parakeet_build_audit_log.pdf</code></td>
+        <td>v1.0</td>
+        <td>Aug 2026</td>
+        <td><span class="b b-green">Current</span></td>
+        <td>This document. Updated continuously throughout design phase.</td>
+      </tr>
+      <tr>
+        <td><strong>R-008</strong></td>
+        <td>WF001 Home Ordering Build Spec</td>
+        <td><code>parakeet_home_ordering_build_spec_v1.2.pdf</code></td>
+        <td>v1.2</td>
+        <td>08/19/26</td>
+        <td><span class="b b-green">Current — Locked</span></td>
+        <td>D-028–D-032 applied. Pricing, brand voice, SLA confirmations incorporated. Current locked version.</td>
+      </tr>
+      <tr>
+        <td><strong>R-009</strong></td>
+        <td>WF002 Rehab Build Spec</td>
+        <td><code>parakeet_rehab_build_spec_v1.3.pdf</code></td>
+        <td>v1.3</td>
+        <td>08/19/26</td>
+        <td><span class="b b-green">Current — Locked</span></td>
+        <td>D-033–D-037 applied. Bid thresholds, SLA timers, photo storage, listing handoff recipients confirmed. Current locked version.</td>
+      </tr>
+      <tr>
+        <td><strong>R-010</strong></td>
+        <td>WF003 Asset Disposition Review Spec</td>
+        <td><code>parakeet_disposition_review_spec_v1.1.pdf</code></td>
+        <td>v1.1</td>
+        <td>08/19/26</td>
+        <td><span class="b b-green">Current — Locked</span></td>
+        <td>D-028–D-032 applied. Hold validation, Monday soft-check, notifications consolidated to recap email. Current locked version.</td>
+      </tr>
+      <tr>
+        <td><strong>R-011</strong></td>
+        <td>Cascade Logic Map</td>
+        <td><code>cascade_logic_map.pdf</code></td>
+        <td>v1.0</td>
+        <td>08/19/26</td>
+        <td><span class="b b-green">Current</span></td>
+        <td>Inter-workflow dependency map. Shows triggers, handoffs, and data flow across WF001–WF006.</td>
+      </tr>
+      <tr>
+        <td><strong>R-012</strong></td>
+        <td>WF004 Move Out Build Spec</td>
+        <td><code>parakeet_move_out_spec_v1.0.pdf</code></td>
+        <td>v1.0</td>
+        <td>08/19/26</td>
+        <td><span class="b b-yellow">Draft — Open Items Pending</span></td>
+        <td>D-038–D-045 incorporated. 5 open items remain (O-WF004-001 through O-WF004-005). Locks after open items resolved.</td>
+      </tr>
+      <tr>
+        <td><strong>R-013</strong></td>
+        <td>WF006 Listings Build Spec</td>
+        <td><code>parakeet_listings_spec_v1.0.pdf</code></td>
+        <td>v1.0</td>
+        <td>08/19/26</td>
+        <td><span class="b b-yellow">Draft — Open Items Pending</span></td>
+        <td>D-046–D-050 incorporated. 5 open items remain (O-WF006-001 through O-WF006-005). Locks after open items resolved.</td>
+      </tr>
+      <tr>
+        <td><strong>R-014</strong></td>
+        <td>QB + FastField Build Playbook (WF001–WF003)</td>
+        <td><code>parakeet_qb_build_playbook_v1.0.pdf</code></td>
+        <td>v1.0</td>
+        <td>08/19/26</td>
+        <td><span class="b b-green">Active</span></td>
+        <td>Phase 0–5 build instructions for WF001 (Home Ordering v1.2), WF002 (Rehab v1.3), WF003 (Disposition Review v1.1). 70 pages, 63 tables. Cross-workflow wire-up, 45 end-to-end tests, Move Out integration stubs included.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 9 — NAMING & FORMATTING RULES ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 09</span>
+    <span class="ttl">Naming &amp; Formatting Rules</span>
+  </div>
+
+  <h3>QB Record ID Formats</h3>
+  <table>
+    <colgroup><col style="width:30%"><col style="width:28%"><col style="width:42%"></colgroup>
+    <thead><tr><th>Table</th><th>Format</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Home Orders</td><td><code>HO-YYYY-###</code></td><td><code>HO-2026-001</code></td></tr>
+      <tr><td>Lots</td><td><code>LOT-###</code></td><td><code>LOT-042</code></td></tr>
+      <tr><td>Workflow Tasks</td><td><code>TK-YYYY-#####</code></td><td><code>TK-2026-00001</code></td></tr>
+      <tr><td>Delivery Records</td><td><code>DLV-YYYY-###</code></td><td><code>DLV-2026-001</code></td></tr>
+      <tr><td>Construction Inspection</td><td><code>CI-YYYY-###</code></td><td><code>CI-2026-001</code></td></tr>
+      <tr><td>Ops Readiness</td><td><code>OR-YYYY-###</code></td><td><code>OR-2026-001</code></td></tr>
+      <tr><td>Listing Records</td><td><code>LST-YYYY-###</code></td><td><code>LST-2026-001</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Field Naming Conventions (Quickbase)</h3>
+  <ul class="rules">
+    <li>Use <strong>Title Case</strong> for all field names</li>
+    <li>No abbreviations unless universally understood (e.g., "A/C", "VIN", "HVAC")</li>
+    <li>Boolean/checkbox fields: phrase as a confirmable statement — e.g., "Serial Number Confirmed" not "Serial Number Status"</li>
+    <li>Date fields: include the event name + "Date" — e.g., "Delivery Date", "Listing Date", "Set Date"</li>
+    <li>Cross-reference fields: use "RM" prefix for Rent Manager cross-references — e.g., "RM Asset Record #", "RM Unit #"</li>
+  </ul>
+
+  <h3>FastField Form Naming Convention</h3>
+  <div class="ex-block">
+    <strong>Pattern:</strong> PARAKEET — [WORKFLOW #] — [Form Name]<br><br>
+    <strong>Examples:</strong><br>
+    PARAKEET — WF001 — Home Delivery Confirmation<br>
+    PARAKEET — WF001 — Construction Inspection<br>
+    PARAKEET — WF001 — Ops &amp; Sales Readiness<br>
+    PARAKEET — WF001 — Listing Form
+  </div>
+
+  <h3>Document Naming Convention</h3>
+  <div class="ex-block">
+    <strong>Pattern:</strong> parakeet_[descriptor]_[type]_v[version].[ext]<br><br>
+    <strong>Examples:</strong><br>
+    parakeet_home_ordering_build_spec_v1.1.pdf<br>
+    parakeet_jotform_audit_v1.0.xlsx<br>
+    parakeet_build_audit_log_v1.0.pdf
+  </div>
+
+  <h3>Stage / Status Values</h3>
+  <ul class="rules">
+    <li>Always use <strong>Title Case</strong> (e.g., "In Production" — not "in production" or "IN PRODUCTION")</li>
+    <li>Never abbreviate stage names in QB. Spell out fully — it is a dropdown, length does not matter.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════ SECTION 10 — INTEGRATION & TECHNICAL NOTES ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr">
+    <span class="num">Section 10</span>
+    <span class="ttl">Integration &amp; Technical Notes</span>
+  </div>
+
+  <div class="tech-block">
+    <h4>Quickbase ↔ FastField</h4>
+    <ul class="rules">
+      <li><strong>Integration method:</strong> webhook-based JSON POST on FastField form submission (preferred)</li>
+      <li><strong>Fallback:</strong> manual CSV export from FastField → QB import (acceptable for initial launch)</li>
+      <li><strong>Matching key:</strong> Home Order # field appears on all FastField forms — used to link child records back to the master Home Orders table</li>
+      <li><strong>All FastField forms prefixed</strong> PARAKEET — WF001 — [Name] for easy filtering within FastField admin</li>
+    </ul>
+  </div>
+
+  <div class="tech-block">
+    <h4>Quickbase ↔ Rent Manager</h4>
+    <ul class="rules">
+      <li><strong>No automatic sync.</strong> QB and RM are parallel systems.</li>
+      <li>Cross-reference fields (RM Asset Record #, RM Unit #) are manually maintained by Asset Mgmt</li>
+      <li>QB does not create or modify RM records — it tracks workflow state only</li>
+      <li>Asset Mgmt (Justin) is responsible for keeping both systems updated when QB stage changes require RM updates</li>
+    </ul>
+  </div>
+
+  <div class="tech-block">
+    <h4>File Storage</h4>
+    <ul class="rules">
+      <li><strong>FastField photo/video attachments:</strong> stored in FastField, linked back to QB child records</li>
+      <li><strong>Order documents:</strong> stored in Teams/SharePoint in temporary folder per batch (per SOP Step 5)</li>
+      <li><strong>Signed invoices / loan docs / insurance:</strong> uploaded to Rent Manager (per SOP)</li>
+      <li><strong>PSA uploads (from Offer form):</strong> decision pending — see Q-003</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

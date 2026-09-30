@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVID Exchange SOP — Swim-Lane Flowchart | Parakeet Communities</title>
+<style>
+  body { margin:0; padding:24px; font-family:Arial,sans-serif; background:#fff; color:#333; }
+  h1 { color:#1F3864; font-size:20px; margin-bottom:4px; }
+  .sub { color:#2E7D32; font-size:14px; font-weight:bold; margin-bottom:4px; }
+  .meta { font-size:11px; color:#666; margin-bottom:18px; }
+  svg { display:block; width:100%; max-width:1060px; margin:0 auto; }
+  @media print { body{padding:8px;} svg{max-width:100%;} }
+</style>
+</head>
+<body>
+<h1>Operational Procedure: AVID Exchange Invoice & Workflow Management</h1>
+<div class="sub">Parakeet Communities · Operations SOP — Swim-Lane Flowchart</div>
+<div class="meta">Process Owner: Natalie Magurne, Director of Operations &nbsp;|&nbsp; Status: DRAFT — Pending Approval</div>
+
+<svg viewBox="0 0 1060 1820" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#C62828" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#1F3864" stroke-width="1.5" stroke-linecap="round"/></marker>
+</defs>
+
+<!-- LANE HEADERS -->
+<rect x="28"  y="14" width="196" height="30" fill="#1F3864"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="126" y="33">DM / RM / Manager</text>
+<rect x="228" y="14" width="196" height="30" fill="#0F6E56"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="326" y="33">Accounting Team</text>
+<rect x="428" y="14" width="196" height="30" fill="#854F0B"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="526" y="33">AVID Exchange (System)</text>
+<rect x="628" y="14" width="196" height="30" fill="#72243E"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="726" y="33">Director (CapEx / POH)</text>
+<rect x="828" y="14" width="214" height="30" fill="#1B4F72"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="935" y="33">Rent Manager</text>
+
+<!-- LANE BACKGROUNDS -->
+<rect x="28"  y="44" width="196" height="1760" fill="#1F3864" opacity="0.04"/>
+<rect x="228" y="44" width="196" height="1760" fill="#0F6E56" opacity="0.04"/>
+<rect x="428" y="44" width="196" height="1760" fill="#854F0B" opacity="0.04"/>
+<rect x="628" y="44" width="196" height="1760" fill="#72243E" opacity="0.04"/>
+<rect x="828" y="44" width="214" height="1760" fill="#1B4F72" opacity="0.04"/>
+
+<!-- LANE DIVIDERS -->
+<line x1="224"  y1="14" x2="224"  y2="1804" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="424"  y1="14" x2="424"  y2="1804" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="624"  y1="14" x2="624"  y2="1804" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="824"  y1="14" x2="824"  y2="1804" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+<!-- PHASE SPINE LABELS -->
+<rect x="0" y="58"   width="20" height="120" rx="3" fill="#1F3864"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,118)"><tspan x="10" y="122">Phase 1 · Submission</tspan></text>
+<rect x="0" y="192"  width="20" height="170" rx="3" fill="#0F6E56"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,277)"><tspan x="10" y="281">Phase 2 · Review</tspan></text>
+<rect x="0" y="376"  width="20" height="200" rx="3" fill="#854F0B"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,476)"><tspan x="10" y="480">Phase 3 · Workflow</tspan></text>
+<rect x="0" y="590"  width="20" height="180" rx="3" fill="#72243E"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,680)"><tspan x="10" y="684">Phase 4 · Approval</tspan></text>
+<rect x="0" y="784"  width="20" height="140" rx="3" fill="#1B4F72"/><text font-family="Arial" font-size="9" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,10,854)"><tspan x="10" y="858">Phase 5 · Payment</tspan></text>
+
+<!-- ══ START ══ -->
+<rect x="462" y="50" width="128" height="32" rx="16" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#333" text-anchor="middle" x="526" y="71">START</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="526" y="92">Invoice received from vendor</text>
+<line x1="526" y1="94" x2="526" y2="108" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="526" y1="108" x2="126" y2="108" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- ══ PHASE 1 ══ -->
+<!-- Manager: Verify invoice -->
+<rect x="36" y="112" width="180" height="68" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="126" y="132">Verify Invoice</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="148">Must say "Invoice" not</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="162">"Estimate" or "Quote"</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="174">W-9 · COI · Vendor packet</text>
+
+<!-- DECISION: Invoice complete? -->
+<polygon points="126,196 178,220 126,244 74,220" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="216">Invoice</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="230">complete?</text>
+<text font-family="Arial" font-size="10" fill="#C62828" x="64" y="244">NO</text>
+<line x1="74" y1="220" x2="36" y2="220" stroke="#C62828" stroke-width="1"/>
+<line x1="36" y1="220" x2="36" y2="275" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+<rect x="36" y="275" width="120" height="40" rx="4" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="96" y="291">Return to vendor</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="96" y="305">Request correction</text>
+
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="180" y="244">YES</text>
+<line x1="178" y1="220" x2="240" y2="220" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- Manager: Email to Accounting -->
+<rect x="36" y="196" width="180" height="0" rx="0" fill="none"/><!-- spacer -->
+
+<!-- Accounting: Receive + Upload to AVID -->
+<rect x="236" y="196" width="180" height="68" rx="6" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#085041" text-anchor="middle" x="326" y="216">Receive &amp; Upload</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="232">Email: "Property – Invoice</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="246">for Payment – Vendor"</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="260">Upload invoice to AVID</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="28" y1="378" x2="1042" y2="378" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 2 ══ -->
+<!-- Manager: Log in daily, review -->
+<rect x="36" y="390" width="180" height="84" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="126" y="410">Review Invoice in AVID</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="426">Log in daily</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="440">Confirm: Invoice # · Amount</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="454">Date · Vendor · Property</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="468">Left panel = invoice details</text>
+
+<!-- DECISION: Discrepancy? -->
+<polygon points="126,490 182,516 126,542 70,516" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="512">Discrepancy</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="526">found?</text>
+
+<text font-family="Arial" font-size="10" fill="#C62828" x="64" y="540">YES</text>
+<line x1="70" y1="516" x2="36" y2="516" stroke="#C62828" stroke-width="1"/>
+<line x1="36" y1="516" x2="36" y2="560" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+<rect x="36" y="560" width="150" height="40" rx="4" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="111" y="576">Contact vendor</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="111" y="590">Do NOT approve yet</text>
+
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="184" y="536">NO</text>
+<line x1="182" y1="516" x2="240" y2="516" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- AVID: Invoice in system -->
+<rect x="436" y="390" width="180" height="52" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="526" y="410">Invoice in AVID</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="426">Pending review</text>
+
+<!-- Arrow: Accounting → AVID -->
+<line x1="416" y1="230" x2="438" y2="230" stroke="#0F6E56" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- PHASE SEPARATOR -->
+<line x1="28" y1="590" x2="1042" y2="590" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 3 — WORKFLOW ASSIGNMENT ══ -->
+<!-- DECISION: CapEx or POH > $1k? -->
+<polygon points="326,608 400,636 326,664 252,636" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="630">CapEx or</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="644">POH &gt; $1,000?</text>
+
+<!-- YES → reassign workflow -->
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="402" y="638">YES</text>
+<line x1="400" y1="636" x2="440" y2="636" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- NO → standard -->
+<text font-family="Arial" font-size="10" fill="#333" x="254" y="678">NO</text>
+<line x1="252" y1="636" x2="126" y2="636" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Manager: Standard workflow -->
+<rect x="36" y="646" width="180" height="52" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="126" y="666">Standard Regional</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="682">Workflow → Dir. of Operations</text>
+
+<!-- AVID: Assign workflow -->
+<rect x="436" y="608" width="180" height="84" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="526" y="628">Assign Workflow in AVID</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="644">More → Assign Workflow</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="658">CapEx → Construction</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="672">POH &gt;$1k → Sales &amp; Marketing</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="686">Confirm before exiting</text>
+
+<!-- Important: POH ≤$1k -->
+<rect x="828" y="608" width="200" height="54" rx="4" fill="#fff9c4" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="928" y="626">⚠ POH ≤ $1,000</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="928" y="642">stays in Standard</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="928" y="656">Regional Workflow</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="28" y1="784" x2="1042" y2="784" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 4 — APPROVAL ══ -->
+<!-- Merge paths -->
+<line x1="126" y1="698" x2="126" y2="760" stroke="#888" stroke-width="1"/>
+<line x1="526" y1="692" x2="526" y2="760" stroke="#888" stroke-width="1"/>
+<line x1="126" y1="760" x2="526" y2="760" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="760" x2="326" y2="796" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Manager / Director: Approve -->
+<rect x="236" y="800" width="180" height="68" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="326" y="820">Approve Invoice</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="836">Click invoice # in list</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="850">Click "Approve" button</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="326" y="864">Monitor approval status</text>
+
+<!-- Director lane: CapEx/POH approval -->
+<rect x="636" y="800" width="180" height="84" rx="6" fill="#f5d0e0" stroke="#72243E" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#4B1528" text-anchor="middle" x="726" y="818">Director Approval</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="726" y="834">Dir. of Operations: Standard</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="726" y="848">Construction (John Clark): CapEx</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="726" y="862">Sales &amp; Mktg (Leslie Croft): POH &gt;$1k</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="726" y="876">Reviews &amp; approves</text>
+
+<!-- Arrow: AVID routes to Director -->
+<line x1="616" y1="650" x2="636" y2="834" stroke="#72243E" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<text font-family="Arial" font-size="9" fill="#72243E" text-anchor="middle" x="640" y="745">Auto-routed</text>
+
+<!-- AVID: Auto-routes -->
+<rect x="436" y="800" width="180" height="68" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="526" y="820">AVID Routes Invoice</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="836">Auto-advances after</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="850">each approval step</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="864">Cannot be recalled</text>
+
+<!-- Important: cannot recall -->
+<rect x="28" y="800" width="196" height="54" rx="4" fill="#fff9c4" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="126" y="818">⚠ Never approve</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="126" y="834">with unresolved</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="126" y="848">discrepancies</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="28" y1="980" x2="1042" y2="980" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══ PHASE 5 — PAYMENT & RECORD KEEPING ══ -->
+<!-- Merge approvals -->
+<line x1="326" y1="868" x2="326" y2="950" stroke="#888" stroke-width="1"/>
+<line x1="726" y1="868" x2="726" y2="950" stroke="#888" stroke-width="1"/>
+<line x1="326" y1="950" x2="726" y2="950" stroke="#888" stroke-width="1"/>
+<line x1="526" y1="950" x2="526" y2="992" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Rent Manager: Payment confirmation -->
+<rect x="836" y="992" width="192" height="68" rx="6" fill="#cce0f5" stroke="#1B4F72" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0B3054" text-anchor="middle" x="932" y="1012">Payment Confirmed</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="932" y="1028">Invoice + confirmation</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="932" y="1042">available in Rent Manager</text>
+
+<!-- Manager: Review P&L -->
+<rect x="36" y="992" width="180" height="68" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="126" y="1012">Review Monthly P&amp;L</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="1028">Confirm invoice booked</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="126" y="1042">correctly in Rent Manager</text>
+
+<!-- AVID: Fully approved -->
+<rect x="436" y="992" width="180" height="68" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="526" y="1012">Fully Approved</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="1028">Payment processed</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="526" y="1042">Records updated</text>
+
+<!-- Arrows to Rent Manager -->
+<line x1="616" y1="1026" x2="834" y2="1026" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="216" y1="1026" x2="434" y2="1026" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- END -->
+<rect x="462" y="1106" width="128" height="34" rx="17" fill="#2E7D32" stroke="#1B5E20" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="526" y="1128">COMPLETE</text>
+<text font-family="Arial" font-size="10" fill="#555" text-anchor="middle" x="526" y="1152">Invoice paid · P&amp;L confirmed</text>
+
+<line x1="526" y1="1060" x2="526" y2="1104" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+<!-- WORKFLOW ROUTING REFERENCE TABLE -->
+<rect x="28" y="1178" width="1014" height="30" fill="#1F3864" rx="4"/>
+<text font-family="Arial" font-size="13" font-weight="600" fill="white" text-anchor="middle" x="535" y="1198">WORKFLOW ROUTING QUICK REFERENCE</text>
+
+<rect x="28"  y="1212" width="260" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" x="36" y="1230">Invoice Type</text>
+<rect x="290" y="1212" width="220" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" x="298" y="1230">Workflow</text>
+<rect x="512" y="1212" width="280" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" x="520" y="1230">Routes To</text>
+<rect x="794" y="1212" width="248" height="28" fill="#E8EDF5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" x="802" y="1230">Threshold</text>
+
+<!-- Row 1 -->
+<rect x="28"  y="1240" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="36" y="1258">Standard operational invoice</text>
+<rect x="290" y="1240" width="220" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="298" y="1258">Standard Regional Workflow</text>
+<rect x="512" y="1240" width="280" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="520" y="1258">Regional Manager → Director of Operations</text>
+<rect x="794" y="1240" width="248" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="802" y="1258">Any amount</text>
+
+<!-- Row 2 -->
+<rect x="28"  y="1268" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="36" y="1286">CapEx (construction, capital repairs)</text>
+<rect x="290" y="1268" width="220" height="28" fill="#fde9b8" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#633806" x="298" y="1286">CapEx Workflow</text>
+<rect x="512" y="1268" width="280" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="520" y="1286">Construction — John Clark</text>
+<rect x="794" y="1268" width="248" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="802" y="1286">Any amount</text>
+
+<!-- Row 3 -->
+<rect x="28"  y="1296" width="260" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="36" y="1314">Park-Owned Home (POH)</text>
+<rect x="290" y="1296" width="220" height="28" fill="#f5d0e0" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#4B1528" x="298" y="1314">POH Workflow</text>
+<rect x="512" y="1296" width="280" height="28" fill="white" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="520" y="1314">Sales &amp; Marketing — Leslie Croft</text>
+<rect x="794" y="1296" width="248" height="28" fill="#fce8e8" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#C62828" x="802" y="1314">&gt; $1,000 only</text>
+
+<!-- Row 4 -->
+<rect x="28"  y="1324" width="260" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="36" y="1342">Park-Owned Home (POH)</text>
+<rect x="290" y="1324" width="220" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="298" y="1342">Standard Regional Workflow</text>
+<rect x="512" y="1324" width="280" height="28" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" x="520" y="1342">Regional Manager</text>
+<rect x="794" y="1324" width="248" height="28" fill="#E8F5E9" stroke="#ccc" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#2E7D32" x="802" y="1342">$1,000 or less</text>
+
+<!-- Footer -->
+<line x1="28" y1="1380" x2="1042" y2="1380" stroke="#2E7D32" stroke-width="1"/>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="535" y="1396">Parakeet Communities, LLC · Confidential Internal Document · Not for External Distribution</text>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="535" y="1410">Process Owner: Natalie Magurne, Director of Operations · Status: DRAFT — Pending Approval</text>
+
+<!-- VERTICAL FLOW ARROWS -->
+<line x1="126" y1="180" x2="126" y2="194" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="326" y1="264" x2="326" y2="380" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="326" y1="380" x2="126" y2="380" stroke="#888" stroke-width="1"/>
+<line x1="126" y1="380" x2="126" y2="390" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="326" y1="380" x2="526" y2="380" stroke="#888" stroke-width="1"/>
+<line x1="526" y1="380" x2="526" y2="388" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="326" y1="500" x2="326" y2="592" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+</svg>
+</body>
+</html>

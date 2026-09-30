@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parakeet Communities — WF002 Rehab Build Spec v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+      onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+  <style>
+    /* ===== PAGE ===== */
+    @page {
+      size: A4;
+      margin: 2.2cm 1.8cm 2.4cm 1.8cm;
+      @top-left {
+        content: "PARAKEET COMMUNITIES \2014 CONFIDENTIAL \2014 INTERNAL BUILD SPEC";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #888;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+      }
+      @top-right {
+        content: string(doctitle);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #2F4E65;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+        font-weight: 600;
+      }
+      @bottom-center {
+        content: "Parakeet Communities \B7 WF002 Rehab Build Spec \B7 v1.0 \B7 Confidential \B7 08/18/26";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6pt; color: #aaa;
+        border-top: 0.5pt solid #eee; padding-top: 4pt;
+      }
+    }
+    @page :first {
+      margin: 0;
+      @top-left   { content: none; }
+      @top-right  { content: none; }
+      @bottom-center { content: none; }
+    }
+
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: 9pt; color: #222; line-height: 1.45;
+      string-set: doctitle "";
+    }
+    h1 { string-set: doctitle content(); }
+    p { margin: 0 0 8px 0; }
+
+    /* ===== COVER ===== */
+    .cover {
+      width: 210mm; height: 297mm; margin: 0; padding: 0;
+      position: relative; overflow: hidden; page-break-after: always;
+      background: linear-gradient(155deg, #1b2f40 0%, #2F4E65 42%, #3a6275 68%, #1b2f40 100%);
+      color: #fff; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .cover-stripe-top {
+      position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: linear-gradient(90deg, #4ABA81 0% 33%, #FFCC3B 33% 66%, #F16262 66% 100%);
+    }
+    .cover-stripe-bot {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+      background: #4ABA81;
+    }
+    .cover-wordmark {
+      font-size: 11pt; font-weight: 700; letter-spacing: 3px;
+      text-transform: lowercase; margin-bottom: 48px;
+    }
+    .cover-wordmark .g { color: #4ABA81; }
+    .cover-wordmark .n { color: #a8cede; }
+    .cover-eyebrow {
+      font-size: 8pt; font-weight: 600; letter-spacing: 4px;
+      text-transform: uppercase; color: #4ABA81; margin-bottom: 12px;
+    }
+    .cover-workflow-badge {
+      display: inline-block; background: rgba(74,186,129,0.18);
+      border: 1px solid #4ABA81; color: #4ABA81;
+      font-size: 8pt; font-weight: 700; letter-spacing: 2px;
+      padding: 4px 14px; margin-bottom: 18px; text-transform: uppercase;
+    }
+    .cover h1 {
+      font-size: 36pt; font-weight: 800; color: #fff; text-align: center;
+      line-height: 1.05; margin: 0 0 12px 0; padding: 0 36px; max-width: 100%;
+      white-space: normal; overflow-wrap: break-word;
+      string-set: doctitle "";
+    }
+    .cover-subtitle {
+      font-size: 11pt; font-weight: 400; color: #bdd4e3;
+      line-height: 1.45; margin-bottom: 8px; padding: 0 50px;
+    }
+    .cover-tagline { font-size: 8.5pt; color: #7ea5be; margin-bottom: 32px; }
+    .cover-divider { width: 55px; height: 2px; background: #4ABA81; margin: 0 auto 28px; }
+    .cover-meta { display: flex; gap: 32px; margin-bottom: 32px; }
+    .cover-meta-item .lbl {
+      font-size: 7pt; color: #7ea5be; text-transform: uppercase;
+      letter-spacing: 1.8px; display: block; margin-bottom: 4px;
+    }
+    .cover-meta-item .val { font-size: 10pt; font-weight: 600; color: #fff; }
+    .cover-status-pill {
+      display: inline-block; background: #FFCC3B; color: #3a2800;
+      font-size: 8pt; font-weight: 700; letter-spacing: 1px;
+      padding: 5px 16px; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .cover-context {
+      background: rgba(255,255,255,0.07); border-left: 3px solid #4ABA81;
+      padding: 12px 18px; margin: 0 50px;
+      font-size: 8pt; color: #bdd4e3; line-height: 1.55; text-align: left;
+    }
+    .cover-footer {
+      position: absolute; bottom: 18px;
+      font-size: 7pt; color: #6a92a8; letter-spacing: 0.8px;
+      left: 0; right: 0; text-align: center;
+    }
+
+    /* ===== TOC ===== */
+    .toc-page { padding-top: 10px; }
+    .toc-title {
+      font-size: 20pt; color: #2F4E65; margin-bottom: 22px;
+      border-bottom: 2pt solid #2F4E65; padding-bottom: 8px; font-weight: 700;
+      page-break-after: avoid;
+    }
+    .toc-list {
+      list-style: none; padding: 0; margin: 0;
+      column-count: 2; column-gap: 0.8cm;
+    }
+    .toc-list li { display: flex; align-items: baseline; padding: 4px 0; break-inside: avoid; }
+    .toc-list li a { display: flex; align-items: baseline; width: 100%; text-decoration: none; color: #333; }
+    .toc-list .toc-h2 .toc-text { font-weight: 700; font-size: 10pt; color: #2F4E65; }
+    .toc-list .toc-h3 { padding-left: 16px; }
+    .toc-list .toc-h3 .toc-text { font-weight: 400; font-size: 9pt; color: #555; }
+    .toc-text { white-space: nowrap; flex-shrink: 0; }
+    .toc-dots { flex: 1; margin: 0 5px; border-bottom: 1.5px dotted #bbb; min-width: 20px; position: relative; top: -3px; }
+    .toc-page-num { flex-shrink: 0; text-align: right; min-width: 18px; font-size: 9pt; color: #555; }
+
+    /* ===== SECTION HEADER BAR ===== */
+    .sec-hdr {
+      background: #2F4E65; color: #fff;
+      padding: 7px 12px; margin: 0 0 12px 0;
+      display: flex; align-items: baseline; gap: 10px;
+      page-break-after: avoid;
+    }
+    .sec-hdr .num { font-size: 7pt; font-weight: 700; color: #4ABA81; text-transform: uppercase; letter-spacing: 1.5px; white-space: nowrap; }
+    .sec-hdr .ttl { font-size: 12pt; font-weight: 700; color: #fff; }
+    .sec-hdr .sub { font-size: 7pt; color: #a8cede; margin-left: auto; white-space: nowrap; }
+
+    /* ===== SUB-HEADERS ===== */
+    h2.sh {
+      font-size: 10.5pt; font-weight: 700; color: #2F4E65;
+      margin: 14px 0 6px 0;
+      border-bottom: 1.5px solid #2F4E65; padding-bottom: 3px;
+      page-break-after: avoid;
+    }
+    h3.ssh {
+      font-size: 9.5pt; font-weight: 700; color: #2F4E65;
+      margin: 10px 0 5px 0; page-break-after: avoid;
+    }
+
+    /* ===== TABLES ===== */
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 8.5pt; margin-bottom: 14px; max-width: 100%;
+    }
+    th {
+      background: #2F4E65; color: #fff; font-weight: 600;
+      font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.4px;
+      padding: 5px 8px; text-align: left;
+    }
+    td { padding: 4px 8px; border-bottom: 0.5pt solid #e4e4e4; vertical-align: top; line-height: 1.4; }
+    tr:nth-child(even) td { background: #F5F5F5; }
+    tr:nth-child(odd)  td { background: #fff; }
+    tr { page-break-inside: avoid; }
+    caption::before { content: attr(data-label) "  "; font-weight: 700; font-size: 8pt; }
+    caption { font-size: 8pt; color: #555; text-align: left; padding: 0 0 4px 0; font-style: italic; caption-side: top; }
+
+    /* ===== SECTION-HEADER ROWS IN TABLES ===== */
+    .chk-section-hdr td {
+      background: #2F4E65 !important; color: #fff;
+      font-weight: 700; font-size: 8pt; padding: 5px 8px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .chk-item td { font-size: 8.5pt; }
+
+    /* ===== BADGES ===== */
+    .b { display: inline-block; padding: 2px 6px; border-radius: 2px; font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+    .b-green  { background: #4ABA81; color: #fff; }
+    .b-yellow { background: #FFCC3B; color: #5a4a00; }
+    .b-red    { background: #F16262; color: #fff; }
+    .b-navy   { background: #2F4E65; color: #fff; }
+    .b-gray   { background: #9e9e9e; color: #fff; }
+
+    /* ===== FIELD TYPE MARKERS ===== */
+    .fld-auto { color: #4ABA81; font-weight: 600; font-style: italic; }
+    .fld-req  { color: #F16262; font-weight: 700; }
+    .fld-calc { color: #2F4E65; font-style: italic; }
+
+    /* ===== CALLOUT / NOTICE BOXES ===== */
+    .callout {
+      padding: 8px 13px; margin: 0 0 12px 0;
+      font-size: 8.5pt; line-height: 1.5;
+      border-left-width: 4px; border-left-style: solid;
+    }
+    .callout-navy  { background: #eef4fa; border-color: #2F4E65; color: #222; }
+    .callout-green { background: #f0faf5; border-color: #4ABA81; color: #1a4a30; }
+    .callout-amber { background: #fffbeb; border-color: #FFCC3B; color: #5a4a00; }
+    .callout-red   { background: #fff2f2; border-color: #F16262; color: #5a0000; }
+
+    /* ===== STAGE PIPELINE ===== */
+    .pipeline-wrap { margin: 0 0 14px 0; }
+    .pipeline-row {
+      display: flex; align-items: stretch; gap: 0;
+      margin-bottom: 8px; flex-wrap: nowrap;
+    }
+    .stage-box {
+      flex: 1; min-width: 0;
+      background: #2F4E65; color: #fff;
+      padding: 8px 6px 7px 6px; text-align: center;
+      position: relative; display: flex; flex-direction: column; align-items: center;
+    }
+    .stage-box.amber { background: #FFCC3B; color: #3a2800; }
+    .stage-box.green { background: #4ABA81; color: #fff; }
+    .stage-box.gray  { background: #7a8c99; color: #fff; }
+    .stage-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); color: #fff;
+      font-size: 8pt; font-weight: 800; line-height: 20px;
+      margin: 0 auto 4px; display: block; text-align: center;
+    }
+    .stage-box.amber .stage-num { color: #3a2800; background: rgba(0,0,0,0.1); }
+    .stage-name { font-size: 7.5pt; font-weight: 700; line-height: 1.2; margin-bottom: 2px; }
+    .stage-owner { font-size: 6.5pt; opacity: 0.8; font-style: italic; line-height: 1.2; }
+    .pipe-arrow {
+      width: 14px; display: flex; align-items: center; justify-content: center;
+      background: #e8eef3; color: #2F4E65; font-size: 10pt; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pipeline-note {
+      font-size: 7.5pt; color: #666; font-style: italic; margin-top: 4px;
+      padding: 4px 8px; background: #f8f8f8; border-left: 3px solid #FFCC3B;
+    }
+    .loop-indicator {
+      font-size: 7pt; color: #5a4a00; font-weight: 700;
+      display: block; margin-top: 2px;
+    }
+
+    /* ===== GATE TABLE (amber accent) ===== */
+    .gate-table tr:nth-child(even) td { background: #fffbeb; }
+    .gate-table tr:nth-child(odd)  td { background: #fff; }
+    .gate-table td:first-child { font-weight: 700; color: #2F4E65; white-space: nowrap; }
+    .gate-table-wrap { border-left: 4px solid #FFCC3B; padding-left: 0; margin-bottom: 14px; }
+
+    /* ===== AUTOMATION TABLE ===== */
+    .auto-table td:first-child { white-space: nowrap; font-weight: 700; color: #2F4E65; }
+    .timing-badge {
+      display: inline-block; padding: 1px 5px; font-size: 6.5pt; font-weight: 700;
+      border-radius: 2px; background: #eef4fa; color: #2F4E65; white-space: nowrap;
+    }
+    .timing-badge.daily { background: #fffbeb; color: #5a4a00; }
+
+    /* ===== OPEN ITEMS TABLE ===== */
+    .oi-table td:first-child { font-weight: 700; color: #2F4E65; white-space: nowrap; }
+    .status-open {
+      display: inline-block; padding: 2px 7px; font-size: 6.5pt; font-weight: 800;
+      background: #F16262; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
+      border-radius: 2px; white-space: nowrap;
+    }
+    .status-resolved {
+      display: inline-block; padding: 2px 7px; font-size: 6.5pt; font-weight: 800;
+      background: #4ABA81; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
+      border-radius: 2px;
+    }
+
+    /* ===== LISTS ===== */
+    ul.bp { margin: 5px 0 10px 0; padding-left: 16px; font-size: 8.5pt; line-height: 1.6; }
+    ul.bp li { margin-bottom: 2px; }
+    ol.steps { margin: 5px 0 10px 0; padding-left: 20px; font-size: 8.5pt; line-height: 1.6; }
+    ol.steps li { margin-bottom: 4px; }
+
+    /* ===== META / CODE ===== */
+    code {
+      font-family: 'Courier New', monospace; font-size: 7.5pt;
+      background: #eef2f5; padding: 1px 4px; border-radius: 2px; color: #2F4E65;
+    }
+    .note { font-size: 7.5pt; color: #666; font-style: italic; margin: 3px 0 9px 0; }
+
+    /* ===== KEY-VALUE META BLOCK ===== */
+    .meta-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin-bottom: 14px;
+    }
+    .meta-item {
+      background: #eef4fa; border-left: 3px solid #2F4E65;
+      padding: 7px 10px;
+    }
+    .meta-item .mk { font-size: 6.5pt; font-weight: 700; color: #2F4E65; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+    .meta-item .mv { font-size: 9pt; font-weight: 600; color: #222; }
+
+    /* ===== SECTION BLOCK ===== */
+    .section-block { margin-bottom: 18px; }
+
+    /* ===== OVERFLOW PREVENTION ===== */
+    pre, table, figure, img, svg, blockquote, .equation, code {
+      max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;
+    }
+    pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+    figure { page-break-inside: avoid; max-height: 70vh; height: auto; width: 100%; }
+    a { word-break: break-all; }
+    .katex-display { overflow-x: auto; }
+
+    /* ===== PAGE BREAKS ===== */
+    h2.sh, h3.ssh { page-break-after: avoid; }
+    .sec-hdr { page-break-after: avoid; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ COVER ═══════════════════════ -->
+<div class="cover">
+  <div class="cover-stripe-top"></div>
+  <div class="cover-wordmark"><span class="g">parakeet</span>&nbsp;<span class="n">communities</span></div>
+  <div class="cover-eyebrow">Internal Build Specification</div>
+  <div class="cover-workflow-badge">Workflow #002</div>
+  <h1>Rehab</h1>
+  <div class="cover-subtitle">Quickbase + FastField Build Specification<br>Existing Home Rehabilitation — Vacant to Ready to Market</div>
+  <div class="cover-tagline">Parakeet Communities &nbsp;·&nbsp; Internal &nbsp;·&nbsp; Confidential</div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><span class="lbl">Version</span><span class="val">v1.0</span></div>
+    <div class="cover-meta-item"><span class="lbl">Date</span><span class="val">08/18/26</span></div>
+    <div class="cover-meta-item"><span class="lbl">Workflow ID</span><span class="val">WF002</span></div>
+  </div>
+  <div class="cover-status-pill">Draft for Review</div>
+  <div class="cover-context">
+    <strong>Scope:</strong> This document specifies the Quickbase tables, workflow stages, automations, gate rules, and FastField form for Workflow #002: Rehab. Applies to existing homes in the portfolio requiring rehabilitation before re-listing or re-occupancy. Companion document to WF001 — Home Ordering, Delivery &amp; Set.
+  </div>
+  <div class="cover-footer">Parakeet Communities &nbsp;·&nbsp; WF002 Rehab Build Spec &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; 08/18/26</div>
+  <div class="cover-stripe-bot"></div>
+</div>
+
+<!-- ═══════════════════════ TABLE OF CONTENTS ═══════════════════════ -->
+<div class="toc-page">
+  <h2 class="toc-title">Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-h2"><a href="#s1"><span class="toc-text">1. Document Purpose</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s1"></span></span></a></li>
+    <li class="toc-h2"><a href="#s2"><span class="toc-text">2. Workflow Overview</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s2"></span></span></a></li>
+    <li class="toc-h2"><a href="#s3"><span class="toc-text">3. Workflow Stages</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s3"></span></span></a></li>
+    <li class="toc-h2"><a href="#s4"><span class="toc-text">4. Quickbase Tables</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s4"></span></span></a></li>
+    <li class="toc-h3"><a href="#s4-1"><span class="toc-text">4.1 Rehab Records (RH)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s4-1"></span></span></a></li>
+    <li class="toc-h3"><a href="#s4-2"><span class="toc-text">4.2 Rehab Tasks (TK-RH)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s4-2"></span></span></a></li>
+    <li class="toc-h3"><a href="#s4-3"><span class="toc-text">4.3 Rehab Walkthrough Records (RW)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s4-3"></span></span></a></li>
+    <li class="toc-h2"><a href="#s5"><span class="toc-text">5. FastField Form — Rehab Walkthrough Punchlist</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s5"></span></span></a></li>
+    <li class="toc-h2"><a href="#s6"><span class="toc-text">6. Cascading Dropdown Architecture (WF002)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s6"></span></span></a></li>
+    <li class="toc-h2"><a href="#s7"><span class="toc-text">7. Automations</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s7"></span></span></a></li>
+    <li class="toc-h2"><a href="#s8"><span class="toc-text">8. Gate Rules</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s8"></span></span></a></li>
+    <li class="toc-h2"><a href="#s9"><span class="toc-text">9. Open Items</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s9"></span></span></a></li>
+    <li class="toc-h2"><a href="#s10"><span class="toc-text">10. Spec Version History</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s10"></span></span></a></li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════ SECTION 1 — DOCUMENT PURPOSE ═══════════════════════ -->
+<div class="section-block" id="s1">
+  <div class="sec-hdr">
+    <span class="num">Section 01</span>
+    <span class="ttl">Document Purpose</span>
+    <span class="sub">WF002 — Rehab</span>
+  </div>
+
+  <p style="font-size:8.5pt;line-height:1.55;margin:0 0 10px 0;">
+    This specification defines the complete Quickbase (QB) tables, workflow stages, automations, gate rules, and FastField form required to build Workflow #002: Rehab. This workflow manages the end-to-end process of taking a vacant home from initial identification of rehab need through completed rehab, final walkthrough approval, and handoff to the listing workflow.
+  </p>
+  <p style="font-size:8.5pt;line-height:1.55;margin:0 0 10px 0;">
+    <strong>Workflow #002 is independent of Workflow #001 (Home Ordering).</strong> It applies to <em>existing homes</em> in the portfolio — homes that have been vacated via move-out or otherwise identified as needing rehab before they can be re-listed or re-occupied. WF001 covers new homes ordered from manufacturers; WF002 covers existing portfolio assets.
+  </p>
+
+  <div class="callout callout-navy">
+    <strong>System of Record:</strong> Rent Manager (RM) remains the system of record for asset data, financial records, and insurance. This build complements RM — it does not replace or auto-modify any RM records. All Rent Manager field references in QB are cross-references only.
+  </div>
+
+  <table>
+    <thead><tr><th>Boundary</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><strong>In Scope</strong></td><td>All 9 rehab workflow stages; QB Rehab Records, Rehab Tasks, and Walkthrough Records tables; FastField Rehab Walkthrough Punchlist form; FastField → QB webhook integration; all automations and gate rules defined in this document</td></tr>
+      <tr><td><strong>Out of Scope</strong></td><td>Rent Manager asset record creation or modification; marketing execution post-listing; Workflow #001 (new home ordering); financial/invoice processing; vendor portal or external work order systems</td></tr>
+      <tr><td><strong>Dependent Workflows</strong></td><td>WF001 Stage 9 (Listing) — WF002's final stage hands off to the listing process. Move Out workflow — completed move-out can auto-trigger a WF002 record.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SECTION 2 — WORKFLOW OVERVIEW ═══════════════════════ -->
+<div class="section-block" id="s2">
+  <div class="sec-hdr">
+    <span class="num">Section 02</span>
+    <span class="ttl">Workflow Overview</span>
+    <span class="sub">WF002 — Rehab</span>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-item"><span class="mk">Workflow ID</span><span class="mv">WF002</span></div>
+    <div class="meta-item"><span class="mk">Workflow Name</span><span class="mv">Rehab</span></div>
+    <div class="meta-item"><span class="mk">Status</span><span class="mv"><span class="b b-yellow">Draft for Review</span></span></div>
+    <div class="meta-item"><span class="mk">Applies To</span><span class="mv">Existing homes — vacant, requiring rehab</span></div>
+    <div class="meta-item"><span class="mk">Primary Actor</span><span class="mv">Community Manager + Ops Team</span></div>
+    <div class="meta-item"><span class="mk">System of Record</span><span class="mv">Rent Manager</span></div>
+    <div class="meta-item"><span class="mk">Trigger</span><span class="mv">Move Out completion (auto) OR Manual creation</span></div>
+    <div class="meta-item"><span class="mk">Outcome</span><span class="mv">Rehab Approved → Ready to Market</span></div>
+    <div class="meta-item"><span class="mk">Stages</span><span class="mv">9 (incl. 1 conditional loop)</span></div>
+  </div>
+
+  <h2 class="sh">Relationship to Other Workflows</h2>
+  <table>
+    <thead><tr><th>Related Workflow</th><th>Relationship</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WF001 — Home Ordering</strong></td><td>Separate workflow for new homes from manufacturers. WF002 covers existing portfolio homes only. No overlap; WF002 connects at WF001 Stage 9 (Listing) only at handoff.</td></tr>
+      <tr><td><strong>Move Out (separate QB table)</strong></td><td>A completed Move Out record can auto-trigger creation of a WF002 Rehab Record for the same lot/asset (Automation A-RH-01).</td></tr>
+      <tr><td><strong>Listing Workflow</strong></td><td>WF002 Stage 9 (Handed to Listing) triggers the listing process. A "Rehab Approved" home feeds directly into listing. Automation A-RH-08 handles the handoff.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-amber">
+    <strong>Trigger Clarification (Open Item O-WF002-01):</strong> Confirm whether WF002 can also be triggered manually — e.g., for acquired homes, homes with existing damage, or portfolio-wide rehab reviews — independent of a move-out event. Manual trigger option should be supported unless confirmed otherwise.
+  </div>
+</div>
+
+<!-- ═══════════════════════ SECTION 3 — WORKFLOW STAGES ═══════════════════════ -->
+<div class="section-block" id="s3">
+  <div class="sec-hdr">
+    <span class="num">Section 03</span>
+    <span class="ttl">Workflow Stages</span>
+    <span class="sub">9 Stages — 1 Conditional Loop</span>
+  </div>
+
+  <p style="font-size:8.5pt;margin:0 0 10px 0;">Nine stages define the full lifecycle from vacancy identification through market-ready handoff. Stage 7 is a <strong>conditional loop</strong> — entered only when the walkthrough does not pass. A passing walkthrough advances directly from Stage 6 → Stage 8, skipping Stage 7.</p>
+
+  <!-- PIPELINE ROW 1: Stages 1–5 -->
+  <div class="pipeline-wrap">
+    <div class="pipeline-row">
+      <div class="stage-box">
+        <span class="stage-num">1</span>
+        <div class="stage-name">Rehab Identified</div>
+        <div class="stage-owner">Ops / Comm Mgr</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">2</span>
+        <div class="stage-name">Scope Assessed</div>
+        <div class="stage-owner">Community Mgr</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">3</span>
+        <div class="stage-name">Work Assigned</div>
+        <div class="stage-owner">Ops</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">4</span>
+        <div class="stage-name">Work In Progress</div>
+        <div class="stage-owner">Vendor / Maint.</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">5</span>
+        <div class="stage-name">Walkthrough Scheduled</div>
+        <div class="stage-owner">Community Mgr</div>
+      </div>
+    </div>
+    <!-- PIPELINE ROW 2: Stages 6–9 -->
+    <div class="pipeline-row">
+      <div class="stage-box">
+        <span class="stage-num">6</span>
+        <div class="stage-name">Walkthrough Complete</div>
+        <div class="stage-owner">Comm Mgr / Inspector</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box amber">
+        <span class="stage-num">7</span>
+        <div class="stage-name">Items To Resolve</div>
+        <div class="stage-owner">Community Mgr</div>
+        <span class="loop-indicator">&#8617; Loop → Stage 4</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box green">
+        <span class="stage-num">8</span>
+        <div class="stage-name">Approved — Ready to Market</div>
+        <div class="stage-owner">Ops</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box gray">
+        <span class="stage-num">9</span>
+        <div class="stage-name">Handed to Listing</div>
+        <div class="stage-owner">Listing Team</div>
+      </div>
+    </div>
+    <div class="pipeline-note"><strong>Stage 7 (amber):</strong> Conditional loop — entered only when Walkthrough Status = Needs Additional Items, Not Ready, or Vendor Needs to Finish. Loops back to Stage 4. Skipped entirely on first-pass approval (Stage 6 → Stage 8 direct).</div>
+  </div>
+
+  <table>
+    <caption data-label="Table 3-1">Stage Detail Reference</caption>
+    <thead><tr><th style="width:4%">#</th><th style="width:22%">Stage Name</th><th style="width:20%">Owner</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td>Rehab Identified</td><td>Ops / Community Mgr</td><td>Home flagged for rehab. Record created in QB. Asset status updated to In Rehab. Rehab ID auto-generated.</td></tr>
+      <tr><td><strong>2</strong></td><td>Scope Assessed</td><td>Community Mgr</td><td>Physical assessment complete. Scope of work documented in QB Scope Notes field. Gate: Scope Notes must not be blank before advancing.</td></tr>
+      <tr><td><strong>3</strong></td><td>Work Assigned</td><td>Ops</td><td>Vendor or maintenance staff assigned. Work orders (Rehab Tasks records) created in QB. Gate: Assigned To field must be populated.</td></tr>
+      <tr><td><strong>4</strong></td><td>Work In Progress</td><td>Vendor / Maintenance</td><td>Active rehab underway. QB Rehab Tasks updated as items are completed. Gate: at least one Task must exist with status = In Progress or Complete.</td></tr>
+      <tr><td><strong>5</strong></td><td>Walkthrough Scheduled</td><td>Community Mgr</td><td>Final walkthrough date set. QB automation generates the pre-populated FastField launch link. Gate: Walkthrough Scheduled Date must be set.</td></tr>
+      <tr><td><strong>6</strong></td><td>Walkthrough Complete</td><td>Community Mgr / Inspector</td><td>FastField Rehab Walkthrough Punchlist submitted. Webhook creates child Walkthrough Record. Results parsed. Walkthrough Status set. Gate: at least one Walkthrough Record must exist.</td></tr>
+      <tr><td><strong>7</strong></td><td>Items To Resolve</td><td>Community Mgr</td><td><em>Conditional — triggered only when Walkthrough Status ≠ Approved.</em> Follow-up tasks created in Rehab Tasks. Loops back to Stage 4 when tasks are complete and re-inspection scheduled.</td></tr>
+      <tr><td><strong>8</strong></td><td>Approved — Ready to Market</td><td>Ops</td><td>Walkthrough Status = Approved as Ready to Market. Asset Status updated to Available. Approved Date set. Listing team notified.</td></tr>
+      <tr><td><strong>9</strong></td><td>Handed to Listing</td><td>Listing Team</td><td>Listing workflow triggered (Automation A-RH-08). Rehab Record closed. Asset proceeds to listing process.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SECTION 4 — QB TABLES ═══════════════════════ -->
+<div class="section-block" id="s4">
+  <div class="sec-hdr">
+    <span class="num">Section 04</span>
+    <span class="ttl">Quickbase Tables</span>
+    <span class="sub">3 Tables — Primary + 2 Child Tables</span>
+  </div>
+
+  <h2 class="sh" id="s4-1">4.1 Rehab Records (RH) — Primary Table</h2>
+  <p class="note">One record per home rehab project. Parent to Rehab Tasks and Walkthrough Records. Record ID format: RH-YYYY-### (e.g., RH-2026-001).</p>
+
+  <table>
+    <caption data-label="Table 4-1">Rehab Records — Field Definitions</caption>
+    <thead><tr><th style="width:28%">Field Name</th><th style="width:22%">Field Type</th><th>Notes / Rules</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Rehab ID</strong></td><td><span class="fld-auto">Text (auto-generated)</span></td><td>Format: RH-YYYY-###. Set by Automation A-RH-02 on record creation.</td></tr>
+      <tr><td><strong>Community</strong></td><td>Relationship → Communities</td><td><span class="fld-req">Required.</span> Cascading — top of the Community → Lot → Asset chain.</td></tr>
+      <tr><td><strong>Lot</strong></td><td>Relationship → Lots</td><td><span class="fld-req">Required.</span> Filtered to selected Community. Lot Status must be In Rehab or Available.</td></tr>
+      <tr><td><strong>Asset</strong></td><td>Relationship → Assets</td><td><span class="fld-req">Required.</span> Filtered to selected Lot. Asset Status must be In Rehab.</td></tr>
+      <tr><td><strong>RM Asset Record #</strong></td><td>Text</td><td>Cross-reference to Rent Manager asset record. Manual entry only — do not auto-sync.</td></tr>
+      <tr><td><strong>RM Unit #</strong></td><td>Text</td><td>Cross-reference to Rent Manager unit number. Manual entry only — do not auto-sync.</td></tr>
+      <tr><td><strong>Rehab Stage</strong></td><td>Dropdown</td><td>Values: Rehab Identified / Scope Assessed / Work Assigned / Work In Progress / Walkthrough Scheduled / Walkthrough Complete / Items To Resolve / Approved — Ready to Market / Handed to Listing.</td></tr>
+      <tr><td><strong>Triggered By</strong></td><td>Dropdown</td><td>Values: Move Out / Manual / Acquisition. Determines source of rehab identification.</td></tr>
+      <tr><td><strong>Source Move Out Record #</strong></td><td>Relationship → Move Out Records</td><td>Populated only if Triggered By = Move Out. Links Rehab Record to the originating Move Out event.</td></tr>
+      <tr><td><strong>Rehab Identified Date</strong></td><td>Date</td><td>mm/dd/yy. Auto-populated when record is created.</td></tr>
+      <tr><td><strong>Scope Assessed Date</strong></td><td>Date</td><td>mm/dd/yy. Set when Stage advances to Scope Assessed.</td></tr>
+      <tr><td><strong>Work Assigned Date</strong></td><td>Date</td><td>mm/dd/yy. Set by Automation A-RH-03.</td></tr>
+      <tr><td><strong>Work In Progress Date</strong></td><td>Date</td><td>mm/dd/yy. Set when Stage advances to Work In Progress.</td></tr>
+      <tr><td><strong>Walkthrough Scheduled Date</strong></td><td>Date</td><td>mm/dd/yy. Set by Automation A-RH-04. Gate field for Stage 5.</td></tr>
+      <tr><td><strong>Walkthrough Completed Date</strong></td><td>Date</td><td>mm/dd/yy. Set by Automation A-RH-05 on FastField submission.</td></tr>
+      <tr><td><strong>Approved Date</strong></td><td>Date</td><td>mm/dd/yy. Set by Automation A-RH-06 when Walkthrough Status = Approved.</td></tr>
+      <tr><td><strong>Assigned To</strong></td><td>Text</td><td>Vendor name or staff member. Gate field — must not be blank before Stage 3 → Stage 4 transition.</td></tr>
+      <tr><td><strong>Scope Notes</strong></td><td>Text (multi-line)</td><td>Description of full rehab scope. Gate field — must not be blank before Stage 2 → Stage 3 transition.</td></tr>
+      <tr><td><strong>Walkthrough Status</strong></td><td>Dropdown</td><td>Values: Approved as Ready to Market / Needs Additional Items / Not Ready / Vendor Needs to Finish. Drives Stage 7 vs. Stage 8 routing (see Gate G-RH-06).</td></tr>
+      <tr><td><strong>Days In Rehab</strong></td><td><span class="fld-calc">Duration (calculated)</span></td><td>Rehab Identified Date → Approved Date. Drives overdue alerts (A-RH-10 at 30 days; A-RH-11 at 60 days).</td></tr>
+      <tr><td><strong>FastField Launch Link</strong></td><td>URL</td><td>Pre-populated link to FastField Rehab Walkthrough Punchlist. Auto-generated by Automation A-RH-04. Includes Community, Lot, Asset, and Rehab Record ID as URL parameters.</td></tr>
+      <tr><td><strong>Record Created By</strong></td><td><span class="fld-auto">Text (auto)</span></td><td>QB user who created the record. Auto-populated.</td></tr>
+      <tr><td><strong>Last Updated</strong></td><td><span class="fld-auto">Date/Time (auto)</span></td><td>QB auto-stamp on every save.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sh" id="s4-2">4.2 Rehab Tasks (TK-RH) — Child Table</h2>
+  <p class="note">One record per work item or assignment. Child of Rehab Records. Multiple tasks per Rehab Record. Record ID format: TK-RH-YYYY-##### (e.g., TK-RH-2026-00001).</p>
+
+  <table>
+    <caption data-label="Table 4-2">Rehab Tasks — Field Definitions</caption>
+    <thead><tr><th style="width:28%">Field Name</th><th style="width:22%">Field Type</th><th>Notes / Rules</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Task ID</strong></td><td><span class="fld-auto">Text (auto-generated)</span></td><td>Format: TK-RH-YYYY-#####. Auto on record creation.</td></tr>
+      <tr><td><strong>Parent Rehab Record</strong></td><td>Relationship → Rehab Records</td><td><span class="fld-req">Required.</span> Links task to its parent rehab project.</td></tr>
+      <tr><td><strong>Task Name</strong></td><td>Text</td><td><span class="fld-req">Required.</span> Free-text description of the specific work item.</td></tr>
+      <tr><td><strong>Category</strong></td><td>Dropdown</td><td>Values: Interior / Doors &amp; Hardware / Kitchen / Bathrooms / Utilities / Exterior / Other.</td></tr>
+      <tr><td><strong>Assigned To</strong></td><td>Text</td><td>Vendor name or staff member handling this specific task.</td></tr>
+      <tr><td><strong>Assigned Date</strong></td><td>Date</td><td>mm/dd/yy. Date task was assigned to vendor/staff.</td></tr>
+      <tr><td><strong>Due Date</strong></td><td>Date</td><td>mm/dd/yy. Expected completion date. Used in overdue reporting.</td></tr>
+      <tr><td><strong>Status</strong></td><td>Dropdown</td><td>Values: Not Started / In Progress / Complete / Blocked. Gate field — all tasks must be Complete before Stage G-RH-07 allows walkthrough re-scheduling.</td></tr>
+      <tr><td><strong>Completion Date</strong></td><td>Date</td><td>mm/dd/yy. Set when Status changes to Complete.</td></tr>
+      <tr><td><strong>Notes</strong></td><td>Text (multi-line)</td><td>Additional context, blockers, or completion notes.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sh" id="s4-3">4.3 Rehab Walkthrough Records (RW) — Child Table</h2>
+  <p class="note">One record per FastField walkthrough submission. Child of Rehab Records. Multiple submissions possible (one per walkthrough attempt). Populated via webhook from FastField. Record ID format: RW-YYYY-### (e.g., RW-2026-001).</p>
+
+  <table>
+    <caption data-label="Table 4-3">Rehab Walkthrough Records — Field Definitions</caption>
+    <thead><tr><th style="width:28%">Field Name</th><th style="width:22%">Field Type</th><th>Notes / Rules</th></tr></thead>
+    <tbody>
+      <tr class="chk-section-hdr"><td colspan="3">HEADER FIELDS</td></tr>
+      <tr class="chk-item"><td><strong>Walkthrough Record ID</strong></td><td><span class="fld-auto">Text (auto)</span></td><td>Format: RW-YYYY-###. Auto on record creation from webhook.</td></tr>
+      <tr class="chk-item"><td><strong>Parent Rehab Record</strong></td><td>Relationship → Rehab Records</td><td><span class="fld-req">Required.</span> Matched by Rehab Record ID from FastField payload.</td></tr>
+      <tr class="chk-item"><td><strong>FastField Submission ID</strong></td><td>Text</td><td>UUID from FastField webhook payload. Stored for audit traceability.</td></tr>
+      <tr class="chk-item"><td><strong>Community</strong></td><td>Relationship → Communities</td><td>From FastField (pre-populated on form open). Cross-checks parent record.</td></tr>
+      <tr class="chk-item"><td><strong>Lot</strong></td><td>Relationship → Lots</td><td>From FastField (pre-populated). Cross-checks parent record.</td></tr>
+      <tr class="chk-item"><td><strong>Submitted By</strong></td><td>Text</td><td>Manager name as entered on the FastField form.</td></tr>
+      <tr class="chk-item"><td><strong>Manager Email</strong></td><td>Email</td><td>From FastField form field. Used for notification routing.</td></tr>
+      <tr class="chk-item"><td><strong>Walkthrough Date</strong></td><td>Date</td><td>mm/dd/yy. Date of walkthrough as entered on the form.</td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION A — Interior (10 items)</td></tr>
+      <tr class="chk-item"><td>Home Smells Clean</td><td>Checkbox (Yes / No)</td><td>Interior condition indicator.</td></tr>
+      <tr class="chk-item"><td>No Trash / Debris</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Floors Swept / Mopped / Vacuumed</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Cabinets / Counters / Appliances Cleaned</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Blinds Installed / Clean / Working</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Outlet / Switch Covers Installed</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Interior Bulbs Working</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Smoke Detectors Working</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Bath / Toilets / Sinks Cleaned</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Windows Cleaned</td><td>Checkbox (Yes / No)</td><td></td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION B — Doors, Hardware &amp; Safety (5 items)</td></tr>
+      <tr class="chk-item"><td>Front Door Handle / Lock Good or Replaced</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Deadbolt Works / Keys Labeled</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Interior / Closet Doors Work</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Windows Open / Close / Lock</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Steps / Porch / Handrails Safe</td><td>Checkbox (Yes / No)</td><td></td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION C — Kitchen &amp; Appliances (6 items)</td></tr>
+      <tr class="chk-item"><td>Refrigerator Clean / Working</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Stove / Oven Clean / Working</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Dishwasher / Range Hood Works</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Sink / Faucet Works</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>No Leaks Under Sink</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Cabinets / Drawers Work</td><td>Checkbox (Yes / No)</td><td></td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION D — Bathrooms &amp; Plumbing (6 items)</td></tr>
+      <tr class="chk-item"><td>New Toilet Seat Installed</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Toilet Flushes</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Sink / Shower / Tub Work</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>No Leaks</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Mirror / Vanity / Towel Bar Secure</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Caulking Clean / Complete</td><td>Checkbox (Yes / No)</td><td></td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION E — Utilities &amp; Vacant Home Check (5 items)</td></tr>
+      <tr class="chk-item"><td>Electric On / Staying On</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Water On / Staying On</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Heat / A/C Works</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Toilets Flushed / Water Run in Sinks</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Checked for Leaks / Odors / Pests / Vandalism</td><td>Checkbox (Yes / No)</td><td></td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION F — Exterior &amp; Landscaping (5 items)</td></tr>
+      <tr class="chk-item"><td>Exterior Clean / Power Washed</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Skirting Secure / Presentable</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Yard Cleaned / Grass Cut / Weeds Handled</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Landscaping Complete or Assigned</td><td>Checkbox (Yes / No)</td><td></td></tr>
+      <tr class="chk-item"><td>Landscaping Owner</td><td>Dropdown</td><td>Values: Maintenance / Manager / Vendor. Required when Landscaping Complete or Assigned = Yes.</td></tr>
+
+      <tr class="chk-section-hdr"><td colspan="3">SECTION G — Post-Walkthrough Status &amp; Calculated Fields</td></tr>
+      <tr class="chk-item"><td><strong>Walkthrough Status</strong></td><td>Dropdown</td><td>Values: Approved as Ready to Market / Needs Additional Items / Not Ready / Vendor Needs to Finish. Drives routing automation (A-RH-06 or A-RH-07).</td></tr>
+      <tr class="chk-item"><td>Inspector Signature</td><td>Signature</td><td>Captured in FastField. Stored as image attachment in QB record.</td></tr>
+      <tr class="chk-item"><td>Items Passed</td><td><span class="fld-calc">Number (calculated)</span></td><td>Count of Yes responses across all 37 checklist items.</td></tr>
+      <tr class="chk-item"><td>Items Failed</td><td><span class="fld-calc">Number (calculated)</span></td><td>Count of No responses across all 37 checklist items.</td></tr>
+      <tr class="chk-item"><td>Pass Rate</td><td><span class="fld-calc">Percentage (calculated)</span></td><td>Items Passed ÷ 37 × 100. Display format: xx.x%. Example: 35 of 37 = 94.6%.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SECTION 5 — FASTFIELD FORM ═══════════════════════ -->
+<div class="section-block" id="s5">
+  <div class="sec-hdr">
+    <span class="num">Section 05</span>
+    <span class="ttl">FastField Form — Rehab Walkthrough Punchlist</span>
+    <span class="sub">37 Checklist Items · 8 Sections</span>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-item"><span class="mk">Form Name</span><span class="mv">PARAKEET — WF002 — Rehab Walkthrough Punchlist</span></div>
+    <div class="meta-item"><span class="mk">Form Type</span><span class="mv">Field inspection / punchlist</span></div>
+    <div class="meta-item"><span class="mk">Launch Method</span><span class="mv">Pre-populated link from QB Rehab Record</span></div>
+    <div class="meta-item"><span class="mk">Integration</span><span class="mv">Webhook JSON POST → QB Rehab Walkthrough Records</span></div>
+    <div class="meta-item"><span class="mk">Matching Key</span><span class="mv">Rehab Record ID (pre-populated, locked)</span></div>
+    <div class="meta-item"><span class="mk">Total Items</span><span class="mv">37 checklist items (36 Yes/No + 1 dropdown)</span></div>
+  </div>
+
+  <div class="callout callout-navy">
+    <strong>Launch Flow:</strong> Field crew navigates to the Rehab Record in QB. QB displays a pre-populated FastField launch link (generated by Automation A-RH-04). Tapping the link opens FastField with Community, Lot, Asset, and Rehab Record ID already filled in and locked. Manager adds their name, email, and walkthrough date, then completes the 37 checklist items. On submission, the webhook creates a child Walkthrough Record in QB instantly.
+  </div>
+
+  <table>
+    <caption data-label="Table 5-1">FastField Form Structure</caption>
+    <thead><tr><th style="width:5%">#</th><th style="width:32%">Section Name</th><th style="width:10%">Items</th><th>Fields / Details</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Header</td>
+        <td>6 fields</td>
+        <td><strong>Community</strong> (pre-populated, locked) · <strong>Lot / Unit</strong> (pre-populated, locked) · <strong>Rehab Record ID</strong> (pre-populated, locked — matching key) · <strong>Manager Name</strong> (text, required) · <strong>Manager Email</strong> (email, required) · <strong>Date of Walkthrough</strong> (date, default = today)</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Interior</td>
+        <td>10 Yes/No</td>
+        <td>Home Smells Clean · No Trash/Debris · Floors Swept/Mopped/Vacuumed · Cabinets/Counters/Appliances Cleaned · Blinds Installed/Clean/Working · Outlet/Switch Covers Installed · Interior Bulbs Working · Smoke Detectors Working · Bath/Toilets/Sinks Cleaned · Windows Cleaned</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Doors, Hardware &amp; Safety</td>
+        <td>5 Yes/No</td>
+        <td>Front Door Handle/Lock Good or Replaced · Deadbolt Works/Keys Labeled · Interior/Closet Doors Work · Windows Open/Close/Lock · Steps/Porch/Handrails Safe</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Kitchen &amp; Appliances</td>
+        <td>6 Yes/No</td>
+        <td>Refrigerator Clean/Working · Stove/Oven Clean/Working · Dishwasher/Range Hood Works · Sink/Faucet Works · No Leaks Under Sink · Cabinets/Drawers Work</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td>Bathrooms &amp; Plumbing</td>
+        <td>6 Yes/No</td>
+        <td>New Toilet Seat Installed · Toilet Flushes · Sink/Shower/Tub Work · No Leaks · Mirror/Vanity/Towel Bar Secure · Caulking Clean/Complete</td>
+      </tr>
+      <tr>
+        <td><strong>6</strong></td>
+        <td>Utilities &amp; Vacant Home Check</td>
+        <td>5 Yes/No</td>
+        <td>Electric On/Staying On · Water On/Staying On · Heat/A/C Works · Toilets Flushed/Water Run in Sinks · Checked for Leaks/Odors/Pests/Vandalism</td>
+      </tr>
+      <tr>
+        <td><strong>7</strong></td>
+        <td>Exterior &amp; Landscaping</td>
+        <td>5 items</td>
+        <td>Exterior Clean/Power Washed (Y/N) · Skirting Secure/Presentable (Y/N) · Yard Cleaned/Grass Cut/Weeds Handled (Y/N) · Landscaping Complete or Assigned (Y/N) · Landscaping Owner (dropdown: Maintenance / Manager / Vendor)</td>
+      </tr>
+      <tr>
+        <td><strong>8</strong></td>
+        <td>Post-Walkthrough Status</td>
+        <td>2 fields</td>
+        <td><strong>Walkthrough Status</strong> (dropdown, required): Approved as Ready to Market / Needs Additional Items / Not Ready / Vendor Needs to Finish · <strong>Manager/Inspector Signature</strong> (signature capture, required)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-amber">
+    <strong>Photo Documentation (Open Item O-WF002-10):</strong> The current form spec does not include photo capture fields. Confirm with Austin whether the form should include photos — e.g., one photo per section, or a photo capture triggered by any "No" answer. Photo fields can be added to any section without changing the 37-item count.
+  </div>
+</div>
+
+<!-- ═══════════════════════ SECTION 6 — CASCADING DROPDOWNS ═══════════════════════ -->
+<div class="section-block" id="s6">
+  <div class="sec-hdr">
+    <span class="num">Section 06</span>
+    <span class="ttl">Cascading Dropdown Architecture (WF002)</span>
+    <span class="sub">Community → Lot → Asset</span>
+  </div>
+
+  <p style="font-size:8.5pt;margin:0 0 10px 0;">All Community, Lot, and Asset selections in WF002 follow the master cascading chain defined in WF001 Section 3A. The cascade is: <strong>Community → Lot → Asset</strong>. Each selection filters the next dropdown to show only valid child records. WF002 applies the following filters specific to the rehab context.</p>
+
+  <table>
+    <caption data-label="Table 6-1">WF002 Cascading Dropdown Filter Rules</caption>
+    <thead><tr><th style="width:20%">Dropdown</th><th style="width:30%">Filter Applied</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Community</strong></td><td>All active communities</td><td>No filter — all communities shown. User selects the community where the home is located.</td></tr>
+      <tr><td><strong>Lot</strong></td><td>Lot Status = In Rehab OR Available</td><td>Filters to lots in the selected Community that are vacant and eligible for rehab tracking.</td></tr>
+      <tr><td><strong>Asset</strong></td><td>Asset Status = In Rehab</td><td>Filters to the specific home on the selected lot that is actively in rehab.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-amber">
+    <strong>Asset Status Value (Open Item O-WF002-07):</strong> <strong>"In Rehab"</strong> must be added as a valid Asset Status value in the Assets table. Confirm the full set of Asset Status values with Austin before building the Assets table. Recommended values: <em>In Rehab / Available / Listed / Occupied / Demo / Other</em>.
+  </div>
+
+  <div class="callout callout-navy">
+    <strong>FastField Pre-Population:</strong> When a field crew member taps the FastField launch link in QB, Community, Lot, Asset, and Rehab Record ID are passed as URL parameters and pre-populated into the form header fields. These four fields are locked (read-only) on the form — the inspector cannot change them. This ensures every submission is correctly matched to its parent QB record.
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>Lot Status for Rehab (Open Item O-WF002-08):</strong> A vacated lot currently carries Lot Status = Available. Confirm whether a separate Lot Status value of "In Rehab" is needed, or whether rehab state is tracked at the Asset Status level only. The current spec tracks rehab state on the Asset (Asset Status = In Rehab) and leaves Lot Status = Available, preserving lot availability metrics while the asset is being rehabbed.
+  </div>
+</div>
+
+<!-- ═══════════════════════ SECTION 7 — AUTOMATIONS ═══════════════════════ -->
+<div class="section-block" id="s7">
+  <div class="sec-hdr">
+    <span class="num">Section 07</span>
+    <span class="ttl">Automations</span>
+    <span class="sub">11 Automations — QB Pipelines</span>
+  </div>
+
+  <p style="font-size:8.5pt;margin:0 0 10px 0;">All automations run in QB Pipelines and fire on record events (field changes, new record creation, or webhook receipt) unless marked <span class="timing-badge daily">Daily</span>. Every automation is numbered with a persistent ID for traceability. Automations are not activated until all Open Items in Section 9 that affect the relevant logic are resolved.</p>
+
+  <div class="callout callout-red">
+    <strong>Hard Rule:</strong> Automations A-RH-06 and A-RH-07 are mutually exclusive — exactly one fires per walkthrough submission. They are triggered by the value of Walkthrough Status. Both cannot fire on the same record event.
+  </div>
+
+  <table class="auto-table">
+    <caption data-label="Table 7-1">Automation Register — WF002</caption>
+    <thead><tr><th style="width:12%">ID</th><th style="width:30%">Trigger</th><th style="width:40%">Action</th><th style="width:10%">Timing</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A-RH-01</strong></td>
+        <td>Move Out record Status field changed to <em>Completed</em></td>
+        <td>Auto-create a Rehab Record linked to the same Lot and Asset. Set Rehab Stage = Rehab Identified. Set Triggered By = Move Out. Populate Source Move Out Record # link.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-02</strong></td>
+        <td>Rehab Record created (Stage = Rehab Identified)</td>
+        <td>Auto-generate Rehab ID (RH-YYYY-### format). Set Rehab Identified Date = today. Set Asset Status = In Rehab. Notify assigned Ops contact by email.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-03</strong></td>
+        <td>Rehab Record Stage changed to <em>Work Assigned</em></td>
+        <td>Set Work Assigned Date = today. Send email notification to the Assigned To contact (vendor or staff) with Rehab ID, Lot, and Scope Notes summary.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-04</strong></td>
+        <td>Rehab Record Stage changed to <em>Walkthrough Scheduled</em></td>
+        <td>Generate pre-populated FastField launch link (Community + Lot + Asset + Rehab Record ID as URL parameters). Set Walkthrough Scheduled Date. Notify Community Manager by email with the FastField link.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-05</strong></td>
+        <td>FastField Rehab Walkthrough Punchlist webhook received</td>
+        <td>Create child Rehab Walkthrough Record. Map all 37 checklist fields plus header fields. Calculate Items Passed, Items Failed, and Pass Rate. Set Walkthrough Completed Date = today. Update parent Rehab Record: Walkthrough Status = value from form, Stage = Walkthrough Complete.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-06</strong></td>
+        <td>Walkthrough Status set to <em>Approved as Ready to Market</em></td>
+        <td>Set Rehab Stage = Approved — Ready to Market. Set Asset Status = Available. Set Approved Date = today. Notify Ops team and Listing team by email.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-07</strong></td>
+        <td>Walkthrough Status set to <em>Needs Additional Items</em> OR <em>Not Ready</em> OR <em>Vendor Needs to Finish</em></td>
+        <td>Set Rehab Stage = Items To Resolve. Create follow-up Rehab Task record with Category = Other and Task Name = "Re-inspect: [Walkthrough Status value]". Notify assigned vendor/maintenance by email.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-08</strong></td>
+        <td>Rehab Record Stage changed to <em>Handed to Listing</em></td>
+        <td>Trigger listing workflow (create Listing Record or send notification to listing team — per Open Item O-WF002-05). Set Rehab Record Status = Closed. Set Rehab Record as read-only.</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-09</strong></td>
+        <td>All Rehab Tasks linked to a Rehab Record change to Status = <em>Complete</em></td>
+        <td>Notify Community Manager: "All rehab tasks complete — walkthrough can now be scheduled." Updates Rehab Record Stage to Walkthrough Scheduled only if manager confirms (prevents auto-skip of gate).</td>
+        <td><span class="timing-badge">Immediate</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-10</strong></td>
+        <td>Rehab Record open &gt; 30 days (Days In Rehab &gt; 30) and Stage ≠ Approved or Handed to Listing</td>
+        <td>Send overdue alert email to Ops team with Rehab ID, current Stage, Days In Rehab, and Assigned To. Flag record with <span class="b b-yellow">Overdue</span> label in QB views.</td>
+        <td><span class="timing-badge daily">Daily check</span></td>
+      </tr>
+      <tr>
+        <td><strong>A-RH-11</strong></td>
+        <td>Rehab Record open &gt; 60 days (Days In Rehab &gt; 60) and Stage ≠ Approved or Handed to Listing</td>
+        <td>Escalate to Austin (CEO) by email. Flag record as <span class="b b-red">Critically Overdue</span> in QB views. Include full stage history in alert. (See Open Item O-WF002-09 — confirm escalation path.)</td>
+        <td><span class="timing-badge daily">Daily check</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SECTION 8 — GATE RULES ═══════════════════════ -->
+<div class="section-block" id="s8">
+  <div class="sec-hdr">
+    <span class="num">Section 08</span>
+    <span class="ttl">Gate Rules</span>
+    <span class="sub">8 Hard Stops — No Bypass Permitted</span>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Enforcement Principle:</strong> Gate rules are hard stops implemented as QB field-level validation or Pipeline checks. A gate that can be bypassed is not a gate. The Rehab Stage field must be locked to its current value until all conditions for the target stage are satisfied. Soft warnings are non-compliant.
+  </div>
+
+  <div class="gate-table-wrap">
+    <table class="gate-table">
+      <caption data-label="Table 8-1">Gate Rules — WF002 Rehab</caption>
+      <thead><tr><th style="width:12%">Gate ID</th><th style="width:32%">Stage Transition</th><th>Condition(s) — All Must Be True</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>G-RH-01</strong></td>
+          <td>Rehab Identified → Scope Assessed</td>
+          <td>Scope Notes field is not blank. Community, Lot, and Asset are all linked (not null). RM Asset Record # and RM Unit # populated (warn if blank, not hard-block — per Open Item O-WF002-01).</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-02</strong></td>
+          <td>Scope Assessed → Work Assigned</td>
+          <td>Assigned To field is not blank.</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-03</strong></td>
+          <td>Work Assigned → Work In Progress</td>
+          <td>At least one Rehab Task record exists linked to this Rehab Record. At least one Rehab Task has Status = In Progress or Complete.</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-04</strong></td>
+          <td>Work In Progress → Walkthrough Scheduled</td>
+          <td>Walkthrough Scheduled Date is populated and is not a past date.</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-05</strong></td>
+          <td>Walkthrough Scheduled → Walkthrough Complete</td>
+          <td>At least one Rehab Walkthrough Record exists linked to this Rehab Record (confirmed via FastField webhook receipt and A-RH-05 execution).</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-06</strong></td>
+          <td>Walkthrough Complete → Approved</td>
+          <td>Walkthrough Status = "Approved as Ready to Market". Will not advance if Walkthrough Status = Needs Additional Items / Not Ready / Vendor Needs to Finish. Stage will route to Items To Resolve (Stage 7) via A-RH-07 instead.</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-07</strong></td>
+          <td>Items To Resolve → Walkthrough Scheduled</td>
+          <td>All Rehab Tasks linked to this Rehab Record have Status = Complete. No tasks with Status = Not Started / In Progress / Blocked. Enforces that re-inspection is not booked until all open items are resolved.</td>
+        </tr>
+        <tr>
+          <td><strong>G-RH-08</strong></td>
+          <td>Approved → Handed to Listing</td>
+          <td>Approved Date is populated. Asset Status = Available. Listing team confirmation received (method per Open Item O-WF002-05).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SECTION 9 — OPEN ITEMS ═══════════════════════ -->
+<div class="section-block" id="s9">
+  <div class="sec-hdr">
+    <span class="num">Section 09</span>
+    <span class="ttl">Open Items</span>
+    <span class="sub">10 Open — All Assigned to Austin</span>
+  </div>
+
+  <p style="font-size:8.5pt;margin:0 0 10px 0;">All items below require a decision before the associated build step can be finalised. Items are not blocking the spec itself — they are blocking the implementation of the steps they reference. When resolved, the decision becomes binding for that step with no further change requests in scope without a document revision.</p>
+
+  <table class="oi-table">
+    <caption data-label="Table 9-1">Open Items Register — WF002 v1.0</caption>
+    <thead><tr><th style="width:14%">ID</th><th style="width:10%">Category</th><th>Description</th><th style="width:10%">Owner</th><th style="width:9%">Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>O-WF002-01</strong></td>
+        <td>Trigger</td>
+        <td>Is WF002 always triggered automatically by a Move Out completion? Or can it also be triggered manually — e.g., for acquired homes, homes with existing damage identified during routine inspection? Recommend: support both auto and manual triggers; confirm whether Triggered By = Acquisition is in scope.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-02</strong></td>
+        <td>Scope / Budget</td>
+        <td>Is there a cost or budget tracking component to Rehab? Should Rehab Records include fields for estimated cost, actual cost, and/or vendor invoice amounts? If yes, this adds fields to Table 4.1 (Rehab Records) and potentially a sub-table for line-item costs.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-03</strong></td>
+        <td>Work Orders</td>
+        <td>Should Rehab Tasks (Table 4.2) be simple QB task records as currently specced, or is a formal Work Order document needed — one that can be sent to vendors via email from QB or accessed through a vendor portal? Formal work orders require additional design for the output document and vendor notification logic.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-04</strong></td>
+        <td>Vendors</td>
+        <td>Is a Vendors table required in QB? (Vendor name, type, contact info, communities served.) A Vendors table enables vendor assignment via dropdown (rather than free-text), vendor-level reporting, and structured notification routing. Required if Work Orders (O-WF002-03) are implemented.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-05</strong></td>
+        <td>Listing Handoff</td>
+        <td>When Rehab is Approved — does this auto-create a Listing Request record (in WF001 or a standalone listing workflow), or does the listing team manually initiate the listing process? The current spec has Automation A-RH-08 trigger the listing workflow, but the exact mechanism (auto-create vs. notify-and-wait) is TBD.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-06</strong></td>
+        <td>Checklist Source</td>
+        <td>The 37-item Rehab Walkthrough Punchlist (7 sections) is derived from the JotForm audit provided. Confirm: Is this the complete, current checklist the team uses, or is there a more detailed version in use? Any additions or reordering affect the FastField form build and the QB Walkthrough Records table.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-07</strong></td>
+        <td>Asset Status Values</td>
+        <td>"In Rehab" must be added as an Asset Status value in the Assets table before the cascading dropdown filter in Section 6 will work. Confirm the full set of Asset Status values to be supported: <em>In Rehab / Available / Listed / Occupied / Demo / Other</em> — or a different set?</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-08</strong></td>
+        <td>Lot Status for Rehab</td>
+        <td>A vacated lot currently carries Lot Status = Available. Should there be a separate Lot Status = In Rehab to distinguish actively rehabbing lots from genuinely available lots? Or is the rehab state tracked at the Asset level only (as currently specced in Section 6)? Decision affects lot-level dashboard filtering.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-09</strong></td>
+        <td>Escalation Contact</td>
+        <td>Automation A-RH-11 escalates directly to Austin (CEO) after 60 days in rehab. Is this the correct escalation path, or should there be an intermediate escalation step — e.g., to a Regional Manager or VP of Operations — before CEO notification? Also confirm whether the 30-day (A-RH-10) and 60-day (A-RH-11) thresholds are appropriate, or whether different timeframes are preferred.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF002-10</strong></td>
+        <td>Photo Documentation</td>
+        <td>The current FastField Rehab Walkthrough Punchlist spec does not include photo capture fields. Should photos be added? Options: (a) one photo field per section (7 photos total), (b) a photo capture triggered by any "No" answer (up to 37 prompts), or (c) a single "Additional Photos" field at the end of the form. Photos increase form build complexity but significantly improve deficiency documentation.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════ SECTION 10 — VERSION HISTORY ═══════════════════════ -->
+<div class="section-block" id="s10">
+  <div class="sec-hdr">
+    <span class="num">Section 10</span>
+    <span class="ttl">Spec Version History</span>
+  </div>
+
+  <table>
+    <caption data-label="Table 10-1">Document Version History</caption>
+    <thead><tr><th style="width:12%">Version</th><th style="width:14%">Date</th><th style="width:22%">Author</th><th>Changes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>v1.0</strong></td>
+        <td>08/18/26</td>
+        <td>Parakeet Build Team</td>
+        <td>Initial specification. 9 workflow stages (incl. 1 conditional loop), 3 QB tables (Rehab Records, Rehab Tasks, Walkthrough Records), 1 FastField form (37-item punchlist, 8 sections), 11 automations, 8 gate rules, 10 open items. Status: Draft for Review.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var observer = new MutationObserver(function(mutations, obs) {
+    var pagedContent = document.querySelector('.pagedjs_pages');
+    if (pagedContent) { obs.disconnect(); setTimeout(resolvePageNumbers, 500); }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  function resolvePageNumbers() {
+    document.querySelectorAll('.page-ref').forEach(function(ref) {
+      var href = ref.getAttribute('data-href');
+      var target = document.getElementById(href.replace('#', ''));
+      if (target) {
+        var page = target.closest('.pagedjs_page');
+        if (page) ref.textContent = page.getAttribute('data-page-number') || '';
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

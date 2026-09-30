@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parakeet Communities — WF003 Asset Disposition Review Build Spec v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4;
+      margin: 2.2cm 1.8cm 2.4cm 1.8cm;
+      @top-left {
+        content: "PARAKEET COMMUNITIES \2014 CONFIDENTIAL \2014 INTERNAL BUILD SPEC";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #888;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+      }
+      @top-right {
+        content: string(doctitle);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt; color: #2F4E65; font-weight: 600;
+        border-bottom: 0.5pt solid #ddd; padding-bottom: 4pt;
+      }
+      @bottom-left {
+        content: "Parakeet Communities \B7 WF003 Asset Disposition Review Build Spec \B7 v1.0 \B7 Confidential \B7 08/19/26";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6pt; color: #aaa;
+        border-top: 0.5pt solid #eee; padding-top: 4pt;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7.5pt; color: #777;
+        border-top: 0.5pt solid #eee; padding-top: 4pt;
+      }
+    }
+    @page :first {
+      margin: 0;
+      @top-left   { content: none; }
+      @top-right  { content: none; }
+      @bottom-left  { content: none; }
+      @bottom-right { content: none; }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: 9pt; color: #222; line-height: 1.45;
+      string-set: doctitle "";
+    }
+    h1 { string-set: doctitle content(); }
+    p { margin: 0 0 8px 0; }
+
+    .cover {
+      width: 210mm; height: 297mm; margin: 0; padding: 0;
+      position: relative; overflow: hidden; page-break-after: always;
+      background: linear-gradient(155deg, #1b2f40 0%, #2F4E65 42%, #3a6275 68%, #1b2f40 100%);
+      color: #fff; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .cover-stripe-top {
+      position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: linear-gradient(90deg, #4ABA81 0% 33%, #FFCC3B 33% 66%, #F16262 66% 100%);
+    }
+    .cover-stripe-bot { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: #4ABA81; }
+    .cover-wordmark { font-size: 11pt; font-weight: 700; letter-spacing: 3px; text-transform: lowercase; margin-bottom: 44px; }
+    .cover-wordmark .g { color: #4ABA81; }
+    .cover-wordmark .n { color: #a8cede; }
+    .cover-eyebrow { font-size: 8pt; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4ABA81; margin-bottom: 10px; }
+    .cover-wf-badge { display: inline-block; background: rgba(74,186,129,0.18); border: 1px solid #4ABA81; color: #4ABA81; font-size: 8pt; font-weight: 700; letter-spacing: 2px; padding: 4px 14px; margin-bottom: 16px; text-transform: uppercase; }
+    .cover h1 {
+      font-size: 30pt; font-weight: 800; color: #fff; text-align: center;
+      line-height: 1.05; margin: 0 0 10px 0; padding: 0 36px; max-width: 100%;
+      white-space: normal; overflow-wrap: break-word;
+      string-set: doctitle "";
+    }
+    .cover-subtitle { font-size: 10pt; font-weight: 400; color: #bdd4e3; line-height: 1.45; margin-bottom: 6px; padding: 0 50px; }
+    .cover-tagline { font-size: 8.5pt; color: #7ea5be; margin-bottom: 28px; }
+    .cover-divider { width: 55px; height: 2px; background: #4ABA81; margin: 0 auto 26px; }
+    .cover-meta { display: flex; gap: 28px; margin-bottom: 26px; flex-wrap: wrap; justify-content: center; }
+    .cover-meta-item .lbl { font-size: 7pt; color: #7ea5be; text-transform: uppercase; letter-spacing: 1.8px; display: block; margin-bottom: 4px; }
+    .cover-meta-item .val { font-size: 10pt; font-weight: 600; color: #fff; }
+    .cover-status-pill { display: inline-block; background: #FFCC3B; color: #3a2800; font-size: 8pt; font-weight: 700; letter-spacing: 1px; padding: 5px 16px; text-transform: uppercase; margin-bottom: 24px; }
+    .cover-changes {
+      background: rgba(255,255,255,0.07); border-left: 3px solid #4ABA81;
+      padding: 11px 18px; margin: 0 44px;
+      font-size: 7.5pt; color: #bdd4e3; line-height: 1.55; text-align: left;
+    }
+    .cover-footer { position: absolute; bottom: 18px; font-size: 7pt; color: #6a92a8; letter-spacing: 0.8px; left: 0; right: 0; text-align: center; }
+
+    .toc-page { padding-top: 10px; }
+    .toc-title { font-size: 20pt; color: #2F4E65; margin-bottom: 20px; border-bottom: 2pt solid #2F4E65; padding-bottom: 8px; font-weight: 700; page-break-after: avoid; }
+    .toc-list { list-style: none; padding: 0; margin: 0; }
+    .toc-list li { display: flex; align-items: baseline; padding: 3.5px 0; break-inside: avoid; }
+    .toc-list li a { display: flex; align-items: baseline; width: 100%; text-decoration: none; color: #333; }
+    .toc-list .toc-h2 .toc-text { font-weight: 700; font-size: 10pt; color: #2F4E65; }
+    .toc-list .toc-h3 { padding-left: 16px; }
+    .toc-list .toc-h3 .toc-text { font-weight: 400; font-size: 9pt; color: #555; }
+    .toc-text { white-space: nowrap; flex-shrink: 0; }
+    .toc-dots { flex: 1; margin: 0 5px; border-bottom: 1.5px dotted #bbb; min-width: 20px; position: relative; top: -3px; }
+    .toc-page-num { flex-shrink: 0; text-align: right; min-width: 18px; font-size: 9pt; color: #555; }
+
+    .sec-hdr {
+      background: #2F4E65; color: #fff;
+      padding: 7px 12px; margin: 0 0 12px 0;
+      display: flex; align-items: baseline; gap: 10px;
+      page-break-after: avoid;
+    }
+    .sec-hdr .num { font-size: 7pt; font-weight: 700; color: #4ABA81; text-transform: uppercase; letter-spacing: 1.5px; white-space: nowrap; }
+    .sec-hdr .ttl { font-size: 12pt; font-weight: 700; color: #fff; }
+    .sec-hdr .sub { font-size: 7pt; color: #a8cede; margin-left: auto; white-space: nowrap; }
+
+    h2.sh { font-size: 10.5pt; font-weight: 700; color: #2F4E65; margin: 14px 0 6px 0; border-bottom: 1.5px solid #2F4E65; padding-bottom: 3px; page-break-after: avoid; }
+    h3.ssh { font-size: 9.5pt; font-weight: 700; color: #2F4E65; margin: 10px 0 5px 0; page-break-after: avoid; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 14px; max-width: 100%; }
+    th { background: #2F4E65; color: #fff; font-weight: 600; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.4px; padding: 5px 8px; text-align: left; }
+    td { padding: 4px 8px; border-bottom: 0.5pt solid #e4e4e4; vertical-align: top; line-height: 1.4; }
+    tr:nth-child(even) td { background: #F5F5F5; }
+    tr:nth-child(odd)  td { background: #fff; }
+    tr { page-break-inside: avoid; }
+
+    .gate-wrap { border-left: 4px solid #FFCC3B; margin-bottom: 14px; }
+    .gate-wrap table tr:nth-child(even) td { background: #fffbeb; }
+    .gate-wrap table tr:nth-child(odd) td { background: #fff; }
+    .gate-wrap table td:first-child { font-weight: 700; color: #2F4E65; white-space: nowrap; }
+
+    .pipeline-wrap { margin: 0 0 12px 0; }
+    .pipeline-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 6px; flex-wrap: nowrap; }
+    .stage-box {
+      flex: 1; min-width: 0;
+      background: #2F4E65; color: #fff;
+      padding: 8px 4px 6px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .stage-box.green { background: #4ABA81; color: #fff; }
+    .stage-box.amber { background: #FFCC3B; color: #3a2800; }
+    .stage-box.gray  { background: #7a8c99; color: #fff; }
+    .stage-num { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.2); color: #fff; font-size: 7.5pt; font-weight: 800; line-height: 18px; margin: 0 auto 3px; display: block; text-align: center; }
+    .stage-box.amber .stage-num { color: #3a2800; background: rgba(0,0,0,0.1); }
+    .stage-name { font-size: 7pt; font-weight: 700; line-height: 1.2; margin-bottom: 2px; }
+    .stage-owner { font-size: 6pt; opacity: 0.85; font-style: italic; line-height: 1.2; }
+    .pipe-arrow { width: 12px; display: flex; align-items: center; justify-content: center; background: #e8eef3; color: #2F4E65; font-size: 10pt; font-weight: 700; flex-shrink: 0; }
+    .pipeline-note { font-size: 7.5pt; color: #555; font-style: italic; margin-top: 4px; padding: 4px 8px; background: #f8f8f8; border-left: 3px solid #FFCC3B; }
+
+    .callout { padding: 8px 13px; margin: 0 0 12px 0; font-size: 8.5pt; line-height: 1.5; border-left-width: 4px; border-left-style: solid; }
+    .callout-navy  { background: #eef4fa; border-color: #2F4E65; color: #222; }
+    .callout-green { background: #f0faf5; border-color: #4ABA81; color: #1a4a30; }
+    .callout-amber { background: #fffbeb; border-color: #FFCC3B; color: #5a4a00; }
+    .callout-red   { background: #fff2f2; border-color: #F16262; color: #5a0000; }
+
+    .b { display: inline-block; padding: 2px 6px; border-radius: 2px; font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+    .b-green  { background: #4ABA81; color: #fff; }
+    .b-yellow { background: #FFCC3B; color: #5a4a00; }
+    .b-red    { background: #F16262; color: #fff; }
+    .b-navy   { background: #2F4E65; color: #fff; }
+    .b-gray   { background: #9e9e9e; color: #fff; }
+
+    .auto-table td:first-child { white-space: nowrap; font-weight: 700; color: #2F4E65; font-size: 8pt; }
+    .timing-imm  { display: inline-block; padding: 1px 5px; font-size: 6.5pt; font-weight: 700; background: #eef4fa; color: #2F4E65; white-space: nowrap; }
+    .timing-daily { display: inline-block; padding: 1px 5px; font-size: 6.5pt; font-weight: 700; background: #fffbeb; color: #5a4a00; white-space: nowrap; }
+
+    .oi-table td:first-child { font-weight: 700; color: #2F4E65; white-space: nowrap; font-size: 8pt; }
+    .status-open { display: inline-block; padding: 2px 7px; font-size: 6.5pt; font-weight: 800; background: #F16262; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 2px; }
+    .status-dep  { display: inline-block; padding: 2px 7px; font-size: 6.5pt; font-weight: 800; background: #FFCC3B; color: #3a2800; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 2px; }
+
+    .fld-auto { color: #4ABA81; font-weight: 600; font-style: italic; }
+    .fld-req  { color: #F16262; font-weight: 700; }
+    .fld-calc { color: #2F4E65; font-style: italic; }
+
+    .meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+    .meta-item { background: #eef4fa; border-left: 3px solid #2F4E65; padding: 6px 10px; }
+    .meta-item .mk { font-size: 6.5pt; font-weight: 700; color: #2F4E65; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+    .meta-item .mv { font-size: 9pt; font-weight: 600; color: #222; }
+
+    ul.bp { margin: 5px 0 10px 0; padding-left: 16px; font-size: 8.5pt; line-height: 1.6; }
+    ul.bp li { margin-bottom: 2px; }
+    ol.steps { margin: 5px 0 10px 0; padding-left: 20px; font-size: 8.5pt; line-height: 1.6; }
+    ol.steps li { margin-bottom: 4px; }
+
+    code { font-family: 'Courier New', monospace; font-size: 7.5pt; background: #eef2f5; padding: 1px 4px; border-radius: 2px; color: #2F4E65; }
+    .note { font-size: 7.5pt; color: #666; font-style: italic; margin: 3px 0 9px 0; line-height: 1.4; }
+    .section-block { margin-bottom: 18px; }
+
+    pre, table, figure, img, svg, blockquote, code { max-width: 100%; box-sizing: border-box; overflow-wrap: break-word; }
+    a { word-break: break-all; }
+    h2.sh, h3.ssh { page-break-after: avoid; }
+    .sec-hdr { page-break-after: avoid; }
+
+    .disp-pill { display: inline-block; padding: 2px 8px; font-size: 7.5pt; font-weight: 700; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .disp-rehab { background: #F16262; color: #fff; }
+    .disp-demo  { background: #7a8c99; color: #fff; }
+    .disp-sale  { background: #4ABA81; color: #fff; }
+    .disp-hold  { background: #FFCC3B; color: #5a4a00; }
+    .disp-none  { background: #e0e0e0; color: #555; }
+
+    .outcome-block { border: 1.5px solid #2F4E65; margin-bottom: 10px; }
+    .outcome-hdr { background: #2F4E65; color: #fff; padding: 5px 10px; font-size: 8pt; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .outcome-body { padding: 8px 10px; font-size: 8.5pt; }
+    .outcome-body ul { margin: 4px 0; padding-left: 14px; }
+    .outcome-body li { margin-bottom: 3px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div class="cover">
+  <div class="cover-stripe-top"></div>
+  <div class="cover-wordmark"><span class="g">parakeet</span>&nbsp;<span class="n">communities</span></div>
+  <div class="cover-eyebrow">Internal Build Specification</div>
+  <div class="cover-wf-badge">Workflow #003 &nbsp;·&nbsp; Asset Disposition Review</div>
+  <h1>Asset Disposition Review</h1>
+  <div class="cover-subtitle">Quickbase Build Specification<br>Weekly Monday Meeting — Disposition Decisions per Vacated Unit</div>
+  <div class="cover-tagline">Parakeet Communities &nbsp;·&nbsp; Internal &nbsp;·&nbsp; Confidential</div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><span class="lbl">Version</span><span class="val">v1.0</span></div>
+    <div class="cover-meta-item"><span class="lbl">Date</span><span class="val">08/19/26</span></div>
+    <div class="cover-meta-item"><span class="lbl">Status</span><span class="val"><span class="cover-status-pill">Draft for Review</span></span></div>
+    <div class="cover-meta-item"><span class="lbl">Workflow ID</span><span class="val">WF003</span></div>
+    <div class="cover-meta-item"><span class="lbl">Supersedes</span><span class="val">None — first issue</span></div>
+    <div class="cover-meta-item"><span class="lbl">Communities</span><span class="val">68 Active</span></div>
+  </div>
+  <div class="cover-changes">
+    <strong>v1.0 — First Issue:</strong> Formalizes the weekly Monday Asset Management meeting in Quickbase. Tracks disposition decisions (Rehab / Demo / Turn for Sale / Hold / No Action) per unit per meeting. Auto-triggers WF002 Rehab when disposition = Rehab; sets lot and asset statuses for Demo and Turn for Sale dispositions. Upstream trigger for WF002 and future Demo / Listing workflows. No FastField forms — QB-only workflow.
+  </div>
+  <div class="cover-footer">Parakeet Communities &nbsp;·&nbsp; WF003 Asset Disposition Review Build Spec &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; 08/19/26</div>
+  <div class="cover-stripe-bot"></div>
+</div>
+
+<!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+<div class="toc-page">
+  <h2 class="toc-title">Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-h2"><a href="#s1"><span class="toc-text">1. Document Purpose &amp; Scope</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s2"><span class="toc-text">2. Workflow Overview</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s3"><span class="toc-text">3. Disposition Outcomes</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s4"><span class="toc-text">4. Item Stages (per Disposition Item)</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s5"><span class="toc-text">5. Quickbase Tables</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h3"><a href="#s5a"><span class="toc-text">5A. Disposition Meetings (DM)</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h3"><a href="#s5b"><span class="toc-text">5B. Disposition Items (DI)</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s6"><span class="toc-text">6. Automations</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s7"><span class="toc-text">7. Gate Rules</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s8"><span class="toc-text">8. Relationships &amp; Downstream Workflows</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s9"><span class="toc-text">9. Reports &amp; Views</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s10"><span class="toc-text">10. Open Items</span><span class="toc-dots"></span></a></li>
+    <li class="toc-h2"><a href="#s11"><span class="toc-text">11. Version History</span><span class="toc-dots"></span></a></li>
+  </ul>
+</div>
+
+<!-- ═══════════════════ SECTION 1 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s1">
+    <span class="num">Section 01</span>
+    <span class="ttl">Document Purpose &amp; Scope</span>
+    <span class="sub">WF003 — Asset Disposition Review — v1.0 — 08/19/26</span>
+  </div>
+
+  <p>This document specifies the Quickbase build for <strong>WF003 — Asset Disposition Review</strong>. WF003 formalizes the weekly Monday morning Asset Management meeting in Quickbase — capturing disposition decisions per vacated unit and automatically triggering the appropriate downstream workflow based on that decision.</p>
+
+  <div class="callout callout-navy">
+    <strong>Design Intent:</strong> Today the Monday meeting runs entirely outside Quickbase. Dispositions (Rehab / Demo / Turn for Sale) are decided verbally and entered manually into downstream systems — or not entered at all. WF003 creates a structured record of every meeting, every unit reviewed, and every decision made. This gives the company a full disposition audit trail and removes manual handoffs as the trigger for WF002 and future Demo/Listing workflows.
+  </div>
+
+  <table>
+    <thead><tr><th>Item</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Workflow Name</strong></td><td>Asset Disposition Review</td></tr>
+      <tr><td><strong>Workflow ID</strong></td><td>WF003</td></tr>
+      <tr><td><strong>Primary Purpose</strong></td><td>Record Monday Asset Disposition meeting outcomes in QB per unit; auto-trigger downstream workflows based on disposition assigned.</td></tr>
+      <tr><td><strong>Meeting Cadence</strong></td><td>Weekly — every Monday AM</td></tr>
+      <tr><td><strong>Meeting Facilitator</strong></td><td>Asset Management team</td></tr>
+      <tr><td><strong>Participants</strong></td><td>Asset Management, Ops, Construction, Sales</td></tr>
+      <tr><td><strong>Disposition Options</strong></td><td>Rehab / Demo / Turn for Sale / Hold / No Action</td></tr>
+      <tr><td><strong>Downstream Workflows</strong></td><td>WF002 Rehab (Disposition = Rehab) · Demo workflow (Disposition = Demo — future WF) · Listings (Disposition = Turn for Sale — future WF)</td></tr>
+      <tr><td><strong>FastField Forms</strong></td><td>None — QB-only workflow (office / meeting data entry)</td></tr>
+      <tr><td><strong>QB Tables</strong></td><td>2 — Disposition Meetings (DM) + Disposition Items (DI)</td></tr>
+      <tr><td><strong>In Scope</strong></td><td>Weekly Monday meeting record creation; per-unit Disposition Item records; disposition assignment (all 5 values); automations triggering WF002 on Rehab disposition; lot and asset status updates on Demo and Turn for Sale; meeting-level rollups and reporting; audit trail of all disposition decisions</td></tr>
+      <tr><td><strong>Out of Scope</strong></td><td>Demo execution workflow (future WF); listing execution workflow (future WF); Rent Manager record creation or modification; financial tracking (handled in WF002); FastField field forms; units not yet reviewed / not yet vacated</td></tr>
+      <tr><td><strong>Dependent Workflows</strong></td><td>WF002 Rehab — triggered automatically when Disposition = Rehab. Future Demo WF — triggered when Disposition = Demo. Future Listing WF — triggered when Disposition = Turn for Sale.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 2 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s2">
+    <span class="num">Section 02</span>
+    <span class="ttl">Workflow Overview</span>
+  </div>
+
+  <p>WF003 operates at two levels: a <strong>Meeting record</strong> (one per Monday meeting) and <strong>Item records</strong> (one per unit reviewed at that meeting). The meeting recorder creates items in QB before or during the meeting. After each disposition is assigned, QB automations fire immediately — no manual handoff required.</p>
+
+  <div class="pipeline-wrap">
+    <div class="pipeline-row">
+      <div class="stage-box">
+        <span class="stage-num">1</span>
+        <span class="stage-name">Meeting Created</span>
+        <span class="stage-owner">Asset Mgmt</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">2</span>
+        <span class="stage-name">Items Added</span>
+        <span class="stage-owner">Recorder</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box amber">
+        <span class="stage-num">3</span>
+        <span class="stage-name">Pending Review</span>
+        <span class="stage-owner">Meeting</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box">
+        <span class="stage-num">4</span>
+        <span class="stage-name">Reviewed</span>
+        <span class="stage-owner">Asset Mgmt</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box green">
+        <span class="stage-num">5</span>
+        <span class="stage-name">Actioned</span>
+        <span class="stage-owner">Auto</span>
+      </div>
+      <div class="pipe-arrow">›</div>
+      <div class="stage-box gray">
+        <span class="stage-num">6</span>
+        <span class="stage-name">Closed</span>
+        <span class="stage-owner">Auto / Ops</span>
+      </div>
+    </div>
+    <div class="pipeline-note">Stages 3–6 apply per Disposition Item. Meeting record status = Open until all items are Actioned or Closed, then auto-sets to Closed.</div>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-item"><span class="mk">QB Tables</span><span class="mv">2</span></div>
+    <div class="meta-item"><span class="mk">Item Stages</span><span class="mv">4</span></div>
+    <div class="meta-item"><span class="mk">Automations</span><span class="mv">5</span></div>
+    <div class="meta-item"><span class="mk">Gate Rules</span><span class="mv">3</span></div>
+    <div class="meta-item"><span class="mk">FastField Forms</span><span class="mv">None</span></div>
+    <div class="meta-item"><span class="mk">Disposition Values</span><span class="mv">5</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 3 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s3">
+    <span class="num">Section 03</span>
+    <span class="ttl">Disposition Outcomes</span>
+    <span class="sub">Five possible outcomes — each drives a different QB action</span>
+  </div>
+
+  <p class="note">All five dispositions are available on every Disposition Item. The assigned value determines what automation fires and what downstream workflow (if any) is triggered.</p>
+
+  <div class="outcome-block">
+    <div class="outcome-hdr"><span class="disp-pill disp-rehab">Rehab</span> — Unit requires rehabilitation before re-listing</div>
+    <div class="outcome-body">
+      <ul>
+        <li>Automation A-DR-01 fires immediately on save.</li>
+        <li>Creates a new WF002 Rehab Record — Community, Lot, and Asset passed automatically.</li>
+        <li>Sets Lot Status → <strong>Lot-In Rehab</strong> on the linked Lot record.</li>
+        <li>Sets Asset Status → <strong>Rehab in Process</strong> on the linked Asset record.</li>
+        <li>Downstream Record ID field on the Disposition Item is auto-populated with the new Rehab Record ID (e.g., RH-2026-004).</li>
+        <li>Item Status auto-advances to <strong>Actioned</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="outcome-block">
+    <div class="outcome-hdr"><span class="disp-pill disp-demo">Demo</span> — Unit flagged for demolition</div>
+    <div class="outcome-body">
+      <ul>
+        <li>Automation A-DR-02 fires immediately on save.</li>
+        <li>Sets Lot Status → <strong>Lot-Demo</strong> on the linked Lot record.</li>
+        <li>Sets Asset Status → <strong>To Be Demoed</strong> on the linked Asset record.</li>
+        <li>Sends notification to Ops team: unit flagged for Demo, meeting date, community, lot, and asset details included.</li>
+        <li>Item Status auto-advances to <strong>Actioned</strong>.</li>
+        <li><em>Note: Full Demo execution workflow (WF-Demo) is a future workflow. WF003 handles the flag and status update only.</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="outcome-block">
+    <div class="outcome-hdr"><span class="disp-pill disp-sale">Turn for Sale</span> — Unit to be listed for sale</div>
+    <div class="outcome-body">
+      <ul>
+        <li>Automation A-DR-03 fires immediately on save.</li>
+        <li>Sets Asset Status → <strong>For Sale</strong> on the linked Asset record.</li>
+        <li>Sends notification to Listing team: unit approved for sale, meeting date, community, lot, asset, and any disposition notes included.</li>
+        <li>Item Status auto-advances to <strong>Actioned</strong>.</li>
+        <li><em>Note: Full Listing workflow (WF006) is a separate workflow. WF003 triggers the initial notification and status update only.</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="outcome-block">
+    <div class="outcome-hdr"><span class="disp-pill disp-hold">Hold</span> — Decision deferred; unit held pending further information</div>
+    <div class="outcome-body">
+      <ul>
+        <li>Automation A-DR-05 fires: Item Status advances to <strong>Closed</strong>. No status changes to Lot or Asset.</li>
+        <li>Disposition Notes field should capture reason for hold and expected review date.</li>
+        <li>Unit should be re-added to the next meeting agenda (manual — recorder adds a new Disposition Item).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="outcome-block">
+    <div class="outcome-hdr"><span class="disp-pill disp-none">No Action</span> — Reviewed; no disposition assigned at this time</div>
+    <div class="outcome-body">
+      <ul>
+        <li>Automation A-DR-05 fires: Item Status advances to <strong>Closed</strong>. No status changes to Lot or Asset.</li>
+        <li>Record preserved for audit trail — unit was reviewed but no action was warranted.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 4 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s4">
+    <span class="num">Section 04</span>
+    <span class="ttl">Item Stages (per Disposition Item)</span>
+  </div>
+
+  <p class="note">Each Disposition Item moves through 4 stages. Meeting-level status is a separate field on the Disposition Meeting record and tracks aggregate progress.</p>
+
+  <table>
+    <colgroup><col style="width:5%"><col style="width:18%"><col style="width:15%"><col style="width:62%"></colgroup>
+    <thead><tr><th>#</th><th>Stage</th><th>Owner</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Pending Review</td>
+        <td>Recorder</td>
+        <td>Disposition Item created in QB. Community, Lot, and Asset linked. Current Lot Status and Asset Status captured as a snapshot. No disposition assigned yet. Gate: Community, Lot, and Asset must all be set before Item Status can advance.</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Reviewed</td>
+        <td>Asset Mgmt</td>
+        <td>Meeting attendees review the unit. Disposition assigned (Rehab / Demo / Turn for Sale / Hold / No Action). Disposition Notes entered if applicable. Gate: Disposition field must be set (not blank) before advancing from Pending Review. Reviewed Date auto-stamped.</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Actioned</td>
+        <td>Auto (QB)</td>
+        <td>Set automatically by automation upon Disposition assignment for Rehab, Demo, and Turn for Sale. Downstream record created or notification sent. Actioned Date auto-stamped. Downstream Record ID populated where applicable.</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Closed</td>
+        <td>Auto / Ops</td>
+        <td>Set automatically for Hold and No Action (no downstream workflow triggered). For Rehab / Demo / Turn for Sale: auto-closes when downstream record confirmed. Meeting Status on parent record auto-sets to Closed when all items reach Actioned or Closed.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 5 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s5">
+    <span class="num">Section 05</span>
+    <span class="ttl">Quickbase Tables</span>
+  </div>
+
+  <h2 class="sh" id="s5a">5A — Disposition Meetings (DM)</h2>
+  <p class="note">One record per Monday meeting. Parent table. Record ID format: DM-YYYY-###</p>
+
+  <table>
+    <colgroup><col style="width:22%"><col style="width:20%"><col style="width:58%"></colgroup>
+    <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Meeting ID</strong></td><td><span class="fld-auto">Text (auto)</span></td><td>DM-YYYY-### format. Auto-generated on record creation.</td></tr>
+      <tr><td><strong>Meeting Date</strong></td><td>Date</td><td><span class="fld-req">Required.</span> Date of the Monday meeting. Format: mm/dd/yy. Should always be a Monday — validation rule recommended (open item).</td></tr>
+      <tr><td><strong>Meeting Status</strong></td><td>Dropdown</td><td>Values: Open / Closed. Defaults to Open on creation. Auto-set to Closed by A-DR-04 when all linked Disposition Items = Actioned or Closed.</td></tr>
+      <tr><td><strong>Facilitator</strong></td><td>User</td><td><span class="fld-req">Required.</span> QB user running the meeting — typically Asset Management lead.</td></tr>
+      <tr><td><strong>Participants</strong></td><td>Text (multi-line)</td><td>Optional. Names or roles of attendees beyond the facilitator (Ops, Construction, Sales reps).</td></tr>
+      <tr><td><strong>Meeting Notes</strong></td><td>Text (multi-line)</td><td>Optional. General meeting notes — not unit-specific (unit notes go on individual Disposition Items).</td></tr>
+      <tr><td><strong>Total Units Reviewed</strong></td><td><span class="fld-calc">Count (rollup)</span></td><td>Count of all linked Disposition Items. Auto-calculated.</td></tr>
+      <tr><td><strong>Rehab Count</strong></td><td><span class="fld-calc">Count (rollup)</span></td><td>Count of linked Disposition Items where Disposition = Rehab. Auto-calculated.</td></tr>
+      <tr><td><strong>Demo Count</strong></td><td><span class="fld-calc">Count (rollup)</span></td><td>Count of linked Disposition Items where Disposition = Demo. Auto-calculated.</td></tr>
+      <tr><td><strong>Turn for Sale Count</strong></td><td><span class="fld-calc">Count (rollup)</span></td><td>Count of linked Disposition Items where Disposition = Turn for Sale. Auto-calculated.</td></tr>
+      <tr><td><strong>Hold Count</strong></td><td><span class="fld-calc">Count (rollup)</span></td><td>Count of linked Disposition Items where Disposition = Hold. Auto-calculated.</td></tr>
+      <tr><td><strong>Created By</strong></td><td><span class="fld-auto">User (auto)</span></td><td>QB user who created the meeting record. Auto-stamped.</td></tr>
+      <tr><td><strong>Created Date</strong></td><td><span class="fld-auto">Date/Time (auto)</span></td><td>Auto-stamped on record creation.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sh" id="s5b">5B — Disposition Items (DI)</h2>
+  <p class="note">One record per unit reviewed at a meeting. Child of Disposition Meetings. Record ID format: DI-YYYY-###</p>
+
+  <table>
+    <colgroup><col style="width:25%"><col style="width:22%"><col style="width:53%"></colgroup>
+    <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Item ID</strong></td><td><span class="fld-auto">Text (auto)</span></td><td>DI-YYYY-### format. Auto-generated on record creation.</td></tr>
+      <tr><td><strong>Meeting</strong></td><td>Relationship → Disposition Meetings</td><td><span class="fld-req">Required.</span> Links this item to the parent Monday meeting record (DM-YYYY-###).</td></tr>
+      <tr><td><strong>Community</strong></td><td>Relationship → Communities</td><td><span class="fld-req">Required.</span> Top of cascade. Filtered to active communities.</td></tr>
+      <tr><td><strong>Lot</strong></td><td>Relationship → Lots</td><td><span class="fld-req">Required.</span> Filtered dynamically to lots belonging to the selected Community.</td></tr>
+      <tr><td><strong>Asset</strong></td><td>Relationship → Assets</td><td><span class="fld-req">Required.</span> Filtered dynamically to assets on the selected Lot.</td></tr>
+      <tr><td><strong>Lot Status at Review</strong></td><td><span class="fld-calc">Text (formula)</span></td><td>Snapshot of the Lot's current Lot Status at time of review — pulled from the linked Lot record. Read-only. Preserved even if Lot Status changes after meeting.</td></tr>
+      <tr><td><strong>Asset Status at Review</strong></td><td><span class="fld-calc">Text (formula)</span></td><td>Snapshot of the Asset's current Asset Status at time of review — pulled from the linked Asset record. Read-only. Preserved even if Asset Status changes after meeting.</td></tr>
+      <tr><td><strong>Disposition</strong></td><td>Dropdown</td><td>Values: (blank — Pending) / Rehab / Demo / Turn for Sale / Hold / No Action. Defaults to blank. Setting this field to a non-blank value triggers the appropriate automation. <span class="fld-req">Required before advancing Item Status.</span></td></tr>
+      <tr><td><strong>Disposition Notes</strong></td><td>Text (multi-line)</td><td>Optional. Reason for disposition, specific scope notes, or hold details. Required when Disposition = Hold (open item — O-WF003-001).</td></tr>
+      <tr><td><strong>Assigned To</strong></td><td>User</td><td>Optional. QB user responsible for following up on this item (e.g., the Ops rep who will initiate WF002).</td></tr>
+      <tr><td><strong>Item Status</strong></td><td>Dropdown</td><td>Values: Pending Review / Reviewed / Actioned / Closed. Defaults to Pending Review on creation. Drives automations and gate rules.</td></tr>
+      <tr><td><strong>Downstream Record ID</strong></td><td><span class="fld-auto">Text (auto)</span></td><td>Auto-populated by automation with the ID of the downstream record created — e.g., RH-2026-004 for a Rehab disposition. Empty for Hold and No Action.</td></tr>
+      <tr><td><strong>Reviewed Date</strong></td><td><span class="fld-auto">Date (auto)</span></td><td>Auto-stamped when Item Status advances to Reviewed.</td></tr>
+      <tr><td><strong>Actioned Date</strong></td><td><span class="fld-auto">Date (auto)</span></td><td>Auto-stamped when Item Status advances to Actioned.</td></tr>
+      <tr><td><strong>Created By</strong></td><td><span class="fld-auto">User (auto)</span></td><td>QB user who created this Disposition Item. Auto-stamped.</td></tr>
+      <tr><td><strong>Created Date</strong></td><td><span class="fld-auto">Date/Time (auto)</span></td><td>Auto-stamped on record creation.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-amber">
+    <strong>Cascade Logic (Community → Lot → Asset):</strong> All three relationship fields use the same dynamic cascade architecture established in WF001 and WF002 (D-011). Community is selected first; Lot dropdown filters to that community only; Asset dropdown filters to that lot only. Context filter for WF003: no status restriction on Lot or Asset — any recently vacated unit may be under review regardless of current status. The meeting recorder selects the unit and the status snapshot fields capture the current state automatically.
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 6 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s6">
+    <span class="num">Section 06</span>
+    <span class="ttl">Automations</span>
+    <span class="sub">5 automations — A-DR-01 through A-DR-05</span>
+  </div>
+
+  <p class="note">All automations trigger immediately on save (not on a schedule). Timing column below confirms trigger type.</p>
+
+  <table class="auto-table">
+    <colgroup><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:62%"></colgroup>
+    <thead><tr><th>ID</th><th>Trigger</th><th>Timing</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A-DR-01</strong></td>
+        <td>Disposition Item saved with Disposition = Rehab</td>
+        <td><span class="timing-imm">Immediate</span></td>
+        <td>
+          <strong>Create WF002 Rehab Record</strong> — passes Community, Lot, Asset, Meeting Date (from parent DM record), and Disposition Notes to the new Rehab Record. New Rehab Record ID auto-generated (RH-YYYY-###).<br>
+          <strong>Update Lot record:</strong> Lot Status → Lot-In Rehab.<br>
+          <strong>Update Asset record:</strong> Asset Status → Rehab in Process.<br>
+          <strong>Update Disposition Item:</strong> Downstream Record ID = new RH-####; Item Status → Actioned; Actioned Date → today.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>A-DR-02</strong></td>
+        <td>Disposition Item saved with Disposition = Demo</td>
+        <td><span class="timing-imm">Immediate</span></td>
+        <td>
+          <strong>Update Lot record:</strong> Lot Status → Lot-Demo.<br>
+          <strong>Update Asset record:</strong> Asset Status → To Be Demoed.<br>
+          <strong>Send notification to Ops team:</strong> "[Asset ID] at [Community] has been flagged for Demo at the [Meeting Date] Asset Disposition meeting. Lot: [Lot]. Notes: [Disposition Notes]."<br>
+          <strong>Update Disposition Item:</strong> Item Status → Actioned; Actioned Date → today.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>A-DR-03</strong></td>
+        <td>Disposition Item saved with Disposition = Turn for Sale</td>
+        <td><span class="timing-imm">Immediate</span></td>
+        <td>
+          <strong>Update Asset record:</strong> Asset Status → For Sale.<br>
+          <strong>Send notification to Listing team:</strong> "[Asset ID] at [Community] has been approved for sale at the [Meeting Date] Asset Disposition meeting. Lot: [Lot]. Notes: [Disposition Notes]. Please initiate the listing process."<br>
+          <strong>Update Disposition Item:</strong> Item Status → Actioned; Actioned Date → today.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>A-DR-04</strong></td>
+        <td>All Disposition Items for a Disposition Meeting = Actioned or Closed</td>
+        <td><span class="timing-imm">Immediate</span></td>
+        <td>
+          <strong>Update Disposition Meeting record:</strong> Meeting Status → Closed.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>A-DR-05</strong></td>
+        <td>Disposition Item saved with Disposition = Hold or No Action</td>
+        <td><span class="timing-imm">Immediate</span></td>
+        <td>
+          <strong>Update Disposition Item:</strong> Item Status → Closed. No status changes to Lot or Asset record. Record preserved for audit trail.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-green">
+    <strong>A-DR-01 Integration with WF002:</strong> The Rehab Record created by A-DR-01 is a fully formed WF002 record at Stage 1 (Rehab Identified). The meeting recorder does not need to open WF002 separately — the record is created automatically and the Rehab team is notified per WF002 automation A-RH-02 (existing). The WF003 Disposition Item and the WF002 Rehab Record are linked via the Downstream Record ID field for full traceability.
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 7 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s7">
+    <span class="num">Section 07</span>
+    <span class="ttl">Gate Rules</span>
+    <span class="sub">3 hard stops — no exceptions</span>
+  </div>
+
+  <p class="note">Gate rules are enforced at the QB form level and automation level. They are hard stops — the record cannot be saved in a state that violates a gate rule.</p>
+
+  <div class="gate-wrap">
+    <table>
+      <colgroup><col style="width:12%"><col style="width:88%"></colgroup>
+      <thead><tr><th>Gate ID</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>G-DR-01</strong></td>
+          <td><strong>Disposition required before Reviewed status.</strong> Item Status cannot be set to Reviewed (or beyond) unless Disposition is set to a non-blank value (Rehab / Demo / Turn for Sale / Hold / No Action). A unit cannot be marked as reviewed without a disposition decision on record.</td>
+        </tr>
+        <tr>
+          <td><strong>G-DR-02</strong></td>
+          <td><strong>All items must be Actioned or Closed before Meeting can close.</strong> Disposition Meeting Status cannot be manually set to Closed if any linked Disposition Item = Pending Review or Reviewed. Meeting closure is auto-handled by A-DR-04 — manual close override is blocked. This ensures no unit is forgotten at an open meeting.</td>
+        </tr>
+        <tr>
+          <td><strong>G-DR-03</strong></td>
+          <td><strong>No duplicate active Disposition Items for the same Lot in the same meeting.</strong> A Disposition Item cannot be created for a Lot that already has a non-Closed Disposition Item linked to the same Disposition Meeting. If a unit needs to be re-reviewed, the existing item must be closed first or a new meeting must be created.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 8 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s8">
+    <span class="num">Section 08</span>
+    <span class="ttl">Relationships &amp; Downstream Workflows</span>
+  </div>
+
+  <table>
+    <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+    <thead><tr><th>Workflow</th><th>Relationship to WF003</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>WF002 — Rehab</strong></td>
+        <td>Primary downstream. When Disposition = Rehab, A-DR-01 auto-creates a WF002 Rehab Record. Community, Lot, Asset, and Disposition Notes passed automatically. The WF003 Disposition Item links to the created Rehab Record via Downstream Record ID. WF003 provides the official trigger and audit trail for every WF002 Rehab Record created via meeting disposition.</td>
+      </tr>
+      <tr>
+        <td><strong>Demo Workflow (future)</strong></td>
+        <td>Not yet specced. When Disposition = Demo, WF003 sets Lot Status → Lot-Demo and Asset Status → To Be Demoed and notifies Ops. The full Demo execution workflow will be specced separately. WF003 creates the disposition record and status changes; the Demo WF will handle execution tracking.</td>
+      </tr>
+      <tr>
+        <td><strong>WF006 — Listings (future)</strong></td>
+        <td>Not yet specced. When Disposition = Turn for Sale, WF003 sets Asset Status → For Sale and notifies Listing team. The full Listing workflow will be specced separately. WF003 creates the disposition record and initial status; WF006 handles the listing execution.</td>
+      </tr>
+      <tr>
+        <td><strong>Move Out Workflow (future)</strong></td>
+        <td>A completed Move Out record may pre-populate the Lot and Asset fields on a new Disposition Item — the unit appears on the next meeting's agenda automatically. Move Out WF is not yet specced; this integration point is noted for future design.</td>
+      </tr>
+      <tr>
+        <td><strong>Communities Table</strong></td>
+        <td>WF003 Disposition Items use the same Communities reference table as WF001 and WF002. No new community data required.</td>
+      </tr>
+      <tr>
+        <td><strong>Lot Status Table (LS)</strong></td>
+        <td>WF003 automations write to Lot Status on the linked Lot record using the same LS reference table defined in WF002. No additional Lot Status values required for WF003.</td>
+      </tr>
+      <tr>
+        <td><strong>Asset Status Table (AS)</strong></td>
+        <td>WF003 automations write to Asset Status on the linked Asset record using the same AS reference table defined in WF002. Values used: Rehab in Process (Rehab), To Be Demoed (Demo), For Sale (Turn for Sale).</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 9 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s9">
+    <span class="num">Section 09</span>
+    <span class="ttl">Reports &amp; Views</span>
+  </div>
+
+  <p class="note">Standard QB reports to build alongside WF003. All reports are QB-native — no external BI tool required at this stage.</p>
+
+  <table>
+    <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+    <thead><tr><th>Report Name</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>This Week's Meeting</strong></td>
+        <td>Shows the current week's Disposition Meeting and all linked Disposition Items. Default view for the Monday meeting recorder. Columns: Item ID, Community, Lot, Asset, Status at Review, Disposition, Disposition Notes, Item Status, Downstream Record ID.</td>
+      </tr>
+      <tr>
+        <td><strong>All Open Meetings</strong></td>
+        <td>Lists all Disposition Meetings where Meeting Status = Open. Used to confirm no meeting has outstanding unactioned items. Columns: Meeting ID, Meeting Date, Facilitator, Total Units Reviewed, Rehab Count, Demo Count, Turn for Sale Count, Hold Count.</td>
+      </tr>
+      <tr>
+        <td><strong>Disposition History by Community</strong></td>
+        <td>All Disposition Items grouped by Community. Filterable by date range and disposition type. Used for portfolio-level reporting and asset management reviews.</td>
+      </tr>
+      <tr>
+        <td><strong>Rehab Pipeline Source</strong></td>
+        <td>All Disposition Items where Disposition = Rehab. Links through to associated WF002 Rehab Records. Shows disposition date, community, lot, asset, and current WF002 stage.</td>
+      </tr>
+      <tr>
+        <td><strong>Pending Items (Unactioned)</strong></td>
+        <td>All Disposition Items where Item Status = Pending Review or Reviewed. Used to identify any items that have stalled without an outcome. Expected to be empty at end of each meeting week.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 10 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s10">
+    <span class="num">Section 10</span>
+    <span class="ttl">Open Items</span>
+  </div>
+
+  <table class="oi-table">
+    <colgroup><col style="width:14%"><col style="width:56%"><col style="width:15%"><col style="width:15%"></colgroup>
+    <thead><tr><th>Item ID</th><th>Description</th><th>Owner</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>O-WF003-001</strong></td>
+        <td><strong>Hold disposition — notes required?</strong> Should Disposition Notes be a required field when Disposition = Hold? Without a note, there is no record of why the unit was held or when it should be re-reviewed. Recommended: yes, required on Hold. Confirmation needed.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF003-002</strong></td>
+        <td><strong>Meeting date validation — enforce Monday only?</strong> Should QB validate that the Meeting Date field is always a Monday? Enforcing this prevents data entry errors but adds a validation rule to configure. If meetings sometimes occur on other days (e.g., holiday weeks), validation should be a warning rather than a block.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF003-003</strong></td>
+        <td><strong>Agenda pre-population from Move Out?</strong> Should a completed Move Out record automatically add the vacated unit to the next Monday meeting's Disposition Item list? This would require the Move Out workflow to be specced first. Recommended: yes — reduces manual data entry by the meeting recorder. Deferred until Move Out WF is designed.</td>
+        <td>Design dependency</td>
+        <td><span class="status-dep">Pending Move Out WF</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF003-004</strong></td>
+        <td><strong>Notification recipients for Demo and Turn for Sale.</strong> A-DR-02 (Demo) notifies "Ops team" and A-DR-03 (Turn for Sale) notifies "Listing team." Specific QB user(s) or email distribution list for each notification must be confirmed before automations can be configured.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+      <tr>
+        <td><strong>O-WF003-005</strong></td>
+        <td><strong>Units already in WF002 — block duplicate?</strong> G-DR-03 blocks duplicate items within the same meeting. Should QB also block (or warn) when a recorder tries to add a unit that already has an active WF002 Rehab Record — meaning a previous meeting already sent it to rehab? Recommended: warning (not hard block) so recorder can note the status and skip.</td>
+        <td>Austin</td>
+        <td><span class="status-open">Open</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════ SECTION 11 ═══════════════════ -->
+<div class="section-block">
+  <div class="sec-hdr" id="s11">
+    <span class="num">Section 11</span>
+    <span class="ttl">Version History</span>
+  </div>
+
+  <table>
+    <colgroup><col style="width:10%"><col style="width:12%"><col style="width:12%"><col style="width:66%"></colgroup>
+    <thead><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>v1.0</strong></td>
+        <td>08/19/26</td>
+        <td>Abacus AI Agent</td>
+        <td>First issue. Full spec for WF003 Asset Disposition Review: 2 QB tables (Disposition Meetings, Disposition Items), 4 item stages, 5 automations (A-DR-01 through A-DR-05), 3 gate rules (G-DR-01 through G-DR-03), 5 reports, 5 open items. WF002 Rehab integration via A-DR-01 fully documented. Disposition outcomes (Rehab / Demo / Turn for Sale / Hold / No Action) fully specified.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

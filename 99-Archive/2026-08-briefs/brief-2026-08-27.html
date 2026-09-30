@@ -1,0 +1,507 @@
+<title>Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+  :root {
+    --paper:#F4F6F7;
+    --card:#FFFFFF;
+    --ink:#12171B;
+    --muted:#5C666E;
+    --rule:#D8DEE2;
+    --signal:#B45309;
+    --critical:#A32036;
+    --ok:#16794A;
+    --slate:#2F4858;
+    --wash:#EDF1F3;
+
+    --sans:"IBM Plex Sans Condensed","Helvetica Neue",Arial,sans-serif;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0E1317;
+      --card:#161D23;
+      --ink:#E6EAED;
+      --muted:#94A0A8;
+      --rule:#29333B;
+      --signal:#E9A63F;
+      --critical:#F2657C;
+      --ok:#4FBF87;
+      --slate:#9FC0D4;
+      --wash:#1C242B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:#0E1317;
+    --card:#161D23;
+    --ink:#E6EAED;
+    --muted:#94A0A8;
+    --rule:#29333B;
+    --signal:#E9A63F;
+    --critical:#F2657C;
+    --ok:#4FBF87;
+    --slate:#9FC0D4;
+    --wash:#1C242B;
+  }
+
+  * { box-sizing:border-box; }
+
+  body {
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.55;
+    margin:0;
+    padding:28px 18px 72px;
+    -webkit-text-size-adjust:100%;
+  }
+
+  .wrap { max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:30px; }
+
+  /* ---------- masthead ---------- */
+  .mast { display:flex; flex-direction:column; gap:8px; border-bottom:2px solid var(--ink); padding-bottom:14px; }
+  .mast h1 {
+    font-family:var(--sans); font-weight:700; font-size:34px; line-height:1.02;
+    letter-spacing:-0.01em; margin:0; text-wrap:balance;
+  }
+  .mast .date {
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted); font-variant-numeric:tabular-nums;
+  }
+  .mast .standfirst { font-size:16.5px; color:var(--muted); margin:2px 0 0; font-style:italic; }
+
+  /* ---------- section headings ---------- */
+  h2 {
+    font-family:var(--sans); font-weight:700; font-size:13px; letter-spacing:0.13em;
+    text-transform:uppercase; color:var(--slate); margin:0 0 12px; padding-bottom:6px;
+    border-bottom:1px solid var(--rule);
+  }
+  section { display:flex; flex-direction:column; }
+  .stack { display:flex; flex-direction:column; gap:12px; }
+
+  /* ---------- cards ---------- */
+  .card {
+    background:var(--card); border:1px solid var(--rule); border-left:4px solid var(--rule);
+    border-radius:2px; padding:14px 16px; display:flex; flex-direction:column; gap:8px;
+  }
+  .card.crit { border-left-color:var(--critical); }
+  .card.warn { border-left-color:var(--signal); }
+  .card.good { border-left-color:var(--ok); }
+  .card.flat { border-left-color:var(--slate); }
+
+  .card h3 {
+    font-family:var(--sans); font-weight:600; font-size:19.5px; line-height:1.22;
+    margin:0; text-wrap:balance;
+  }
+  .card p { margin:0; font-size:16.5px; }
+  .card p + p { margin-top:2px; }
+
+  .rank {
+    font-family:var(--mono); font-size:11.5px; font-weight:600; letter-spacing:0.08em;
+    color:var(--muted); text-transform:uppercase;
+  }
+
+  /* ---------- quote ---------- */
+  blockquote {
+    margin:2px 0; padding:8px 0 8px 13px; border-left:2px solid var(--rule);
+    font-size:16px; font-style:italic; color:var(--ink);
+  }
+  blockquote cite {
+    display:block; margin-top:6px; font-style:normal; font-family:var(--mono);
+    font-size:11.5px; letter-spacing:0.03em; color:var(--muted);
+  }
+
+  /* ---------- do line ---------- */
+  .do {
+    font-family:var(--sans); font-size:16px; font-weight:500; line-height:1.4;
+    background:var(--wash); border-radius:2px; padding:9px 11px;
+  }
+  .do b { font-weight:700; }
+
+  /* ---------- confidence tags ---------- */
+  .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .tag {
+    font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:0.07em;
+    text-transform:uppercase; border:1px solid var(--rule); border-radius:2px;
+    padding:2px 6px; color:var(--muted); white-space:nowrap;
+  }
+  .tag.v { color:var(--ok); border-color:var(--ok); }
+  .tag.s { color:var(--signal); border-color:var(--signal); }
+  .tag.i { color:var(--muted); }
+
+  /* ---------- schedule ---------- */
+  .sched { display:flex; flex-direction:column; gap:0; }
+  .slot {
+    display:grid; grid-template-columns:78px 1fr; gap:12px;
+    padding:12px 0; border-bottom:1px solid var(--rule);
+  }
+  .slot:first-child { border-top:1px solid var(--rule); }
+  .slot .t {
+    font-family:var(--mono); font-size:13px; font-variant-numeric:tabular-nums;
+    color:var(--slate); font-weight:600; padding-top:2px;
+  }
+  .slot.done .t, .slot.done .s-body { opacity:0.5; }
+  .slot .s-title { font-family:var(--sans); font-weight:600; font-size:17px; line-height:1.25; }
+  .slot .s-meta { font-size:14.5px; color:var(--muted); margin-top:2px; }
+  .slot .s-prep {
+    margin-top:7px; font-size:15px; border-left:3px solid var(--signal);
+    padding:5px 0 5px 10px;
+  }
+  .slot .s-prep b { font-family:var(--sans); font-weight:700; font-size:11.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--signal); display:block; }
+
+  /* ---------- closed list ---------- */
+  .closed { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .closed li { display:grid; grid-template-columns:20px 1fr; gap:9px; font-size:16.5px; }
+  .closed .mark { color:var(--ok); font-family:var(--sans); font-weight:700; line-height:1.5; }
+  .closed b { font-family:var(--sans); font-weight:600; }
+  .closed .why { display:block; color:var(--muted); font-size:15px; margin-top:1px; }
+
+  /* ---------- decisions ---------- */
+  .dec { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; }
+  .dec li {
+    display:grid; grid-template-columns:24px 1fr; gap:9px; align-items:start;
+    padding:12px 0; border-bottom:1px solid var(--rule); font-size:16.5px;
+  }
+  .dec li:first-child { border-top:1px solid var(--rule); }
+  .dec .box { font-family:var(--mono); font-size:19px; color:var(--slate); line-height:1.35; }
+  .dec .lede { font-family:var(--sans); font-weight:600; display:block; }
+  .dec .sub { display:block; color:var(--muted); font-size:15px; margin-top:2px; }
+
+  /* ---------- open list ---------- */
+  .open { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .open li { font-size:15.5px; color:var(--muted); padding-left:15px; position:relative; }
+  .open li::before {
+    content:""; position:absolute; left:0; top:0.62em; width:6px; height:1px; background:var(--muted);
+  }
+  .open b { font-family:var(--sans); font-weight:600; color:var(--ink); }
+
+  /* ---------- misc ---------- */
+  .note {
+    font-size:15px; color:var(--muted); border:1px dashed var(--rule);
+    border-radius:2px; padding:11px 13px;
+  }
+  .note b { font-family:var(--sans); font-weight:600; color:var(--ink); }
+  code {
+    font-family:var(--mono); font-size:0.86em; background:var(--wash);
+    padding:1px 4px; border-radius:2px;
+  }
+  footer {
+    border-top:1px solid var(--rule); padding-top:14px; font-family:var(--mono);
+    font-size:11.5px; line-height:1.7; color:var(--muted); letter-spacing:0.02em;
+  }
+  .scroller { overflow-x:auto; }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="date">Thursday · 27 August 2026 · data current to 2:15 PM ET</div>
+    <h1>Morning Brief</h1>
+    <p class="standfirst">Running mid-day, not at six. Two meetings left and both of them matter.</p>
+  </header>
+
+  <!-- ============ FEEDBACK LOOP ============ -->
+  <section>
+    <h2>The reply loop</h2>
+    <div class="note">
+      <b>No brief reply to act on.</b> A search of the full mailbox for a subject containing
+      &ldquo;Morning Brief&rdquo; returns nothing — this is the first one delivered by email, so
+      there is nothing yet to close on your say-so. From tomorrow, replying to the email with a
+      disposition (&ldquo;done&rdquo;, &ldquo;handled&rdquo;, &ldquo;not now&rdquo;) moves the item
+      and it shows up in the next brief as closed.
+      <span class="tags" style="margin-top:9px;"><span class="tag v">Verified</span></span>
+    </div>
+  </section>
+
+  <!-- ============ CLOSED ============ -->
+  <section>
+    <h2>Closed since yesterday — by your own hand</h2>
+    <ul class="closed">
+      <li>
+        <span class="mark">✓</span>
+        <span><b>George, about skills.</b> Sent 1:36 PM to <code>george@capitalpointins.com</code>,
+        subject &ldquo;Some Skills&rdquo;: <em>&ldquo;Lock it in!&rdquo;</em> plus two Claude skill
+        links.
+        <span class="why">This had been blocked in the ledger on two unknowns — which George, and
+        what &ldquo;skills&rdquo; meant. You answered both by sending it. George is at Capital Point
+        Insurance; skills means Claude Skills. Ledger item 9, closed.</span></span>
+      </li>
+      <li>
+        <span class="mark">✓</span>
+        <span><b>The six BOA account closures and the branch visit.</b> Booked.
+        <span class="why">You told Jon at 12:18 PM: <em>&ldquo;I made an appointment for
+        tomorrow.&rdquo;</em> That lands 8/28 — inside the window Berman asked for. This was the
+        half of his ask that was deliberately kept open when the wire closed on 8/26.</span></span>
+      </li>
+      <li>
+        <span class="mark">✓</span>
+        <span><b>MHVillage charges hitting personal cards.</b> Decided and executed.
+        <span class="why">10:49 AM: <em>&ldquo;I created a virtual card for you both on Ramp so it
+        doesn't hit your individual spend.&rdquo;</em> Melanie confirmed; you closed it out at 10:52.
+        One of yesterday's three open decisions.</span></span>
+      </li>
+      <li>
+        <span class="mark">✓</span>
+        <span><b>Mayflower operating licence — Nora Gosselin's second chase.</b> Answered 10:55 AM
+        with the attachment.</span>
+      </li>
+      <li>
+        <span class="mark">✓</span>
+        <span><b>Royal Oaks eminent domain.</b> Downgraded — Brokaw found it himself at 10:51 AM:
+        <em>&ldquo;CR 510 / 85th Street widening project, FPID 441692-1-22-02.&rdquo;</em>
+        <span class="why">Now a confirm, not a research task.</span></span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ BEFORE NEXT MEETING ============ -->
+  <section>
+    <h2>Before your next meeting — three things</h2>
+    <div class="stack">
+
+      <article class="card crit">
+        <div class="rank">1 · 3:00 PM, in under an hour</div>
+        <h3>Nobody confirmed whether the Jadian call is happening</h3>
+        <p>Jon floated moving it and never got an answer. Last night, 10:46 PM:</p>
+        <blockquote>
+          I'm going to summarize today's call and part of me wants to punt Joe to Friday if he'd have
+          it. Should I listen in on quick base more just to have a pulse
+          <cite>Jon Wyss → Austin, 2026-08-26 22:46 ET</cite>
+        </blockquote>
+        <p>Your 7:54 AM reply — <em>&ldquo;You are more than welcome to&rdquo;</em> — answered the
+        Quickbase half, not the punt. Meanwhile Jon's actual plan for the call is on the record from
+        9:51 PM: send the sales-process friction points to Leslie and Natalie first, <em>&ldquo;so we
+        can use tomorrow's call to talk through actions already taken with joe, to show how focused
+        we are on this.&rdquo;</em> He sent the summary at 12:28 AM.</p>
+        <p class="do"><b>Do:</b> one line to Jon — call stands, or Friday. If it stands, his framing
+        is the right one and it needs your backing in the room.</p>
+        <div class="tags"><span class="tag v">Verified</span><span class="tag i">Both quotes read in full</span></div>
+      </article>
+
+      <article class="card crit">
+        <div class="rank">2 · 4:30 PM, Finance &amp; Accounting EOS</div>
+        <h3>Berman runs the meeting where today's floorplan finding lands</h3>
+        <p>Jon's tie-out went out at 11:55 AM, high importance, to Berman, Bennett, Moe and Justin.
+        The headline number is real money:</p>
+        <blockquote>
+          59 serials appear on more than one row. 46 are full duplicate submissions: the home is
+          already funded at one lender (mostly CountryPlace) and is also sitting as a roughly
+          full-balance pending approval at a second lender (mostly 21st).
+          <cite>Jon Wyss, &ldquo;Floorplan Line Tie-Out&rdquo;, 2026-08-27 11:55 ET</cite>
+        </blockquote>
+        <p>Four minutes later he forwarded it to Demetria with you copied — <em>&ldquo;Yet another
+        thing for David's file&rdquo;</em> — noting Berman <em>&ldquo;created a whole ruckus
+        internally saying we didnt have line capacity to buy homes and pointing fingers.&rdquo;</em>
+        The duplicates are why the line looked full.</p>
+        <p>You are already managing what he sees. 1:38 PM, to Jon, on the JPM signature request:
+        <em>&ldquo;I don't want to give him this but I also don't want to tip him off.&rdquo;</em></p>
+        <p class="do"><b>Decide before 4:30:</b> how much of the tie-out goes on the table in a
+        meeting he organises and Albert sits in. It is a genuine operating fix and a piece of the
+        exit file at the same time — those two want different handling.</p>
+        <div class="tags"><span class="tag v">Verified</span><span class="tag i">Email bodies + Teams read in full</span></div>
+      </article>
+
+      <article class="card crit">
+        <div class="rank">3 · Thirty seconds, any time today</div>
+        <h3>Great Oaks and Lucky Clover are now silent across every channel you have</h3>
+        <p>These are the two items the ledger ranks above everything else on stakes: an active boil
+        water notice with the vendor absent, and a resident who pointed a gun at contractors with
+        Angel alone on site. Neither has a named owner.</p>
+        <p>Yesterday's sweep found nothing in email or Teams. Today closes the last gap: the 8/26
+        construction call ran two full hours and <b>covered both properties by name</b> — and neither
+        the boil water notice nor the gun incident came up. Great Oaks was <em>&ldquo;all homes are
+        set, blocked, and ready&rdquo;</em>; Lucky was permits and septic abandonment.</p>
+        <p class="do"><b>Do:</b> name one person for each, in one line. Vendor status on Great Oaks;
+        trespass and eviction protocol on Lucky Clover. Nine days on the gun incident.</p>
+        <div class="tags"><span class="tag v">Verified — silence confirmed</span><span class="tag s">Single-source — underlying incidents</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section>
+    <h2>Today</h2>
+    <div class="sched">
+
+      <div class="slot done">
+        <div class="t">9:00<br>10:00</div>
+        <div class="s-body">
+          <div class="s-title">Quickbase Discovery Session</div>
+          <div class="s-meta">Ran 68 minutes. Six Quickbase people, plus Zach and Natalie. Done —
+          recurring cadence now set: Tuesdays 10–11, Thursdays 9–10 ET.</div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <div class="t">3:00<br>4:00</div>
+        <div class="s-body">
+          <div class="s-title">Parakeet × Jadian Weekly Check-in</div>
+          <div class="s-meta"><b>External.</b> Joe Cridge and Toby Nelson from Jadian; Jon, Zach,
+          Natalie, Leslie on our side.</div>
+          <div class="s-prep">
+            <b>Prep</b>
+            Two things land in this room. First, confirm with Jon whether the call is happening at
+            all (above). Second — the ledger's number-one open item is a Jadian item: the hard-costs
+            subtotal in the shipped Riverwalk and McGregor reports describes itself as summing
+            &ldquo;sitework through amenities&rdquo; when it sums through personal property. Both
+            reports are already delivered. The disclosure posture has never been decided. A weekly
+            check-in is not where you raise it cold, but decide the posture today — a later discovery
+            cuts directly against the &ldquo;look how responsive we are&rdquo; framing Jon is walking
+            in with.
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <div class="t">4:30<br>5:30</div>
+        <div class="s-body">
+          <div class="s-title">Finance &amp; Accounting EOS</div>
+          <div class="s-meta">Organised by Berman. Zach, Jon, Albert Gano. Agenda as circulated:
+          occupancy dashboard, capex, acquisitions, then tax / audit / new monthly close / FP&amp;A.</div>
+          <div class="s-prep">
+            <b>Prep</b>
+            The floorplan decision above. Also the only room today with Albert in it — his three
+            decisions (DECISION 0, the 21 unnamed people across six security groups, the
+            <code>_Errors</code> freeze) have gone a full week with no written movement, and the
+            blocker underneath all three is that his Full Control access was never actually granted.
+            That is a sentence to Cedrick, not a meeting.
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note" style="margin-top:14px;">Jon also called a 2:20 PM CRM-hygiene working session
+    with Leslie and Auzzi and copied you for visibility — not on your calendar, not yours to attend.</p>
+  </section>
+
+  <!-- ============ NEW ============ -->
+  <section>
+    <h2>New since yesterday</h2>
+    <div class="stack">
+
+      <article class="card warn">
+        <h3>The Berman exit went operational today</h3>
+        <p>Three separate strands moved inside six hours, and none of them are in the vault yet.
+        Demetria received the floorplan write-up for the file at 11:59 AM. A separate
+        &ldquo;Moe Mehmood Statements — Note to File&rdquo; came from her to you at 7:10 AM and you
+        forwarded it to Jon five minutes later. And at 1:48 PM Demetria wrote:
+        <em>&ldquo;Lets surprise him and make the HH a Farewell party.&rdquo;</em></p>
+        <p>Worth holding alongside the conflict already flagged in the vault: the intercompany AR/AP
+        plan assigns Berman five non-delegable roles, including signing the entity list that gates
+        the whole programme. Sequencing that against an exit is still unresolved.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </article>
+
+      <article class="card good">
+        <h3>Belle Haven — plaintiffs' counsel asked for a call this afternoon about a stay</h3>
+        <blockquote>
+          Plaintiffs' counsel e-mailed us this morning asking us for a call this afternoon to discuss
+          a potential stay of the litigation while we negotiate the rent increase piece
+          <cite>Zachary Wallack, Eckert Seamans, 2026-08-27 09:39 ET</cite>
+        </blockquote>
+        <p>You asked at 9:54 — <em>&ldquo;So our strategy is working?&rdquo;</em> — and Wallack
+        answered at 10:14: <em>&ldquo;It appears to be — but let's see how the call goes.&rdquo;</em>
+        Jon: <em>&ldquo;Well played keep us posted!&rdquo;</em> Counsel is carrying it; nothing owed
+        by you before the outcome comes back.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </article>
+
+      <article class="card flat">
+        <h3>The rest of the floorplan finding, beyond the duplicates</h3>
+        <p>29 homes have no floor line row at all and are marked &ldquo;Cash — verify&rdquo;.
+        16 homes carry a lender that disagrees with the floor line. Three homes are floored at
+        CountryPlace but missing from the RM master entirely, and a handful of serials appear in no
+        system of ours. Jon has assigned the lender-facing half to Berman and the RM half to Daniel,
+        Moe and Justin — but wrote the assignments as open questions, not instructions.</p>
+        <p>You replied at 12:52 with the Home Ordering SOP attached: <em>&ldquo;Every issue Jon
+        flagged below traces back to a step in that document being skipped&rdquo;</em> — and added
+        insurance costs as a new leg of the reconciliation.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </article>
+
+      <article class="card flat">
+        <h3>Citrin cleared, and one signature is waiting</h3>
+        <p>Berman reviewed the Royal Palm and Gulf Breeze drafts at 9:55 AM —
+        <em>&ldquo;Updated percentages look good on the updated Gulf return and no notes on my end
+        for RP Austin&rdquo;</em> — so that review is now yours alone, and it sits on the critical
+        path for the FUNDIILP recording question. You sent Fund II LP 2025 distributions at 10:45 AM.
+        Separately, the PSE MM 2025 return arrived at 12:55 PM ready to sign.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </article>
+
+      <article class="card flat">
+        <h3>Smaller, resolved or self-resolving</h3>
+        <p>Uniti sent implementation next steps and opened a Teams channel — the kickoff that
+        produced no written scope yesterday now has one. Cedrick explained the Rent Manager
+        cancellation you had chased for two weeks: a number ported on 28 April that has been billed
+        ever since. Triad's Brightly #923919 came back as a denial and you routed it to Leslie.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ DECISIONS ============ -->
+  <section>
+    <h2>Decisions only you can make</h2>
+    <ul class="dec">
+      <li>
+        <span class="box">☐</span>
+        <span><span class="lede">Jadian at 3:00 — stands, or Friday?</span>
+        <span class="sub">Jon asked last night and has not been answered. Under an hour out.</span></span>
+      </li>
+      <li>
+        <span class="box">☐</span>
+        <span><span class="lede">How much of the floorplan tie-out goes on the table at 4:30.</span>
+        <span class="sub">Berman organises that meeting. Operating fix and exit file want different handling.</span></span>
+      </li>
+      <li>
+        <span class="box">☐</span>
+        <span><span class="lede">Disclosure posture on the Riverwalk / McGregor subtotal.</span>
+        <span class="sub">Errata to Jadian, corrected reissue, or documented internal-only correction. Open since the register was written; 52 further divergences queue behind it.</span></span>
+      </li>
+      <li>
+        <span class="box">☐</span>
+        <span><span class="lede">One named owner each for Great Oaks and Lucky Clover.</span>
+        <span class="sub">Both currently unassigned. Both outrank everything else on the ledger by stakes.</span></span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ STILL OPEN ============ -->
+  <section>
+    <h2>Still open, not urgent</h2>
+    <ul class="open">
+      <li><b>Albert's Full Control access</b> — never granted. Cedrick's queue is moving; Albert is not on it. One message fixes it and unblocks three stalled decisions.</li>
+      <li><b>Lamberton Lake</b> — 24 days of the self-imposed 90 gone, no broker contact since 3 August. Draft to Dustin Wilmer is written and waiting on a date you pick.</li>
+      <li><b>Plaintext credential store</b> — <code>A2Z Utility Logins.xlsx</code> on company storage, plus a live card number read aloud in the Post River Oaks Plaud recording. Rotate, then delete.</li>
+      <li><b>License &amp; Permits</b> — recommendation is Ops, not Asset Management; interview Melanie in week one. Lot 59 demo permit still sitting in Incomplete Submittal with no named owner.</li>
+      <li><b>Jon's 13 standardization decisions</b> — no movement. Everything downstream queues behind them.</li>
+      <li><b>Cambridge</b> — the $242,942.16 payable and the binary final-return call. You flagged it as priority; it is still a two-option decision that only gets more expensive.</li>
+      <li><b>Fund II LP</b> — Q2-versus-Q4 defeasance timing is an open disagreement between you and Berman, and the Q2 consolidated balance sheet has not been produced.</li>
+      <li><b>Belmart</b> — bank package to lenders; separately, the injured employee at lot 35 and the unsanded handrails.</li>
+      <li><b>Hensdale Club</b> — membership application, unfinished.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Sources — Outlook inbox and sent items 8/26 23:00 → 8/27 14:15 ET · Teams chat 8/27 ·
+    Graph calendar, 3 events · Plaud notes <code>c27bbc61</code> (8/26 construction, 2h) and
+    <code>cacb09c9</code> (8/27 Quickbase, 68m).<br>
+    Every candidate finding was diffed against <code>99-archive/</code> and
+    <code>01-now/open-loops.md</code> before it appeared here. Closed items were not re-raised.<br>
+    Blind spot, unchanged — Teams meeting transcripts are disabled tenant-wide, so any meeting
+    without a Plaud recording is invisible. &ldquo;No movement&rdquo; here always means no
+    <em>written</em> movement.<br>
+    Reply to the email that carried this link with any disposition and tomorrow's brief will pick it up.
+  </footer>
+
+</div>

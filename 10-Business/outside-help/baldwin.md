@@ -1,0 +1,41 @@
+# Baldwin
+
+**What this is:** Parakeet's insurance broker since March 2026, replacing IOA as part of a platform-wide insurance RFP.
+
+**Status:** current, 2026-09-22. The Brunswick incident and the first notice of loss question added by the Page Update; the workers comp visibility fact is as of 2026-09-15 and the rest of the page as of 2026-08-30. Extended 2026-09-26: a dated block from the closes of 2026-09-22 to 09-25 was added by the Page Update; nothing above it was changed.
+
+## The facts
+- **What they supply:** insurance brokerage across the platform — the property tower, general and excess liability, and the corporate and park-owned-home lines. Confirmed by the owner on 2026-08-30.
+- **The move: "COMPLETE PLATFORM-WIDE INSURANCE RFP – Moving from IOA to Baldwin in March to better serve platform size & growth"** (March 2026 board deck, Accounting & Finance 2026 goals). The broker change and the RFP are one initiative, not two.
+- **Who uses it:** David Berman owns the relationship internally. **"Complete insurance transition seamlessly and implement better tracking" was his Q1 2026 rock.** The March executive strategy deck's finance slide still carries "Insurance transition - complete and tracking properly across all entities" as an open item.
+- **Why it mattered: insurance ran 22% over budget in 2025** — $873,853 actual against $715,273 budget, **$158,580 over** — and the board deck states the driver: "The increase in insurance expense was driven by us **electing higher coverage (agency req) levels – particularly commercial property.**" The over-run came from an agency-required election, which is exactly what a broker RFP tests.
+- **The programme Baldwin inherited, per the insurance policy inventory dated 2025-06-17 with the portfolio renewal effective 2025-04-22:** a **four-layer property tower — Layer 1 $5M, Layer 2 $5M, Layer 3 $20M, Layer 4 $22M** — plus TRIA on property, general liability, TRIA on GL, and excess liability, allocated per building and per entity across the portfolio.
+- Carriers named in that inventory: Westchester, Axis, James River and RSUI across the property layers; **Fidelis** (TRIA property & GL), **Ategrity Specialty** (general liability), **Evanston** (excess liability); and on the corporate lines **Travelers** (business auto), **Employers Compensation Ins Co** (workers comp, pay-as-you-go), **USLI** (property & GL on two leased offices, required by lease), **Peleus** (E&O / D&O, covered by the Jadian master policy) and **Crum & Forster** (corporate cyber).
+- **Park-owned homes carry their own policy:** a **Lloyd's FL** home policy with an insurable value and premium broken out **per unit across roughly 145 home rows**, held in Parakeet Home Sales LLC and the community entities.
+- **How critical: high.** Insurance is a lender covenant, a lease requirement on the offices, and the gate on Parakeet's own vendor process — SOP 300 will not let an invoice be paid without a **current Certificate of Insurance** on file, and SOP 200 will not let a demo contractor be engaged without one. A broker is replaceable in principle; replacing one mid-programme across ~78 entities, a four-layer tower and a per-unit home schedule is months of work, and a lapse anywhere in it is a covenant problem.
+- **Insurance also sits inside the operating processes.** SOP 001 has Accounting activate insurance after delivery and send a status notification **every 30 days** until permanent transition or closure. SOP 004 makes "insurance updated" one of Accounting's three confirmations before an asset can be closed out. SOP 108 has the Director of Operations decide whether an incident triggers the insurance / property damage claim process.
+- **Known problems:** SOP 108's downstream is **"[TBD — Insurance / Property Damage Claim Process]"** and the related-resources entry repeats "[TBD — SOP name/link]." **The insurance feed — the reason incident reporting exists — has no downstream SOP.** Incident Reporting is also still one of the seven Tier 1 red rows on the tracker despite the SOP being finished.
+- The only insurance inventory in the vault is **dated 2025-06-17 and effective 2025-04-22 — the IOA-era programme.** Nothing post-transition is filed here, so the current Baldwin-placed programme, its carriers and its renewal dates are not documented in this vault. That is the "better tracking" half of the rock, still open.
+- Insurance also appears as a 2026 budget assumption rather than a settled cost — the JREFII commentary rebudgets rental income, taxes and insurance specifically because the acquired properties have limited history.
+
+- **The handover from the prior arrangement lost HR its view of the workers comp policy, and nobody noticed for six months.** Demetria said on 2026-09-14 that she can no longer see the Parakeet workers compensation breakdown since the Baldwin Group took over from the arrangement Tom Skwiat had set up, and she found out because she needed it, not because anyone checked. `TD-0652`. **The general version matters more than the instance**: when a broker or vendor relationship changes hands, no step here re-establishes the internal access that went with the old one. The close asked who owns that step twice and it was dropped unanswered.
+- **Added 2026-09-22 by the Page Update.** **The management liability call moved from 2026-09-21 to 2026-09-22 at 16:00 ET for the holiday, and a live incident now sits behind it.** A tree destroyed a resident couple's car at Brunswick Estates on the evening of 2026-09-17; as of the 2026-09-21 close the carrier had no notice on the record, no arborist report existed, and the couple had spoken to the press (`TD-0681`). **The question the closes asked twice and nobody answered: who tells the carrier and how fast.** `70-Operations/sops/108-incident-reporting.md` names the Director of Operations as the person who decides whether an incident triggers the claim process, and marks the claim process itself TBD; no window in hours exists anywhere. The broker is the natural place to ask what the policy actually requires for first notice of loss, and the portfolio question under it, tree work done with no arborist assessment on file, is `KP-0121`. Separately, Berman dropped Baldwin from the Triad inventory insurance thread on 2026-09-17 as not relevant; the Triad method is on `10-Business/vendors/triad.md`.
+
+## Claims and the dealer licence certificate, 2026-09-21 to 09-25
+
+*Added 2026-09-26 by the Page Update from the daily closes of 2026-09-22 to 09-25 (`00-Meta/daily-close/2026-09-22.md` to `2026-09-25.md`). Confidence labels are the closes' own; the primary messages were not re-opened this run. Figures in `00-Meta/numbers-ledger.md`.*
+
+- **Shady Acres claim:** Baldwin named Zurich on 2026-09-21 and offered to file; Natalie asked Baldwin to report it on 2026-09-22. Zurich's document request was answered in full 2026-09-25. Baldwin is the broker, not the carrier. `KP-0121`.
+- **The Florida dealer licence expires 2026-09-30 and Baldwin holds the only piece left.** FLHSMV rejected the prior certificate of insurance; Austin told Baldwin at 15:38 ET on 2026-09-24 and asked how to request these earlier in future. **As of 2026-09-25 the corrected COI had not arrived**; Baldwin wrote that day about a management liability package instead. `TD-0707`.
+- **Management liability call held 2026-09-22 at 16:00 ET.** Employment practices liability is being priced (`TD-0715`); why is kept off this page.
+
+## Decisions
+- None recorded yet.
+
+## Sources
+- [[80-Finance/board/Parakeet - Board Presentation 2026-03 vFINAL.pdf]] — the IOA-to-Baldwin move in March, and the 22% / $158,580 insurance over-run and its stated cause.
+- [[80-Finance/planning/2026-executive-strategy/2026 Rocks & KPIs.xlsx]] — David Berman's Q1 2026 rock, "Complete insurance transition seamlessly and implement better tracking."
+- Austin, in the Structure Interview, 2026-08-30. The pre-transition programme detail is from `99-Archive/rock-processes/David/MASTER Insurance Policy Inventory.xlsx`.
+- [[00-Meta/daily-close/2026-09-14]] — Demetria's message and `TD-0652`. Added 2026-09-15.
+- [[00-Meta/daily-close/2026-09-21]] — the Baldwin call moved and the incident position; `00-Meta/daily-close/2026-09-19.md` for the incident itself. Added 2026-09-22.
+

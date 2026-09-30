@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home Sales Process – Swim-Lane Flowchart</title>
+<style>
+  body { font-family: Calibri, Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 20px; }
+  h1 { color: #1F3864; margin: 0 0 4px; font-size: 22px; }
+  .sub { color: #1E5631; font-size: 14px; margin: 0 0 6px; font-weight: bold; }
+  .draft { background: #FFF3CD; border: 1px solid #BF8F00; color: #856404; padding: 6px 14px; font-size: 12px; margin-bottom: 12px; display: inline-block; border-radius: 4px; }
+  .wrap { overflow-x: auto; border: 1px solid #ccc; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .legend { margin-top: 14px; display: flex; gap: 18px; flex-wrap: wrap; background: white; padding: 10px 14px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; align-items: center; }
+  .li { display: flex; align-items: center; gap: 5px; }
+</style>
+</head>
+<body>
+<h1>Operational Procedure: Home Sales Process</h1>
+<div class="sub">Parakeet Communities · Sales SOP</div>
+<div class="draft">⚠ DRAFT — For Review Only · Not Yet Approved · July 2, 2026 · Author: Natalie Magurne</div>
+<div class="wrap"><svg id="chart" xmlns="http://www.w3.org/2000/svg" style="display:block;"></svg></div>
+<div class="legend">
+  <strong>Legend:</strong>
+  <div class="li"><svg width="20" height="20"><ellipse cx="10" cy="10" rx="9" ry="9" fill="#1E5631"/></svg> Start / End</div>
+  <div class="li"><svg width="22" height="20"><rect x="1" y="4" width="20" height="12" rx="3" fill="#DDEEFF" stroke="#2196F3" stroke-width="1.5"/></svg> Task</div>
+  <div class="li"><svg width="22" height="22"><polygon points="11,1 21,11 11,21 1,11" fill="#FFF9C4" stroke="#BF8F00" stroke-width="1.5"/></svg> Decision</div>
+  <div class="li"><svg width="22" height="20"><rect x="1" y="4" width="20" height="12" rx="3" fill="#FFCDD2" stroke="#C00000" stroke-width="1.5"/></svg> IMPORTANT / Denied</div>
+  <div class="li"><svg width="22" height="20"><rect x="1" y="5" width="20" height="10" rx="5" fill="#BBDEFB" stroke="#0070C0" stroke-width="1.5"/></svg> Handoff</div>
+  <div class="li"><svg width="30" height="14"><line x1="0" y1="7" x2="24" y2="7" stroke="#FF6F00" stroke-width="2" stroke-dasharray="4,2"/><polygon points="22,4 30,7 22,10" fill="#FF6F00"/></svg> Rework</div>
+  <div class="li"><svg width="30" height="14"><line x1="0" y1="7" x2="24" y2="7" stroke="#0070C0" stroke-width="2" stroke-dasharray="4,2"/><polygon points="22,4 30,7 22,10" fill="#0070C0"/></svg> Skip (Cash)</div>
+  <div class="li"><svg width="30" height="14"><line x1="0" y1="7" x2="24" y2="7" stroke="#1E5631" stroke-width="2"/><polygon points="22,4 30,7 22,10" fill="#1E5631"/></svg> Approved</div>
+  <div class="li"><svg width="30" height="14"><line x1="0" y1="7" x2="24" y2="7" stroke="#C00000" stroke-width="2"/><polygon points="22,4 30,7 22,10" fill="#C00000"/></svg> Denied</div>
+</div>
+<script>
+const LANE_H = 85, HEADER_H = 28, LANE_LBL_W = 175, COL = 115, NODE_W = 110, NODE_H = 48;
+const DIAG_H = 85;
+const NAVY='#1F3864', GREEN='#1E5631', WHITE='#FFFFFF', RED='#C00000', BLUE='#0070C0', AMBER='#BF8F00', GRAY='#555';
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+const LANES = [
+  { name:'Person Handling Sale',       bg:'#EFF8FF' },
+  { name:'Regional Manager',           bg:'#F5F0FF' },
+  { name:'Director of Operations',     bg:'#F0FFF4' },
+  { name:'Director of Sales',          bg:'#FFFBF0' },
+  { name:'Buyer / Lender',             bg:'#FFF0F5' },
+  { name:'Resident Relations Spec.',   bg:'#F0FFFE' },
+  { name:'Operations Coordinator',     bg:'#F8FFF0' },
+  { name:'Finance / Accounting',       bg:'#F5F0FF' },
+  { name:'Community Manager',          bg:'#FFF8F0' },
+];
+const NL = LANES.length;
+const ly = l => HEADER_H + l * LANE_H + LANE_H / 2;
+const DX = LANE_LBL_W;
+const cx = col => DX + col * COL;
+const DY_TOP = HEADER_H + NL * LANE_H;
+const DY = DY_TOP + DIAG_H / 2;
+const REWORK_Y = DY_TOP + DIAG_H + 15;
+const SVG_H = DY_TOP + DIAG_H + 45;
+const SVG_W = DX + 38 * COL + 60;
+
+const PHASES = [
+  { lbl:'Phase 1: Offer & Approval',         x1:0,    x2:7.5,  bg:'#EBF5FB' },
+  { lbl:'Phase 2: Financing Determination',  x1:7.5,  x2:14.5, bg:'#F5EEF8' },
+  { lbl:'Phase 3: Application & Deposit',    x1:14.5, x2:22.5, bg:'#FFFDE7' },
+  { lbl:'Phase 4: Closing Package Prep.',    x1:22.5, x2:30.5, bg:'#FEF9E7' },
+  { lbl:'Phase 5: Closing Execution',        x1:30.5, x2:38,   bg:'#EAFAF1' },
+];
+
+// type: start|end|task|decision|denied|handoff
+// lane: 0-8 or 'D' (denied row)
+const NODES = [
+  // Phase 1
+  { id:'start', t:'start',    col:0,    lane:0, lbl:'START' },
+  { id:'n1',    t:'task',     col:1.5,  lane:0, lbl:'Submit PSA\n(Fastform/Jotform)' },
+  { id:'n2',    t:'task',     col:3,    lane:1, lbl:'Review Offer' },
+  { id:'n3',    t:'task',     col:4,    lane:2, lbl:'Review &\nForward Offer' },
+  { id:'n4',    t:'decision', col:5.2,  lane:3, lbl:'Offer\nApproved?' },
+  { id:'n5',    t:'task',     col:6.5,  lane:0, lbl:'Update Listing\nto Pending' },
+  { id:'d1',    t:'denied',   col:5.2,  lane:'D', lbl:'DENIED · Notify Team\nUpdate Prospect in RM' },
+  // Phase 2
+  { id:'n6',    t:'decision', col:8.5,  lane:4, lbl:'Cash or\nFinance?' },
+  { id:'n7',    t:'task',     col:10,   lane:4, lbl:'Buyer Works\nwith Lender' },
+  { id:'n8',    t:'task',     col:11.5, lane:4, lbl:'Lender Submits\nPaperwork' },
+  { id:'n9',    t:'decision', col:13,   lane:4, lbl:'Financing\nApproved?' },
+  { id:'d2',    t:'denied',   col:13,   lane:'D', lbl:'DENIED · Notify Team\nRefund Deposit · Update RM' },
+  // Phase 3
+  { id:'n10',   t:'task',     col:15,   lane:0, lbl:'Send Application\nLink to Buyer' },
+  { id:'n11',   t:'task',     col:16.5, lane:4, lbl:'Complete\nApplication' },
+  { id:'n12',   t:'decision', col:18,   lane:5, lbl:'Background &\nCredit Passed?' },
+  { id:'d3',    t:'denied',   col:18,   lane:'D', lbl:'DENIED · CM Works w/ Buyer\nIf Unresolved → Refund · End' },
+  { id:'n13',   t:'task',     col:19.5, lane:0, lbl:'Collect Deposit\n(within 24 hrs)', imp:true },
+  { id:'n14',   t:'task',     col:21,   lane:0, lbl:'Communicate\nAccepted Offer' },
+  // Phase 4
+  { id:'n15',   t:'task',     col:23,   lane:6, lbl:'Prepare Closing\nDocuments' },
+  { id:'n16',   t:'task',     col:24.2, lane:6, lbl:'Send Package\nfor Review' },
+  { id:'n17',   t:'task',     col:25.4, lane:7, lbl:'Calculate\nProrations' },
+  { id:'n18',   t:'task',     col:26.6, lane:7, lbl:'Confirm Wire Info\n[IMPORTANT]', imp:true },
+  { id:'n19',   t:'decision', col:28,   lane:3, lbl:'Package\nApproved?' },
+  { id:'n20',   t:'task',     col:29.5, lane:3, lbl:'Update\nMRB Status' },
+  // Phase 5
+  { id:'n21',   t:'task',     col:31,   lane:6, lbl:'Generate\nE-Sig Package' },
+  { id:'n22',   t:'task',     col:32.2, lane:6, lbl:'Send E-Sig\nto Buyer' },
+  { id:'n23',   t:'task',     col:33.4, lane:4, lbl:'Sign Closing\nDocuments' },
+  { id:'n24',   t:'task',     col:34.6, lane:6, lbl:'Save to\nSharePoint' },
+  { id:'n25',   t:'handoff',  col:35.8, lane:6, lbl:'Send Files to\nCommunity [HANDOFF]' },
+  { id:'n25b',  t:'task',     col:35.8, lane:8, lbl:'CM: Initiate Move\nIn / Move Out' },
+  { id:'n26',   t:'task',     col:37,   lane:6, lbl:'Update Asset\nin Rent Manager' },
+  { id:'end',   t:'end',      col:37,   lane:6, lbl:'END' },
+];
+
+const EDGES = [
+  { f:'start',t:'n1',  ec:'normal' },
+  { f:'n1',  t:'n2',  ec:'normal' },
+  { f:'n2',  t:'n3',  ec:'normal' },
+  { f:'n3',  t:'n4',  ec:'normal' },
+  { f:'n4',  t:'n5',  ec:'yes',   lb:'YES' },
+  { f:'n4',  t:'d1',  ec:'no',    lb:'NO' },
+  { f:'n5',  t:'n6',  ec:'normal' },
+  { f:'n6',  t:'n7',  ec:'no',    lb:'Finance' },
+  { f:'n6',  t:'n10', ec:'skip',  lb:'Cash ↓' },
+  { f:'n7',  t:'n8',  ec:'normal' },
+  { f:'n8',  t:'n9',  ec:'normal' },
+  { f:'n9',  t:'n10', ec:'yes',   lb:'YES' },
+  { f:'n9',  t:'d2',  ec:'no',    lb:'NO' },
+  { f:'n10', t:'n11', ec:'normal' },
+  { f:'n11', t:'n12', ec:'normal' },
+  { f:'n12', t:'n13', ec:'yes',   lb:'YES' },
+  { f:'n12', t:'d3',  ec:'no',    lb:'NO' },
+  { f:'n13', t:'n14', ec:'normal' },
+  { f:'n14', t:'n15', ec:'normal' },
+  { f:'n15', t:'n16', ec:'normal' },
+  { f:'n16', t:'n17', ec:'normal' },
+  { f:'n17', t:'n18', ec:'normal' },
+  { f:'n18', t:'n19', ec:'normal' },
+  { f:'n19', t:'n20', ec:'yes',   lb:'YES' },
+  { f:'n19', t:'n15', ec:'rework',lb:'Revisions' },
+  { f:'n20', t:'n21', ec:'normal' },
+  { f:'n21', t:'n22', ec:'normal' },
+  { f:'n22', t:'n23', ec:'normal' },
+  { f:'n23', t:'n24', ec:'normal' },
+  { f:'n24', t:'n25', ec:'normal' },
+  { f:'n25', t:'n25b',ec:'normal' },
+  { f:'n25', t:'n26', ec:'normal' },
+  { f:'n26', t:'end', ec:'normal' },
+];
+
+// ── Build SVG ─────────────────────────────────────────────────────────────────
+const svg = document.getElementById('chart');
+svg.setAttribute('width', SVG_W);
+svg.setAttribute('height', SVG_H);
+
+function mk(tag, attrs) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  return e;
+}
+function txt(parent, x, y, lines, size=10, fill=NAVY, bold=false) {
+  if (typeof lines === 'string') lines = lines.split('\n');
+  const n = lines.length;
+  lines.forEach((line, i) => {
+    const dy = (i - (n-1)/2) * (size + 3);
+    const t = mk('text', { x, y: y+dy, 'text-anchor':'middle', 'dominant-baseline':'middle',
+      'font-size':size, 'font-family':'Calibri,Arial,sans-serif', fill, 'font-weight':bold?'bold':'normal' });
+    t.textContent = line;
+    parent.appendChild(t);
+  });
+}
+
+// Groups
+const gBg = mk('g',{}), gEdge = mk('g',{}), gNode = mk('g',{});
+svg.appendChild(gBg); svg.appendChild(gEdge); svg.appendChild(gNode);
+
+// Arrowhead markers
+const defs = mk('defs',{});
+[['arr',GRAY],['arr-yes',GREEN],['arr-no',RED],['arr-rework','#FF6F00'],['arr-skip',BLUE]].forEach(([id,col])=>{
+  const m = mk('marker',{id,markerWidth:8,markerHeight:6,refX:7,refY:3,orient:'auto'});
+  const p = mk('polygon',{points:'0,0 8,3 0,6',fill:col});
+  m.appendChild(p); defs.appendChild(m);
+});
+svg.insertBefore(defs, svg.firstChild);
+
+// Phase backgrounds
+PHASES.forEach(p => {
+  const px = cx(p.x1), pw = (p.x2-p.x1)*COL;
+  gBg.appendChild(mk('rect',{x:px, y:0, width:pw, height:HEADER_H, fill:p.bg}));
+  gBg.appendChild(mk('rect',{x:px, y:HEADER_H, width:pw, height:NL*LANE_H, fill:p.bg, opacity:'0.45'}));
+  const t = mk('text',{x:px+pw/2, y:HEADER_H/2, 'text-anchor':'middle','dominant-baseline':'middle',
+    'font-size':11,'font-family':'Calibri,Arial,sans-serif','font-weight':'bold',fill:NAVY});
+  t.textContent = p.lbl; gBg.appendChild(t);
+  // Phase separator line
+  gBg.appendChild(mk('line',{x1:px,y1:0,x2:px,y2:DY_TOP,stroke:'#aaa','stroke-width':'1','stroke-dasharray':'4,3'}));
+});
+
+// Lane rows
+LANES.forEach((lane, i) => {
+  const y = HEADER_H + i*LANE_H;
+  gBg.appendChild(mk('rect',{x:DX,y,width:SVG_W-DX,height:LANE_H,fill:lane.bg,stroke:'#ddd','stroke-width':'0.5'}));
+  gBg.appendChild(mk('rect',{x:0,y,width:LANE_LBL_W,height:LANE_H,fill:NAVY}));
+  // Split label into up to 2 lines
+  const words = lane.name.split(' ');
+  const mid = Math.ceil(words.length/2);
+  const l1 = words.slice(0,mid).join(' '), l2 = words.slice(mid).join(' ');
+  const base = y + LANE_H/2 + (l2?-7:0);
+  [l1,l2].filter(Boolean).forEach((line,li)=>{
+    const t = mk('text',{x:LANE_LBL_W/2, y:base+li*14, 'text-anchor':'middle','dominant-baseline':'middle',
+      'font-size':10,'font-family':'Calibri,Arial,sans-serif','font-weight':'bold',fill:WHITE});
+    t.textContent = line; gBg.appendChild(t);
+  });
+});
+
+// Denied row
+gBg.appendChild(mk('rect',{x:DX,y:DY_TOP,width:SVG_W-DX,height:DIAG_H,fill:'#FFEBEE',stroke:'#FFCDD2','stroke-width':'0.5'}));
+gBg.appendChild(mk('rect',{x:0,y:DY_TOP,width:LANE_LBL_W,height:DIAG_H,fill:RED}));
+const dt = mk('text',{x:LANE_LBL_W/2,y:DY,'text-anchor':'middle','dominant-baseline':'middle',
+  'font-size':10,'font-family':'Calibri,Arial,sans-serif','font-weight':'bold',fill:WHITE});
+dt.textContent = 'Process End / Denied'; gBg.appendChild(dt);
+
+// Horizontal grid lines
+for(let i=0;i<=NL;i++){
+  const y=HEADER_H+i*LANE_H;
+  gBg.appendChild(mk('line',{x1:0,y1:y,x2:SVG_W,y2:y,stroke:'#ccc','stroke-width':'0.5'}));
+}
+
+// Node lookup & position helper
+const nmap = {};
+NODES.forEach(n=>nmap[n.id]=n);
+function nxy(n){
+  return { x:cx(n.col), y: n.lane==='D' ? DY : ly(n.lane) };
+}
+
+// Edges
+function edgeStroke(ec){ return {normal:GRAY,yes:GREEN,no:RED,rework:'#FF6F00',skip:BLUE}[ec]||GRAY; }
+function mkr(ec){ return `url(#${{normal:'arr',yes:'arr-yes',no:'arr-no',rework:'arr-rework',skip:'arr-skip'}[ec]||'arr'})`; }
+
+EDGES.forEach(e=>{
+  const fn=nmap[e.f], tn=nmap[e.t];
+  if(!fn||!tn) return;
+  const fp=nxy(fn), tp=nxy(tn);
+  const col=edgeStroke(e.ec);
+  const dashed=e.ec==='rework'||e.ec==='skip';
+  let d;
+  if(Math.abs(fp.y-tp.y)<4){
+    d=`M${fp.x} ${fp.y} L${tp.x} ${tp.y}`;
+  } else if(e.ec==='rework'){
+    d=`M${fp.x} ${fp.y} L${fp.x} ${REWORK_Y} L${tp.x} ${REWORK_Y} L${tp.x} ${tp.y}`;
+  } else {
+    const mx=(fp.x+tp.x)/2;
+    d=`M${fp.x} ${fp.y} C${mx} ${fp.y},${mx} ${tp.y},${tp.x} ${tp.y}`;
+  }
+  gEdge.appendChild(mk('path',{d,fill:'none',stroke:col,'stroke-width':'1.5',
+    'stroke-dasharray':dashed?'6,3':'none','marker-end':mkr(e.ec)}));
+  if(e.lb){
+    const lx=(fp.x+tp.x)/2, ly2=(fp.y+tp.y)/2;
+    const bg=mk('rect',{x:lx-22,y:ly2-9,width:44,height:18,fill:'white',opacity:'0.85',rx:3});
+    const lt=mk('text',{x:lx,y:ly2,'text-anchor':'middle','dominant-baseline':'middle',
+      'font-size':9,'font-family':'Calibri,Arial,sans-serif',fill:col,'font-weight':'bold'});
+    lt.textContent=e.lb; gEdge.appendChild(bg); gEdge.appendChild(lt);
+  }
+});
+
+// Nodes
+NODES.forEach(n=>{
+  const {x,y}=nxy(n);
+  const lines=n.lbl.split('\n');
+  const g=mk('g',{});
+  if(n.t==='start'||n.t==='end'){
+    g.appendChild(mk('ellipse',{cx:x,cy:y,rx:38,ry:20,fill:GREEN,stroke:'#145A32','stroke-width':'1.5'}));
+    txt(g,x,y,n.lbl,11,WHITE,true);
+  } else if(n.t==='decision'){
+    const s=34;
+    g.appendChild(mk('polygon',{points:`${x},${y-s} ${x+s*1.3},${y} ${x},${y+s} ${x-s*1.3},${y}`,
+      fill:'#FFF9C4',stroke:AMBER,'stroke-width':'1.5'}));
+    txt(g,x,y,lines,9,'#5D4037');
+  } else if(n.t==='denied'){
+    const w=NODE_W+10,h=NODE_H+4;
+    g.appendChild(mk('rect',{x:x-w/2,y:y-h/2,width:w,height:h,rx:4,fill:'#FFCDD2',stroke:RED,'stroke-width':'2'}));
+    txt(g,x,y,lines,9,RED,true);
+  } else if(n.t==='handoff'){
+    const w=NODE_W+10,h=34;
+    g.appendChild(mk('rect',{x:x-w/2,y:y-h/2,width:w,height:h,rx:h/2,fill:'#BBDEFB',stroke:BLUE,'stroke-width':'1.5'}));
+    txt(g,x,y,lines,9,BLUE,true);
+  } else {
+    const fill=n.imp?'#FFCDD2':'#DDEEFF', stroke=n.imp?RED:'#2196F3';
+    g.appendChild(mk('rect',{x:x-NODE_W/2,y:y-NODE_H/2,width:NODE_W,height:NODE_H,rx:5,fill,stroke,'stroke-width':'1.5'}));
+    txt(g,x,y,lines,9.5,n.imp?RED:NAVY);
+  }
+  gNode.appendChild(g);
+});
+
+// Footer
+const ft=mk('text',{x:DX+10,y:SVG_H-6,'font-size':9,'font-family':'Calibri,Arial,sans-serif',fill:'#999'});
+ft.textContent='DRAFT — Parakeet Communities · Home Sales Process SOP · July 2, 2026';
+svg.appendChild(ft);
+</script>
+</body>
+</html>

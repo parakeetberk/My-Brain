@@ -1,0 +1,2 @@
+The Demo to Infill workflow is drafted in Lucid (docs: '200 Demo to infill' and '200a_Demo to infill' in the shared Lucid folder).
+Export the final version to PDF and drop it in this folder when approved.

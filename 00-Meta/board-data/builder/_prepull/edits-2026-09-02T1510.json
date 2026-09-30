@@ -1,0 +1,384 @@
+{
+ "CM-22": {
+  "community": {
+   "from": "",
+   "to": "Geiger Key RV Resort",
+   "ts": "2026-09-01 15:32",
+   "state": "actioned"
+  }
+ },
+ "PR-0013": {
+  "community": {
+   "from": "Muskegon Hill",
+   "to": "",
+   "ts": "2026-09-01 15:33",
+   "state": "actioned"
+  }
+ },
+ "PR-0019": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 15:34",
+   "state": "actioned"
+  }
+ },
+ "PR-0022": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Demetria Loukas",
+   "ts": "2026-09-01 15:35",
+   "state": "actioned"
+  }
+ },
+ "PR-0025": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Team",
+   "ts": "2026-09-01 15:35",
+   "state": "actioned"
+  }
+ },
+ "PR-0026": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Natalie Magurne",
+   "ts": "2026-09-01 15:35",
+   "state": "actioned"
+  }
+ },
+ "PR-0027": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "John Clark",
+   "ts": "2026-09-01 15:36",
+   "state": "actioned"
+  }
+ },
+ "PR-0029": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 15:37",
+   "state": "actioned"
+  }
+ },
+ "PR-0030": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 15:38",
+   "state": "actioned"
+  }
+ },
+ "PD-02": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 15:47",
+   "state": "actioned"
+  },
+  "category": {
+   "from": "Finance",
+   "to": "People",
+   "ts": "2026-09-01 20:57",
+   "state": "actioned"
+  }
+ },
+ "PD-01": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Jon Wyss",
+   "ts": "2026-09-01 15:48",
+   "state": "actioned"
+  },
+  "due": {
+   "from": "",
+   "to": "2026-09-30",
+   "ts": "2026-09-01 20:57",
+   "state": "actioned"
+  }
+ },
+ "PD-10": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Team",
+   "ts": "2026-09-01 15:48",
+   "state": "actioned"
+  },
+  "category": {
+   "from": "Finance",
+   "to": "Sales & leasing",
+   "ts": "2026-09-01 20:54",
+   "state": "actioned"
+  }
+ },
+ "PD-11": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "John Clark",
+   "ts": "2026-09-01 15:48",
+   "state": "actioned"
+  },
+  "category": {
+   "from": "Finance",
+   "to": "Construction",
+   "ts": "2026-09-01 20:54",
+   "state": "actioned"
+  }
+ },
+ "PD-20": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Jon Wyss",
+   "ts": "2026-09-01 15:49",
+   "state": "actioned"
+  }
+ },
+ "KP-0001": {
+  "owner_short": {
+   "from": "David Berman",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 15:49",
+   "state": "actioned"
+  }
+ },
+ "PR-0001": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Natalie Magurne",
+   "ts": "2026-09-01 16:45",
+   "state": "actioned"
+  }
+ },
+ "PR-0002": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "John Clark",
+   "ts": "2026-09-01 16:45",
+   "state": "actioned"
+  }
+ },
+ "PR-0003": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Group",
+   "ts": "2026-09-01 16:47",
+   "state": "actioned"
+  }
+ },
+ "CM-01": {
+  "priority": {
+   "from": "Critical (stated)",
+   "to": "Closed",
+   "ts": "2026-09-01 17:22",
+   "state": "actioned"
+  }
+ },
+ "CM-02": {
+  "priority": {
+   "from": "Critical (stated)",
+   "to": "Closed",
+   "ts": "2026-09-01 17:23",
+   "state": "actioned"
+  }
+ },
+ "CM-03": {
+  "priority": {
+   "from": "Blocked",
+   "to": "Open",
+   "ts": "2026-09-01 17:25",
+   "state": "actioned"
+  }
+ },
+ "CM-04": {
+  "priority": {
+   "from": "Critical (stated)",
+   "to": "Closed",
+   "ts": "2026-09-01 17:25",
+   "state": "actioned"
+  }
+ },
+ "CM-05": {
+  "priority": {
+   "from": "Critical (stated)",
+   "to": "Open",
+   "ts": "2026-09-01 17:26",
+   "state": "actioned"
+  }
+ },
+ "CM-06": {
+  "priority": {
+   "from": "Critical (stated)",
+   "to": "Open",
+   "ts": "2026-09-01 17:27",
+   "state": "actioned"
+  }
+ },
+ "CM-13": {
+  "priority": {
+   "from": "Closed",
+   "to": "Open",
+   "ts": "2026-09-01 17:27",
+   "state": "actioned"
+  }
+ },
+ "CM-19": {
+  "owner_short": {
+   "from": "Austin Berk",
+   "to": "Melanie Sanchez",
+   "ts": "2026-09-01 17:31",
+   "state": "actioned"
+  },
+  "due": {
+   "from": "",
+   "to": "2026-09-04",
+   "ts": "2026-09-01 17:39",
+   "state": "actioned"
+  }
+ },
+ "CM-23": {
+  "due": {
+   "from": "",
+   "to": "2026-09-14",
+   "ts": "2026-09-01 17:39",
+   "state": "actioned"
+  }
+ },
+ "PD-06": {
+  "due": {
+   "from": "",
+   "to": "2026-09-10",
+   "ts": "2026-09-01 20:54",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Austin Berk",
+   "ts": "2026-09-01 20:54",
+   "state": "actioned"
+  }
+ },
+ "PD-18": {
+  "community": {
+   "from": "",
+   "to": "Vantage Oaks",
+   "ts": "2026-09-01 21:00",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Zach Schwartz",
+   "ts": "2026-09-01 23:22",
+   "state": "actioned"
+  }
+ },
+ "PD-17": {
+  "community": {
+   "from": "",
+   "to": "The Oaks",
+   "ts": "2026-09-01 21:00",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Leslie Croft",
+   "ts": "2026-09-01 23:22",
+   "state": "actioned"
+  }
+ },
+ "PD-19": {
+  "community": {
+   "from": "",
+   "to": "Windward Knoll",
+   "ts": "2026-09-01 21:00",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Zach Schwartz",
+   "ts": "2026-09-01 23:22",
+   "state": "actioned"
+  }
+ },
+ "PD-16": {
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "Natalie Magurne",
+   "ts": "2026-09-01 23:06",
+   "state": "actioned"
+  },
+  "community": {
+   "from": "",
+   "to": "Gulf Breeze",
+   "ts": "2026-09-01 23:06",
+   "state": "actioned"
+  },
+  "due": {
+   "from": "",
+   "to": "2026-09-11",
+   "ts": "2026-09-01 23:07",
+   "state": "actioned"
+  }
+ },
+ "PD-15": {
+  "community": {
+   "from": "",
+   "to": "Lucky Clover",
+   "ts": "2026-09-01 23:07",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "John Clark",
+   "ts": "2026-09-01 23:08",
+   "state": "actioned"
+  }
+ },
+ "PD-14": {
+  "community": {
+   "from": "",
+   "to": "River Oaks",
+   "ts": "2026-09-01 23:08",
+   "state": "actioned"
+  },
+  "owner_short": {
+   "from": "Unassigned",
+   "to": "John Clark",
+   "ts": "2026-09-01 23:08",
+   "state": "actioned"
+  }
+ },
+ "PD-13": {
+  "community": {
+   "from": "",
+   "to": "River Oaks",
+   "ts": "2026-09-01 23:08",
+   "state": "actioned"
+  }
+ },
+ "PD-12": {
+  "community": {
+   "from": "",
+   "to": "River Oaks",
+   "ts": "2026-09-01 23:08",
+   "state": "actioned"
+  }
+ },
+ "TD-0032": {
+  "priority": {
+   "from": "Open",
+   "to": "Closed",
+   "ts": "2026-09-02 10:36",
+   "state": "open"
+  }
+ },
+ "TD-0037": {
+  "priority": {
+   "from": "Open",
+   "to": "Closed",
+   "ts": "2026-09-02 10:36",
+   "state": "open"
+  }
+ }
+}

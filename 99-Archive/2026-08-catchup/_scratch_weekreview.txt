@@ -1,0 +1,198 @@
+﻿Parakeet Week in Review — Aug 19–24, 2026
+1. THIS WEEK — DATED AND TIME-SENSITIVE
+Today, Tuesday 8/25
+Items Needed for Uniti: Then send them the kickoff team list, the FAQ worksheet answers, EIN/business name, and create the AI agent's email + name.
+Verify yesterday's Rose commitments happened (Gulf Breeze): water company call with the blocked buyer, 11 AM meeting with the deceased resident's sister to collect money and stop the eviction, buyer showing at lot 28, plumber quote for lot 12. Check in with her.
+Verify the regional manager made the promised Monday visit to the elderly Belle Haven resident's water leak (promise made to her face Saturday).
+Justin: confirm the Brunswick/Bronze Oak address fix used 221 Robarts Road (was misstated as 201 mid-meeting) across website, Rent Manager, Google, and signage.
+Wednesday 8/26
+Two-part sales planning call: hour 1 core team (funnel ownership, CRM hygiene, hiring); hour 2 adds Ozzy/Tanya, Zach optional, listing audit with Leslie. John to send the dashboard file and CRM workflow docs beforehand; Joe's compiled thoughts due to everyone.
+MAV dedup rules review call with Ozzie — settle the same-name/different-contact edge case.
+Standing Wednesday meeting: escalate the Champion punch list from Riverwalk (defective stairs, treads, doors, concrete on ALL lots — manager sent John the full list).
+Thursday 8/27
+I-4 corridor expansion public meeting (per the sign at Windward Knoll). Someone should attend or at least investigate impact on the property.
+Friday
+3:00 PM ET MAV MCP sandbox call — connect sandbox to the Claude Teams account, run test prompts. Ozzie sending the invite. MAV building the sandbox with real data (prospects, tours, units, properties) and sending details on the ~900 tools beforehand.
+After that call: intro MAV to Saad and Dan at RentViewer to scope CRM ↔ warehouse integration. Big open architecture question: John thinks if everything lands in the RentViewer warehouse, the MAV MCP may be unnecessary. Decide the single source of truth before paying for overlap.
+Next ~2 weeks
+Ozzie evaluation window: Miami office observation + CRM deep-dive this week with him included. Call Zach for his read if that didn't happen Saturday. Leslie drafting the formal written bonus policy (replacing "commission" language) for HR to file.
+Corner IQ trial onboarding: their next batch is this week (8/26–28). Decide participants internally (you, John, Zach, Dan) and respond to Zayv and Luke. Respond to them passing gently
+Rellit: watch for the Calendly email to John (you looped); book the 30-min exec intro, then the CPA-led technical demo. You offered to intro Rellit to Rent Manager's API team.
+Zelman conference in ~2–3 weeks — meet with Bill.
+---
+2. PROMISES MADE TO THE TEAM — FOLLOW THROUGH ON EVERY ONE
+These are the "little things" said to people's faces. They're watching whether corporate delivers.
+Regency I (manager + departing maintenance man)
+Tree trimming "coming soon" — before hurricane season. She asked directly.
+Mailbox replacement (7 stations) — she already got it approved; make sure it actually executes.
+Payment-plan/subsidy help for good residents with home repairs (skirting) — stated policy commitment.
+Follow up with the former park worker met on-site at Regency II — told him "you can call us out on it if we don't do right." Get his name and contact from the manager; he's a proven mower/ditch/planting hand and the maintenance man is leaving for Ohio. This is both a promise and the staffing fix.
+Brunswick (Shady & Druid manager)
+Mark's rehab crew arriving "in the next couple days" — confirm they showed.
+Gator/equipment pricing support for her new maintenance hire.
+Benches at the 42s and waterfront (John owns), playground/basketball in the old pool area, bus stop shelter — all raised by her, all "agreed in concept." Pick and fund at least one visibly.
+Whispering Pines (manager)
+Her phone number listed alongside the sales line on the two Daisy Bear listings — she lives on-site and loses walk-ups to the call center. You said "we've got to talk about that." Resolve it; ties to the RingCentral fix.
+Lucky Clover (Angel + maintenance lead)
+Design decision owed on the shuffleboard shade (metal roof vs re-anchored shades) and the lighting walk-through — "we'll get together about lighting up the area."
+Bigger American flag + Parakeet flag, plus the cable rigging he needs. Also flagpole/flags at Muskegon Hill.
+Angel is brand new and had a resident threaten her with a gun — back her visibly (see lowlights).
+Vantage Oaks (Amanda + team)
+Advance notice before walkway crews arrive (promised).
+Chris on-site next week for the kitchen/outlet fix.
+Power timeline stated to staff: Paradise Palms energized by end of this week; Vantage set + powered within a month, closing out late September. Staff repeated it to residents — don't let it slip silently.
+Gulf Breeze (Rose)
+Take the water-company fight off her shoulders — "the fact that you said you would help me." Letters already going; escalate to a named human at the utility.
+Zero-turn mower + trailer so her maintenance guy replaces the fired landscaper.
+Leslie to paper the lot 2 as-is/title-pending sale.
+River Oaks (Vicky, Mitch, Sam + team)
+Ship the remaining shirts/swag down (ran out).
+Movie-night projector setup ("we'll get one").
+Clubhouse microwave.
+Reimburse Vicky promptly for the cash bingo machine purchase.
+Approve the aerator quote she already has; resolve pier power (George's quote vs letting Mitch + staffer do it).
+Resident survey on amenities before building.
+The Oaks (manager + Travis)
+Lunch/tea for the moms' community committee whenever they meet — coordinate with Natalie.
+Rent credit for the mom who moderates the community Facebook page (check first whether you can compensate her given she posts on the community's behalf). You told her to "reprocess the request" if you forget — don't make her.
+Connect the manager with the in-house financing specialist so she stops handing prospects cold to external lenders.
+Tool package (maintenance has the list — Eric left with the tools), shed on slab, gator.
+Belle Haven (Julie + regional)
+Monday water-leak inspection at the elderly resident's unit (verify done). She's caring for a terminally ill brother; this one is about dignity as much as plumbing.
+Gift bags left for Alex and Brandon; extra umbrella/gift cards for staff recognition.
+Applegate
+One resident's grab bag went out WITHOUT the gift card — make it right. Buy more $10–25 gift cards in bulk; the painting-resident moment proved the program works.
+Riverwalk (manager)
+He sent John the complete lot-issues list ("What lot?" "All of them"). Confirm receipt and get Champion scheduled — you told him the defects are out of his control; now show him corporate carries it.
+---
+3. TO-DOS BY PROPERTY
+Regency I/II (Savannah)
+Assign an owner for the two forming sinkholes (speed bump + mid-road) — safety/liability, currently unowned.
+Install new entrance sign (in shop; white pole; avoid the city easement strip).
+Green Oak: seal coat + patch; repave only the worst stretch. ADA bathroom conversion. Parking lights. Rubber mulch beds out.
+Dumpster: kill the $395/mo service, dispose of the tire container, convert area to paid trailer storage.
+Landlord strategy needed — Larry (~20 units, $2,000–2,200 rents, gouging) is the priority; complete the landlord roster (only ~10 of 20–30 known).
+Double-wide tie-down/reorientation enforcement; fence removal at lot 140; set a mandatory weekly grass-cut day.
+Centralized landscaping business case: pull current landscaping spend at both Regencies; model one crew + zero-turn; rentals bundle into rent, homeowners get "trim it or we remove it."
+Brunswick — Shady & Druid
+Resident memo (email + print) proving engineering/septic work is real — 5 years of broken prior-owner promises means they don't believe you.
+Second entrance sign for the back of Druid. Solar motion camera at the broken-into mailboxes. Collapsed sewer pipe (location unknown — John owns). Lift station privacy fence + phone-alert check. Pull/replace unit 2828 with a new porch home. Streetlights left side. White PVC mailbox standardization (post office OK first). 3-rail PVC + steel corner protection at turns. Pond EPD violation (crushed lining) — assign a plan. Speed bumps via Jeremy's contact. Field trash containers, bleachers at the tree line.
+Phasing locked: lot prep/trees first, homes in (~60 potential), roads LAST.
+Applegate
+Champion escalation: no-show two visits running; homes delivered 7/22 and 7/23 still not set; one home has NO cribbing and is about to fall over. This joins the Riverwalk punch list — Champion accountability is now a portfolio-level conversation, not a site issue.
+Bulletin boards behind mailbox clusters (portfolio standard; Applegate first).
+Verify lot 224 rent current.
+Paradise Lakes
+Confirm the no-dig order to the contractor until the ~$30K utility locate/map completes. Orange mesh replaces caution tape. Temporary barriers at the new roadside pole and broken-gate exit. Spectrum timeline for old pole removal. Sewer boot repairs on contractor's dime. Gate system = next year's budget (already told to Barry). Interim gate-code handling for the terminated employee. Septic + seawall items restored to the master list.
+Sam's retirement date keeps moving — start maintenance succession planning.
+Whispering Pines
+Camp Spot: 6-month minimum on historically seasonal lots (Alex helps map/block); relocate/refund the mis-booked transients; system can't book past 2026 — needs a fix.
+Electrical stub-out (~$5K) at the front corner/dock DURING the utility upgrade — cheap now, expensive later.
+366 Lily Mora rehab (25-yr resident to nursing home). Bamboo house permits (Shireen). Street signs in process.
+Vantage Oaks / Okeechobee
+Permits: pick up in person within the 72-hour window the moment Champion says issued; set 2 NCS + 2 park models immediately, electric later.
+Deploy 50 For Sale signs + 20 flags on arrival; $100 gift cards to end-lot residents for flag placement.
+Back-office scaling for 20 sales/month: hire alongside the title person NOW (Sarah/Natalie/Leslie feeding candidates).
+Review written paving estimate ($683K — down from $1.8M, verify scope before signing). Skyline drawer front warranty swap. Office space decision (Lot 1 unbuildable).
+Gulf Breeze / Rose's portfolio
+FEMA homes: permit/utility verification decides sell-cheap vs scrap-for-parts. Test permit application at another home to learn county's post-hurricane stance.
+Standardize the investor application policy company-wide: $50 fee + deposit, refunded if approved AND they buy. Fixer-upper addendum: outside first.
+Hunter Springs power pole. Palm Spring Estates: entrance + internal signs, title cleanup on the purchased home ("he still owns it"), permit verification, open violations.
+Fence Outlet (vendor on the way from Gulf Breeze to PSE) — get a quote; fencing needs exist at a half-dozen properties.
+Great Oaks
+BOIL WATER NOTICE active, aerator pump out — get vendor status today; assign a point person. This is the most urgent property item on the list.
+Grey oak vinyl clubhouse floor, bulletin board to mailboxes, grill enclosure teardown (fire hazard) + bocce redo, lamp post, verify storage area secured, pool repaint.
+Riverwalk
+Champion return visit for the full-lot punch list (Wednesday escalation). Lock boxes on the two new homes. Crews clean debris daily. RV relocation plan (3 no-build lots; ~1.5 month notice). Dumpster placement off-road. Hillsborough County home replacement program — pursue.
+River Oaks
+HOLD on new homes until sales move; price at $49,900; 15% RV-resident discount (terms TBD). Rent Manager listing gap — none of River Oaks is in the system; sell now, fix mechanics in parallel.
+Grassroots marketing: Vicky visits nearby $100K+ communities (referral fee — settle the ethics question), RV parks, Elks Lodge/American Legion flyers; investigate the blank billboard at Bayshore & 41 in Ruskin.
+Clubhouse sinking/leaning with recurring leak — review the inspection report before spending more on it. Well relocation feasibility (could reclaim 6–8 lots).
+The Oaks / Terrace Crossings
+Individual trash cans everywhere — staff currently spends FOUR DAYS A WEEK hauling trash. Get real vendor quotes (current ones are phone quotes), review the ~$15K number with Zach, time rollout with rent increases (Oaks: October; Terrace: July).
+12-ft PVC privacy fence around the wastewater plant BEFORE listing the nearby new homes. Pavilion (half screened, with electric — Paradise Lakes model). Basketball double hoops, not pickleball. LOP buyout offers to legacy Steiner holders. Price the incoming new homes.
+Belle Haven
+Roof replacements approved at $5–7K each — start with the occupied rental. RV in-fill: Facebook "block and blast" targeting contractors + buy one ~$50K test RV, skirt it, list it. Pickleball/dog park/covered grill BEFORE homes finish (~January). Window workaround for the $13K/6-week custom window problem.
+Paradise Palms (55+)
+Crew accountability: standard set — door swing governs stair orientation, all stair wood skirted; the noncompliant crew comes back and fixes at their cost. Fix broken entry codes. Fence decision on the new drain field. Office door paint, mailbox enclosure, post cap at 1923. Verify the pump was included in the vendor's final quote before approving.
+---
+4. TO-DOS BY FUNCTION
+Systems / AI / Data (the big convergence)
+Everything lands on a 5-week runway to October snowbird season: Uniti AI sales agent live (~end of Sept goal; their standard is 30–45 days), MAV dedup + MCP sandbox, RentViewer warehouse rollout, sales org hires in seats within 4 weeks.
+ARCHITECTURE DECISION NEEDED: single source of truth across MAV CRM / Rent Manager / RentViewer warehouse / Camp Spot. John's position: warehouse-first may make the MAV MCP redundant. Get the joint call scheduled and don't build twice.
+Camp Spot gap: 6 RV communities (~400 sites) invisible to Rent Manager — nightly CSV drop to Uniti as interim (John), webhooks later. Park models sold at all-Camp Spot properties could be missed.
+RentViewer rollout: you + one, then Zach and Stewie; define a formula-change approval process. GL not yet in warehouse. Dan's "podcast digest" idea for asset mgmt updates — worth reviving.
+Power Automate: dedicated server accounts, no individual-drive access, nobody builds their own automations (John).
+QuickBase (carryover): walkthrough today; Kevin needs the metadata exports and wants a signed solution design doc before build.
+AI adoption policy: limit output access to a small group for now; internal agent with org-chart permissions; "95% of the company doesn't use AI yet" — education is the bottleneck. John still wants an independent tech advisor for build-vs-buy (Corner IQ vs self-built vs others).
+Finance / Legal / Tax
+Berman Fund II: Golf property K-1 may be filed off the wrong draft (50/50 vs 49/51) — Lisa confirming. Mayfair/733 bombshell: no real debt exists; years of "debt service" to Post were distributions — other partners are likely owed money. Needs quantification and a plan before the asset sale. Get final 2026 deferred-gain numbers from Lisa & Co. with a date. Warn LPs: 2025 recapture (~$450–470K on PSE alone) hits K-1s even though gains defer to 2026, and one-sided cost-seg means capital accounts won't match splits.
+Accounting is a "black box" — utilities, operating permits, licenses ownership unclear; a personnel removal was voiced. Rellit demo feeds the same problem: books close 30–45 days in arrears, Ramp booked monthly, CFO "not tech forward" and replacement openly discussed. Decide the sequence: people first or platform first — buying Rellit under the current department just automates the mess.
+Ownership waiver letter for the audit (Zach drafting short version — the AI draft was overdone). Settlement statement reviewed, "seems fine" — confirm and respond. Nantucket HOA: Jamie compiling dates; formal letter pending a sit-down.
+21st Mortgage: register the unregistered communities (Joe's mystery shop was DENIED at Paradise Park) — a financing channel is dark.
+Equity commitment restructure (Joe/Brian/Tyler): 5% → 3.5% opportunistic, 2% on four-plus deals — not finalized. $20M reserved for the Bay Area deal. Core-plus deal: seller gone quiet; watch for Brian/Jeff/Rick email.
+Carryovers from last week still open: roadwork vendor documentation (John Clark's team, target was Monday 8/24 — chase it), storm drain hazard fix, title fraud contract-period clock, principals call on the contract extension via Chris/Adam.
+Sales Org (from SAM session)
+Permanent sales org, not a temp army: assistant managers → sales/leasing agents; regional sales managers aligned to regionals ("three Anthonys"); job ads out now, seats filled in ~4 weeks. Loan Coordinator posting live (Demetria).
+Vantage gets a dedicated daily salesperson; River Oaks similar; small communities covered regionally.
+Call routing fix (came up FOUR times this week): on-site prospects reach the 24-hr call center while the manager sits in the office — Rhonda named as losing buyers. RingCentral direction set; onboard ALL managers to the app. This is the highest-frequency fixable revenue leak of the week.
+Google Ads stays off until infrastructure is ready — team already near capacity on call volume.
+HR / People
+Ozzie: 2-week evaluation running; written bonus policy replaces ad-hoc commission; job description needs his signature; exit path = utility role or hire an experienced customer-success person. CRM findings were real: 700 stale prospects, 84 miscategorized tours, 7 flow errors.
+Berman: multiple people voicing serious frustration, including "fly up and let him go" — still no decision. This needs a real conversation, not another car ride vent.
+Ashlyn's region: least improved; dead cockroach in a clubhouse. Deliberately soft-pedaled with her — decide whether that stays informal or becomes a documented expectation.
+Justin: wants finance/asset-mgmt/acquisitions growth — invest in him, stop using him as inter-departmental cleanup. Clarify what Daniel does. Paul drifting between deals; Ozzy not expected long-term.
+Staffing gaps: Regency I maintenance (Ohio departure), Auburn maintenance sign-off (Liz + Demetria — urgent, homes arriving), Riverwalk candidate doubts, employee back injury at Belmart lot 35 (check on him; workers' comp documentation).
+---
+5. HIGHLIGHTS — WINS AND PEOPLE TO RECOGNIZE
+People (send notes / call them out)
+Rose (Gulf Breeze + 5 properties): "I take care of it as if I own it." Turned a squatter into an approved applicant, sources her own vendors, logs everything in Rent Manager.
+Liz's region (SC/GA): most improved — "completely blown away," mostly with newer managers.
+Alex: visible impact since June ("you can see the difference").
+Vicky + River Oaks crew (Mitch, Sam, staffer): rebuilt the clubhouse in-house post-hurricane; John called it "the one to beat"; "everybody crushed it."
+Julie (Belle Haven): saved ~$13K/house by scavenging windows, found all the mini blinds after being told none existed.
+Regency I manager: enforcement finally working, one grass violation where there used to be dozens, mailbox project self-initiated.
+Brunswick manager: relocated for the job, tows/fines/sprays herself, cleans the field every Monday.
+Lucky Clover maintenance lead: Saturdays, repainted everything, keeps a rotting fence alive yearly — got a check on-site, deserves the public version too.
+Angel (Lucky Clover): found the job herself, thrown into the fire day one.
+Whispering Pines manager: reads Disney attendance as an RV demand signal; election-cycle insight now in your analysis toolkit.
+Brandon + Fernando: Riverwalk street signs. Travis (The Oaks): came in Saturday. The Oaks manager: best resident-engagement program in the portfolio (moms committee, events calendar, Facebook moderator recruit). Janine's story: 8th-grade education to regional manager. Stewie, Charles, Melanie, Justin named as core lifers. Leslie: field staff "so happy" working with her; Joe (never the nice guy) said the "entire team is awesome and they are crushing it" — make sure the team hears it.
+Demetria: posted the Loan Coordinator job description same-day.
+Business wins
+Infill program "an act of god": 130 homes delivered, 40 listed and ready, finishing above an aggressive plan — right before snowbird season.
+Paving rebid saved ~$1.1M ($1.8M → $683K). Flood elevation fear resolved at Vantage (no $100K/home elevation needed). All Vantage COs signed.
+Home-set average 37 days vs 45-day target. Champion/Cavco storing homes free; 24 more slotted for Lucky and River.
+Southgate sale closed. Three sales in one day at Fountain Inn (prior week), $1,850/mo on the rehabbed 3/3 at Brunswick, $5,000 as-is home got a same-day full-price offer.
+Grant won on ~64 decommissioned septics. Okeechobee mayor + school principal excited about House of Hope — permits moving faster because of it.
+RentViewer MCP first live test nailed a real AR query (77% of AR at Windward Knolls, ~$84.1K) — verified correct, 3 weeks into the build.
+Lucky Clover transformation, Palm Spring Estates cleanup, Paradise Lakes community life visibly returning, police confirm Auburn's drug-zone reputation is gone.
+Gift card program validated twice — resident delight at Applegate; raise to $25 standard confirmed at Vantage.
+---
+6. LOWLIGHTS — RISKS AND PROBLEMS
+Safety (act first)
+Lucky Clover: resident pointed a gun at contractors; Angel believes "he was probably going to shoot me... it keeps getting worse." Another resident threatened self-harm. New manager alone on-site. This needs a protocol (trespass/law enforcement/eviction path) this week, not sympathy.
+Great Oaks: active boil water notice, aerator pump down, vendor absent.
+Storm drain at the roadwork property (carryover): still boarded with two-by-fours unless fixed last week — confirm.
+Applegate home with no cribbing "about to fall over." Belmart handrails all unsanded. Employee back injury lot 35.
+Vendor accountability
+Champion is the week's recurring villain: no-shows at Applegate (twice), defective installs across ALL Riverwalk lots, 4+ weeks of delivered-not-set inventory. One consolidated corporate-level escalation beats three site-level complaints.
+Paradise Lakes utility contractor: tipped machine, hidden damage, sewer boots destroyed, language-barrier safety risk.
+Paradise Palms: one crew perfect, one crew lazy — night and day on identical scope.
+Gulf Breeze water company blocking new-buyer activations — killing sales directly (investor declined another purchase over it).
+Money / compliance
+Mayfair/733 partner-distribution issue (see Finance) — quantify before the sale closes.
+2025 recapture surprise coming to LPs if not communicated early.
+River Oaks at ~60% actual occupancy despite looking full; "over ambitious with the spending" — spend paused pending sales.
+Laundry revenue structurally declining (new units have W/D). Operating margin at one property down ~65% → low 50s% until city water passes through.
+Title irregularities: PSE purchased home still titled to seller; title fraud property (carryover) still burning contract-period clock.
+Sensitive: your full Visa card number + expiration was read aloud booking the Lakeland hotel and is in the Post River Oaks transcript (~39 min). Gate/house codes (8518) also captured. Consider deleting or trimming that recording in Plaud, and treat transcript sharing accordingly.
+Organizational
+Sales infrastructure vs October: 5 weeks, hires not made, Uniti not live, call routing still broken. This is the recap's stated make-or-break.
+Accounting black box + CFO question + 30–45 day close — the biggest structural weakness named this week, by you, on a vendor call.
+SOPs: ops lead needs a protected 3-hour block; folders disorganized; management-accounting SOPs have zero visibility. You and John committed to reorganizing the folders early this week.
+Resident trust deficit at legacy-neglect properties (Brunswick memo, Lucky Clover proof-of-work) — communication is the fix, and it's cheap.
+---
+7. OPEN DECISIONS PARKED THIS WEEK
+Ozzie's future (2 weeks). Berman. CFO/accounting ownership. MAV MCP vs warehouse-only. Rellit adoption. Corner IQ trial scope. Referral-fee ethics for outside managers. Centralized landscaping business case (needs spend data). Regency landlord strategy (Larry). FEMA homes sell vs scrap. Well relocation at River Oaks. Pickleball vs residents' actual preferences (survey first). Clubhouse repair vs the sinking foundation at River Oaks. Dog wash vs bathroom conversion at River Oaks. Shuffleboard roof design. Whether Rose's investor residents may rent units out. New-home pricing at The Oaks. Office solution at Vantage. I-4 corridor exposure at Windward Knoll.
+---
+Compiled 8/25/2026 from Plaud. Speaker attribution is best-effort from AI diarization — verify names before acting on anything HR-sensitive (Ozzie, Berman, Ashlyn, accounting personnel). The 8/19 10:59 AM recording remains untranscribed in Plaud.

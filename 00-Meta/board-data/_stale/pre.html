@@ -1,0 +1,189 @@
+<title>The Open Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700&family=Red+Hat+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --green:#4ABA81; --yellow:#FFCC3B; --red:#F16262;
+  --ground:#FFFFFF; --panel:#F5F7F8; --panel2:#EDF2F4; --rule:#DCE4E8; --muted:#8FA3B2;
+  --ink:#2F4E65; --ink-dim:#5B7686;
+  --disp:"Red Hat Display",Calibri,Arial,sans-serif;
+  --body:"Red Hat Text","Red Hat Display",Calibri,Arial,sans-serif;
+  --mono:"Red Hat Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#1B2E3C; --panel:#243D4E; --panel2:#2C4859; --rule:#365468;
+  --ink:#EAF1F4; --ink-dim:#AFC3CE; --muted:#8FA3B2;}}
+:root[data-theme="dark"]{
+  --ground:#1B2E3C; --panel:#243D4E; --panel2:#2C4859; --rule:#365468;
+  --ink:#EAF1F4; --ink-dim:#AFC3CE; --muted:#8FA3B2;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 24px 90px}
+h1,h2,h3{font-family:var(--disp);color:var(--ink);margin:0;text-wrap:balance}
+h1{font-weight:900;font-size:34px;line-height:1.12;letter-spacing:-.02em}
+.eyebrow{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.lede{font-size:16px;color:var(--ink-dim);max-width:78ch;margin:16px 0 0}
+.lede b{color:var(--ink)}
+
+/* headline three */
+.hi{margin:30px 0 0;border-left:3px solid var(--red);background:var(--panel);
+  padding:16px 20px 18px;border-radius:0 3px 3px 0}
+.hi h2{font-weight:700;font-size:12px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px}
+.hi ol{margin:0;padding-left:20px}
+.hi li{margin-bottom:6px;font-size:14px;color:var(--ink-dim)}
+.hi li b{color:var(--ink);font-weight:700}
+.hi li:last-child{margin-bottom:0}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:26px 0 0}
+.stat{background:var(--panel);padding:13px 14px 15px}
+.stat b{display:block;font-family:var(--disp);font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums}
+.stat span{display:block;font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+
+/* filter bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ground);
+  border-bottom:1px solid var(--rule);padding:14px 0 13px;margin:28px 0 0}
+.bar__row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+input[type=search],select{font-family:var(--body);font-size:13px;color:var(--ink);
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+input[type=search]{flex:1 1 210px;min-width:170px}
+select{max-width:220px}
+.tog{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-dim);
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:6px 11px;cursor:pointer}
+.tog input{accent-color:var(--red);margin:0}
+.btn{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--ink);
+  background:transparent;border:1px solid var(--rule);border-radius:4px;padding:7px 12px;cursor:pointer}
+.btn:hover{background:var(--panel)}
+.count{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--muted);
+  margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.count b{color:var(--ink)}
+
+/* sections */
+details.reg{border:1px solid var(--rule);border-radius:4px;margin-top:14px;background:var(--ground)}
+details.reg>summary{cursor:pointer;list-style:none;padding:13px 16px;display:flex;
+  align-items:baseline;gap:11px;background:var(--panel);border-radius:3px}
+details.reg[open]>summary{border-bottom:1px solid var(--rule);border-radius:3px 3px 0 0}
+summary::-webkit-details-marker{display:none}
+.caret{font-family:var(--mono);font-size:11px;color:var(--muted);width:9px;flex:none}
+details[open]>summary .caret::after{content:"▾"}
+details:not([open])>summary .caret::after{content:"▸"}
+.rtitle{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink)}
+.rsub{font-size:12px;color:var(--muted)}
+.rn{margin-left:auto;font-family:var(--disp);font-weight:700;font-size:13px;
+  color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+details.sub{border-top:1px solid var(--rule)}
+details.sub>summary{cursor:pointer;list-style:none;padding:9px 16px 9px 30px;display:flex;
+  align-items:baseline;gap:9px;background:var(--ground)}
+details.sub>summary:hover{background:var(--panel)}
+.stitle{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--ink-dim)}
+
+/* rows */
+.row-legacy{display:none}
+.row:hover{background:var(--panel)}
+.desc{color:var(--ink);font-size:13.5px}
+.meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.own{font-size:12px;color:var(--ink-dim);word-break:break-word}
+.own.un{color:var(--red);font-weight:700}
+.age{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-align:right;
+  font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-family:var(--disp);font-weight:700;font-size:9.5px;
+  letter-spacing:.05em;text-transform:uppercase;padding:3px 6px;border-radius:3px;
+  white-space:nowrap;line-height:1.25}
+.p-crit{background:var(--red);color:#3D1010}
+.p-rule{background:var(--yellow);color:#3D2E00}
+.p-high{background:var(--yellow);color:#3D2E00}
+.p-blok{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+.p-dna{background:var(--green);color:#0C2A1C}
+.p-open{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+.p-clos{background:transparent;color:var(--muted);border:1px dashed var(--rule)}
+[hidden]{display:none!important}
+.empty{padding:26px 16px;color:var(--muted);font-size:13.5px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);
+  font-size:12.5px;color:var(--muted);max-width:92ch}
+footer b{color:var(--ink-dim)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media (max-width:860px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .row{grid-template-columns:1fr;gap:3px;padding-left:20px}
+  .age{text-align:left}
+  h1{font-size:26px}
+  .wrap{padding:26px 16px 70px}
+}
+
+.row{display:grid;grid-template-columns:78px 96px 1fr 132px 108px;gap:11px;
+  padding:9px 16px 9px 26px;border-top:1px solid var(--rule);align-items:start}
+.rid{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--ink-dim);
+  cursor:pointer;border:1px solid var(--rule);border-radius:3px;padding:2px 5px;
+  background:var(--panel);white-space:nowrap;user-select:all}
+.rid:hover{border-color:var(--green);color:var(--ink)}
+.rid.copied{background:var(--green);color:#0C2A1C;border-color:var(--green)}
+.srcs{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.slink{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.04em;
+  text-transform:uppercase;padding:3px 7px;border-radius:3px;text-decoration:none;
+  background:var(--green);color:#0C2A1C;white-space:nowrap}
+.slink:hover{filter:brightness(1.08)}
+.stype{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.sreg{font-size:10.5px;color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--rule)}
+.sreg:hover{color:var(--ink)}
+.cpq{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.04em;
+  text-transform:uppercase;padding:3px 7px;border-radius:3px;cursor:pointer;
+  background:transparent;color:var(--ink-dim);border:1px solid var(--rule);white-space:nowrap}
+.cpq:hover{border-color:var(--ink-dim);color:var(--ink)}
+.cpq.copied{background:var(--green);color:#0C2A1C;border-color:var(--green)}
+.how{margin:22px 0 0;border-left:3px solid var(--green);background:var(--panel);
+  padding:15px 20px 17px;border-radius:0 3px 3px 0}
+.how h2{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.how p{margin:0 0 7px;font-size:13.5px;color:var(--ink-dim)}
+.how p:last-child{margin-bottom:0}
+.how code{font-family:var(--mono);font-size:12.5px;background:var(--panel2);padding:1px 5px;border-radius:3px;color:var(--ink)}
+@media (max-width:900px){.row{grid-template-columns:1fr;gap:4px;padding-left:20px}
+  .age{text-align:left}.srcs{flex-direction:row;flex-wrap:wrap;align-items:center}}
+</style>
+<div class="wrap">
+<p class="eyebrow">Parakeet Communities &middot; every open item &middot; 1 September 2026</p>
+<h1>738 items, every one with an ID you can quote back to me.</h1>
+<p class="lede">All five registers on one page. <b>728 open, 184 with nobody's name on them.</b> Every row now carries a permanent reference &mdash; <code style="font-family:var(--mono)">PF-0324</code>, <code style="font-family:var(--mono)">CM-07</code>, <code style="font-family:var(--mono)">TD-0001</code> &mdash; written into the register file itself, not generated for this page. Click an ID to copy it.</p>
+
+<div class="how">
+  <h2>How to use the ID</h2>
+  <p>Tell me the ID and what changed. <b>&ldquo;PF-0324 &mdash; Congress sold, close it&rdquo;</b> is enough: I find the row, mark it closed with your reason and the date, and log it. No description needed and no ambiguity about which of the 738 you mean.</p>
+  <p><b>Source links are being filled in, not faked.</b> The registers never stored a URL, so 10 rows have a real one so far &mdash; the rest show their source type and a <b>Copy search</b> button that puts the distinctive words on your clipboard to paste into Outlook or Teams. Ask me for any ID's source and I resolve it and write it into the register permanently, so the gap only shrinks. From now on every harvest captures the link at capture time.</p>
+  <p>The <b>register</b> link on each row opens the source file in Obsidian.</p>
+</div>
+
+<div class="hi">
+  <h2>The three for today</h2>
+  <ol>
+    <li><b>The 8:45 with Jon and employment counsel</b> is still tentative, and the offer-letter records check you gave Demetria has not come back.</li>
+    <li><b>Lucky Clover, day twelve, no owner on the trespass protocol</b> &mdash; <code style="font-family:var(--mono)">TD-0001</code> and <code style="font-family:var(--mono)">CM-07</code>.</li>
+    <li><b>Triad says an insurance premium is past due.</b> Sent to finance at 3:36 yesterday, no answer. They carry $3.1M of the floor line.</li>
+  </ol>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>728</b><span>Open right now</span></div>
+  <div class="stat"><b style="color:var(--red)">184</b><span>No owner</span></div>
+  <div class="stat"><b style="color:var(--red)">40</b><span>Critical, or waiting on your ruling</span></div>
+  <div class="stat"><b style="color:var(--green)">24</b><span>Agreed in a meeting, never actioned. The cheap wins</span></div>
+  <div class="stat"><b>10</b><span>Rows with a real source link so far</span></div>
+</div>
+
+<div class="bar"><div class="bar__row">
+  <input type="search" id="q" placeholder="Search text, owner, or an ID like PF-0324&hellip;" autocomplete="off">
+  <select id="fp"><option value="">Priority &mdash; all</option><option value="Critical (stated)">Critical (20)</option><option value="Awaiting your ruling">Your ruling (20)</option><option value="High (stated)">High (18)</option><option value="High (ledger)">High · ledger (16)</option><option value="Blocked">Blocked (42)</option><option value="Decided, never actioned">Decided, not done (24)</option><option value="Open">Open (588)</option><option value="Closed">Closed (10)</option></select>
+  <select id="fc"><option value="">Category &mdash; all</option><option value="Amenities">Amenities (21)</option><option value="Collections">Collections (2)</option><option value="Construction">Construction (196)</option><option value="Finance">Finance (51)</option><option value="Legal">Legal (23)</option><option value="People">People (14)</option><option value="Regulatory">Regulatory (73)</option><option value="Resident">Resident (22)</option><option value="Sales &amp; leasing">Sales &amp; leasing (55)</option><option value="Systems &amp; data">Systems &amp; data (83)</option><option value="Titles">Titles (14)</option><option value="Uncategorised">Uncategorised (138)</option><option value="Utilities">Utilities (46)</option></select>
+  <select id="fm"><option value="">Community &mdash; all</option><option value="American">American (3)</option><option value="Applegate">Applegate (1)</option><option value="Applegate MHC">Applegate MHC (14)</option><option value="Auburn Ridge">Auburn Ridge (18)</option><option value="Bay Oaks">Bay Oaks (2)</option><option value="Belle Haven">Belle Haven (32)</option><option value="Brunswick Estates">Brunswick Estates (8)</option><option value="Central">Central (2)</option><option value="Congress Mobile Home Park">Congress Mobile Home Park (1)</option><option value="Crystal Acres">Crystal Acres (2)</option><option value="Druid Oaks MHC">Druid Oaks MHC (7)</option><option value="Fox Creek">Fox Creek (16)</option><option value="Geiger Key RV Resort">Geiger Key RV Resort (1)</option><option value="Great Oak">Great Oak (2)</option><option value="Great Oak RV Resort">Great Oak RV Resort (7)</option><option value="Gulf Breeze">Gulf Breeze (3)</option><option value="Gulf Breeze MHC">Gulf Breeze MHC (9)</option><option value="Harbour Mobile Home Park">Harbour Mobile Home Park (1)</option><option value="Hendersons">Hendersons (1)</option><option value="Hunter Springs MHP">Hunter Springs MHP (1)</option><option value="Lake Wales">Lake Wales (1)</option><option value="Lake Wales MHC">Lake Wales MHC (12)</option><option value="Lamberton Lake">Lamberton Lake (1)</option><option value="Lucky Clover">Lucky Clover (18)</option><option value="Mayflower Hills">Mayflower Hills (4)</option><option value="McGregor Downs">McGregor Downs (3)</option><option value="Northgate">Northgate (3)</option><option value="Northgate MH">Northgate MH (4)</option><option value="Oakside MHP">Oakside MHP (2)</option><option value="Ormond Beach Oasis">Ormond Beach Oasis (1)</option><option value="Palm Haven Estates">Palm Haven Estates (1)</option><option value="Palm Spring">Palm Spring (1)</option><option value="Palm Spring Estates">Palm Spring Estates (3)</option><option value="Paradise Lakes">Paradise Lakes (9)</option><option value="Paradise Palms">Paradise Palms (7)</option><option value="Parkwood Mobile Home Park">Parkwood Mobile Home Park (17)</option><option value="Redlands">Redlands (2)</option><option value="Regency">Regency (2)</option><option value="Regency I &amp; II">Regency I &amp; II (14)</option><option value="River Oaks">River Oaks (5)</option><option value="River Oaks RV Resort">River Oaks RV Resort (12)</option><option value="Riverwalk">Riverwalk (11)</option><option value="Royal Oaks">Royal Oaks (5)</option><option value="Royal Oaks MHC">Royal Oaks MHC (1)</option><option value="Sea Shells">Sea Shells (1)</option><option value="Shady Acres MHC">Shady Acres MHC (9)</option><option value="Shady Oaks MHP">Shady Oaks MHP (2)</option><option value="Silver Breeze">Silver Breeze (4)</option><option value="Silver Hill MHC">Silver Hill MHC (4)</option><option value="Southgate">Southgate (4)</option><option value="Terrace Crossing">Terrace Crossing (1)</option><option value="Terrace Crossings">Terrace Crossings (1)</option><option value="The Oaks">The Oaks (11)</option><option value="Tradewinds MHC">Tradewinds MHC (2)</option><option value="Triple S">Triple S (1)</option><option value="Vantage Oaks">Vantage Oaks (17)</option><option value="Westwood MHC">Westwood MHC (1)</option><option value="Whispering Pines MH FL">Whispering Pines MH FL (8)</option><option value="Windward">Windward (1)</option><option value="Windward Knoll">Windward Knoll (1)</option></select>
+  <select id="fo"><option value="">Owner &mdash; all</option><option value="Accounting">Accounting (1)</option><option value="Albert Gano">Albert Gano (2)</option><option value="Albert with Natalie — Natalie owns">Albert with Natalie — Natalie owns (1)</option><option value="Alex">Alex (2)</option><option value="Angel and Jason Davis, via Natalie">Angel and Jason Davis, via Natalie (1)</option><option value="Are the Kippy dispute and the Roya">Are the Kippy dispute and the Roya (1)</option><option value="Austin Berk">Austin Berk (79)</option><option value="Austin to adopt, Albert to apply">Austin to adopt, Albert to apply (1)</option><option value="Austin to answer the prerequisite;">Austin to answer the prerequisite; (1)</option><option value="Austin to direct, IT to execute">Austin to direct, IT to execute (1)</option><option value="Austin to follow up, Natalie to re">Austin to follow up, Natalie to re (1)</option><option value="Austin to re">Austin to re (1)</option><option value="Austin to revise; John Clark owes ">Austin to revise; John Clark owes  (1)</option><option value="Austin to send, Albert to execute">Austin to send, Albert to execute (1)</option><option value="Austin to send, draft owed to him">Austin to send, draft owed to him (1)</option><option value="Austin to unblock; working owner p">Austin to unblock; working owner p (1)</option><option value="Austin with Demetria Loukas">Austin with Demetria Loukas (2)</option><option value="Austin with Jon">Austin with Jon (3)</option><option value="Austin with Jon. Counsel is Paul H">Austin with Jon. Counsel is Paul H (1)</option><option value="Austin. Berman set the deadline, J">Austin. Berman set the deadline, J (1)</option><option value="Austin. External, angry, counterpa">Austin. External, angry, counterpa (1)</option><option value="Austin. Jon has stated a preferenc">Austin. Jon has stated a preferenc (1)</option><option value="Austin. Live commitment, due 2026">Austin. Live commitment, due 2026 (1)</option><option value="Austin. Managing Partner of the fu">Austin. Managing Partner of the fu (1)</option><option value="Austin. Not delegable — the govern">Austin. Not delegable — the govern (1)</option><option value="Austin. Not delegable.">Austin. Not delegable. (1)</option><option value="Austin. Outside counsel is running">Austin. Outside counsel is running (1)</option><option value="Auzzi Dixon">Auzzi Dixon (1)</option><option value="Chris">Chris (3)</option><option value="Construction">Construction (1)</option><option value="Critical">Critical (8)</option><option value="David Berman">David Berman (4)</option><option value="David Berman with Austin Berk">David Berman with Austin Berk (1)</option><option value="David Berman with Leslie Croft">David Berman with Leslie Croft (1)</option><option value="David Berman with Natalie Magurne">David Berman with Natalie Magurne (1)</option><option value="Decide whether the scheduled brief">Decide whether the scheduled brief (1)</option><option value="Demetria Loukas">Demetria Loukas (7)</option><option value="Demetria Loukas with Natalie Magur">Demetria Loukas with Natalie Magur (1)</option><option value="Director of Construction">Director of Construction (3)</option><option value="Director of Sales &amp; Marketing">Director of Sales &amp; Marketing (1)</option><option value="Director of Sales and Director of ">Director of Sales and Director of  (2)</option><option value="Fernando">Fernando (2)</option><option value="Get the corporate Google Shared Dr">Get the corporate Google Shared Dr (1)</option><option value="Great Oak">Great Oak (1)</option><option value="Group">Group (1)</option><option value="Heidi">Heidi (1)</option><option value="High">High (7)</option><option value="Hunter Springs MHC carries activit">Hunter Springs MHC carries activit (1)</option><option value="Hunter Springs MHC is carrying $35">Hunter Springs MHC is carrying $35 (1)</option><option value="Is the Massachusetts settlement th">Is the Massachusetts settlement th (1)</option><option value="Is the rent increase settlement a ">Is the rent increase settlement a  (1)</option><option value="Is there a separate Belle Haven se">Is there a separate Belle Haven se (1)</option><option value="Joe">Joe (1)</option><option value="John Clark">John Clark (87)</option><option value="John Clark / Justin Minkoff">John Clark / Justin Minkoff (4)</option><option value="John Clark and Leslie Croft">John Clark and Leslie Croft (1)</option><option value="Jon Wyss">Jon Wyss (40)</option><option value="Jon Wyss / Gunster">Jon Wyss / Gunster (1)</option><option value="Jon Wyss / JLL">Jon Wyss / JLL (1)</option><option value="Jon Wyss / John Clark">Jon Wyss / John Clark (5)</option><option value="Jon Wyss / Vladimir Baga">Jon Wyss / Vladimir Baga (1)</option><option value="Jon found it; lender">Jon found it; lender (1)</option><option value="Justin Minkoff">Justin Minkoff (3)</option><option value="Justin Minkoff / Jon Wyss">Justin Minkoff / Jon Wyss (1)</option><option value="Leslie Croft">Leslie Croft (33)</option><option value="Lucky Clover">Lucky Clover (1)</option><option value="Lucky Clover&#x27;s manager.">Lucky Clover&#x27;s manager. (1)</option><option value="MAV">MAV (3)</option><option value="MAV and Parakeet">MAV and Parakeet (1)</option><option value="Mark Anthony Vido">Mark Anthony Vido (1)</option><option value="Mark Doucette / Auzzi Dixon">Mark Doucette / Auzzi Dixon (3)</option><option value="Mark Doucette / John Clark">Mark Doucette / John Clark (5)</option><option value="Mark Doucette / Jon Wyss">Mark Doucette / Jon Wyss (1)</option><option value="Mark Doucette / Natalie Magurne">Mark Doucette / Natalie Magurne (54)</option><option value="Melanie Sanchez">Melanie Sanchez (2)</option><option value="Melanie Sanchez — Austin, 16:48 ET">Melanie Sanchez — Austin, 16:48 ET (1)</option><option value="Moe Mehmood">Moe Mehmood (1)</option><option value="Name the on">Name the on (1)</option><option value="Natalie Magurne">Natalie Magurne (74)</option><option value="Natalie Magurne / Auzzi Dixon">Natalie Magurne / Auzzi Dixon (1)</option><option value="Natalie Magurne / John Clark">Natalie Magurne / John Clark (1)</option><option value="Natalie Magurne with David Berman">Natalie Magurne with David Berman (1)</option><option value="Natalie Magurne with Leslie Croft">Natalie Magurne with Leslie Croft (1)</option><option value="Natalie Magurne with outside couns">Natalie Magurne with outside couns (4)</option><option value="Normalise community names before t">Normalise community names before t (1)</option><option value="Occupancy.">Occupancy. (1)</option><option value="Operations and HR">Operations and HR (2)</option><option value="Reconcile the unit count. 6,379 ag">Reconcile the unit count. 6,379 ag (1)</option><option value="Regional Manager">Regional Manager (1)</option><option value="Resolve /sites/ParakeetHome agains">Resolve /sites/ParakeetHome agains (1)</option><option value="Rose and Natalie">Rose and Natalie (1)</option><option value="Rule on what counts as an operatin">Rule on what counts as an operatin (1)</option><option value="Settle whether the warehouse or th">Settle whether the warehouse or th (1)</option><option value="Southgate — a trap, not a conflict">Southgate — a trap, not a conflict (1)</option><option value="Team">Team (6)</option><option value="The portfolio has no financial bas">The portfolio has no financial bas (1)</option><option value="Unassigned">Unassigned (185)</option><option value="Unit count.">Unit count. (1)</option><option value="Vendor">Vendor (3)</option><option value="Vikki, via Natalie">Vikki, via Natalie (1)</option><option value="What counts as a reporting propert">What counts as a reporting propert (1)</option><option value="What is the &quot;RV data&quot; counsel refe">What is the &quot;RV data&quot; counsel refe (1)</option><option value="Zach Schwartz">Zach Schwartz (20)</option><option value="open">open (6)</option><option value="outside counsel, via Natalie">outside counsel, via Natalie (3)</option></select>
+  <label class="tog"><input type="checkbox" id="fu"> Unassigned only</label>
+  <label class="tog"><input type="checkbox" id="fl"> Has source link</label>
+  <button class="btn" id="reset">Reset</button>
+  <button class="btn" id="expand">Expand all</button>
+  <span class="count" id="count"><b>738</b> shown</span>
+</div></div>
+

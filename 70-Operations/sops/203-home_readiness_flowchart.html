@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Home Readiness Workflow — CONST-004 · Parakeet Communities</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Calibri, Arial, sans-serif; background: #F4F6F9; padding: 24px; }
+
+  /* Header */
+  .header { background: #1B3A5C; color: #fff; padding: 20px 28px 16px; border-radius: 8px; margin-bottom: 20px; }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+  .header p  { font-size: 12px; color: #A5D6A7; margin-top: 4px; }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; padding: 12px 16px;
+            background: #fff; border-radius: 8px; border: 1px solid #D0D4DA; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #333; }
+  .leg-box  { width: 18px; height: 18px; border-radius: 3px; border: 1.5px solid #888; flex-shrink: 0; }
+  .leg-dia  { width: 18px; height: 18px; background: #FCD34D; border: 1.5px solid #92400E;
+              transform: rotate(45deg); flex-shrink: 0; }
+  .leg-pill { width: 40px; height: 18px; border-radius: 9px; background: #1B3A5C; flex-shrink: 0; }
+  .leg-oval { width: 28px; height: 18px; border-radius: 9px; border: 2px solid #555; background: #eee; flex-shrink: 0; }
+
+  /* Swim lane wrapper */
+  .chart-scroll { overflow-x: auto; }
+  .chart { display: grid; min-width: 1400px; }
+
+  /* Lane rows */
+  .lane { display: grid; grid-template-columns: 130px 1fr; border-bottom: 1px solid #D0D4DA; }
+  .lane:last-child { border-bottom: none; }
+  .lane-label { background: #1B3A5C; color: #fff; font-size: 11px; font-weight: 700;
+                display: flex; align-items: center; justify-content: center; text-align: center;
+                padding: 10px 8px; min-height: 110px; line-height: 1.4; writing-mode: initial; }
+  .lane-body  { background: #fff; padding: 18px 10px; display: flex; align-items: center;
+                flex-wrap: nowrap; gap: 0; min-height: 110px; border-left: 3px solid #2D6A3F; }
+
+  /* Phase dividers */
+  .phase-divider { display: grid; grid-template-columns: 130px 1fr; border-bottom: 2px solid #2D6A3F; }
+  .phase-div-blank { background: #1B3A5C; }
+  .phase-div-label { background: #2D6A3F; color: #fff; font-size: 10px; font-weight: 700;
+                     padding: 5px 12px; letter-spacing: 0.5px; }
+
+  /* Connectors */
+  .arrow { display: flex; align-items: center; color: #6B7280; font-size: 18px; padding: 0 4px;
+           flex-shrink: 0; }
+  .arrow-down { writing-mode: vertical-rl; font-size: 16px; color: #6B7280; padding: 4px 0; }
+  .spacer-h { flex: 0 0 24px; }
+
+  /* Node types */
+  .node { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; text-align: center;
+          position: relative; }
+  .node-label { font-size: 10px; line-height: 1.3; max-width: 120px; }
+
+  /* Task rectangle */
+  .task { background: #EFF6FF; border: 2px solid #1B3A5C; border-radius: 5px;
+          padding: 8px 10px; width: 120px; font-size: 10px; font-weight: 600;
+          color: #1B3A5C; line-height: 1.35; }
+
+  /* Decision diamond wrapper */
+  .diamond-wrap { width: 80px; height: 80px; position: relative; flex-shrink: 0; }
+  .diamond-inner { width: 70px; height: 70px; background: #FCD34D; border: 2px solid #92400E;
+                   transform: rotate(45deg); position: absolute; top: 5px; left: 5px; }
+  .diamond-text  { position: absolute; top: 0; left: 0; width: 80px; height: 80px;
+                   display: flex; align-items: center; justify-content: center;
+                   font-size: 9px; font-weight: 700; color: #78350F; text-align: center;
+                   padding: 10px; line-height: 1.2; z-index: 1; }
+  .diamond-yes   { position: absolute; right: -28px; top: 50%; transform: translateY(-50%);
+                   font-size: 8px; color: #065F46; font-weight: 700; }
+  .diamond-no    { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+                   font-size: 8px; color: #B91C1C; font-weight: 700; }
+
+  /* Start / End ovals */
+  .start-end { background: #1B3A5C; color: #fff; border-radius: 20px; padding: 8px 14px;
+               font-size: 10px; font-weight: 700; min-width: 90px; text-align: center; }
+  .end-node  { background: #2D6A3F; color: #fff; border-radius: 20px; padding: 8px 14px;
+               font-size: 10px; font-weight: 700; min-width: 90px; text-align: center; }
+
+  /* Handoff pill */
+  .handoff { background: #1B3A5C; color: #fff; border-radius: 12px; padding: 6px 12px;
+             font-size: 9px; font-weight: 700; min-width: 90px; text-align: center; line-height: 1.3; }
+
+  /* IMPORTANT / deadline */
+  .important { background: #FEF2F2; border: 2px solid #B91C1C; border-radius: 5px;
+               padding: 6px 10px; width: 120px; font-size: 9px; font-weight: 700;
+               color: #B91C1C; line-height: 1.35; }
+
+  /* Rework arrow */
+  .rework-arrow { color: #B91C1C; font-size: 11px; }
+
+  /* TBD node */
+  .tbd { background: #FEF3C7; border: 2px dashed #92400E; border-radius: 5px;
+         padding: 6px 10px; width: 120px; font-size: 9px; font-weight: 600;
+         color: #78350F; line-height: 1.35; }
+
+  /* Cross-lane arrows: we use a vertical connector column */
+  .vertical-connector { display: flex; justify-content: center; align-items: center;
+                        color: #6B7280; font-size: 20px; padding: 2px 0; }
+  .lane-vc-blank { background: #1B3A5C; width: 130px; }
+  .lane-vc-body  { background: #F4F6F9; display: flex; justify-content: center;
+                   align-items: center; padding: 4px; border-left: 3px solid #2D6A3F; }
+
+  /* Phase section */
+  .phase-section { margin-bottom: 6px; border: 1px solid #D0D4DA; border-radius: 6px; overflow: hidden; }
+
+  /* Sub-label */
+  .sub-label { font-size: 9px; color: #6B7280; margin-top: 4px; max-width: 120px; line-height: 1.2; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>New Home Readiness Workflow — CONST-004</h1>
+  <p>Parakeet Communities · Construction & Operations · Two-Phase Installation Gate &amp; Buyer's-Eye Walk</p>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="leg-oval"></div> Start / End</div>
+  <div class="legend-item"><div class="leg-box" style="background:#EFF6FF;border-color:#1B3A5C;"></div> Task</div>
+  <div class="legend-item"><div class="leg-dia"></div> Decision</div>
+  <div class="legend-item"><div class="leg-pill"></div> Handoff / Trigger</div>
+  <div class="legend-item"><div class="leg-box" style="background:#FEF2F2;border-color:#B91C1C;"></div> Deadline / IMPORTANT</div>
+  <div class="legend-item"><div class="leg-box" style="background:#FEF3C7;border-color:#92400E;border-style:dashed;"></div> TBD — Open Item</div>
+  <div class="legend-item"><span style="color:#B91C1C;font-size:13px;font-weight:700;">↩</span> Rework / Loop-back</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHASE 1 — HOME SET NOTIFICATION
+     ══════════════════════════════════════════════════════════════ -->
+<div class="phase-section">
+  <div class="phase-divider">
+    <div class="phase-div-blank"></div>
+    <div class="phase-div-label">PHASE 1 — HOME SET NOTIFICATION</div>
+  </div>
+
+  <!-- Vendor lane -->
+  <div class="lane">
+    <div class="lane-label">Vendor /<br>Set Crew</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="start-end">Home Set<br>on Lot</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Email Construction:<br>Home ready for<br>Phase 1 inspection</div>
+        <div class="sub-label">Include: community, lot #, date set</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="handoff">HANDOFF →<br>Director of<br>Construction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Director of Construction lane -->
+  <div class="lane">
+    <div class="lane-label">Director of<br>Construction</div>
+    <div class="lane-body">
+      <div style="flex: 0 0 268px;"></div><!-- align with handoff -->
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Receive vendor email.<br>Email Facility Manager<br>to begin Phase 1</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="important">⚠ IMPORTANT<br>Inspection must start<br>within 1 week of<br>vendor notification</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHASE 2 — PHASE 1 INSTALLATION INSPECTION
+     ══════════════════════════════════════════════════════════════ -->
+<div class="phase-section">
+  <div class="phase-divider">
+    <div class="phase-div-blank"></div>
+    <div class="phase-div-label">PHASE 2 — PHASE 1: INSTALLATION INSPECTION</div>
+  </div>
+
+  <!-- Facility Manager lane -->
+  <div class="lane">
+    <div class="lane-label">Facility<br>Manager</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="task">Complete Construction/<br>Installation checklist<br>on-site</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Submit Phase 1<br>JotForm to Director<br>of Construction</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="handoff">HANDOFF →<br>Director of<br>Construction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Director of Construction lane (review + decision) -->
+  <div class="lane" style="min-height:140px;">
+    <div class="lane-label">Director of<br>Construction</div>
+    <div class="lane-body" style="align-items:center;">
+      <div style="flex:0 0 280px;"></div>
+      <div class="node">
+        <div style="position:relative;">
+          <div class="diamond-wrap">
+            <div class="diamond-inner"></div>
+            <div class="diamond-text">All items<br>pass?</div>
+          </div>
+          <div class="diamond-yes">YES →</div>
+          <div class="diamond-no" style="bottom:-22px;">NO ↓</div>
+        </div>
+      </div>
+      <div class="spacer-h"></div>
+      <div class="node">
+        <div class="task">Approve Phase 1<br>JotForm</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="handoff">HANDOFF →<br>Construction,<br>Ops & Sales<br>(auto-notify)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rework loop row: Director emails vendor if items fail -->
+  <div class="lane" style="min-height:70px;background:#FFF8F8;">
+    <div class="lane-label" style="background:#7F1D1D;font-size:10px;">Rework<br>Loop</div>
+    <div class="lane-body" style="background:#FFF8F8;border-left-color:#B91C1C;">
+      <div style="flex:0 0 354px;"></div>
+      <div class="node">
+        <div class="important" style="background:#FEF2F2;border-color:#B91C1C;">↩ Director emails<br>vendor: list of<br>failed items</div>
+      </div>
+      <div class="arrow" style="color:#B91C1C;">→</div>
+      <div class="node">
+        <div class="important" style="background:#FEF2F2;border-color:#B91C1C;">Vendor corrects.<br>Facility Manager<br>re-inspects → resubmit</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHASE 3 — PHASE 2 BUYER'S-EYE WALK
+     ══════════════════════════════════════════════════════════════ -->
+<div class="phase-section">
+  <div class="phase-divider">
+    <div class="phase-div-blank"></div>
+    <div class="phase-div-label">PHASE 3 — PHASE 2: BUYER'S-EYE WALK</div>
+  </div>
+
+  <!-- Community Manager / Sales lane -->
+  <div class="lane" style="min-height:130px;">
+    <div class="lane-label">Community Mgr /<br>Sales Rep</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="task">Receive Phase 1<br>clearance. Schedule<br>Phase 2 walk.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="important">⚠ Within 1 week<br>of Phase 1<br>clearance</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Walk home using<br>Ops & Sales<br>checklist</div>
+        <div class="sub-label">Buyer's perspective:<br>presentation, systems,<br>cleanliness, curb appeal</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Log issues in<br>Phase 2 JotForm +<br>open Rent Manager<br>work order</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node" style="position:relative;">
+        <div class="diamond-wrap">
+          <div class="diamond-inner"></div>
+          <div class="diamond-text">Warranty<br>defect or<br>install issue?</div>
+        </div>
+        <div class="diamond-yes" style="right:-44px;font-size:8px;white-space:nowrap;">WARRANTY →</div>
+        <div class="diamond-no">INSTALL ↓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHASE 4 — ISSUE RESOLUTION & ROUTING
+     ══════════════════════════════════════════════════════════════ -->
+<div class="phase-section">
+  <div class="phase-divider">
+    <div class="phase-div-blank"></div>
+    <div class="phase-div-label">PHASE 4 — ISSUE RESOLUTION &amp; ROUTING</div>
+  </div>
+
+  <!-- Manufacturer lane -->
+  <div class="lane">
+    <div class="lane-label">Manufacturer</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="task">Receive warranty<br>defect claim<br>(email or portal)</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="tbd">⚠ TBD: Warranty<br>window — days<br>from delivery to<br>submit claim</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Complete warranty<br>repairs. Notify<br>Community Manager.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vendor/Set Crew rework lane -->
+  <div class="lane">
+    <div class="lane-label">Vendor /<br>Set Crew</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="task">Receive installation<br>issue list via email<br>from Community Mgr</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Complete corrections.<br>Notify Community<br>Manager.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Community Manager re-walk lane -->
+  <div class="lane" style="min-height:130px;">
+    <div class="lane-label">Community Mgr /<br>Sales Rep</div>
+    <div class="lane-body">
+      <div style="flex:0 0 20px;"></div>
+      <div class="node">
+        <div class="task">Email manufacturer<br>or vendor/set crew<br>with issue details</div>
+        <div class="sub-label">CC Director of Construction.<br>Include photos + Rent Manager #</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Receive fix<br>confirmation.<br>Schedule re-walk.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Re-walk home.<br>Verify all issues<br>are resolved.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node" style="position:relative;">
+        <div class="diamond-wrap">
+          <div class="diamond-inner"></div>
+          <div class="diamond-text">All issues<br>resolved?</div>
+        </div>
+        <div class="diamond-yes">YES →</div>
+        <div class="diamond-no" style="white-space:nowrap;bottom:-22px;">↩ NO: re-route</div>
+      </div>
+      <div class="spacer-h"></div>
+      <div class="node">
+        <div class="task">Close all Rent<br>Manager work<br>orders.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHASE 5 — HOME LISTING CLEARANCE
+     ══════════════════════════════════════════════════════════════ -->
+<div class="phase-section">
+  <div class="phase-divider">
+    <div class="phase-div-blank"></div>
+    <div class="phase-div-label">PHASE 5 — HOME LISTING CLEARANCE</div>
+  </div>
+
+  <div class="lane">
+    <div class="lane-label">Community<br>Manager</div>
+    <div class="lane-body">
+      <div class="node">
+        <div class="task">Confirm all issues<br>resolved. All Rent<br>Manager WOs closed.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="task">Submit Home<br>Listing JotForm</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="handoff">HANDOFF →<br>Listing Process<br>Triggered</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="end-node">✓ HOME<br>CLEARED FOR<br>LISTING &amp; SHOWING</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="margin-top:16px;padding:10px 16px;background:#E8EDF2;border-radius:6px;font-size:10px;color:#555;display:flex;justify-content:space-between;">
+  <span><strong>CONST-004 v1.0</strong> · New Home Readiness Workflow · Parakeet Communities</span>
+  <span>Swim-lane flowchart — roles by lane, time flows left to right · August 2026</span>
+</div>
+
+</body>
+</html>

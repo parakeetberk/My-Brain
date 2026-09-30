@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lease Renewal SOP — Swim-Lane Flowchart | Parakeet Communities</title>
+<style>
+  body { margin: 0; padding: 24px; font-family: Arial, Calibri, sans-serif; background: #ffffff; color: #333; }
+  h1 { color: #1F3864; font-size: 20px; margin-bottom: 4px; }
+  .subtitle { color: #2E7D32; font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #666; margin-bottom: 20px; }
+  svg { display: block; width: 100%; max-width: 900px; margin: 0 auto; }
+
+  .t  { font-family: Arial, sans-serif; font-size: 13px; fill: #333333; }
+  .ts { font-family: Arial, sans-serif; font-size: 11px; fill: #555555; }
+  .th { font-family: Arial, sans-serif; font-size: 13px; font-weight: 600; fill: #333333; }
+
+  .c-blue   rect, .c-blue   polygon { fill: #d0e8f8; stroke: #185FA5; }
+  .c-blue   .t, .c-blue   .ts, .c-blue   .th { fill: #0C447C; }
+  .c-teal   rect, .c-teal   polygon { fill: #c8ede0; stroke: #0F6E56; }
+  .c-teal   .t, .c-teal   .ts, .c-teal   .th { fill: #085041; }
+  .c-amber  rect, .c-amber  polygon { fill: #fde9b8; stroke: #854F0B; }
+  .c-amber  .t, .c-amber  .ts, .c-amber  .th { fill: #633806; }
+  .c-pink   rect, .c-pink   polygon { fill: #f5d0e0; stroke: #993556; }
+  .c-pink   .t, .c-pink   .ts, .c-pink   .th { fill: #4B1528; }
+  .c-gray   rect, .c-gray   polygon { fill: #eeece6; stroke: #888780; }
+  .c-gray   .t, .c-gray   .ts, .c-gray   .th { fill: #2C2C2A; }
+
+  .arr { stroke: #888780; stroke-width: 1.5; fill: none; }
+  .leader { stroke: #aaa; stroke-width: 0.5; stroke-dasharray: 4 3; fill: none; }
+
+  @media print {
+    body { padding: 12px; }
+    svg { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<h1>Operational Procedure: Lease Renewal</h1>
+<div class="subtitle">Parakeet Communities · Operations SOP — Swim-Lane Flowchart</div>
+<div class="meta">Process Owner: Natalie Magurne, Director of Operations &nbsp;|&nbsp; Date: _________________ &nbsp;|&nbsp; Status: DRAFT — Pending Approval</div>
+
+<svg viewBox="0 0 900 2000" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Lease Renewal Swim-Lane Flowchart</title>
+<desc>Five-phase lease renewal process across four role lanes reading left to right by time: Asset Management, Community Manager, Regional Manager, Director of Operations.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- PHASE SPINE LABELS -->
+<rect x="0" y="50" width="22" height="320" rx="4" fill="#185FA5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,11,210)"><tspan x="11" y="214">Phase 1 · Identification &amp; Preparation</tspan></text>
+<rect x="0" y="378" width="22" height="218" rx="4" fill="#0F6E56"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,11,487)"><tspan x="11" y="491">Phase 2 · Lease Creation</tspan></text>
+<rect x="0" y="604" width="22" height="430" rx="4" fill="#854F0B"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,11,819)"><tspan x="11" y="823">Phase 3 · Lease Execution</tspan></text>
+<rect x="0" y="1042" width="22" height="278" rx="4" fill="#3B6D11"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,11,1181)"><tspan x="11" y="1185">Phase 4 · QC &amp; Activation</tspan></text>
+<rect x="0" y="1328" width="22" height="640" rx="4" fill="#72243E"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" transform="rotate(-90,11,1648)"><tspan x="11" y="1652">Phase 5 · Follow-Up &amp; Compliance</tspan></text>
+
+<!-- LANE HEADERS -->
+<rect x="26" y="50" width="208" height="30" fill="#185FA5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="130" y="69">Asset Management</text>
+<rect x="238" y="50" width="208" height="30" fill="#0F6E56"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="342" y="69">Community Manager</text>
+<rect x="450" y="50" width="208" height="30" fill="#854F0B"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="554" y="69">Regional Manager</text>
+<rect x="662" y="50" width="220" height="30" fill="#72243E"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="772" y="69">Director of Operations</text>
+
+<!-- LANE BACKGROUNDS -->
+<rect x="26"  y="80" width="208" height="1900" fill="#185FA5" opacity="0.04"/>
+<rect x="238" y="80" width="208" height="1900" fill="#0F6E56" opacity="0.04"/>
+<rect x="450" y="80" width="208" height="1900" fill="#854F0B" opacity="0.04"/>
+<rect x="662" y="80" width="220" height="1900" fill="#72243E" opacity="0.04"/>
+
+<!-- LANE DIVIDERS -->
+<line x1="234" y1="50" x2="234" y2="1980" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="446" y1="50" x2="446" y2="1980" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="658" y1="50" x2="658" y2="1980" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+<!-- LEGEND ROW -->
+<rect x="26" y="14" width="856" height="28" rx="5" fill="none" stroke="#ddd" stroke-width="0.5"/>
+<rect x="34"  y="20" width="12" height="12" rx="2" fill="#d0e8f8" stroke="#185FA5" stroke-width="0.5"/>
+<text class="ts" x="50" y="30">Asset Mgmt</text>
+<rect x="138" y="20" width="12" height="12" rx="2" fill="#c8ede0" stroke="#0F6E56" stroke-width="0.5"/>
+<text class="ts" x="154" y="30">Community Manager</text>
+<rect x="292" y="20" width="12" height="12" rx="2" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text class="ts" x="308" y="30">Regional Manager</text>
+<rect x="430" y="20" width="12" height="12" rx="2" fill="#f5d0e0" stroke="#72243E" stroke-width="0.5"/>
+<text class="ts" x="446" y="30">Director of Operations</text>
+<rect x="600" y="20" width="12" height="12" rx="2" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text class="ts" x="616" y="30">⚠ IMPORTANT</text>
+
+<!-- ══════════════ PHASE 1 ══════════════ -->
+<!-- START -->
+<g class="c-gray">
+  <rect x="290" y="100" width="104" height="34" rx="17" stroke-width="0.5"/>
+  <text class="th" x="342" y="117" text-anchor="middle" dominant-baseline="central">START TRIGGER</text>
+</g>
+
+<!-- ASSET: Approve + circulate -->
+<g class="c-blue">
+  <rect x="36" y="158" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="126" y="176" text-anchor="middle" dominant-baseline="central">Approve rent increases</text>
+  <text class="ts" x="126" y="196" text-anchor="middle">&amp; circulate for approval</text>
+</g>
+
+<!-- ASSET: Issue renewal notices -->
+<g class="c-blue">
+  <rect x="36" y="226" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="126" y="244" text-anchor="middle" dominant-baseline="central">Issue renewal notices</text>
+  <text class="ts" x="126" y="264" text-anchor="middle">FL/SC: 90 days · GA/MA/NC: 60 days</text>
+</g>
+
+<!-- IMPORTANT: notice -->
+<rect x="36" y="292" width="180" height="40" rx="4" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="126" y="307">⚠ Default to 90 days</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="126" y="323">if state unclear</text>
+
+<!-- CM: Validate tenant -->
+<g class="c-teal">
+  <rect x="248" y="158" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="176" text-anchor="middle" dominant-baseline="central">Validate tenant data</text>
+  <text class="ts" x="338" y="196" text-anchor="middle">confirm approved rent amt</text>
+</g>
+
+<!-- CM: Confirm unit -->
+<g class="c-teal">
+  <rect x="248" y="226" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="244" text-anchor="middle" dominant-baseline="central">Confirm unit assignment</text>
+  <text class="ts" x="338" y="264" text-anchor="middle">correct &amp; available</text>
+</g>
+
+<!-- RM: Spot-check Phase 1 -->
+<g class="c-amber">
+  <rect x="460" y="158" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="176" text-anchor="middle" dominant-baseline="central">Spot-check notices</text>
+  <text class="ts" x="550" y="196" text-anchor="middle">sent correctly &amp; on time</text>
+</g>
+
+<!-- HANDOFF Asset→CM -->
+<line x1="216" y1="184" x2="246" y2="184" stroke="#185FA5" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+<text font-family="Arial" font-size="10" fill="#185FA5" text-anchor="middle" x="231" y="179">HANDOFF</text>
+<!-- Asset dashes to RM -->
+<line x1="216" y1="170" x2="458" y2="170" stroke="#185FA5" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arrow-blue)"/>
+
+<!-- PHASE SEPARATOR -->
+<line x1="26" y1="376" x2="882" y2="376" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══════════════ PHASE 2 ══════════════ -->
+<!-- CM: Log in -->
+<g class="c-teal">
+  <rect x="248" y="390" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="408" text-anchor="middle" dominant-baseline="central">Log in to Rent Manager</text>
+  <text class="ts" x="338" y="428" text-anchor="middle">Express</text>
+</g>
+
+<!-- CM: Navigate -->
+<g class="c-teal">
+  <rect x="248" y="458" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="476" text-anchor="middle" dominant-baseline="central">Navigate to tenant profile</text>
+  <text class="ts" x="338" y="496" text-anchor="middle">Properties → Tenants</text>
+</g>
+
+<!-- IMPORTANT: Renew not New -->
+<rect x="248" y="524" width="180" height="52" rx="4" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="338" y="542">⚠ Click RENEW LEASE</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="338" y="560">NOT New Lease</text>
+
+<!-- RM: Spot-check Phase 2 -->
+<g class="c-amber">
+  <rect x="460" y="390" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="408" text-anchor="middle" dominant-baseline="central">Spot-check lease creation</text>
+  <text class="ts" x="550" y="428" text-anchor="middle">date range &amp; accuracy</text>
+</g>
+
+<!-- RM: Escalate errors -->
+<rect x="460" y="458" width="180" height="52" rx="4" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" fill="#633806" text-anchor="middle" x="550" y="476">Errors found →</text>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="550" y="494">escalate to Dir. of Ops</text>
+<line x1="640" y1="484" x2="690" y2="484" stroke="#854F0B" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- DOps: Receive escalation (Phase 2) -->
+<g class="c-pink">
+  <rect x="672" y="458" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="762" y="476" text-anchor="middle" dominant-baseline="central">Receive escalation</text>
+  <text class="ts" x="762" y="496" text-anchor="middle">determine correction path</text>
+</g>
+
+<!-- PHASE SEPARATOR -->
+<line x1="26" y1="602" x2="882" y2="602" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══════════════ PHASE 3 ══════════════ -->
+<!-- CM: Generate lease doc -->
+<g class="c-teal">
+  <rect x="248" y="616" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="634" text-anchor="middle" dominant-baseline="central">Generate lease document</text>
+  <text class="ts" x="338" y="654" text-anchor="middle">review PDF for accuracy</text>
+</g>
+
+<!-- DECISION: E-sign or manual -->
+<g class="c-gray">
+  <polygon points="338,682 394,712 338,742 282,712" stroke-width="0.5"/>
+  <text class="ts" x="338" y="708" text-anchor="middle" dominant-baseline="central">E-sign or</text>
+  <text class="ts" x="338" y="722" text-anchor="middle" dominant-baseline="central">manual?</text>
+</g>
+
+<!-- PATH A label + arrow -->
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0F6E56" text-anchor="middle" x="222" y="758">Path A: Digital</text>
+<line x1="282" y1="712" x2="230" y2="712" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="230" y1="712" x2="230" y2="774" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- PATH B label + arrow -->
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0F6E56" text-anchor="middle" x="454" y="758">Path B: Manual</text>
+<line x1="394" y1="712" x2="454" y2="712" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="454" y1="712" x2="454" y2="774" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- PATH A: Publish + assign -->
+<g class="c-teal">
+  <rect x="150" y="774" width="160" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="230" y="792" text-anchor="middle" dominant-baseline="central">Publish doc</text>
+  <text class="ts" x="230" y="812" text-anchor="middle">assign signers + verify emails</text>
+</g>
+
+<!-- PATH A: Send + track -->
+<g class="c-teal">
+  <rect x="150" y="842" width="160" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="230" y="860" text-anchor="middle" dominant-baseline="central">Send &amp; track status</text>
+  <text class="ts" x="230" y="880" text-anchor="middle">Pending → Signed</text>
+</g>
+
+<!-- PATH B: Print + obtain signatures -->
+<g class="c-teal">
+  <rect x="366" y="774" width="176" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="454" y="792" text-anchor="middle" dominant-baseline="central">Print &amp; obtain signatures</text>
+  <text class="ts" x="454" y="812" text-anchor="middle">in person</text>
+</g>
+
+<!-- PATH B: Scan + upload -->
+<g class="c-teal">
+  <rect x="366" y="842" width="176" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="454" y="860" text-anchor="middle" dominant-baseline="central">Scan &amp; upload</text>
+  <text class="ts" x="454" y="880" text-anchor="middle">Tenant Profile → Notes</text>
+</g>
+
+<!-- DECISION: Signed within 30 days? -->
+<g class="c-gray">
+  <polygon points="338,910 402,940 338,970 274,940" stroke-width="0.5"/>
+  <text class="ts" x="338" y="936" text-anchor="middle" dominant-baseline="central">Signed within</text>
+  <text class="ts" x="338" y="950" text-anchor="middle" dominant-baseline="central">30 days?</text>
+</g>
+
+<!-- YES: activate -->
+<text font-family="Arial" font-size="11" fill="#3B6D11" x="262" y="962">YES</text>
+<line x1="274" y1="940" x2="230" y2="940" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+<line x1="230" y1="940" x2="230" y2="986" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+<!-- NO: escalate to RM -->
+<text font-family="Arial" font-size="11" fill="#A32D2D" x="406" y="962">NO</text>
+<line x1="402" y1="940" x2="530" y2="940" stroke="#A32D2D" stroke-width="1" marker-end="url(#arrow-red)"/>
+
+<!-- YES: Activate lease -->
+<g class="c-teal">
+  <rect x="150" y="986" width="160" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="230" y="1004" text-anchor="middle" dominant-baseline="central">Activate lease</text>
+  <text class="ts" x="230" y="1024" text-anchor="middle">status → Active</text>
+</g>
+
+<!-- RM: Contact resident -->
+<g class="c-amber">
+  <rect x="460" y="920" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="938" text-anchor="middle" dominant-baseline="central">Contact resident</text>
+  <text class="ts" x="550" y="958" text-anchor="middle">resolve refusal</text>
+</g>
+
+<!-- CM: Tenancy Ack (refusal path) -->
+<g class="c-teal">
+  <rect x="366" y="988" width="176" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="454" y="1006" text-anchor="middle" dominant-baseline="central">Complete Tenancy Lease</text>
+  <text class="ts" x="454" y="1026" text-anchor="middle">Acknowledgment</text>
+</g>
+<line x1="550" y1="972" x2="550" y2="988" stroke="#888" stroke-width="1"/>
+<line x1="550" y1="988" x2="544" y2="988" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- IMPORTANT: rent goes into effect -->
+<rect x="662" y="912" width="200" height="54" rx="4" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="762" y="930">⚠ Rent increase goes into</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="762" y="946">effect regardless of signing</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="762" y="960">Unsigned ≠ delayed increase</text>
+
+<!-- MA Note -->
+<rect x="662" y="774" width="200" height="74" rx="4" fill="#d0e8f8" stroke="#185FA5" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C447C" text-anchor="middle" x="762" y="792">MA PROPERTIES ONLY:</text>
+<text font-family="Arial" font-size="11" fill="#0C447C" text-anchor="middle" x="762" y="808">Full § 32P disclosure pkg</text>
+<text font-family="Arial" font-size="11" fill="#0C447C" text-anchor="middle" x="762" y="824">required 72 hrs before</text>
+<text font-family="Arial" font-size="11" fill="#0C447C" text-anchor="middle" x="762" y="840">resident signs</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="26" y1="1040" x2="882" y2="1040" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══════════════ PHASE 4 ══════════════ -->
+<!-- ASSET: Update billing -->
+<g class="c-blue">
+  <rect x="36" y="1054" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="126" y="1072" text-anchor="middle" dominant-baseline="central">Update billing schedule</text>
+  <text class="ts" x="126" y="1092" text-anchor="middle">in Rent Manager</text>
+</g>
+
+<!-- CM: Verify details -->
+<g class="c-teal">
+  <rect x="248" y="1054" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="1072" text-anchor="middle" dominant-baseline="central">Verify all details</text>
+  <text class="ts" x="338" y="1092" text-anchor="middle">tenant, unit, rent, charges</text>
+</g>
+
+<!-- CM: Confirm billing w/ Asset -->
+<g class="c-teal">
+  <rect x="248" y="1122" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="1140" text-anchor="middle" dominant-baseline="central">Confirm billing activated</text>
+  <text class="ts" x="338" y="1160" text-anchor="middle">verify w/ Asset Management</text>
+</g>
+<line x1="248" y1="1148" x2="218" y2="1148" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+<text font-family="Arial" font-size="10" fill="#0F6E56" text-anchor="middle" x="233" y="1143">HANDOFF</text>
+
+<!-- RM: QC spot-check -->
+<g class="c-amber">
+  <rect x="460" y="1054" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="1072" text-anchor="middle" dominant-baseline="central">QC spot-check</text>
+  <text class="ts" x="550" y="1092" text-anchor="middle">periodic portfolio review</text>
+</g>
+
+<!-- IMPORTANT: billing -->
+<rect x="662" y="1054" width="200" height="52" rx="4" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="762" y="1072">⚠ Inactive lease =</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="762" y="1088">wrong billing rate</text>
+
+<!-- PHASE SEPARATOR -->
+<line x1="26" y1="1326" x2="882" y2="1326" stroke="#bbb" stroke-width="1"/>
+
+<!-- ══════════════ PHASE 5 ══════════════ -->
+<!-- CM/SM: Weekly report -->
+<g class="c-teal">
+  <rect x="248" y="1340" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="1358" text-anchor="middle" dominant-baseline="central">Run weekly report</text>
+  <text class="ts" x="338" y="1378" text-anchor="middle">unsigned / incomplete leases</text>
+</g>
+
+<!-- CM: Send reminders -->
+<g class="c-teal">
+  <rect x="248" y="1408" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="1426" text-anchor="middle" dominant-baseline="central">Send follow-up reminders</text>
+  <text class="ts" x="338" y="1446" text-anchor="middle">to unsigned residents</text>
+</g>
+
+<!-- DECISION: Unsigned after 30 days? -->
+<g class="c-gray">
+  <polygon points="338,1476 402,1506 338,1536 274,1506" stroke-width="0.5"/>
+  <text class="ts" x="338" y="1502" text-anchor="middle" dominant-baseline="central">Unsigned after</text>
+  <text class="ts" x="338" y="1516" text-anchor="middle" dominant-baseline="central">30 days?</text>
+</g>
+
+<!-- NO: continue monitoring -->
+<text font-family="Arial" font-size="11" fill="#3B6D11" x="262" y="1528">NO</text>
+<line x1="274" y1="1506" x2="210" y2="1506" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+<line x1="210" y1="1506" x2="210" y2="1562" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+<!-- NO: Continue monitoring -->
+<g class="c-teal">
+  <rect x="130" y="1562" width="160" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="210" y="1580" text-anchor="middle" dominant-baseline="central">Continue monitoring</text>
+  <text class="ts" x="210" y="1600" text-anchor="middle">weekly follow-up</text>
+</g>
+
+<!-- YES: escalate to RM -->
+<text font-family="Arial" font-size="11" fill="#A32D2D" x="406" y="1528">YES</text>
+<line x1="402" y1="1506" x2="530" y2="1506" stroke="#A32D2D" stroke-width="1" marker-end="url(#arrow-red)"/>
+
+<!-- RM: Escalate + contact -->
+<g class="c-amber">
+  <rect x="460" y="1480" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="1498" text-anchor="middle" dominant-baseline="central">Contact resident</text>
+  <text class="ts" x="550" y="1518" text-anchor="middle">resolve unsigned lease</text>
+</g>
+
+<!-- DECISION: Resolved? -->
+<g class="c-gray">
+  <polygon points="550,1550 608,1578 550,1606 492,1578" stroke-width="0.5"/>
+  <text class="ts" x="550" y="1574" text-anchor="middle" dominant-baseline="central">Resolved?</text>
+</g>
+
+<!-- YES resolved: CM completes -->
+<text font-family="Arial" font-size="11" fill="#3B6D11" x="480" y="1598">YES</text>
+<line x1="492" y1="1578" x2="440" y2="1578" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+<line x1="440" y1="1578" x2="440" y2="1650" stroke="#3B6D11" stroke-width="1"/>
+<line x1="338" y1="1650" x2="440" y2="1650" stroke="#3B6D11" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+<!-- NO: escalate to DOps -->
+<text font-family="Arial" font-size="11" fill="#A32D2D" x="612" y="1598">NO</text>
+<line x1="608" y1="1578" x2="670" y2="1578" stroke="#A32D2D" stroke-width="1" marker-end="url(#arrow-red)"/>
+
+<!-- CM: Tenancy Ack Phase 5 -->
+<g class="c-teal">
+  <rect x="248" y="1624" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="338" y="1642" text-anchor="middle" dominant-baseline="central">Complete Tenancy Lease</text>
+  <text class="ts" x="338" y="1662" text-anchor="middle">Acknowledgment</text>
+</g>
+
+<!-- DOps: Resolve escalation -->
+<g class="c-pink">
+  <rect x="662" y="1554" width="200" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="762" y="1572" text-anchor="middle" dominant-baseline="central">Resolve escalation</text>
+  <text class="ts" x="762" y="1592" text-anchor="middle">w/ Asset Management</text>
+</g>
+
+<!-- RM: Monthly compliance -->
+<g class="c-amber">
+  <rect x="460" y="1720" width="180" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="550" y="1738" text-anchor="middle" dominant-baseline="central">Monthly compliance review</text>
+  <text class="ts" x="550" y="1758" text-anchor="middle">full portfolio check</text>
+</g>
+
+<!-- DOps: ongoing resolution -->
+<g class="c-pink">
+  <rect x="662" y="1720" width="200" height="52" rx="6" stroke-width="0.5"/>
+  <text class="th" x="762" y="1738" text-anchor="middle" dominant-baseline="central">Ongoing escalation mgmt</text>
+  <text class="ts" x="762" y="1758" text-anchor="middle">w/ Asset Management</text>
+</g>
+
+<!-- IMPORTANT: follow-up failure -->
+<rect x="36" y="1720" width="180" height="52" rx="4" fill="#fce8e8" stroke="#A32D2D" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#791F1F" text-anchor="middle" x="126" y="1738">⚠ Lack of follow-up</text>
+<text font-family="Arial" font-size="11" fill="#791F1F" text-anchor="middle" x="126" y="1754">is #1 failure point</text>
+
+<!-- END -->
+<g class="c-gray">
+  <rect x="286" y="1880" width="104" height="34" rx="17" stroke-width="0.5"/>
+  <text class="th" x="338" y="1897" text-anchor="middle" dominant-baseline="central">END</text>
+</g>
+<text font-family="Arial" font-size="11" fill="#555" text-anchor="middle" x="338" y="1930">Lease active · billing confirmed · compliance recorded</text>
+
+<!-- VERTICAL FLOW ARROWS -->
+<line x1="338" y1="134" x2="338" y2="156" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="210" x2="338" y2="224" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="280" x2="338" y2="388" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="444" x2="338" y2="456" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="510" x2="338" y2="614" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="668" x2="338" y2="680" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- Merge paths before signed? decision -->
+<line x1="230" y1="894" x2="230" y2="906" stroke="#888" stroke-width="1"/>
+<line x1="454" y1="894" x2="454" y2="906" stroke="#888" stroke-width="1"/>
+<line x1="230" y1="906" x2="338" y2="906" stroke="#888" stroke-width="1"/>
+<line x1="338" y1="906" x2="454" y2="906" stroke="#888" stroke-width="1"/>
+<line x1="338" y1="906" x2="338" y2="908" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- activate → phase 4 -->
+<line x1="230" y1="1038" x2="230" y2="1050" stroke="#888" stroke-width="1"/>
+<line x1="230" y1="1050" x2="338" y2="1050" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- Phase 4 → Phase 5 -->
+<line x1="338" y1="1174" x2="338" y2="1328" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- Phase 5 internal -->
+<line x1="338" y1="1392" x2="338" y2="1406" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="338" y1="1460" x2="338" y2="1474" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- Tenancy ack → END -->
+<line x1="338" y1="1676" x2="338" y2="1878" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- RM phase 5 flow -->
+<line x1="550" y1="1532" x2="550" y2="1548" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="550" y1="1608" x2="550" y2="1718" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="762" y1="1608" x2="762" y2="1718" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+</svg>
+
+<div style="margin-top:20px; padding:12px; border-top:2px solid #2E7D32; font-size:11px; color:#666; text-align:center;">
+  Parakeet Communities, LLC &nbsp;·&nbsp; Confidential Internal Document &nbsp;·&nbsp; Not for External Distribution<br>
+  Process Owner: Natalie Magurne, Director of Operations &nbsp;·&nbsp; Status: DRAFT — Pending Approval
+</div>
+</body>
+</html>

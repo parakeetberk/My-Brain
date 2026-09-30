@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Move-In Process Flowchart | Parakeet Communities</title>
+<style>
+  body{margin:0;padding:24px;font-family:Arial,sans-serif;background:#fff;}
+  h1{color:#1F3864;font-size:20px;margin-bottom:4px;}
+  .sub{color:#2E7D32;font-size:14px;font-weight:bold;margin-bottom:4px;}
+  .meta{font-size:11px;color:#666;margin-bottom:18px;}
+  svg{display:block;width:100%;max-width:1060px;margin:0 auto;}
+  @media print{body{padding:8px;}svg{max-width:100%;}}
+</style>
+</head>
+<body>
+<h1>Operational Procedure: Move-In Process</h1>
+<div class="sub">Parakeet Communities · Operations SOP — Swim-Lane Flowchart</div>
+<div class="meta">Resident-Owned Homes &nbsp;|&nbsp; Community-Owned Homes / Rentals &nbsp;|&nbsp; Process Owner: Natalie Magurne, Director of Operations</div>
+<svg viewBox="0 0 1060 1540" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/></marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#C62828" stroke-width="1.5" stroke-linecap="round"/></marker>
+</defs>
+
+<!-- LANE HEADERS -->
+<rect x="22"  y="14" width="310" height="30" fill="#1F3864"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="177" y="33">On-Site Manager</text>
+<rect x="336" y="14" width="310" height="30" fill="#2E7D32"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="491" y="33">Home Office / Asset Management</text>
+<rect x="650" y="14" width="388" height="30" fill="#854F0B"/><text font-family="Arial" font-size="11" font-weight="600" fill="white" text-anchor="middle" x="844" y="33">New Resident</text>
+
+<!-- LANE BACKGROUNDS -->
+<rect x="22"  y="44" width="310" height="1480" fill="#1F3864" opacity="0.04"/>
+<rect x="336" y="44" width="310" height="1480" fill="#2E7D32" opacity="0.04"/>
+<rect x="650" y="44" width="388" height="1480" fill="#854F0B" opacity="0.04"/>
+
+<!-- LANE DIVIDERS -->
+<line x1="332"  y1="14" x2="332"  y2="1524" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+<line x1="646"  y1="14" x2="646"  y2="1524" stroke="#ccc" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+<!-- PATH LABELS -->
+<rect x="22" y="54" width="148" height="22" rx="4" fill="#1F3864" opacity="0.15"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#1F3864" text-anchor="middle" x="96" y="69">Path A: Resident-Owned</text>
+<rect x="176" y="54" width="150" height="22" rx="4" fill="#2E7D32" opacity="0.15"/>
+<text font-family="Arial" font-size="10" font-weight="600" fill="#2E7D32" text-anchor="middle" x="251" y="69">Path B: Community-Owned</text>
+
+<!-- START -->
+<rect x="382" y="86" width="218" height="30" rx="15" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="#333" text-anchor="middle" x="491" y="106">APPLICATION APPROVED</text>
+<line x1="491" y1="116" x2="491" y2="130" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="491" y1="130" x2="177" y2="130" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- STEP 1: Manager reaches out -->
+<rect x="30" y="134" width="290" height="68" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="175" y="154">Welcome Prospect</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="170">Reach out · Confirm move-in details</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="184">Send digital lease for signature</text>
+
+<!-- Resident signs lease -->
+<rect x="658" y="134" width="372" height="68" rx="6" fill="#fde9b8" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#633806" text-anchor="middle" x="844" y="154">Sign Digital Lease</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="844" y="170">Resident signs and returns lease</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="844" y="184">Send required documents &amp; deposits</text>
+<line x1="320" y1="168" x2="656" y2="168" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- STEP 2: Collect docs -->
+<rect x="30" y="222" width="290" height="100" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="175" y="242">Collect Required Documents</text>
+<!-- Path A checklist -->
+<text font-family="Arial" font-size="9" fill="#1F3864" font-weight="600" x="38" y="260">Path A (Resident-Owned):</text>
+<text font-family="Arial" font-size="9" fill="#333" x="38" y="274">Title · Bill of Sale · Signed Lease</text>
+<text font-family="Arial" font-size="9" fill="#333" x="38" y="288">1st Rent · Security Dep · Pet/Occ Fees</text>
+<!-- Path B checklist -->
+<text font-family="Arial" font-size="9" fill="#2E7D32" font-weight="600" x="175" y="260">Path B (Community-Owned):</text>
+<text font-family="Arial" font-size="9" fill="#333" x="175" y="274">Signed Lease · 1st Rent · Security Dep</text>
+<text font-family="Arial" font-size="9" fill="#333" x="175" y="288">Move-In Inspection Form · Pet/Occ Fees</text>
+<line x1="844" y1="202" x2="844" y2="232" stroke="#888" stroke-width="1"/>
+<line x1="844" y1="232" x2="320" y2="232" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="175" y1="202" x2="175" y2="220" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- DECISION: All docs received? -->
+<polygon points="175,340 250,368 175,396 100,368" fill="#eee" stroke="#aaa" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="364">All docs</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="378">received?</text>
+<line x1="175" y1="322" x2="175" y2="338" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- NO: Follow up -->
+<text font-family="Arial" font-size="10" fill="#C62828" x="52" y="382">NO</text>
+<line x1="100" y1="368" x2="50" y2="368" stroke="#C62828" stroke-width="1"/>
+<line x1="50" y1="368" x2="50" y2="430" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+<rect x="30" y="430" width="200" height="40" rx="4" fill="#fce8e8" stroke="#C62828" stroke-width="0.5"/>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="130" y="448">Contact resident for missing docs</text>
+<text font-family="Arial" font-size="10" fill="#791F1F" text-anchor="middle" x="130" y="460">Do not schedule Meet &amp; Greet yet</text>
+<line x1="130" y1="470" x2="130" y2="490" stroke="#C62828" stroke-width="1"/>
+<line x1="130" y1="490" x2="175" y2="490" stroke="#C62828" stroke-width="1"/>
+<line x1="175" y1="490" x2="175" y2="396" stroke="#C62828" stroke-width="1" marker-end="url(#arr-r)"/>
+
+<!-- YES -->
+<text font-family="Arial" font-size="10" fill="#2E7D32" x="252" y="382">YES</text>
+<line x1="250" y1="368" x2="320" y2="368" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- STEP 3A: Meet & Greet (Path A) -->
+<rect x="30" y="510" width="290" height="52" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="175" y="530">Schedule &amp; Conduct Meet &amp; Greet</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="546">All paths — once all docs confirmed</text>
+<line x1="175" y1="396" x2="175" y2="410" stroke="#2E7D32" stroke-width="1"/>
+<line x1="175" y1="410" x2="320" y2="410" stroke="#888" stroke-width="1"/>
+<line x1="320" y1="410" x2="320" y2="530" stroke="#888" stroke-width="1"/>
+<line x1="320" y1="530" x2="322" y2="530" stroke="#888" stroke-width="0.5"/>
+<line x1="175" y1="410" x2="175" y2="508" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- PATH B ONLY: Move-In Inspection -->
+<rect x="30" y="582" width="290" height="52" rx="6" fill="#c8ede0" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#085041" text-anchor="middle" x="175" y="602">Move-In Inspection &amp; Walk-Through</text>
+<text font-family="Arial" font-size="9" fill="#085041" text-anchor="middle" x="175" y="618">Path B only · Both parties sign inspection form</text>
+<line x1="175" y1="562" x2="175" y2="580" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Home Office confirms -->
+<rect x="344" y="510" width="290" height="68" rx="6" fill="#c8ede0" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#085041" text-anchor="middle" x="489" y="530">Confirm All Documents</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="489" y="546">Verify completeness &amp; accuracy</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="489" y="560">Import into Rent Manager</text>
+<line x1="320" y1="368" x2="489" y2="368" stroke="#888" stroke-width="1"/>
+<line x1="489" y1="368" x2="489" y2="508" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Update RM -->
+<rect x="344" y="598" width="290" height="84" rx="6" fill="#c8ede0" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#085041" text-anchor="middle" x="489" y="618">Update Rent Manager</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="489" y="634">Move Resident: Prospect → Resident</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="489" y="648">Change unit status</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="489" y="662">Confirm recurring charges</text>
+<line x1="489" y1="578" x2="489" y2="596" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Resident becomes new resident -->
+<rect x="658" y="598" width="372" height="52" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="12" font-weight="700" fill="#1B5E20" text-anchor="middle" x="844" y="622">RESIDENT BECOMES NEW RESIDENT</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="844" y="638">System updated · Tenancy begins</text>
+<line x1="636" y1="640" x2="656" y2="640" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+<!-- 3-day check-in -->
+<rect x="30" y="720" width="290" height="52" rx="6" fill="#d0e4f8" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#0C2754" text-anchor="middle" x="175" y="740">3-Day Post-Move-In Check-In</text>
+<text font-family="Arial" font-size="10" fill="#333" text-anchor="middle" x="175" y="756">Address questions · Document in RM</text>
+<line x1="175" y1="634" x2="175" y2="680" stroke="#888" stroke-width="1"/>
+<line x1="175" y1="680" x2="489" y2="680" stroke="#888" stroke-width="1"/>
+<line x1="489" y1="682" x2="489" y2="680" stroke="#888" stroke-width="0.5"/>
+<line x1="175" y1="680" x2="175" y2="718" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- END -->
+<rect x="390" y="798" width="200" height="34" rx="17" fill="#2E7D32"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="490" y="820">MOVE-IN COMPLETE</text>
+<line x1="175" y1="772" x2="175" y2="815" stroke="#2E7D32" stroke-width="1"/>
+<line x1="175" y1="815" x2="388" y2="815" stroke="#2E7D32" stroke-width="1" marker-end="url(#arr-g)"/>
+
+<!-- CHECKLIST REFERENCE TABLE -->
+<rect x="22" y="862" width="1016" height="28" fill="#1F3864" rx="4"/>
+<text font-family="Arial" font-size="12" font-weight="600" fill="white" text-anchor="middle" x="530" y="880">MOVE-IN CHECKLIST — REQUIRED DOCUMENTS BY PATH</text>
+
+<rect x="22" y="894" width="510" height="26" fill="#1F3864" opacity="0.15" stroke="#1F3864" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#1F3864" text-anchor="middle" x="277" y="912">PATH A: Resident-Owned Home</text>
+<rect x="534" y="894" width="504" height="26" fill="#2E7D32" opacity="0.15" stroke="#2E7D32" stroke-width="0.5"/>
+<text font-family="Arial" font-size="11" font-weight="600" fill="#2E7D32" text-anchor="middle" x="786" y="912">PATH B: Community-Owned Home / Rental</text>
+
+<!-- Path A items -->
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="932">✓  Copy of Title</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="950">✓  Bill of Sale</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="968">✓  Signed Lease</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="986">✓  1st Month's Rent</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="1004">✓  Security Deposit</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="1022">✓  Pet Fee (if applicable)</text>
+<text font-family="Arial" font-size="10" fill="#333" x="30" y="1040">✓  Additional Occupant Fee (if applicable)</text>
+<text font-family="Arial" font-size="10" fill="#C62828" x="30" y="1058">✗  Move-In Inspection Form (NOT required)</text>
+
+<!-- Path B items -->
+<text font-family="Arial" font-size="10" fill="#C62828" x="542" y="932">✗  Copy of Title (NOT required)</text>
+<text font-family="Arial" font-size="10" fill="#C62828" x="542" y="950">✗  Bill of Sale (NOT required)</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="968">✓  Signed Lease</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="986">✓  1st Month's Rent</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="1004">✓  Security Deposit</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="1022">✓  Move-In Inspection Form (REQUIRED)</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="1040">✓  Pet Fee (if applicable)</text>
+<text font-family="Arial" font-size="10" fill="#333" x="542" y="1058">✓  Additional Occupant Fee (if applicable)</text>
+
+<!-- Divider -->
+<line x1="530" y1="890" x2="530" y2="1070" stroke="#ccc" stroke-width="0.5"/>
+
+<!-- Footer -->
+<line x1="22" y1="1090" x2="1038" y2="1090" stroke="#2E7D32" stroke-width="1"/>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="530" y="1108">Parakeet Communities, LLC · Confidential Internal Document · Not for External Distribution</text>
+<text font-family="Arial" font-size="10" fill="#1F3864" font-style="italic" text-anchor="middle" x="530" y="1122">Process Owner: Natalie Magurne, Director of Operations · Status: DRAFT — Pending Approval</text>
+</svg>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<title>Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F6F7; --card:#FFFFFF; --ink:#12171B; --muted:#5C666E;
+  --rule:#D8DEE2; --signal:#B45309; --critical:#A32036; --ok:#16794A; --slate:#2F4858;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8;
+    --rule:#29333B; --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8;
+  --rule:#29333B; --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:18px; line-height:1.55;
+  margin:0; padding:22px 16px 72px; overflow-x:hidden;
+}
+.wrap{max-width:640px;margin:0 auto}
+h1,h2,h3,.k{font-family:"IBM Plex Sans Condensed","Segoe UI",sans-serif}
+h1{font-size:30px;line-height:1.15;margin:0 0 4px;letter-spacing:-.01em}
+.date{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin:0 0 18px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
+   margin:34px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--rule);font-weight:600}
+.card{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--rule);
+      border-radius:3px;padding:15px 17px;margin:0 0 12px}
+.card.crit{border-left-color:var(--critical)}
+.card.warn{border-left-color:var(--signal)}
+.card.done{border-left-color:var(--ok)}
+.card.info{border-left-color:var(--slate)}
+.card h3{font-size:17px;margin:0 0 8px;line-height:1.3}
+.card p{margin:0 0 9px}
+.card p:last-child{margin-bottom:0}
+.num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);
+     letter-spacing:.06em;display:block;margin:0 0 5px;text-transform:uppercase}
+.t{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600}
+q,.q{font-style:italic}
+.lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;
+     text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);
+     border-radius:2px;padding:1px 5px;white-space:nowrap}
+.src{font-size:13.5px;color:var(--muted);line-height:1.45}
+.src code, code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;word-break:break-word}
+.ask{font-weight:600}
+table.sched{width:100%;border-collapse:collapse;font-size:15px}
+table.sched td{border-bottom:1px solid var(--rule);padding:9px 6px 9px 0;vertical-align:top}
+table.sched td.tm{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap;
+                  width:104px;color:var(--slate);font-weight:600}
+table.sched tr:last-child td{border-bottom:none}
+.note{font-size:13.5px;color:var(--muted);display:block;margin-top:3px}
+ul.tail{list-style:none;padding:0;margin:0}
+ul.tail li{border-bottom:1px solid var(--rule);padding:9px 0;font-size:15.5px;line-height:1.45}
+ul.tail li:last-child{border-bottom:none}
+ul.dec{list-style:none;padding:0;margin:0}
+ul.dec li{padding:9px 0 9px 30px;position:relative;border-bottom:1px solid var(--rule);font-size:16px}
+ul.dec li:last-child{border-bottom:none}
+ul.dec li:before{content:"";position:absolute;left:0;top:14px;width:15px;height:15px;
+                 border:1.5px solid var(--muted);border-radius:2px}
+.scope{font-size:13.5px;color:var(--muted);background:var(--card);border:1px solid var(--rule);
+       border-radius:3px;padding:13px 15px;margin:0 0 6px;line-height:1.5}
+.hr{height:1px;background:var(--rule);margin:30px 0 0}
+b,strong{font-weight:600}
+</style>
+
+<div class="wrap">
+
+<p class="date">Wednesday 2 September 2026 &nbsp;·&nbsp; swept 07:35 ET</p>
+<h1>Two clocks before lunch: a name by 10, a pad count by 2.</h1>
+
+<div class="scope">
+<b>Scope.</b> Outlook Inbox, 41 messages since 18:00 ET yesterday, all read not just unread. Sent Items, empty. <b>For Signature</b> by folder ID, 0 items and 0 unread, third night running. Teams, 19 messages across the chats scanned. Calendar for 09-02 and 09-03, every time converted out of UTC. Plaud, 5 recordings dated 09-01, one of them new since the 18:11 close. Diffed against <code>99-Archive/</code>, <code>00-Meta/commitments.md</code>, <code>00-Meta/open-items.md</code>, <code>00-Meta/parked-decisions.md</code> and <code>00-Meta/daily-close/2026-09-01.md</code> before anything below was written.
+<br><br>
+<b>Your own outbound is empty on both channels since 18:00 ET</b>, so nothing closed by your own action overnight. Teams search hit a Graph 429 twice and completed on the third attempt; treat the Teams half as thinner than the mail half.
+<br><br>
+<b>Yesterday's brief carried no comments.</b> Per the standing rule that is not agreement, it is silence. The three dispositions and seven questions in the 09-01 close are all still open and carried below with their ask counts.
+</div>
+
+<h2>Closed since yesterday</h2>
+
+<div class="card done">
+<span class="num">01 · Resolved</span>
+<h3>Mayflower answered in full, and nothing is owed by us</h3>
+<p>Chris Hoke at Woods Oviatt, 19:01 ET yesterday, answering all three of your 16:37 questions. The <span class="t">$150k</span> deposit: Fidelity National confirmed receipt. Environmental: all documentation was provided per your 4 August email. Diligence period expires <b>September 14</b>, financing period expires <b>October 19</b>, closing 30 business days after that.</p>
+<p class="src"><span class="lab">Verified</span> primary email read. Buyer's lender was in the DD data room Tuesday, so they are working it. No item opens from this.</p>
+</div>
+
+<div class="card done">
+<span class="num">02 · Resolved</span>
+<h3>Kevin Grant's Thursday slot got booked, and it collides</h3>
+<p>The one-line reply you were sitting on since 16:49 Monday is done. Nixon Peabody catchup is Thursday <b>5:00 to 5:30pm ET</b>. It sits inside the <b>Finance and Accounting EOS meeting, 4:30 to 5:30pm ET</b>, which Berman organises and Jon, Zach and Albert are on.</p>
+<p class="src"><span class="lab">Verified</span> calendar read, both events. One of the two moves or you take thirty minutes of the EOS call.</p>
+</div>
+
+<div class="card done">
+<span class="num">03 · Resolved</span>
+<h3>Moe's Hunter Springs fee question was answered by Jon, not you</h3>
+<p>Moe at 05:35 ET: whether to run Simplified fees, AM fees and payroll to 2/28/2026 or through 8/31/2026, given the Hunter loan was due 2/28. Jon at 06:46: <q>Ya run it all current.</q> Then <q>But we also credit I believe up to 6 specific lots lot rent if not occupied.</q></p>
+<p class="src"><span class="lab">Verified</span> Teams. Nothing on you. It does mean the Kippy AR numbers you see at 08:30 are being rebuilt this morning.</p>
+</div>
+
+<h2>Needs you before your first meeting</h2>
+
+<div class="card crit">
+<span class="num">01 · Needs you · due 10:00 ET</span>
+<h3>The Uniti agent name is late, and two of your items are late behind it</h3>
+<p>Jon asked twice overnight. Teams at 00:35: <q>are you on board with this as the AI agent name</q>. Email at 01:06, leaning <b>Sam Bennett</b>: <q>I need this by 10am, because the name is the only thing standing between us and the mailbox Uniti already asked for.</q></p>
+<p>In the SAM Masters chat at 00:36 he put it harder: <q>Two things are now late rather than pending: the agent inbox, which Catherine asked for before this call and which is blocked on the name, and the Rent Manager activation request.</q></p>
+<p><span class="ask">Two of the three do-before-2pm items are yours by name.</span> Send the <b>Rent Manager integration activation request</b> with Justin Minkoff, which Jon calls the long lead item against the October 1 go-live and says has not gone. Then stand up the mailbox the moment the name lands, his recommendation <code>sam@parakeetcommunities.com</code>, surname out of the address so a later change costs nothing.</p>
+<p>Natalie already voted at 07:29: <q>Generic and neutral yes.</q> You have not.</p>
+<p class="src"><span class="lab">Verified</span> Jon Wyss, <i>Uniti call 2pm today: 3 decisions we need before then</i>, 01:06 ET, plus Teams 00:35 and 00:36. Call is 14:00 to 14:30 ET, now a standing weekly Wednesday. Dashboard attached to that mail as <code>Uniti_Rollout_Board_2026-09-02_002.html</code>.</p>
+</div>
+
+<div class="card crit">
+<span class="num">02 · Needs you · Q3 closes in 28 days</span>
+<h3>Citrin found a $217,787.93 hole in the Fund II distribution schedule, and it is on you personally</h3>
+<p>Tim McNamara at 19:56 ET yesterday, to you with Timbrook and Berman copied. Bedrock MHC Fund II LP distributions for the current year per the trial balance and GL are <span class="t">$1,108,555.65</span>. Per the schedule you provided, <span class="t">$890,767.07</span>. Difference <span class="t">$217,787.93</span>.</p>
+<p>He named two anomalies and says they do not cover it. An entry dated <b>10/08/2025</b> reading <q>LP Distribution &ndash; BMHC Fund II to IMVAMREMP</q> for <span class="t">$145,837.52</span> that <q>does not fit with any of the LPs you listed</q>, and he cannot decipher what IMVAMREMP indicates. And <b>Deels Inc.</b> at <span class="t">$10,698.05</span> in the GL against <span class="t">$7,132.03</span> on your schedule, which is six quarters of distributions rather than four.</p>
+<p>His ask, verbatim: <q>We need you to provide an updated schedule that reconciles to the trial balance/general ledger.</q></p>
+<p><span class="ask">This lands on commitments item 25</span>, which already carries an admitted error on an issued LP capital account statement, the untraced $7,000 wire from July 2021, and a CPA-signed waterfall promised against a Q3 milestone. Q3 ends in 28 days. An unexplained LP distribution to a name nobody recognises is a different class of problem from a schedule that needs a footnote.</p>
+<p class="src"><span class="lab">Verified</span> primary email read, <i>RE: A2Z Mobile Home Fund I, LLC &amp; Bedrock I Group, LLC &amp; Parakeet MHC Founders LLC</i>, attachment <code>General Ledger - 2026-08-26T211326.635.xlsx</code>. Guardrail 6 applies: nothing reaches the LP base without your say. Yesterday's close asked whether the waterfall and the 2021 wire came up with Citrin. That question is now overtaken: they came back with a third obligation instead.</p>
+</div>
+
+<div class="card warn">
+<span class="num">03 · Needs you · prep for 10:00 and 11:00</span>
+<h3>The line capacity number now has a cause, and today puts the right people in front of you twice</h3>
+<p>A fifth Plaud recording landed at 00:40 last night, 2 hours 24 minutes, starting 21:58 ET. It was not in the 18:11 close. Alongside the personnel half, it carries the hardest operational read this Brain has on the floorplan tie-out, and three of the numbers are new:</p>
+<p>Roughly <b>40% of homes ordered are missing from Cavco's master tracking sheet</b>. <b>32 homes carry incorrect addresses with lenders</b>, which corroborates the 32 already on item 15 from a second source. And <b>lenders are unaware of 28 actively placed orders</b>, which is new. Credit line increases are <b>frozen over the unresolved insurance deductible dispute</b>, which is the same deductible sitting under the $250,000 escrow 21st wants.</p>
+<p>The mechanism named: our agent places the order and designates a lender on the invoice with no real time notice to finance, the manufacturer then talks to the lender directly, and when the designation changes from 21st to Triad the manufacturer often does not tell 21st, so capacity stays locked on the original line.</p>
+<p><span class="ask">So the line capacity number you asked for on 08-31 at 17:21 is not a reporting gap, it is this.</span> Day 7, still no owner and no date. It gates the 21st escrow and the ten home Triad allocation, and both default by silence.</p>
+<p>Today, <b>10:00 rehabs with Doucette and Clark</b> and <b>11:00 Champion and Cavco</b> put the people who know where homes physically sit in front of you twice. <code>TD-0369</code>, the CountryPlace site map and floored home locations, is due <b>2026-09-04</b> with their inspector on site the week of <b>2026-09-08</b>.</p>
+<p class="src"><span class="lab">Single-source</span> Plaud <i>09-01 Analysis of Operational Breakdowns and Interpersonal Dynamics</i>, AI summary read, transcript not read. The 32 figure is the only one corroborated. Do it on <code>60-Communities/asset-inventory.md</code> rather than as a one-off, per yesterday's close.</p>
+</div>
+
+<h2>Today</h2>
+
+<table class="sched">
+<tr><td class="tm">all day</td><td><b>Receiving new homes, River Oaks RV Resort</b><span class="note">Lots 2702, 2710, 2712. Serials 28650, 28651, 28632. Four more arrive tomorrow: 2714, 2716, 2726, 2728. These are exactly the homes the tie-out above is about.</span></td></tr>
+<tr><td class="tm">8:30 &ndash; 9:00</td><td><b>Kippy AR Review</b> &nbsp;Jon, Moe<span class="note">Tentative on your calendar, booked by Jon at 01:17 last night. Jon to Moe at 19:26: <q>We may have to propose a settlement tomorrow so want to get ahead of it. Make sure things are flagged that are in question or lacking invoices, basically things he could contest.</q> <b>Kippy is Laurence Brokaw, one man, which you confirmed Sunday.</b> Item 19 has Melanie mid-transfer on nine Royal Oaks titles through the LLC he reinstated and paid for himself. <code>TD-0368</code>, telling counsel, is unclosed at ask 2. If a settlement gets proposed today, this is the last cheap moment. Also your one meeting before 9.</span></td></tr>
+<tr><td class="tm">9:00 &ndash; 10:00</td><td><b>ZS / AB / JW weekly</b> &nbsp;Jon, Zach<span class="note">Jon at 01:35: <q>Let's discuss this and other on our 9am call tomm.</q> His four overnight asks land here. Zach clears three rows in this slot: the Q2 occupancy commentary <code>TD-0373</code>, the ClickUp renewal <code>PD-21</code>, and the Florida tax appeal where nobody has established the filing deadline <code>TD-0371</code>.</span></td></tr>
+<tr><td class="tm">10:00 &ndash; 10:30</td><td><b>Weekly Rehabs Call</b> &nbsp;Doucette (external), Clark, Natalie, Leslie, Wigfall<span class="note">Jon told Mark Doucette at 22:14 <q>Fully complete by 11/15...we will let you know tomorrow</q> on Hunter Springs. Today is that tomorrow, and Doucette is in the room asking. Natalie is also here, which is the slot to settle the 1:30 question below.</span></td></tr>
+<tr><td class="tm">11:00 &ndash; 12:00</td><td><b>Parakeet Construction Update</b> &nbsp;Champion Homes and Cavco, 22 attendees<span class="note">Largest external room of the day. Cavco's master tracking sheet is the one missing 40% of orders.</span></td></tr>
+<tr><td class="tm">1:30 &ndash; 3:00</td><td><b>SOP Phase 1 kickoff &ndash; proposed, not scheduled</b><span class="note"><code>KP-0005</code> records a kickoff proposed for this window today for the five blocking decisions: Florida's cure period, eviction at 107 or 800, which closing generation governs, JotForm or FastField, and the SC/GA notice periods. <b>Nothing exists on your calendar in it, and the 2pm Uniti call sits inside it.</b> Fourteen state compliance SOPs are at counsel with none signed off. Either it moves or it needs a slot, and both need you and Natalie.</span></td></tr>
+<tr><td class="tm">2:00 &ndash; 2:30</td><td><b>Parakeet x Uniti Implementation</b> &nbsp;Alex, Zach and Catherine at Uniti, Jon, Leslie<span class="note">Google Meet, not Teams. Jon wants to lead and would rather not have everyone talking on a thirty minute call. The pad count is the money question: signed order form says 7,500 sites from day 91, Leslie reads 6,000 from day 1, the Property Data Sheet says 5,435 MH lots of 6,690 total including 1,109 RV. At $1.05 a site Jon puts 7,500 against 5,435 at <b>$2,168 a month, $26,019 across Year 1</b>. Note this is <code>KP-0010</code> wearing a vendor invoice: the portfolio still disagrees with itself on unit count, and <code>00-Meta/analysis/2026-09-01-unit-count-reconciliation.xlsx</code> is the nearest thing we have to an answer.</span></td></tr>
+<tr><td class="tm">4:00 &ndash; 5:00</td><td><b>NM / AB / JW weekly</b> &nbsp;Jon, Natalie<span class="note">Tentative. Second Natalie slot, so the SOP kickoff has two chances today.</span></td></tr>
+</table>
+
+<h2>New since yesterday</h2>
+
+<ul class="tail">
+<li><b>Berman.</b> Last night's recording ends with an amicable separation put on the table and both of you agreeing to a blunt conversation today. Personnel, so nothing about it is written up beyond that and no figure from any of it is recorded anywhere in this Brain, per rule 9 and guardrail 7. Item 16 stays sequenced ahead of items 13, 15 and 21, all of which route through him. <span class="lab">Single-source</span></li>
+<li><b>Origins is projected cash negative by February 2027</b> if current distribution and infill plans continue. Stated in the same recording, with the FP&amp;A gap behind it: no treasury management or cash burn analysis for four years, and Daniel named as the only person doing any cash budgeting. New to this Brain and not on any register yet. <span class="lab">Single-source</span></li>
+<li><b>Jon's four overnight asks, all landing on your 9:00.</b> A cash position report on <b>jref1 by EOD today</b>. Follow up on the timing of the <b>WSRED earn out</b>. Look into <b>opco financials alongside propco</b> for budgets. And <q>auzzi's comments in the sam masters chat are worth a read and id love your input</q>, which is Auzzi's read on read-only warehouse access for inference versus the Rent Manager write path. <span class="lab">Verified</span> Teams, 01:34 to 01:35 ET.</li>
+<li><b>Massachusetts settlement moved, and a CBRE call happens today without you.</b> Wallack, 18:46 ET: plaintiffs' counsel wants data she can take to her clients, our read is <q>a final push to get her clients to yes</q>, and Eckert Seamans speaks to CBRE today to find out whether CBRE will hand over the underlying comps or only their fair market value conclusion. Jon at 19:16: <q>There's no reason CBRE shouldn't share their full data if you want to rope me into that call feel free to.</q> The comparable set choice is the part of <code>CM-20</code> that is not parked on Wallack. <span class="lab">Verified</span></li>
+<li><b>Tradewinds MHC in Cocoa is a new county move-in file</b>, Gunster copied on five lawyers. Jon: <q>we need to put up a fight and do whatever we can to get the cities/counties to allow us to fill sites</q>, zoning reports attached for each. Natalie owns it, FYI to you. <span class="lab">Verified</span></li>
+<li><b>An A &amp; A Development invoice for $108,919.00</b>, dated 4/2/2026 and entered 4/8/2026, is still sitting in AvidXchange Pending WorkFlow Assignment. Five months in a queue that has no workflow attached. Also on today's Invoices Escalated report. <span class="lab">Verified</span> <code>_Invoices in Pending WorkFlow Assignment</code>, 05:58 ET.</li>
+<li><b>A DocuSign reminder for a Rent Manager cancellation</b> is on its second pass, from Christy Dameron at Rent Manager, 01:36 ET. A reminder is a genuine pending signal per the folder map. Worth knowing what is being cancelled before it gets signed. <span class="lab">Verified</span></li>
+<li><b>Zego chargeback #550061782, $118.12</b>, Visa, against <b>A2Z Community Partners LLC</b> rather than a Parakeet entity. Small money, and another instance of the legacy entity still being the name of record on a live payment rail, same shape as the <code>a2zcp.com</code> utility logins. <span class="lab">Verified</span></li>
+<li><b>Two ClickUp tasks went overdue at 9/1</b>: <i>AUG 2026 Close, Day 1 Property Data Lock</i> in Command Center, and <i>Create a workflow effectively using Sharepoint, Teams and Clickup</i> in Albert's space. Month end close day 1 slipping is the one that compounds. <span class="lab">Verified</span></li>
+<li><b>SharePoint is out of storage again</b>, 6,537.4 GB against 2,394 GB. Same wall as 2026-08-10, owned by Albert under item 4, and it is here as a fact rather than as news. <span class="lab">Verified</span></li>
+<li><b>Two vendor pitches on the calendar and in the inbox.</b> A <i>Chaos to Clarity</i> profit specialist call Thursday at 12:00 ET, and an abacus.ai nudge that a <i>FastField Rollout Planning</i> task is sitting unfinished. Neither needs you; the Thursday one is fifteen minutes you could take back. <span class="lab">Verified</span></li>
+<li><b>Something else is writing you a daily brief.</b> <code>martin@trymartin.com</code> sent <i>Daily Briefing: Key Emails, Legal Updates, and Follow-Ups for September 2, 2026</i> at 07:30 ET, leading on the Zego chargeback. Two systems doing this job means two versions of what matters. Worth a decision at some point, not today. <span class="lab">Verified</span></li>
+</ul>
+
+<h2>Decisions only you can make</h2>
+
+<ul class="dec">
+<li><b>Sam Bennett, or another surname.</b> Jon needs it by 10:00 and Natalie has already said yes to it.</li>
+<li><b>The pad count we walk in with at 2pm</b>, and the derivation behind it. 7,500, 6,000 or 5,435.</li>
+<li><b>Does the 1:30 SOP kickoff happen today.</b> If not today, then when, and it has to clear the 2pm.</li>
+<li><b>Who rebuilds the Fund II distribution schedule for Citrin.</b> You, Moe, or Berman on the way out. It is your name on the schedule they are reconciling against.</li>
+<li><b>The line capacity number: who owns it, by when.</b> Day 7. Two capital decisions default by silence until it exists.</li>
+<li><b><code>KP-0008</code>, still waiting.</b> Do the three corporate Google Shared Drives holding cap tables, K-1s and executed signature pages move into a company Workspace, or stay where they are with the risk accepted in writing. Nobody but you can enumerate them.</li>
+</ul>
+
+<h2>Still open, carried forward</h2>
+
+<ul class="tail">
+<li><b>Have you told counsel Kippy and Brokaw are one man?</b> Ask 2. <code>TD-0368</code>. You were with Doner Law Tuesday morning and nothing in mail or Teams records it being passed on, which per rule 11 proves nothing. The 08:30 today is the forum.</li>
+<li><b>The internal controller name, and whether they are in Friday's 15:00 demo.</b> Ask 3. Jon and Joe Cridge were still writing <q>we need to identify a replacement</q> at 16:51 Monday. Unanswered a third run moves this to <code>parked-decisions</code>.</li>
+<li><b>Geiger House.</b> Jon-owned, FYI to you, and the <q>sign this week</q> week is two weeks gone. Ask 2.</li>
+<li><b>Is there a separate Belle Haven settlement?</b> <code>KP-0035</code>. Ask 3, and it gets dropped after this one.</li>
+<li><b>Are the nine Royal Oaks title transfers done?</b> Ask 2. Melanie was in your inbox on the Florida licence, not on these.</li>
+<li><b>Item 1, Jadian.</b> Your <q>Need to see the back up here</q> from 08-31 is still owed: the DR-035 register rows, the shipped subtotal text as it appears in the Riverwalk and McGregor FINALs, and what that subtotal actually sums. <b>You are in front of Jadian tomorrow at 10:00</b> for the pipeline review with Hennessy, Nelson and Cridge.</li>
+<li><b>Item 2, the A2Z credentials.</b> Three reused password roots covering 21 of 38 rows, four shared service mailboxes as the identity layer, and <code>winnie@a2zcp.com</code> still the login of record on two live utility portals. Next action unchanged and unstarted.</li>
+<li><b>Item 7 and item 8.</b> Both closed 09-01 on your word that the team handled them on site. The protocol gaps behind them, <code>TD-0329</code> and <code>TD-0330</code>, are open and unstarted. Not re-raised, recorded.</li>
+<li><b>Item 15.</b> The $250,000 21st escrow against the half million deductible, both founders conditional on the line capacity number. See highlight 3.</li>
+<li><b>Item 22, Geiger House PSA</b>, and <b>item 21, August payroll allocations</b>, both last moved 08-31.</li>
+<li><b>The board.</b> 813 rows across six registers, 267 unowned, at <code>00-Meta/open-board.md</code> and its dashboard. That is where everything not on this page lives.</li>
+</ul>
+
+<h2>What I do not know</h2>
+
+<ul class="tail">
+<li><b>Is the 40% figure about Cavco specifically, or about the master tracker generally?</b> The recording says Cavco's master tracking sheet. Today's 11:00 is a Champion and Cavco call, and if the gap is Cavco's sheet then the fix is a conversation in that room. If it is our own tracker, then it is item 15 and the fix is internal. Those are different next moves and the summary does not separate them.</li>
+<li><b>Does the Origins February 2027 projection exist as a model anywhere, or was it said out loud?</b> It is the only forward cash statement anywhere in this Brain, and it is currently a sentence in an AI summary of a recording. If there is a file behind it, it belongs in the numbers ledger with a source and an as-of date. If there is not, that is the FP&amp;A gap the same conversation was about.</li>
+</ul>
+
+<div class="hr"></div>
+<p class="src" style="margin-top:16px">
+Answer in the chat, it is read every turn. Comments on this page are pull only and will not be seen until tomorrow's run. Confidence labels are per rule 10: <b>Verified</b> means the primary source was read, <b>Single-source</b> means it appears in one place with nothing to check it against.
+</p>
+
+</div>

@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quickbase + FastField Build Specification — Parakeet Communities</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+      onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+  <style>
+    /* ── PAGE SETUP ─────────────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 2.2cm 1.8cm 2.4cm 1.8cm;
+      @top-left {
+        content: "parakeet communities";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7.5pt;
+        color: #4ABA81;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+      }
+      @top-right {
+        content: string(sectitle);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 7.5pt;
+        color: #888;
+      }
+      @bottom-center {
+        content: "Parakeet Communities  ·  Quickbase + FastField Build Spec  ·  Workflow #001  ·  Confidential  ·  v1.0  ·  August 2026";
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 6.5pt;
+        color: #aaa;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Red Hat Display', sans-serif;
+        font-size: 8pt;
+        color: #2F4E65;
+        font-weight: 600;
+      }
+    }
+    @page :first {
+      margin: 0;
+      @top-left   { content: none; }
+      @top-right  { content: none; }
+      @bottom-center { content: none; }
+      @bottom-right  { content: none; }
+    }
+
+    /* ── BASE ───────────────────────────────────────────────── */
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: 9.5pt;
+      color: #2e2e2e;
+      line-height: 1.55;
+      string-set: sectitle "";
+    }
+    h2 { string-set: sectitle content(); }
+
+    /* ── OVERFLOW PREVENTION ────────────────────────────────── */
+    pre, table, figure, img, svg, blockquote, code {
+      max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;
+    }
+    pre  { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+    a    { word-break: break-all; }
+    .katex-display { overflow-x: auto; }
+
+    /* ── COVER ──────────────────────────────────────────────── */
+    .cover {
+      width: 210mm; height: 297mm; margin: 0;
+      position: relative; overflow: hidden;
+      page-break-after: always;
+      background: linear-gradient(155deg, #12253a 0%, #2F4E65 45%, #1e3d54 72%, #0f1e2e 100%);
+      color: #fff;
+      box-sizing: border-box;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .cover-top-bar {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 5px; background: #4ABA81;
+    }
+    .cover-bottom-bar {
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 5px; background: #4ABA81;
+    }
+    .cover-side-accent {
+      position: absolute; top: 5px; left: 0;
+      width: 4px; height: calc(100% - 10px); background: rgba(74,186,129,0.3);
+    }
+    .cover-logo {
+      font-size: 11.5pt; font-weight: 700; color: #4ABA81;
+      letter-spacing: 4px; text-transform: lowercase;
+      margin-bottom: 55px;
+    }
+    .cover-badge {
+      background: rgba(74,186,129,0.12);
+      border: 1px solid rgba(74,186,129,0.38);
+      color: #4ABA81; font-size: 7.5pt; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 5px 18px; margin-bottom: 22px;
+    }
+    .cover h1 {
+      font-size: 30pt; font-weight: 900; color: #fff;
+      text-align: center; line-height: 1.2;
+      margin: 0 0 14px 0; padding: 0 35px;
+      max-width: 100%;
+      white-space: normal; overflow-wrap: break-word; word-wrap: break-word;
+      string-set: sectitle "";
+    }
+    .cover-subtitle {
+      font-size: 13pt; font-weight: 400;
+      color: rgba(255,255,255,0.72); text-align: center;
+      margin-bottom: 44px; padding: 0 30px;
+    }
+    .cover-rule {
+      width: 56px; height: 2px; background: #4ABA81;
+      margin: 0 auto 38px auto;
+    }
+    .cover-meta {
+      text-align: center; font-size: 9pt;
+      color: rgba(255,255,255,0.55); line-height: 1.9;
+    }
+    .cover-meta strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+    .cover-tags {
+      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+      margin-top: 22px; padding: 0 30px;
+    }
+    .cover-tag {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.65);
+      font-size: 7pt; padding: 4px 12px; letter-spacing: 0.8px;
+    }
+
+    /* ── TOC ────────────────────────────────────────────────── */
+    .toc-page { padding-top: 10px; }
+    .toc-title {
+      font-size: 18pt; font-weight: 700; color: #2F4E65;
+      margin-bottom: 18px; padding-bottom: 8px;
+      border-bottom: 2.5px solid #2F4E65;
+    }
+    .toc-list { list-style: none; padding: 0; margin: 0; column-count: 2; column-gap: 0.6cm; }
+    .toc-list li { display: flex; align-items: baseline; padding: 3.5px 0; }
+    .toc-list li a { display: flex; align-items: baseline; width: 100%; text-decoration: none; color: #2e2e2e; }
+    .toc-list .toc-h2 .toc-text { font-weight: 700; font-size: 10pt; color: #2F4E65; }
+    .toc-list .toc-h3 { padding-left: 20px; }
+    .toc-list .toc-h3 .toc-text { font-weight: 400; font-size: 9pt; color: #555; }
+    .toc-text  { white-space: nowrap; flex-shrink: 0; }
+    .toc-dots  { flex: 1; margin: 0 6px; border-bottom: 1.5px dotted #ccc; min-width: 30px; position: relative; top: -3px; }
+    .toc-page-num { flex-shrink: 0; text-align: right; min-width: 20px; font-size: 9pt; color: #777; }
+
+    /* ── SECTION HEADERS ────────────────────────────────────── */
+    .section-header {
+      background: #2F4E65; color: #fff;
+      padding: 9px 16px; margin: 0 0 14px 0;
+      page-break-after: avoid;
+    }
+    .section-header h2 {
+      margin: 0; font-size: 13pt; font-weight: 700; color: #fff;
+      string-set: sectitle content();
+    }
+    .section-num { color: #4ABA81; margin-right: 10px; }
+
+    h3.sub {
+      font-size: 10.5pt; font-weight: 700; color: #2F4E65;
+      border-left: 3px solid #4ABA81; padding-left: 10px;
+      margin: 16px 0 8px 0; page-break-after: avoid;
+    }
+    p { margin: 0 0 7px 0; }
+
+    /* ── TABLES ─────────────────────────────────────────────── */
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 8.5pt; margin: 8px 0 14px 0;
+    }
+    table.flow { page-break-inside: auto; }
+    table.flow tr { page-break-inside: avoid; }
+    thead th {
+      background: #2F4E65; color: #fff;
+      font-weight: 700; padding: 6px 9px;
+      text-align: left; font-size: 8pt;
+    }
+    tbody tr:nth-child(even) { background: #f3f7fb; }
+    tbody tr:nth-child(odd)  { background: #fff; }
+    tbody td {
+      padding: 5px 9px;
+      border-bottom: 1px solid #dde6ef;
+      vertical-align: top;
+    }
+    .fg td { /* field-group row */
+      background: #e4edf5 !important;
+      color: #2F4E65; font-weight: 700;
+      font-size: 8pt; padding: 5px 9px;
+      border-top: 1.5px solid #2F4E65;
+    }
+    /* mini meta rows for FF forms */
+    .meta-table { margin-bottom: 6px; }
+    .meta-table td { padding: 4px 9px; border-bottom: 1px solid #dde6ef; font-size: 8.5pt; }
+    .meta-table .mlabel {
+      width: 130px; font-weight: 700;
+      background: #f3f7fb;
+    }
+
+    /* ── TAGS ───────────────────────────────────────────────── */
+    .tREQ  { background: #F16262; color: #fff; font-size: 7pt; font-weight: 700; padding: 1px 5px; }
+    .tAUTO { background: #4ABA81; color: #fff; font-size: 7pt; font-weight: 700; padding: 1px 5px; }
+    .tCOND { background: #FFCC3B; color: #333; font-size: 7pt; font-weight: 700; padding: 1px 5px; }
+    .tGATE { background: #2F4E65; color: #fff; font-size: 7pt; font-weight: 700; padding: 2px 7px; display: inline-block; }
+    .tAUT  { background: #4ABA81; color: #fff; font-size: 7pt; font-weight: 700; padding: 2px 7px; display: inline-block; }
+    .tWARN { background: #F16262; color: #fff; font-size: 7pt; font-weight: 700; padding: 2px 7px; display: inline-block; }
+    .tOPN  { background: #FFCC3B; color: #333; font-size: 7.5pt; font-weight: 700; padding: 2px 7px; display: inline-block; }
+
+    /* ── INFO BOXES ─────────────────────────────────────────── */
+    .note { background: #fffde6; border-left: 4px solid #FFCC3B; padding: 9px 13px; margin: 8px 0; font-size: 9pt; }
+    .warn { background: #fff4f4; border-left: 4px solid #F16262; padding: 9px 13px; margin: 8px 0; font-size: 9pt; }
+    .info { background: #eef9f3; border-left: 4px solid #4ABA81; padding: 9px 13px; margin: 8px 0; font-size: 9pt; }
+    .note strong, .warn strong, .info strong { display: block; margin-bottom: 3px; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── STAGE CHIPS ────────────────────────────────────────── */
+    .stage-list { list-style: none; padding: 0; margin: 8px 0; display: flex; flex-wrap: wrap; gap: 5px; }
+    .stage-list li {
+      background: #ecf2f8; border: 1px solid #c6d8e8;
+      color: #2F4E65; font-size: 8pt; font-weight: 600; padding: 3px 10px;
+    }
+
+    /* ── FF SECTION BANDS ───────────────────────────────────── */
+    .ff-band {
+      background: #eef9f3; border-left: 4px solid #4ABA81;
+      padding: 5px 11px; margin: 10px 0 5px 0;
+      font-weight: 700; font-size: 9pt; color: #2F4E65;
+      page-break-after: avoid;
+    }
+
+    /* ── LISTS ──────────────────────────────────────────────── */
+    ul.bl { list-style: none; padding: 0; margin: 0 0 9px 0; }
+    ul.bl li { padding: 2px 0 2px 14px; position: relative; font-size: 9pt; }
+    ul.bl li::before { content: "›"; color: #4ABA81; position: absolute; left: 0; font-weight: 700; }
+    ol.steps { padding-left: 22px; margin: 8px 0; }
+    ol.steps li { padding: 3px 0; font-size: 9pt; }
+    ol.steps li strong { color: #2F4E65; }
+
+    /* ── PAGE BREAKS ────────────────────────────────────────── */
+    .pb { page-break-after: always; }
+    h1, h2, h3 { page-break-after: avoid; }
+    figure { page-break-inside: avoid; max-height: 70vh; height: auto; width: 100%; object-fit: contain; }
+    .section-header { page-break-inside: avoid; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     COVER PAGE
+═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top-bar"></div>
+  <div class="cover-side-accent"></div>
+  <div class="cover-logo">parakeet communities</div>
+  <div class="cover-badge">Workflow #001 &nbsp;·&nbsp; Build Specification</div>
+  <h1>Quickbase + FastField<br>Build Specification</h1>
+  <div class="cover-subtitle">Home Ordering, Delivery &amp; Set</div>
+  <div class="cover-rule"></div>
+  <div class="cover-meta">
+    <strong>Parakeet Communities</strong>
+    Internal Document &nbsp;·&nbsp; Confidential<br>
+    Version 1.0 &nbsp;·&nbsp; August 2026
+  </div>
+  <div class="cover-tags">
+    <span class="cover-tag">Quickbase</span>
+    <span class="cover-tag">FastField</span>
+    <span class="cover-tag">Rent Manager</span>
+    <span class="cover-tag">Workflow Automation</span>
+    <span class="cover-tag">11-Stage Process</span>
+  </div>
+  <div class="cover-bottom-bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+═══════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <h2 class="toc-title">Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-h2"><a href="#s1"><span class="toc-text">1. Overview</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s1"></span></span></a></li>
+    <li class="toc-h2"><a href="#s2"><span class="toc-text">2. Roles Reference</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s2"></span></span></a></li>
+    <li class="toc-h2"><a href="#s3"><span class="toc-text">3. Quickbase Data Model</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s3"></span></span></a></li>
+    <li class="toc-h3"><a href="#s31"><span class="toc-text">3.1 Table Architecture</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s31"></span></span></a></li>
+    <li class="toc-h3"><a href="#s32"><span class="toc-text">3.2 Home Orders (Master Table)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s32"></span></span></a></li>
+    <li class="toc-h3"><a href="#s33"><span class="toc-text">3.3 Lots</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s33"></span></span></a></li>
+    <li class="toc-h3"><a href="#s34"><span class="toc-text">3.4 Workflow Tasks</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s34"></span></span></a></li>
+    <li class="toc-h3"><a href="#s35"><span class="toc-text">3.5 Delivery Records</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s35"></span></span></a></li>
+    <li class="toc-h3"><a href="#s36"><span class="toc-text">3.6 Punch List Records</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s36"></span></span></a></li>
+    <li class="toc-h3"><a href="#s37"><span class="toc-text">3.7 Listing Records</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s37"></span></span></a></li>
+    <li class="toc-h2"><a href="#s4"><span class="toc-text">4. Quickbase Forms &amp; Views</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s4"></span></span></a></li>
+    <li class="toc-h3"><a href="#s41"><span class="toc-text">4.1 Forms</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s41"></span></span></a></li>
+    <li class="toc-h3"><a href="#s42"><span class="toc-text">4.2 Views / Dashboards</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s42"></span></span></a></li>
+    <li class="toc-h2"><a href="#s5"><span class="toc-text">5. Quickbase Automations</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s5"></span></span></a></li>
+    <li class="toc-h2"><a href="#s6"><span class="toc-text">6. FastField Forms</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s6"></span></span></a></li>
+    <li class="toc-h3"><a href="#s61"><span class="toc-text">6.1 Form 1: Home Delivery Confirmation</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s61"></span></span></a></li>
+    <li class="toc-h3"><a href="#s62"><span class="toc-text">6.2 Form 2: Interior Punch List (100-Point)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s62"></span></span></a></li>
+    <li class="toc-h3"><a href="#s63"><span class="toc-text">6.3 Form 3: Listing Form</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s63"></span></span></a></li>
+    <li class="toc-h2"><a href="#s7"><span class="toc-text">7. Quickbase ↔ FastField Integration</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s7"></span></span></a></li>
+    <li class="toc-h2"><a href="#s8"><span class="toc-text">8. Workflow Gate Rules (Hard Stops)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s8"></span></span></a></li>
+    <li class="toc-h2"><a href="#s9"><span class="toc-text">9. Build Sequence</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s9"></span></span></a></li>
+    <li class="toc-h2"><a href="#s10"><span class="toc-text">10. Open Items &amp; Decisions Needed</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#s10"></span></span></a></li>
+  </ul>
+</div>
+<div class="pb"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1 — OVERVIEW
+═══════════════════════════════════════════════════════════ -->
+<div id="s1">
+  <div class="section-header"><h2><span class="section-num">01</span>Overview</h2></div>
+
+  <h3 class="sub">Purpose</h3>
+  <p>This document defines the complete Quickbase and FastField build for the Home Ordering, Delivery &amp; Set workflow. It is the <strong>single source of truth</strong> for the configuration. Use it to build, QA, and train staff on the system.</p>
+
+  <h3 class="sub">Scope</h3>
+  <p>Covers all 11 steps of the SOP from <strong>Infill Need Identified</strong> through <strong>Home Listed for Sale</strong>. MRB tracking (Rent Manager) is noted as a parallel system — this build does <em>not</em> replicate Rent Manager; it complements it.</p>
+
+  <h3 class="sub">Out of Scope</h3>
+  <ul class="bl">
+    <li>MRB issue management (stays in Rent Manager)</li>
+    <li>Rent Manager asset records (stays in Rent Manager — referenced via cross-reference fields only)</li>
+    <li>Marketing execution after listing</li>
+  </ul>
+
+  <h3 class="sub">Systems Involved</h3>
+  <table>
+    <thead><tr><th>System</th><th>Role in This Workflow</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Quickbase</strong></td><td>Workflow engine, status tracking, task assignment, internal notifications, gate enforcement</td></tr>
+      <tr><td><strong>FastField</strong></td><td>Field-capture forms (delivery, punch list, listing) — mobile, works offline, syncs to QB</td></tr>
+      <tr><td><strong>Rent Manager</strong></td><td>System of record for asset data — referenced, not replaced</td></tr>
+      <tr><td><strong>Microsoft 365 / Teams</strong></td><td>Notification delivery for automated alerts</td></tr>
+      <tr><td><strong>Claude (via Ops Coordinator)</strong></td><td>Invoice extraction support for Ops Coord (Melanie)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2 — ROLES REFERENCE
+═══════════════════════════════════════════════════════════ -->
+<div id="s2">
+  <div class="section-header"><h2><span class="section-num">02</span>Roles Reference</h2></div>
+  <table>
+    <thead><tr><th>Role</th><th>Abbreviation</th><th>Name / Person</th><th>QB Access Level</th></tr></thead>
+    <tbody>
+      <tr><td>Director of Sales &amp; Marketing</td><td>Sales</td><td>Process Owner</td><td>Full Edit</td></tr>
+      <tr><td>Asset Management / RM Admin</td><td>Asset Mgmt</td><td>Justin</td><td>Full Edit</td></tr>
+      <tr><td>Operations Coordinator</td><td>Ops Coord</td><td>Melanie</td><td>Edit (assigned tasks)</td></tr>
+      <tr><td>Operations</td><td>Ops</td><td>—</td><td>Edit (assigned tasks)</td></tr>
+      <tr><td>Construction</td><td>Construction</td><td>John Clark</td><td>Full Edit</td></tr>
+      <tr><td>Accounting</td><td>Accounting</td><td>—</td><td>Edit (assigned tasks)</td></tr>
+      <tr><td>System Administration</td><td>Sys Admin</td><td>—</td><td>Admin</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3 — DATA MODEL
+═══════════════════════════════════════════════════════════ -->
+<div id="s3">
+  <div class="section-header"><h2><span class="section-num">03</span>Quickbase Data Model</h2></div>
+
+  <!-- 3.1 Architecture -->
+  <div id="s31">
+    <h3 class="sub">3.1 Table Architecture</h3>
+    <p>The build uses a relational, multi-table model. Each table has a specific job. They are linked so that one home order record drives all downstream tasks and forms. Every child table links back to Home Orders as its parent.</p>
+    <table>
+      <thead><tr><th>#</th><th>Table Name</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Home Orders</strong></td><td>Master record for each home being ordered — one record per home; spine of the entire workflow</td></tr>
+        <tr><td>2</td><td><strong>Lots</strong></td><td>Reference table for all lots across all communities; populated once and maintained</td></tr>
+        <tr><td>3</td><td><strong>Workflow Tasks</strong></td><td>Child records tracking every assigned task per home order; drives daily accountability</td></tr>
+        <tr><td>4</td><td><strong>Delivery Records</strong></td><td>FastField delivery form data, linked to Home Order; created on form sync</td></tr>
+        <tr><td>5</td><td><strong>Punch List Records</strong></td><td>FastField punch list data, linked to Home Order; triggers Home Set stage</td></tr>
+        <tr><td>6</td><td><strong>Listing Records</strong></td><td>FastField listing form data, linked to Home Order; triggers Listed — Complete stage</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3.2 Home Orders -->
+  <div id="s32">
+    <h3 class="sub">3.2 Table: Home Orders (Master)</h3>
+    <p>The spine of the entire workflow. Every other table links back to it. One record = one home.</p>
+    <table class="flow">
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Options / Notes</th><th>Req.</th><th>Who Enters</th></tr></thead>
+      <tbody>
+        <tr class="fg"><td colspan="5">Identity &amp; Property</td></tr>
+        <tr><td>Record ID#</td><td>Auto-number</td><td>System generated</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr><td>Home Order #</td><td>Formula-Text</td><td>Auto-formatted — e.g. HO-2026-001</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr><td>Community / Property</td><td>Text – Multiple Choice</td><td>Dropdown of all Parakeet communities (see Open Item O3)</td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Lot Number</td><td>Relationship → Lots</td><td>Linked to Lot record</td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Infill Reason</td><td>Multiple Choice</td><td>Occupied Lot Turnover / Vacant Lot / Demo Lot</td><td><span class="tREQ">YES</span></td><td>Asset Mgmt</td></tr>
+        <tr><td>Date Created</td><td>Date</td><td>Auto-set on record creation</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr><td>Created By</td><td>User</td><td>Auto-set</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr class="fg"><td colspan="5">Manufacturer &amp; Home Details</td></tr>
+        <tr><td>Manufacturer</td><td>Multiple Choice</td><td>Cavco / Clayton / Skyline / Champion / Other</td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Floor Plan Name</td><td>Text</td><td></td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Model</td><td>Text</td><td></td><td>No</td><td>Sales</td></tr>
+        <tr><td>Production Line</td><td>Text</td><td></td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Dimensions</td><td>Text</td><td>e.g. 16×76</td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>Square Footage</td><td>Numeric</td><td></td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>Bedrooms</td><td>Numeric</td><td></td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>Bathrooms</td><td>Numeric – Decimal</td><td></td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>Home Type</td><td>Multiple Choice</td><td>Single Wide / Double Wide / Triple Wide</td><td><span class="tREQ">YES</span></td><td>Asset Mgmt</td></tr>
+        <tr><td>Serial Number</td><td>Text</td><td>⚠ Must be entered before Delivery Scheduled stage (Gate G5)</td><td><span class="tCOND">GATE</span></td><td>Asset Mgmt</td></tr>
+        <tr class="fg"><td colspan="5">Dates &amp; Timeline</td></tr>
+        <tr><td>Order Date</td><td>Date</td><td></td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Online Date</td><td>Date</td><td>From manufacturer — when home enters production</td><td>No</td><td>Sales</td></tr>
+        <tr><td>Offline Date</td><td>Date</td><td>From manufacturer — when home leaves production</td><td>No</td><td>Sales</td></tr>
+        <tr><td>Estimated Delivery Date</td><td>Date</td><td></td><td>No</td><td>Construction</td></tr>
+        <tr><td>Actual Delivery Date</td><td>Date</td><td>Set at delivery confirmation</td><td>No</td><td>Construction / Ops</td></tr>
+        <tr><td>Set Date</td><td>Date</td><td></td><td>No</td><td>Construction</td></tr>
+        <tr><td>Listing Date</td><td>Date</td><td>Auto-set when Listing Records record is created</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr class="fg"><td colspan="5">Financial</td></tr>
+        <tr><td>Purchase Price</td><td>Currency</td><td></td><td><span class="tREQ">YES</span></td><td>Accounting</td></tr>
+        <tr><td>Purchase Date</td><td>Date</td><td></td><td><span class="tREQ">YES</span></td><td>Accounting</td></tr>
+        <tr><td>Floorplan Line</td><td>Text</td><td>Lender / line info</td><td>No</td><td>Accounting</td></tr>
+        <tr><td>Loan Number</td><td>Text</td><td></td><td>No</td><td>Accounting</td></tr>
+        <tr><td>Loan Amount</td><td>Currency</td><td></td><td>No</td><td>Accounting</td></tr>
+        <tr><td>Lender</td><td>Text</td><td></td><td>No</td><td>Accounting</td></tr>
+        <tr><td>Insurance Carrier</td><td>Text</td><td></td><td>No</td><td>Accounting</td></tr>
+        <tr><td>Insurance Policy #</td><td>Text</td><td></td><td>No</td><td>Accounting</td></tr>
+        <tr class="fg"><td colspan="5">Status &amp; Stage</td></tr>
+        <tr><td>Workflow Stage</td><td>Multiple Choice</td><td>See Stage List below — controlled by automations &amp; gates</td><td><span class="tREQ">YES</span></td><td>System / Sales</td></tr>
+        <tr><td>Status</td><td>Multiple Choice</td><td>Active / On Hold / Cancelled</td><td><span class="tREQ">YES</span></td><td>Sales</td></tr>
+        <tr><td>Storage Required?</td><td>Checkbox</td><td>Triggers Automation A5 when checked</td><td>No</td><td>Construction</td></tr>
+        <tr><td>Storage Location</td><td>Multiple Choice</td><td>On Lot / Manufacturer / Community / Other</td><td><span class="tCOND">COND</span></td><td>Construction</td></tr>
+        <tr><td>Storage Start Date</td><td>Date</td><td>Conditional on Storage Required = Yes</td><td><span class="tCOND">COND</span></td><td>Construction</td></tr>
+        <tr><td>Lot Fit Issue?</td><td>Checkbox</td><td>Flag if delivered home does not fit lot — triggers hard-stop A9</td><td>No</td><td>Construction</td></tr>
+        <tr class="fg"><td colspan="5">Rent Manager Cross-Reference</td></tr>
+        <tr><td>RM Asset Record #</td><td>Text</td><td>Manual cross-reference to RM — not replicated, just linked</td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>RM MRB Issue #</td><td>Text</td><td>Manual cross-reference to RM</td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr><td>RM Unit #</td><td>Text</td><td></td><td>No</td><td>Asset Mgmt</td></tr>
+        <tr class="fg"><td colspan="5">Notes &amp; Audit</td></tr>
+        <tr><td>Internal Notes</td><td>Text – Multi-line</td><td>Running notes field — any role can add</td><td>No</td><td>Any</td></tr>
+        <tr><td>Last Updated</td><td>Date/Time</td><td>Auto on any save</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+        <tr><td>Last Updated By</td><td>User</td><td>Auto on any save</td><td><span class="tAUTO">AUTO</span></td><td>System</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub">Workflow Stage Values</h3>
+    <ul class="stage-list">
+      <li>1. Infill Need Identified</li>
+      <li>2. Lot Due Diligence</li>
+      <li>3. Home Selected</li>
+      <li>4. Order Placed</li>
+      <li>5. File &amp; Asset Setup</li>
+      <li>6. In Production</li>
+      <li>7. In Storage ★</li>
+      <li>8. Delivery Scheduled</li>
+      <li>9. Delivered</li>
+      <li>10. Home Set</li>
+      <li>11. Listed — Complete</li>
+    </ul>
+    <p style="font-size:8pt;color:#777;margin-top:4px;">★ Stage 7 (In Storage) is conditional — only activated when Storage Required = Yes and a storage task is created.</p>
+  </div>
+
+  <!-- 3.3 Lots -->
+  <div id="s33">
+    <h3 class="sub">3.3 Table: Lots</h3>
+    <p>Reference table. Populated once per lot, maintained as lot status changes. Linked to Home Orders via the Lot Number relationship field. Pre-populate with all community lots before go-live.</p>
+    <table>
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Lot ID</td><td>Auto-number</td><td>Primary key</td></tr>
+        <tr><td>Community</td><td>Multiple Choice</td><td>All Parakeet communities — must match Home Orders dropdown</td></tr>
+        <tr><td>Lot Number</td><td>Text</td><td>Unique within each community</td></tr>
+        <tr><td>Lot Status</td><td>Multiple Choice</td><td>Available / Occupied / Reserved / Demo</td></tr>
+        <tr><td>Buildable Envelope</td><td>Text</td><td>Max home dimensions that can fit the site</td></tr>
+        <tr><td>Door Swing</td><td>Text</td><td>Door orientation notes for placement planning</td></tr>
+        <tr><td>Electrical Details</td><td>Text</td><td>Panel capacity, service notes</td></tr>
+        <tr><td>Water / Sewer Available</td><td>Checkbox</td><td>Confirms utilities are in place</td></tr>
+        <tr><td>Site Survey Completed</td><td>Checkbox</td><td>Gate G2 dependency — must be checked before Home Selected</td></tr>
+        <tr><td>Site Survey Upload</td><td>File Attachment</td><td>PDF or image of completed survey</td></tr>
+        <tr><td>Notes</td><td>Text – Multi-line</td><td>Any site-specific notes for field staff</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3.4 Workflow Tasks -->
+  <div id="s34">
+    <h3 class="sub">3.4 Table: Workflow Tasks</h3>
+    <p>One record per task per home order. This is how Quickbase drives daily accountability. Each stage transition auto-generates its standard task set via automations (A1–A3, A5, A7–A8).</p>
+    <table>
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Task ID</td><td>Auto-number</td><td>Primary key</td></tr>
+        <tr><td>Home Order</td><td>Relationship → Home Orders</td><td>Parent link — always required</td></tr>
+        <tr><td>Task Name</td><td>Text</td><td>Descriptive task label; auto-populated by automation templates</td></tr>
+        <tr><td>Task Category</td><td>Multiple Choice</td><td>Due Diligence / Order / Setup / Delivery / Set / Listing</td></tr>
+        <tr><td>Assigned To</td><td>User</td><td>QB user account; auto-set by automation</td></tr>
+        <tr><td>Assigned Role</td><td>Multiple Choice</td><td>Mirrors Roles Reference in Section 2</td></tr>
+        <tr><td>Due Date</td><td>Date</td><td>Auto-populated from Order Date offset by automation rule</td></tr>
+        <tr><td>Status</td><td>Multiple Choice</td><td>Not Started / In Progress / Complete / Blocked</td></tr>
+        <tr><td>Completed Date</td><td>Date</td><td>Set when Status changes to Complete</td></tr>
+        <tr><td>Completion Notes</td><td>Text – Multi-line</td><td>Optional — space for context on completion</td></tr>
+        <tr><td>Required Before Next Stage</td><td>Checkbox</td><td>Gate enforcement flag — checked tasks must be Complete before stage advances</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3.5 Delivery Records -->
+  <div id="s35">
+    <h3 class="sub">3.5 Table: Delivery Records</h3>
+    <p>Populated by FastField Home Delivery Confirmation form. One record per delivery per home. Auto-created when FastField form syncs to Quickbase — triggers Automation A7.</p>
+    <table>
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Delivery Record ID</td><td>Auto-number</td><td></td></tr>
+        <tr><td>Home Order</td><td>Relationship → Home Orders</td><td>Matched via Home Order # on sync</td></tr>
+        <tr><td>Delivery Date</td><td>Date</td><td>Auto-populated from FastField form</td></tr>
+        <tr><td>Received By</td><td>User / Text</td><td>Name of on-site staff</td></tr>
+        <tr><td>Home Visually Confirmed</td><td>Checkbox</td><td></td></tr>
+        <tr><td>Serial Number Photo</td><td>File Attachment</td><td>Camera capture from FastField — required</td></tr>
+        <tr><td>Serial Number Confirmed</td><td>Text</td><td>Typed on-site, cross-checked with RM record</td></tr>
+        <tr><td>Video Uploaded</td><td>Checkbox</td><td></td></tr>
+        <tr><td>Photos Uploaded</td><td>File Attachment</td><td>Multiple — minimum 5 required</td></tr>
+        <tr><td>Photo Count</td><td>Numeric</td><td>Minimum 5; validated in FastField before submit</td></tr>
+        <tr><td>Exterior Checklist Completed</td><td>Checkbox</td><td>Passes/fails from FastField Section D</td></tr>
+        <tr><td>Exterior Checklist File</td><td>File Attachment</td><td>FastField exports checklist as PDF</td></tr>
+        <tr><td>Lot Fit Confirmed</td><td>Checkbox</td><td>Synced from FastField Section E</td></tr>
+        <tr><td>Delivery Notes</td><td>Text – Multi-line</td><td></td></tr>
+        <tr><td>Submitted Via</td><td>Text</td><td>Auto: "FastField"</td></tr>
+        <tr><td>Submission Timestamp</td><td>Date/Time</td><td>Auto-populated on sync</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3.6 Punch List Records -->
+  <div id="s36">
+    <h3 class="sub">3.6 Table: Punch List Records</h3>
+    <p>Populated by FastField 100-Point Interior Punch List form. One record per inspection. Triggers Automation A8 (advance to Home Set stage).</p>
+    <table>
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Punch List ID</td><td>Auto-number</td><td></td></tr>
+        <tr><td>Home Order</td><td>Relationship → Home Orders</td><td>Matched via Home Order # on sync</td></tr>
+        <tr><td>Completed By</td><td>User / Text</td><td>Inspector name from FastField</td></tr>
+        <tr><td>Completion Date</td><td>Date</td><td></td></tr>
+        <tr><td>Overall Score</td><td>Numeric</td><td>Calculated from checklist pass/fail responses</td></tr>
+        <tr><td>All Items Passed</td><td>Checkbox</td><td>True only when zero fails</td></tr>
+        <tr><td>Failed Items Count</td><td>Numeric</td><td>Drives follow-up task creation</td></tr>
+        <tr><td>Punch List File</td><td>File Attachment</td><td>Full checklist PDF exported from FastField</td></tr>
+        <tr><td>Manufacturer Packet Confirmed</td><td>Checkbox</td><td>From Section L of punch list form</td></tr>
+        <tr><td>Manufacturer Packet Location</td><td>Text</td><td>Must read "In Refrigerator"</td></tr>
+        <tr><td>Notes</td><td>Text – Multi-line</td><td></td></tr>
+        <tr><td>Submitted Via</td><td>Text</td><td>Auto: "FastField"</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3.7 Listing Records -->
+  <div id="s37">
+    <h3 class="sub">3.7 Table: Listing Records</h3>
+    <p>Populated by FastField Listing Form. One record per home. Triggers Automation A11 (advance to Listed — Complete) when all 6 pre-listing checks confirm Yes.</p>
+    <table>
+      <thead><tr><th>Field Name</th><th>Field Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Listing Record ID</td><td>Auto-number</td><td></td></tr>
+        <tr><td>Home Order</td><td>Relationship → Home Orders</td><td>Matched via Home Order # on sync</td></tr>
+        <tr><td>Listed By</td><td>User / Text</td><td></td></tr>
+        <tr><td>Listing Date</td><td>Date</td><td>Auto-set at submission</td></tr>
+        <tr><td>Listing Checklist Complete</td><td>Checkbox</td><td>True only when all 6 items below = Yes</td></tr>
+        <tr><td>Punch List Uploaded</td><td>Checkbox</td><td>To Rent Manager</td></tr>
+        <tr><td>Manufacturer Packet Confirmed</td><td>Checkbox</td><td>Placed and accessible for buyer</td></tr>
+        <tr><td>Insurance Active</td><td>Checkbox</td><td>Active in Rent Manager</td></tr>
+        <tr><td>Loan Documents Uploaded</td><td>Checkbox</td><td>Uploaded to Rent Manager</td></tr>
+        <tr><td>Serial Number in RM</td><td>Checkbox</td><td>Confirmed in Rent Manager record</td></tr>
+        <tr><td>Asset Status Updated</td><td>Checkbox</td><td>Set to Active in Rent Manager</td></tr>
+        <tr><td>Internal Notification Sent</td><td>Checkbox</td><td>Confirmation that team was notified</td></tr>
+        <tr><td>Notes</td><td>Text – Multi-line</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4 — FORMS & VIEWS
+═══════════════════════════════════════════════════════════ -->
+<div id="s4">
+  <div class="section-header"><h2><span class="section-num">04</span>Quickbase Forms &amp; Views</h2></div>
+
+  <div id="s41">
+    <h3 class="sub">4.1 Forms</h3>
+    <table class="flow">
+      <thead><tr><th>#</th><th>Form Name</th><th>Completed By</th><th>Key Fields</th><th>Trigger / Gate</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>F1</strong></td><td>New Home Order</td><td>Sales</td>
+          <td>Community, Lot Number, Infill Reason, Manufacturer, Floor Plan, Production Line, Order Date</td>
+          <td>Creates Home Order record + auto-generates Stage 1 task set (Automation A1)</td>
+        </tr>
+        <tr>
+          <td><strong>F2</strong></td><td>Lot Due Diligence Entry</td><td>Ops / Construction</td>
+          <td>All Lots table fields pre-linked to lot record</td>
+          <td>Must be marked complete before advancing to Home Selected (Gate G2)</td>
+        </tr>
+        <tr>
+          <td><strong>F3</strong></td><td>Home Details &amp; Asset Setup</td><td>Asset Mgmt / Sales</td>
+          <td>Model, Dimensions, Sqft, Bed/Bath, Home Type, RM Asset Record #, RM MRB Issue #, Purchase Price, Purchase Date</td>
+          <td>Serial number entered here when available from manufacturer</td>
+        </tr>
+        <tr>
+          <td><strong>F4</strong></td><td>Date Management</td><td>Sales</td>
+          <td>Online Date, Offline Date, Estimated Delivery Date</td>
+          <td>Designed for quick repeat edits; any save triggers Automation A4 (date change email)</td>
+        </tr>
+        <tr>
+          <td><strong>F5</strong></td><td>Storage Entry</td><td>Construction</td>
+          <td>Storage Required, Storage Location, Storage Start Date</td>
+          <td>Conditional — only relevant if home is not going directly to lot; triggers A5</td>
+        </tr>
+        <tr>
+          <td><strong>F6</strong></td><td>Delivery Coordination</td><td>Construction</td>
+          <td>Estimated Delivery Date (update), delivery vendor notes, who is receiving</td>
+          <td>Advances stage to Delivery Scheduled; triggers serial number warning A10</td>
+        </tr>
+        <tr>
+          <td><strong>F7</strong></td><td>Post-Delivery Asset Update</td><td>Asset Mgmt</td>
+          <td>Actual Delivery Date, delivery documentation status, RM update confirmation, Lot Fit Issue flag</td>
+          <td>Completed immediately after delivery confirmation; flags Lot Fit Issue if needed</td>
+        </tr>
+        <tr>
+          <td><strong>F8</strong></td><td>Insurance &amp; Loan Entry</td><td>Accounting</td>
+          <td>Floorplan Line, Loan Number, Loan Amount, Lender, Insurance Carrier, Insurance Policy #</td>
+          <td>Gate G4 dependency — Accounting task must be Complete before stage advances</td>
+        </tr>
+        <tr>
+          <td><strong>F9</strong></td><td>Set &amp; Utility Coordination</td><td>Construction</td>
+          <td>Set Date, utility accounts live confirmation</td>
+          <td>Records set completion; stage advances to Home Set after punch list sync</td>
+        </tr>
+        <tr>
+          <td><strong>F10</strong></td><td>Listing Pre-Check</td><td>Sales</td>
+          <td>All 6 listing checklist items (checkboxes)</td>
+          <td>Hard stop — record <em>cannot</em> advance to Listed — Complete until all 6 are checked (Gate G8)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="s42">
+    <h3 class="sub">4.2 Views / Dashboards</h3>
+    <table class="flow">
+      <thead><tr><th>#</th><th>View Name</th><th>Type</th><th>Description</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>V1</strong></td><td>Pipeline Board</td><td>Kanban</td>
+          <td>All active Home Orders by Workflow Stage. Color-coded: green = on track, yellow = approaching due date, red = overdue or blocked</td>
+          <td>All roles</td>
+        </tr>
+        <tr>
+          <td><strong>V2</strong></td><td>My Tasks</td><td>Filtered Table</td>
+          <td>Each user sees only tasks assigned to them, sorted by due date ascending</td>
+          <td>All roles (auto-filtered per user)</td>
+        </tr>
+        <tr>
+          <td><strong>V3</strong></td><td>Sales Master Tracker</td><td>Table (inline edit)</td>
+          <td>All active home orders with key date columns: Online, Offline, Delivery, Set, Listed. Editable inline for fast date updates</td>
+          <td>Sales, Management</td>
+        </tr>
+        <tr>
+          <td><strong>V4</strong></td><td>Overdue / Blocked Tasks</td><td>Filtered Table</td>
+          <td>Any task past due date OR with Status = Blocked. Alert view for daily management review</td>
+          <td>Management, Sales</td>
+        </tr>
+        <tr>
+          <td><strong>V5</strong></td><td>Storage Aging Report</td><td>Filtered Table</td>
+          <td>All homes currently in storage with calculated days-in-storage field. Auto-flags records older than 30 days in red (triggers A6)</td>
+          <td>Construction, Sales, Management</td>
+        </tr>
+        <tr>
+          <td><strong>V6</strong></td><td>Accounting Tracker</td><td>Filtered Table</td>
+          <td>All home orders with financial fields (Purchase Price, Loan, Insurance). Filtered to show homes needing financial action</td>
+          <td>Accounting, Management</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 5 — AUTOMATIONS
+═══════════════════════════════════════════════════════════ -->
+<div id="s5">
+  <div class="section-header"><h2><span class="section-num">05</span>Quickbase Automations</h2></div>
+  <table class="flow">
+    <thead><tr><th>#</th><th>Trigger</th><th>Action</th><th>Recipient(s)</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tAUT">A1</span></td>
+        <td>New Home Order record created</td>
+        <td>Create standard Stage 1 task set: Lot review, MRB notice, Sales notification</td>
+        <td>Assigned roles</td>
+        <td>Auto-populate due dates from Order Date</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A2</span></td>
+        <td>Stage advances to "Home Selected"</td>
+        <td>Create Stage 3–4 task set: Order placement, Accounting setup</td>
+        <td>Sales, Accounting</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A3</span></td>
+        <td>Stage advances to "Order Placed"</td>
+        <td>Create Stage 5 task set: File creation, Asset setup, RM entry</td>
+        <td>Sales, Asset Mgmt, Ops Coord</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A4</span></td>
+        <td>Online Date or Offline Date is changed</td>
+        <td>Send date change notification email using pre-drafted template</td>
+        <td>Regional, Ops, Accounting, Asset Mgmt, Construction</td>
+        <td>Template to be drafted — see Open Item O7</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A5</span></td>
+        <td>Storage Required = checked</td>
+        <td>Create storage-tracking task; flag record with storage stage</td>
+        <td>Construction, Asset Mgmt</td>
+        <td>Also activates Stage 7 (In Storage) if applicable</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A6</span></td>
+        <td>Storage days &gt; 30 (daily scheduled check)</td>
+        <td>Send storage aging alert for each overdue home</td>
+        <td>Construction, Sales, Ops</td>
+        <td>View V5 flags these records in red as well</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A7</span></td>
+        <td>Delivery Records record created (FastField sync)</td>
+        <td>Advance stage to "Delivered"; create post-delivery task set</td>
+        <td>Asset Mgmt, Accounting, Sales</td>
+        <td>Post-delivery tasks: asset update, RM cross-reference, accounting entry</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A8</span></td>
+        <td>Punch List Records record created (FastField sync)</td>
+        <td>Advance stage to "Home Set"; notify Sales</td>
+        <td>Sales</td>
+        <td>Sales is now responsible for initiating listing process</td>
+      </tr>
+      <tr>
+        <td><span class="tWARN">A9</span></td>
+        <td>Lot Fit Issue = checked</td>
+        <td>Send immediate alert; hard-block stage advancement</td>
+        <td>Sales, Asset Mgmt, Accounting</td>
+        <td>Must be resolved and unchecked before workflow can continue</td>
+      </tr>
+      <tr>
+        <td><span class="tWARN">A10</span></td>
+        <td>Serial Number is blank when stage = Delivery Scheduled</td>
+        <td>Send recurring warning: serial number missing — cannot deliver</td>
+        <td>Sales, Asset Mgmt</td>
+        <td>Fires daily until Serial Number is entered (Gate G5 blocks delivery)</td>
+      </tr>
+      <tr>
+        <td><span class="tAUT">A11</span></td>
+        <td>Listing Records record created with all 6 checks = Yes</td>
+        <td>Advance stage to "Listed — Complete"; send team close-out notification</td>
+        <td>All roles</td>
+        <td>Final process close-out — workflow complete for this home</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Legend:</strong> <span class="tAUT">GREEN</span> = standard automation &nbsp;|&nbsp; <span class="tWARN">RED</span> = alert or hard-stop automation that blocks advancement</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 6 — FASTFIELD FORMS
+═══════════════════════════════════════════════════════════ -->
+<div id="s6">
+  <div class="section-header"><h2><span class="section-num">06</span>FastField Forms</h2></div>
+  <div class="info"><strong>About FastField</strong>FastField forms are used for field capture only — on-site, mobile, offline-capable. Form data syncs back to Quickbase via webhook or CSV integration. Three forms cover this workflow. Each form includes a Home Order # field as the linking key to Quickbase.</div>
+
+  <!-- FORM 1 -->
+  <div id="s61">
+    <h3 class="sub">6.1 Form 1: Home Delivery Confirmation</h3>
+    <table class="meta-table">
+      <tbody>
+        <tr><td class="mlabel">When Used</td><td>At time of home delivery, on-site at the community lot</td></tr>
+        <tr><td class="mlabel">Completed By</td><td>Construction or Operations — whoever is physically present</td></tr>
+        <tr><td class="mlabel">QB Table Target</td><td>Delivery Records — creates one child record per delivery</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section A — Home Identification</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Home Order #</td><td>Text / Lookup</td><td><strong>Key match field</strong> — must be entered accurately to link to QB record</td></tr>
+        <tr><td>Community Name</td><td>Text</td><td></td></tr>
+        <tr><td>Lot Number</td><td>Text</td><td></td></tr>
+        <tr><td>Delivery Date</td><td>Date</td><td>Auto-populated with today's date</td></tr>
+        <tr><td>Received By</td><td>Text / Signature</td><td>Name or digital signature of on-site staff</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section B — Serial Number Verification</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Serial Number</td><td>Text</td><td>Typed on-site from VIN plate</td></tr>
+        <tr><td>Serial Number Photo</td><td>Camera Capture</td><td>Required — photo of VIN/serial plate</td></tr>
+        <tr><td>Serial Number matches RM record?</td><td>Multiple Choice</td><td>Yes / No / Not Yet Verified</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section C — Photo &amp; Video Documentation</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Home Video Uploaded</td><td>Yes / No</td><td>Walk-around video</td></tr>
+        <tr><td>Photo 1: Front of Home</td><td>Camera Capture</td><td>Required</td></tr>
+        <tr><td>Photo 2: Rear of Home</td><td>Camera Capture</td><td>Required</td></tr>
+        <tr><td>Photo 3: Left Side</td><td>Camera Capture</td><td>Required</td></tr>
+        <tr><td>Photo 4: Right Side</td><td>Camera Capture</td><td>Required</td></tr>
+        <tr><td>Photo 5: VIN Plate</td><td>Camera Capture</td><td>Required</td></tr>
+        <tr><td>Additional Photos</td><td>Camera Capture</td><td>Optional — multiple allowed for damage documentation</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section D — Exterior Condition Checklist</div>
+    <div class="note" style="margin:5px 0 5px 0;"><strong>Response format:</strong> Each item = Pass / Fail / N/A, plus a notes field that appears when item = Fail.</div>
+    <table>
+      <thead><tr><th>Checklist Item</th><th>Response Options</th></tr></thead>
+      <tbody>
+        <tr><td>Roof condition</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Siding condition</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Windows intact</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Doors intact</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Steps / landing</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Tow hardware removed</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Blocking visible</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Utility connections accessible</td><td>Pass / Fail / N/A</td></tr>
+        <tr><td>Visible transport damage</td><td>Pass / Fail / N/A</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section E — Lot Fit Confirmation</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Home fits intended lot as planned?</td><td>Yes / No</td><td>If No: immediately triggers QB Alert Automation A9 (hard stop)</td></tr>
+        <tr><td>Describe fit issue (if No)</td><td>Text – Multi-line</td><td>Conditional — only visible when answer is No</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section F — Submission</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Submitted By</td><td>Auto-user / Signature</td><td></td></tr>
+        <tr><td>Submission Date/Time</td><td>Date/Time</td><td>Auto-populated at submit</td></tr>
+        <tr><td>Notes / Comments</td><td>Text – Multi-line</td><td>Any final delivery notes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FORM 2 -->
+  <div id="s62">
+    <h3 class="sub">6.2 Form 2: Interior Punch List (100-Point)</h3>
+    <table class="meta-table">
+      <tbody>
+        <tr><td class="mlabel">When Used</td><td>After home is set, before listing — after utilities are confirmed live</td></tr>
+        <tr><td class="mlabel">Completed By</td><td>Construction / Operations (John Clark or designee)</td></tr>
+        <tr><td class="mlabel">QB Table Target</td><td>Punch List Records — advances stage to Home Set on sync</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section A — Record Identification</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Home Order #</td><td>Text / Lookup</td><td>Key match field</td></tr>
+        <tr><td>Community</td><td>Text</td><td></td></tr>
+        <tr><td>Lot Number</td><td>Text</td><td></td></tr>
+        <tr><td>Inspection Date</td><td>Date</td><td>Auto-date</td></tr>
+        <tr><td>Inspector Name</td><td>Text</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Sections B–K — 100-Point Checklist (10 Categories)</div>
+    <div class="note" style="margin:5px 0;"><strong>Format for all items:</strong> Pass / Fail / N/A + Notes field (shown when item = Fail). Final 100-point item list pending from John Clark — see Open Item O2. Categories below define the structure.</div>
+    <table>
+      <thead><tr><th>Section</th><th>Category</th><th>Items Include (representative)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>B</strong></td><td>Exterior</td><td>Siding, roof, gutters, steps, skirting — confirm set condition matches delivery photos</td></tr>
+        <tr><td><strong>C</strong></td><td>Entry &amp; Doors</td><td>Front door, back door, all locks, weatherstripping intact and functional</td></tr>
+        <tr><td><strong>D</strong></td><td>Windows &amp; Screens</td><td>Each window opens/closes/locks, all screens present and undamaged</td></tr>
+        <tr><td><strong>E</strong></td><td>Kitchen</td><td>Cabinets, counters, sink, faucets, all appliances operational, range hood</td></tr>
+        <tr><td><strong>F</strong></td><td>Bathrooms</td><td>All fixtures, caulking, toilet flush, vanity, shower/tub seals</td></tr>
+        <tr><td><strong>G</strong></td><td>Bedrooms</td><td>Doors, closets, flooring, outlets functional in each bedroom</td></tr>
+        <tr><td><strong>H</strong></td><td>Living Areas</td><td>Flooring, outlets, light switches, ceiling condition</td></tr>
+        <tr><td><strong>I</strong></td><td>HVAC</td><td>Thermostat, all registers present, unit condition and operation</td></tr>
+        <tr><td><strong>J</strong></td><td>Plumbing</td><td>Water pressure at all fixtures, drain flow, water heater operation</td></tr>
+        <tr><td><strong>K</strong></td><td>Electrical</td><td>Panel labeled, all outlets functional, GFCI tested, smoke/CO detectors installed</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section L — Manufacturer Packet</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Manufacturer packet present in home?</td><td>Yes / No</td><td>Required before listing</td></tr>
+        <tr><td>Packet location</td><td>Text</td><td>Must read "In Refrigerator" per standard</td></tr>
+        <tr><td>Confirmed with property manager?</td><td>Yes / No</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section M — Submission &amp; Summary</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Overall pass/fail summary</td><td>Auto-calculated</td><td>Derived from all section responses</td></tr>
+        <tr><td>Count of failed items</td><td>Numeric – Auto</td><td>Synced to Punch List Records in QB</td></tr>
+        <tr><td>Submitted By</td><td>Text</td><td></td></tr>
+        <tr><td>Signature</td><td>Signature</td><td>Digital capture</td></tr>
+        <tr><td>Date/Time</td><td>Date/Time</td><td>Auto-populated at submit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FORM 3 -->
+  <div id="s63">
+    <h3 class="sub">6.3 Form 3: Listing Form</h3>
+    <table class="meta-table">
+      <tbody>
+        <tr><td class="mlabel">When Used</td><td>When Sales is ready to list the home — after punch list is complete and all RM tasks are done</td></tr>
+        <tr><td class="mlabel">Completed By</td><td>Sales</td></tr>
+        <tr><td class="mlabel">QB Table Target</td><td>Listing Records — triggers stage advance to Listed — Complete on sync</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section A — Record Identification</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Home Order #</td><td>Text / Lookup</td><td>Key match field</td></tr>
+        <tr><td>Community</td><td>Text</td><td></td></tr>
+        <tr><td>Lot Number</td><td>Text</td><td></td></tr>
+        <tr><td>Listing Date</td><td>Date</td><td>Auto-populated at form open</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section B — Pre-Listing Verification Checklist</div>
+    <div class="warn" style="margin:5px 0;"><strong>Hard Validation:</strong> Form <em>cannot be submitted</em> unless all 6 items are confirmed Yes. This validation is enforced at the FastField level — the submit button is disabled until all 6 are Yes.</div>
+    <table>
+      <thead><tr><th>#</th><th>Pre-Listing Requirement</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Interior punch list complete and uploaded to Rent Manager?</td><td>Yes / No</td></tr>
+        <tr><td>2</td><td>Manufacturer packet confirmed and placed for buyer?</td><td>Yes / No</td></tr>
+        <tr><td>3</td><td>Insurance active in Rent Manager?</td><td>Yes / No</td></tr>
+        <tr><td>4</td><td>Loan documents uploaded to Rent Manager?</td><td>Yes / No</td></tr>
+        <tr><td>5</td><td>Serial number confirmed in Rent Manager?</td><td>Yes / No</td></tr>
+        <tr><td>6</td><td>Asset status updated to Active in Rent Manager?</td><td>Yes / No</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ff-band">Section C — Submission</div>
+    <table>
+      <thead><tr><th>Field</th><th>Input Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Listed By</td><td>Text</td><td></td></tr>
+        <tr><td>Signature</td><td>Signature</td><td>Digital capture</td></tr>
+        <tr><td>Notes</td><td>Text – Multi-line</td><td>Optional final notes</td></tr>
+        <tr><td>Date/Time</td><td>Date/Time</td><td>Auto-populated at submit</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 7 — INTEGRATION
+═══════════════════════════════════════════════════════════ -->
+<div id="s7">
+  <div class="section-header"><h2><span class="section-num">07</span>Quickbase ↔ FastField Integration</h2></div>
+
+  <p><strong>Method:</strong> FastField supports webhook-based data push on form submission. Each FastField form submission sends a JSON payload to a Quickbase webhook endpoint, creating or updating the corresponding child record in Quickbase automatically.</p>
+
+  <h3 class="sub">Integration Map</h3>
+  <table>
+    <thead><tr><th>FastField Form</th><th>QB Table Target</th><th>Action on Submit</th></tr></thead>
+    <tbody>
+      <tr><td>Form 1: Home Delivery Confirmation</td><td>Delivery Records</td><td>Creates new Delivery Record linked to Home Order — triggers A7</td></tr>
+      <tr><td>Form 2: Interior Punch List</td><td>Punch List Records</td><td>Creates new Punch List Record linked to Home Order — triggers A8</td></tr>
+      <tr><td>Form 3: Listing Form</td><td>Listing Records</td><td>Creates new Listing Record linked to Home Order — triggers A11</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Matching Logic</h3>
+  <p>Each FastField form includes a <strong>Home Order #</strong> field. This value is the key used to look up and link the new child record in Quickbase. The Home Order # must be typed or scanned accurately by field staff — it is the only automated link between field data and the QB record. Train all field staff on this requirement before go-live.</p>
+
+  <h3 class="sub">Required Setup Steps</h3>
+  <ol class="steps">
+    <li>Create webhook endpoint in Quickbase (via QB Pipelines or API endpoint configuration)</li>
+    <li>Configure each FastField form to POST its payload to the QB endpoint on submit</li>
+    <li>Map FastField field names to QB field names for each of the 3 forms (field-by-field mapping)</li>
+    <li>Test each form with a dummy submission and verify child record created correctly in QB</li>
+    <li>Confirm automations A7, A8, A11 fire correctly on test record creation</li>
+  </ol>
+
+  <div class="note"><strong>Short-Term Bridge Option (see Open Item O1):</strong> If webhook integration is complex to configure initially, FastField data can be exported to CSV and imported into Quickbase manually as a bridge. Build tables and field names to match FastField exactly so migration to webhook is clean when ready.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 8 — GATE RULES
+═══════════════════════════════════════════════════════════ -->
+<div id="s8">
+  <div class="section-header"><h2><span class="section-num">08</span>Workflow Gate Rules (Hard Stops)</h2></div>
+  <p>These rules prevent a record from advancing to the next stage without required data or confirmations. Gates are enforced via Quickbase form validation and QB Pipelines conditional logic. These are non-negotiable — bypassing them defeats the purpose of the system.</p>
+  <table class="flow">
+    <thead><tr><th>Gate</th><th>Stage Transition</th><th>Required Fields / Conditions</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tGATE">G1</span></td>
+        <td>Infill Need Identified → Lot Due Diligence</td>
+        <td>Lot Number assigned to record; Infill Reason entered</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G2</span></td>
+        <td>Lot Due Diligence → Home Selected</td>
+        <td>Lots table: Site Survey Completed = Yes (or waiver documented in Notes); all due diligence fields filled on Lot record</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G3</span></td>
+        <td>Home Selected → Order Placed</td>
+        <td>Floor Plan Name and Production Line confirmed by Operations; Ops task marked Complete</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G4</span></td>
+        <td>Order Placed → File &amp; Asset Setup</td>
+        <td>Purchase Price entered; Accounting setup task marked Complete</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G5</span></td>
+        <td>In Production → Delivery Scheduled</td>
+        <td>Serial Number field is not blank — must be entered before delivery can be scheduled</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G6</span></td>
+        <td>Delivery Scheduled → Delivered</td>
+        <td>Delivery Records child record exists — FastField Form 1 must have been submitted and synced</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G7</span></td>
+        <td>Delivered → Home Set</td>
+        <td>Lot Fit Issue = unchecked (no issue) OR new lot confirmed by Sales and Asset Mgmt and Lot Fit Issue cleared</td>
+      </tr>
+      <tr>
+        <td><span class="tGATE">G8</span></td>
+        <td>Home Set → Listed — Complete</td>
+        <td>Listing Records child record exists AND all 6 pre-listing checklist items = Yes — both conditions required</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 9 — BUILD SEQUENCE
+═══════════════════════════════════════════════════════════ -->
+<div id="s9">
+  <div class="section-header"><h2><span class="section-num">09</span>Build Sequence (Recommended)</h2></div>
+  <div class="note"><strong>Build in this order</strong> to avoid relationship rework. Parent tables must exist before child tables can reference them. Complete each step fully — including testing — before moving to the next.</div>
+  <ol class="steps">
+    <li><strong>Build the Lots table</strong> — reference data first; no dependencies on other tables</li>
+    <li><strong>Build the Home Orders table</strong> — master record with all fields; add Lot relationship to Lots table</li>
+    <li><strong>Build the Workflow Tasks table</strong> — link to Home Orders as parent; confirm relationship displays correctly</li>
+    <li><strong>Build Delivery Records table</strong> — link to Home Orders; all fields per Section 3.5</li>
+    <li><strong>Build Punch List Records table</strong> — link to Home Orders; all fields per Section 3.6</li>
+    <li><strong>Build Listing Records table</strong> — link to Home Orders; all fields per Section 3.7</li>
+    <li><strong>Create all Quickbase forms</strong> — Forms F1–F10; link each to appropriate table</li>
+    <li><strong>Create all views and dashboards</strong> — Views V1–V6 per Section 4.2</li>
+    <li><strong>Configure automations</strong> — A1 through A11 in order; test each before proceeding</li>
+    <li><strong>Set up gate rules</strong> — form validation and QB Pipelines conditional logic per Section 8</li>
+    <li><strong>Build FastField Form 1</strong> (Delivery Confirmation) — configure fields, set up integration, test end-to-end</li>
+    <li><strong>Build FastField Form 2</strong> (Punch List) — configure 100-point checklist (pending O2), test end-to-end</li>
+    <li><strong>Build FastField Form 3</strong> (Listing Form) — configure hard validation, test end-to-end</li>
+    <li><strong>End-to-end test</strong> — walk one dummy home order through all 11 stages; confirm all gates and automations fire correctly; verify all FastField syncs create correct QB child records</li>
+    <li><strong>Team training</strong> — role-specific walkthroughs for Sales, Construction, Operations, Accounting, and Asset Mgmt; confirm mobile FastField access for field staff</li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 10 — OPEN ITEMS
+═══════════════════════════════════════════════════════════ -->
+<div id="s10">
+  <div class="section-header"><h2><span class="section-num">10</span>Open Items &amp; Decisions Needed</h2></div>
+  <p>These items must be resolved before or during the build. Unresolved items are blocking or partially blocking build steps. Each has a designated owner.</p>
+  <table class="flow">
+    <thead><tr><th>#</th><th>Item</th><th>Owner</th><th>Impact &amp; Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tOPN">O1</span></td>
+        <td>FastField ↔ QB integration method</td>
+        <td>Sys Admin / Ops</td>
+        <td>Direct webhook vs. manual CSV bridge initially. Decision needed before FastField forms go live. Both paths are buildable — see Section 7 for bridge option.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O2</span></td>
+        <td>100-point punch list item list</td>
+        <td>John Clark (Construction)</td>
+        <td><strong>Blocking:</strong> FastField Form 2 cannot be finalized without John's approved item list. Placeholder categories are in Section 6.2 — John to supply final items within each category.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O3</span></td>
+        <td>Community / Property dropdown list</td>
+        <td>Sales / Asset Mgmt</td>
+        <td>Need complete list of all Parakeet community names to populate dropdown in Home Orders table. Must be consistent across QB and FastField forms.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O4</span></td>
+        <td>Manufacturer dropdown list</td>
+        <td>Sales</td>
+        <td>Confirm all manufacturers currently in use. Current placeholder list: Cavco / Clayton / Skyline / Champion / Other. Add or remove as needed.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O5</span></td>
+        <td>Quickbase user accounts</td>
+        <td>Sys Admin</td>
+        <td>All role-holders need QB accounts provisioned before build testing can begin. Confirm list of users per role before Step 7 of build sequence.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O6</span></td>
+        <td>FastField user accounts</td>
+        <td>Sys Admin</td>
+        <td>Construction and Ops field staff need FastField mobile access — app installed and logged in on personal or company devices before go-live.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O7</span></td>
+        <td>Date change notification email template</td>
+        <td>Sales</td>
+        <td>Draft the standard date change notification email text for Automation A4. Triggered whenever Online Date or Offline Date changes. Sales to draft; Sys Admin to configure in QB.</td>
+      </tr>
+      <tr>
+        <td><span class="tOPN">O8</span></td>
+        <td>MRB scope exclusion confirmation</td>
+        <td>Austin</td>
+        <td>Confirm: no MRB fields are replicated in Quickbase — all MRB issue tracking stays in Rent Manager only. This spec assumes Yes; if MRB visibility in QB is needed, this build must be revised.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TOC PAGE NUMBER RESOLUTION -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var observer = new MutationObserver(function(mutations, obs) {
+    var pagedContent = document.querySelector('.pagedjs_pages');
+    if (pagedContent) { obs.disconnect(); setTimeout(resolvePageNumbers, 600); }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  function resolvePageNumbers() {
+    document.querySelectorAll('.page-ref').forEach(function(ref) {
+      var href = ref.getAttribute('data-href');
+      var target = document.getElementById(href.replace('#', ''));
+      if (target) {
+        var page = target.closest('.pagedjs_page');
+        if (page) ref.textContent = page.getAttribute('data-page-number') || '';
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>

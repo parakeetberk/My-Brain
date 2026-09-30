@@ -1,0 +1,698 @@
+<title>Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F6F7; --card:#FFFFFF; --ink:#12171B; --muted:#5C666E;
+  --rule:#D8DEE2; --rule-strong:#C1CBD1; --signal:#B45309; --critical:#A32036; --ok:#16794A; --slate:#2F4858;
+  --disp-bg:#F1F0EA; --disp-rule:#DEDAD0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8;
+    --rule:#29333B; --rule-strong:#3A454D; --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4;
+    --disp-bg:#1B2128; --disp-rule:#323B43;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1317; --card:#161D23; --ink:#E6EAED; --muted:#94A0A8;
+  --rule:#29333B; --rule-strong:#3A454D; --signal:#E9A63F; --critical:#F2657C; --ok:#4FBF87; --slate:#9FC0D4;
+  --disp-bg:#1B2128; --disp-rule:#323B43;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:18px; line-height:1.55;
+  margin:0; padding:0 16px 80px; overflow-x:hidden;
+}
+h1,h2,h3,.k{font-family:"IBM Plex Sans Condensed","Segoe UI",sans-serif}
+code{font-family:"IBM Plex Mono",monospace;font-size:.82em;background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:.05em .32em;color:var(--muted)}
+
+.bar{position:sticky;top:0;z-index:20;margin:0 -16px;background:color-mix(in srgb, var(--paper) 88%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.bar-in{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mark{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px}
+.mark::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.dates{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.dbtn{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;padding:5px 9px;border-radius:5px;cursor:pointer;background:transparent;color:var(--muted);border:1px solid var(--rule);transition:all .12s ease}
+.dbtn:hover{color:var(--ink);border-color:var(--rule-strong)}
+.dbtn[aria-current="true"]{background:var(--slate);border-color:var(--slate);color:#fff}
+
+.wrap{max-width:640px;margin:0 auto}
+.date{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin:18px 0 4px}
+h1{font-size:29px;line-height:1.18;margin:0 0 4px;letter-spacing:-.008em;text-wrap:balance}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:32px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--rule);font-weight:600;display:flex;gap:10px;align-items:baseline}
+h2 .cnt{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--muted);font-weight:500;margin-left:auto}
+h2.hot{color:var(--critical);border-bottom-color:var(--critical)}
+
+.flag{margin:10px 0 0;padding:11px 13px;border-radius:5px;font-size:13.5px;line-height:1.55;background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--signal);color:var(--muted)}
+.flag.alert{border-left-color:var(--critical)}
+.flag.good{border-left-color:var(--ok)}
+
+.card{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:3px;padding:15px 17px;margin:0 0 12px}
+.card.crit{border-left-color:var(--critical)}
+.card.warn{border-left-color:var(--signal)}
+.card.done{border-left-color:var(--ok)}
+.card.answered{border-left-color:var(--ok)!important}
+.card h3{font-size:17px;margin:0 0 8px;line-height:1.3}
+.card p{margin:0 0 9px}
+.card p:last-child{margin-bottom:0}
+.num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;display:flex;gap:8px;align-items:center;margin:0 0 5px;text-transform:uppercase;flex-wrap:wrap}
+.t{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600}
+q,.q{font-style:italic}
+.src{font-size:13.5px;color:var(--muted);line-height:1.45}
+
+.mins{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap;background:color-mix(in srgb,var(--slate) 14%,transparent);color:var(--slate);border:1px solid color-mix(in srgb,var(--slate) 34%,transparent)}
+.waiting{display:block;margin-top:6px;font-size:13.5px;color:var(--muted)}
+.waiting b{color:var(--ink)}
+
+.budget{margin:0 0 14px;padding:11px 14px;border-radius:5px;background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--ok);font-size:14px;line-height:1.5;color:var(--muted)}
+.budget .n{font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--ink);font-size:16px}
+
+.paths{margin:11px 0 0;padding:11px 0 0;border-top:1px dashed var(--disp-rule)}
+.paths>.lbl{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.path{padding:8px 0 8px 12px;border-left:2px solid var(--rule);margin-bottom:6px;font-size:15px;line-height:1.48}
+.path:last-child{margin-bottom:0}
+.path.rec{border-left-color:var(--ok)}
+.path .pn{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block}
+.path.rec .pn{color:var(--ok)}
+
+.ask{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.04em}
+
+table.sched{width:100%;border-collapse:collapse;font-size:15px}
+table.sched td{border-bottom:1px solid var(--rule);padding:9px 6px 9px 0;vertical-align:top}
+table.sched td.tm{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap;width:96px;color:var(--slate);font-weight:600}
+table.sched tr:last-child td{border-bottom:none}
+table.sched tr.clash td{background:color-mix(in srgb,var(--critical) 7%,transparent)}
+.note-line{font-size:13.5px;color:var(--muted);display:block;margin-top:3px}
+
+ul.tail{list-style:none;padding:0;margin:0}
+ul.tail li{border-bottom:1px solid var(--rule);padding:11px 0;font-size:15.5px;line-height:1.45}
+ul.tail li:last-child{border-bottom:none}
+
+.disprow{border-bottom:1px solid var(--rule);padding:13px 0}
+.disprow:last-child{border-bottom:none}
+.disprow>.txt{font-size:15.5px;line-height:1.5;margin-bottom:2px}
+
+.sub{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:22px 0 6px}
+
+.u{background:transparent;border:1px dashed var(--rule-strong);border-radius:6px;padding:14px 16px;margin:0 0 12px}
+.u h3{font-size:16px;line-height:1.35;margin:0 0 7px}
+.u p{margin:0;font-size:14px;line-height:1.55;color:var(--muted)}
+
+.ans{margin-top:12px;padding-top:12px;border-top:1px dashed var(--disp-rule)}
+.ans.first{border-top:none;padding-top:0;margin-top:10px}
+.abtns{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.ab{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;font-size:13px;padding:6px 14px;border-radius:5px;cursor:pointer;border:1px solid var(--rule-strong);background:var(--card);color:var(--muted);transition:all .12s ease;line-height:1.2}
+.ab:hover{border-color:var(--slate);color:var(--ink)}
+.ab[aria-pressed="true"]{background:var(--slate);border-color:var(--slate);color:#fff}
+.ab.y[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.note{display:block;width:100%;margin-top:9px;font-family:"IBM Plex Serif",serif;font-size:14.5px;line-height:1.5;padding:9px 11px;border-radius:5px;resize:vertical;min-height:56px;background:var(--paper);color:var(--ink);border:1px solid var(--rule-strong)}
+.note::placeholder{color:var(--muted)}
+.state{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;letter-spacing:.03em;color:var(--muted)}
+.state.ok{color:var(--ok)}
+.state.err{color:var(--critical)}
+
+.brainbox{margin-top:26px;padding:16px 18px;border:1px dashed var(--rule-strong);border-radius:6px}
+.brainbox h3{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:16px;margin:0 0 4px}
+.brainbox p{margin:0 0 10px;font-size:13.5px;color:var(--muted)}
+.noterow{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+
+.sync{margin:12px 0 18px;padding:10px 13px;border-radius:5px;background:var(--card);border:1px solid var(--rule);font-size:13px;line-height:1.5;color:var(--muted)}
+.sync .n{font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--ink)}
+
+.scope{font-size:13.5px;color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:13px 15px;margin:14px 0 0;line-height:1.5}
+b,strong{font-weight:600}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--rule);font-size:13.5px;line-height:1.6;color:var(--muted)}
+:focus-visible{outline:2px solid var(--slate);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <div class="mark">Parakeet</div>
+  <nav class="dates" id="dates" aria-label="Choose a brief date"></nav>
+</div></div>
+
+<div class="wrap">
+  <p class="date" id="dt"></p>
+  <h1 id="hl"></h1>
+  <div class="scope" id="scope"></div>
+  <div id="flags"></div>
+
+  <h2 id="closedh">Closed on your reply<span class="cnt" id="closedcnt"></span></h2>
+  <div id="closed"></div>
+
+  <h2 class="hot">Emergencies<span class="cnt" id="emcnt"></span></h2>
+  <div id="emergencies"></div>
+
+  <h2 id="winh">Easy wins<span class="cnt" id="wincnt"></span></h2>
+  <div class="budget" id="winbudget"></div>
+  <div id="easywins"></div>
+
+  <h2 id="projh">Important projects<span class="cnt" id="projcnt"></span></h2>
+  <div id="projects"></div>
+
+  <h2 id="delh">Delegation check<span class="cnt">one, every morning</span></h2>
+  <div id="delegation"></div>
+
+  <h2>Today<span class="cnt" id="schedcnt"></span></h2>
+  <table class="sched" id="sched"></table>
+
+  <h2>Everything else<span class="cnt" id="tailcnt"></span></h2>
+  <div id="tailwrap"></div>
+
+  <div class="brainbox">
+    <h3>Anything else for the Brain</h3>
+    <p>Free text. A correction, context, a ruling, something none of the above asked. Filed with this morning's date.</p>
+    <textarea class="note" id="freenote" placeholder="Type anything here and the next run reads it."></textarea>
+    <div class="noterow">
+      <button class="ab" id="freesave" type="button">Save to Brain</button>
+      <span class="state" id="freestate">Nothing here saves until you press Save. Everything above saves by itself.</span>
+    </div>
+  </div>
+  <div class="sync" id="sync"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const BRIEFS = [
+{
+  date:"2026-09-10", weekday:"Thursday", label:"Sep 10",
+  headline:"The Fund II return is sitting signature ready and unsigned, Citrin has you on a call at 11:30, and payroll runs tomorrow with two amounts in the wrong direction.",
+  scope:"<b>One mailbox of two, and the one that is missing is the one rule 14 ranks first.</b> The Gmail tools are <b>absent from this session entirely</b>, not toggled off and not erroring, so <code>austin@a2zcp.com</code> carrying <code>austin@</code>, <code>ir@</code> and <code>info@thebedrockgrp.com</code> was unreadable. <b>That is two consecutive routines without it</b>, after last night's close lost it the same way, and it is five days from the 9/15 filing date. Nothing below speaks for the LP side.<br><br><code>austin@parakeetcommunities.com</code> through Microsoft 365, window <b>2026-09-09 17:00 ET to now</b>, which is the gap the 18:40 close left behind it: <b>Inbox, all 34 messages, both pages, read and unread alike. Sent Items, all 28, both pages.</b> <b>For Signature</b> by folder ID: <b>6 items, 2 unread</b>, and both unread are <code>Completed:</code> notices rather than pending approvals. <b>Teams came back on this pass</b>, 47 of 50 chats on the first page and 35 of 50 on the second before a Graph 429, no channel coverage. <b>Calendar for 09-10 read and every time converted out of UTC.</b><br><br><b>Probed and up:</b> Rent Manager, 21 reports; the RentViewer warehouse, full measure catalogue on <code>VW_Budget_Comparison</code>. Neither was queried for portfolio data because nothing here turns on one. <b>Plaud is reachable and empty, and that is now a pattern rather than a blip</b>: 316 recordings scanned, <b>newest is 09-05 19:55 ET</b>, so nothing from 09-07, 09-08 or 09-09 exists to read. <b>Google Drive not probed.</b> <code>browser-use</code> failed to connect.<br><br>Diffed against <code>99-Archive/</code> listed directory by directory, <code>99-Archive/2026-08-closed/</code> file by file, <code>00-Meta/commitments.md</code>, <code>00-Meta/daily-close/2026-09-09.md</code>, <code>00-Meta/open-items.md</code> and <code>00-Meta/id-conventions.md</code> before anything below was called open.",
+  flags:[
+    {kind:"alert", text:"**No morning brief ran on 2026-09-09.** The archive has briefs for 09-04, 09-07 and 09-08 and nothing for 09-09, and the ledger's *Last reviewed* line still points at 09-08. **So this page covers a two day gap on everything except mail**, where last night's 18:40 close carries the floor under it. That is stated rather than papered over."},
+    {kind:"alert", text:"**Publish by 06:00 was missed again, by about ninety minutes.** The run started at 05:38 ET and the vault reads ahead of the sweep are what ate the time. **You are reading this inside the school run rather than before it**, so the easy wins below are placed against the 08:00 hour, which is still intact today. Second consecutive brief to miss the hour it is built for."},
+    {kind:"good", text:"**Both of Tuesday's answers were still sitting unapplied and they are handled here.** `w1` yes and `w2` no, saved 09:06 ET on 09-08 and never flipped from `new`. They are applied and their status is set, so tomorrow does not re-file them. **The gap this closes is the same one 09-08 recorded**: the answers were read, the flip was not done."},
+    {kind:"warn", text:"**The page's own tail and footer have been rendering their formatting tags as literal text.** The renderer escapes HTML in the tail, decisions, carried items and questions blocks, so anything written with `<b>` there showed the tag rather than the bold. **Fixed on this page** by using markdown in those fields, and the Sep 8 tab is converted too."}
+  ],
+  closed:[
+    {n:"01", title:"You cleared the ND Community Homes return on Tuesday and the reminder chain stopped the same day",
+     body:["<b>Your answer on `w1` was yes</b>, saved 09:06 ET Tuesday. <b>The corroboration is the silence that followed.</b> SafeSend had been sending daily: the request at 09-06 14:04 ET, then reminders at 09-07 01:06 and 09-08 01:05. <span class=\"ask\">There has been no reminder since, across 09-08, 09-09 and this morning, on a platform that had reminded every day until then.</span>",
+       "<b>Verified that the reminders stopped. Inferred that it is signed</b>, because a signature confirmation was not separately located and the distinction is worth keeping rather than rounding off. If it is not signed, it is a five minute item and it is still on the 9/15 clock."],
+     src:"Verified: artifact document `2026-09-08__w1`, choice yes, now marked applied. SafeSend notices of 09-06 14:04, 09-07 01:06 and 09-08 01:05 ET read, and a search of the mailbox from 09-05 forward returns no later ND Community Homes message."},
+    {n:"02", title:"You answered no on the Greg Valentine line, then did it anyway yesterday, and `CM-34` still does not close",
+     body:["<b>`w2` came back no.</b> Then you opened the thread yourself at <b>15:38 ET</b> on 09-09: <q>Didn't receive anything today just want to make sure it didn't go to spam.</q> Three exchanges followed inside twenty minutes.",
+       "<b>What you got back closes the line increase half.</b> Greg Valentine, 15:53 ET: <q>Everything has been already received to move forward with the line increase. I believe we collected the appropriate docs towards the beginning of July.</q> You, 15:59: <q>Fabulous. Thanks didn't remember. We will get the wire sent out tomorrow.</q> Jon Lancaster added an ask of his own at 16:12: <b>they want the GA-1 number</b> to go final on the Georgia locations.",
+       "<b>`CM-34` stays open deliberately, and last night's close already made that call.</b> Valentine answered about the line increase documents. <span class=\"ask\">He said nothing about the insurance record he raised separately, which is what the row is actually about.</span> An answer to a different question is not a closure."],
+     src:"Verified, the whole 21st Mortgage thread read in Inbox and Sent Items for 09-09. Artifact document `2026-09-08__w2`, choice no, now marked applied with the note that his own action overtook it. `CM-34` read at `00-Meta/commitments.md`; the deliberate non closure is recorded in `00-Meta/daily-close/2026-09-09.md`."}
+  ],
+  emergencies:[
+    {n:"01", kind:"crit", due:"issued 17:15 ET last night; eleven K-1 chasers behind it; 9/15 is Tuesday", mins:"10 min",
+     title:"The Bedrock Fund II return went signature ready last night and there is no sign you signed it",
+     body:["<b>What happened, in forty five minutes.</b> Citrin issued it through SafeSend at <b>17:15 ET</b>. You forwarded it to Lisa Timbrook at <b>17:33</b> with one question: <q>We are paying jersey tax in fund ii? Thought we pass all the tax to the investor?</q> Then at <b>17:37</b> you answered yourself: <q>Neverwmind its a refund.</q>",
+       "<b>And then nothing.</b> Your Sent Items run to 19:26 ET and carry no signature and no further message on the thread. <b>No SafeSend completion notice has arrived.</b> <span class=\"ask\">Verified that no completion exists in the mailbox. Inferred, not asserted, that the return is unsigned, because SafeSend does issue a confirmation and none is here.</span>",
+       "<b>Why this is the first thing on the page.</b> `TD-0597` counts <b>eleven parties</b> waiting on Fund II K-1s, one represented by counsel and one, David K. Gustafson, who set his own deadline of <b>today</b>. The filing date is <b>2026-09-15</b>, which is Tuesday, and it is also the first working day of budget week and the first day of the MMHA convention. <b>Everything downstream of the signature is stacked on one date.</b>",
+       "<b>The half nobody has answered is the sequencing.</b> Signing the partnership return and releasing the K-1s are not the same event, and nothing in this Brain says whether Citrin issues them on signature or after e-filing. <b>You are on a call with Timbrook at 11:30 ET today</b>, so the question costs one sentence in a room you are already in."],
+     src:"Verified: the SafeSend notice of 2026-09-09 17:15 ET read, both of your forwards read in Sent Items, and Sent Items enumerated in full for the window rather than sampled. The absence of a completion notice is verified across the whole 34 message Inbox pull. `TD-0597`, `TD-0589` and `CM-25` read at `00-Meta/commitments.md` and `10-Business/eos/to-dos.md`. Last night's close made this its Tomorrow item 1 at `00-Meta/daily-close/2026-09-09.md`.",
+     paths:[
+       {rec:true, n:"Recommended · sign it before 09:00 and put the release question to Timbrook in the same message, so the 11:30 call starts from an answer rather than a status update",
+        text:"Sign, then one line: does signing release the K-1s or do they issue after e-filing. <b>Cost</b>: ten minutes, inside the block you still have. <b>Who</b>: you, and only you, because you are the signer on the partnership return and that is not delegable. <b>Still exposed when it is done</b>: the eleven chasers have still not been told anything, and the portal they were pointed at on 09-02 is still reported dead by four separate people. <b>Wrong choice if</b> the New Jersey line you queried last night is actually wrong rather than a refund, in which case signing locks in an error, and your own 17:37 correction is the only thing standing behind that call. Thirty seconds with Timbrook settles it before you sign."},
+       {rec:false, n:"Hold the signature until the 11:30 call and sign it live with Citrin on the line",
+        text:"Tempting, because the New Jersey question and the release question both get answered by the people who prepared the return. <b>Loses on what the delay buys.</b> The call is scheduled for thirty minutes and its stated subject is A2Z Mobile Home Fund I, which is a different entity and a genuinely hard problem; the Fund II signature will be the thing that gets squeezed. <b>It also spends the one morning block you have</b> waiting rather than acting. <b>The piece worth grafting on</b>: whatever you do with the signature, the release question belongs in that call."},
+       {rec:false, n:"Sign it and tell the eleven chasers today that the return is filed and the K-1s are coming",
+        text:"This is the option that actually reduces the pressure, because the chasers are chasing silence rather than a date. <b>Loses today on a hard blocker</b>: the LP list and the <code>ir@thebedrockgrp.com</code> mailbox both live in the a2zcp account, and that account is unreachable in this session for the second routine running. <b>You cannot send to a list this page could not read.</b> <b>The piece worth keeping</b>, and it is the real finding: the moment Timbrook gives you a release date, that note is worth more than the signature was, and it needs the second mailbox back to send it."}
+     ],
+     prompt:"Signing before 09:00?"},
+    {n:"02", kind:"crit", due:"call at 11:30 ET; fifth chase landed 17:07 last night; 9/15 is Tuesday", mins:"10 min",
+     title:"Citrin booked the call you asked for, then chased a second entity the invite does not cover",
+     body:["<b>You called it yourself yesterday at 16:23 ET</b>, to McNamara and Timbrook: <q>Can we discuss this tomorrow as I am completely stumped. I am not sure what happened to these books.</q> Earlier, 15:47: <q>I am trying to trouble shoot this and pull audit logs. I have no idea what happened as the system in 2024 matches what I sent.</q> <b>That is the most direct thing anyone has said about these books and it is worth crediting</b>, because a fifth holding reply would have been the easier move.",
+       "<b>McNamara booked it at 17:05 ET and you accepted at 17:06.</b> Thirty minutes, 11:30 to 12:00 ET, him and Timbrook.",
+       "<b>Then he chased again one minute later, on the other entity.</b> 17:07 ET: <q>Do you have any update on A2Z ND Portfolio Partners LLC?</q> <span class=\"ask\">The meeting invite is titled <b>A2Z Mobile Home Fund I, LLC</b> and names one entity. The open questions are two. Rule 16 says the matter takes its name from the primary document, and the primary document here covers Fund I only.</span>",
+       "<b>That makes ND the fifth chase and the one at risk of falling through the call.</b> The ND question is not a filing question: cumulative distributions run <b>Evergreen $120,138.94 against OPR $778,663.37</b> where Citrin expected Evergreen at half or better, and the entity held about <b>$90,024</b> at 1/1/2026, so there is not enough inside it to true Evergreen up. His own clock line, from 09-03: <q>particularly given that one investor has already been asking related questions.</q>",
+       "<b>Three returns sit behind the ND answer</b>, ND, Cambridge and Mayflower, because the Operating Agreement uses a targeted capital income allocation and income follows distributions."],
+     src:"Verified: the full 09-09 exchange read in Sent Items and Inbox, the 17:05 invite and the 17:07 chase read as separate messages, and the calendar entry read for today with the UTC time converted. The Evergreen and OPR figures and the $90,024 are on `CM-18` at `00-Meta/commitments.md`, sourced there to Citrin's own 09-03 messages.",
+     paths:[
+       {rec:true, n:"Recommended · take thirty minutes as a Fund I diagnosis and open the call by asking for ND in writing, separately",
+        text:"One sentence at the top: Fund I today, and please put the ND options and their consequences in writing so it can be answered properly. <b>Cost</b>: nothing, it is the first line of a meeting you are already in. <b>Who</b>: you, because he has written to you personally five times. <b>Still exposed when it is done</b>: ND is unanswered for another few days with 9/15 on Tuesday, and three returns stay gated. <b>Wrong choice if</b> the two problems turn out to have one cause, which is plausible given both are A2Z books in wind down, in which case splitting them wastes the only half hour where the accountant is in the room."},
+       {rec:false, n:"Use the thirty minutes for ND, because it has the investor behind it, and let Fund I wait",
+        text:"ND has an interested party asking questions and a distribution imbalance that reads as an over payment. <b>Loses on who called the meeting and why.</b> You booked it because you are stumped on the Fund I books, and that is the one thing on either entity that cannot be resolved by email at all: it needs the audit logs and the 2024 to 2025 trial balance side by side with the person who found the break. <b>The piece worth keeping</b>: ND is the item with the outside clock, and it must leave that call with a date on it even if it does not leave with an answer."},
+       {rec:false, n:"Move the call, bring Moe or Berman, and do both entities properly with the books open",
+        text:"It is the only path that actually finishes anything, and it is the honest answer to the delegation question below. <b>Loses this week</b>: Berman is mid separation and Moe has never been asked to hold any of this, so assembling the room takes longer than the five days left. <b>Wrong choice if</b> Citrin needs the answer before partner review on the Fund II filing, which nobody has established. <b>The piece grafted onto the recommendation</b>: ask on the call who at Citrin can work directly with Moe, so the sixth chase does not come to you."}
+     ],
+     prompt:"Split Fund I and ND on the call?"},
+    {n:"03", kind:"crit", due:"run is tomorrow; two of the three corrections are amounts in the wrong direction", mins:"5 min",
+     title:"Payroll 9.11 has three open corrections and the fix chain went quiet at 01:24 this morning",
+     body:["<b>Berman raised three, 16:47 ET yesterday, to Demetria with you copied.</b> <q>Can you confirm Chris Daltons hourly rate? Looks like that field wasn't noted in the H and T report.</q> <q>Milagros Jimenez should have a pro-rated check for 1 week based upon an 8/31 start date but appears to be getting full pay.</q> Plus a commission adjustment.",
+       "<b>Demetria answered at 01:24 ET this morning and answered well.</b> Chris Dalton's rate <q>had been left blank when onboarding</q> and she attached his offer letter confirming <b>$21 per hour</b>. Millie Jimenez she takes as the pro rate. <span class=\"ask\">So two of the three now have an answer sitting in the thread. What has not happened is anybody confirming the payroll file was actually changed.</span>",
+       "<b>Why this is an emergency rather than an easy win.</b> The run is <b>tomorrow</b>, two of the three are money in the wrong amount, and the correction currently exists as an email at 01:24 rather than as a changed record. <b>A wrong payroll is not reversible by a reply</b>; it is reversible by a second payroll. <b>You already approved the recruiting commissions separately</b> at 13:19 ET yesterday, so the commission leg may be the one that is genuinely done.",
+       "<b>Nothing here is yours to fix and that is the point.</b> Berman and Demetria own it between them. The five minutes is one line asking for confirmation that the file is corrected before it locks."],
+     src:"Verified: Berman's 2026-09-09 16:47 ET message and Demetria's 2026-09-10 01:24 ET reply both read in the Inbox pull, and your 13:19 ET commissions approval read in Sent Items. `TD-0625` was opened on this by last night's close at `00-Meta/daily-close/2026-09-09.md`. **No compensation figure beyond the hourly rate named in the correction itself is recorded anywhere in this Brain, per guardrail 9.**",
+     paths:[
+       {rec:true, n:"Recommended · one line to both of them asking for written confirmation the file is corrected, with a cut off time today",
+        text:"Not a question about the answers, a question about the record. <b>Cost</b>: five minutes and one message. <b>Who</b>: Berman and Demetria, together, because the failure mode is each assuming the other made the change. <b>Still exposed when it is done</b>: it catches these three and nothing about how an hourly rate got left blank at onboarding in the first place. <b>Wrong choice if</b> Paychex has already locked the file for a Friday run, in which case the question is not whether it is corrected but how it gets corrected off cycle, and that is a different and more expensive conversation you would want to start this morning rather than tomorrow."},
+       {rec:false, n:"Leave it, because both owners are awake, engaged and answering each other at one in the morning",
+        text:"There is a real argument here: the chain is working, nobody has dropped anything, and a CEO chasing a payroll correction is exactly the pattern the delegation section exists to reduce. <b>Loses on the clock and only on the clock.</b> One run, tomorrow, two amounts wrong, and no confirmation step anywhere in the process. <b>The piece worth keeping</b>: if the answer comes back clean, that is evidence for handing the confirmation step itself to Demetria permanently rather than doing this again in two weeks."},
+       {rec:false, n:"Put a standing pre run check into the payroll process instead of fixing this one",
+        text:"A named person confirms every flagged correction is in the file before the run locks, every cycle. <b>Right in the long run and wrong for tomorrow</b>: designing a control does not correct Milagros Jimenez's check. <b>Wrong choice as the only move</b>, because the thing that fails this week is not the absence of a process, it is the absence of one message. <b>The piece grafted onto the recommendation</b>: ask for the confirmation, and if it turns out the file was not changed, that is the evidence the check is needed and it should go in before the next run."}
+     ],
+     prompt:"Ask for written confirmation today?"}
+  ],
+  winnote:"<b>Your 08:00 hour is still ahead of you today, which is the first time this week that has been true.</b> Emergency 01 wants the front of it. These six are one liners and messages, none of them thinking work: w1, w2 and w6 answer people who asked you directly overnight and take seven minutes between them; w5 has a clock because the Quickbase call is at 09:00; w3 and w4 are the two Natalie is actually blocked on.",
+  easywins:[
+    {n:"w1", mins:"3 min", title:"Tell Jon the Mail.Send blocker is known, and who can actually clear it",
+     waiting:"Waiting on <b>one reply, and you already have the answer</b>. Jon hit it live at <b>02:07 ET this morning</b> and wrote to you: <q>your Microsoft 365 connection is missing the permission to send mail at the organization level. Microsoft rejected the send with Mail.Send not granted</q>, then <q>can you help me fix this?</q> This Brain has carried that exact finding since 2026-09-03, tested by direct call, with Graph returning <code>403 ErrorAccessDenied</code>. <b>It needs tenant admin consent on the app registration, not anything Jon can do.</b>",
+     src:"Verified, both Teams messages read this morning. The prior test and its error code are recorded at `10-Business/connector-status.md`. Naming the fix as an admin consent action stops him debugging an approvals problem that is not one."},
+    {n:"w2", mins:"2 min", title:"Say yes or no to getting Zach onto the RM API and the warehouse",
+     waiting:"Waiting on <b>a word</b>. Jon, Teams, <b>00:00 ET this morning</b>: <q>can you get zach set up with the RM API and rentviewer datawarehouse mcp</q>, with <q>would be very helpful to pair against his utility stuff</q> right behind it. <b>Both systems were probed this morning and both are up.</b>",
+     src:"Verified, the messages read this morning and both connectors probed live: Rent Manager returned its 21 report definitions and the warehouse returned the full measure catalogue. Related to the utility recapture question Jon asked separately at 01:31, which is in the tail."},
+    {n:"w3", mins:"5 min", title:"Make yourself the approver on the FastField forms, which you already agreed to at 20:46",
+     waiting:"Waiting on <b>you doing the thing you said yes to</b>. Natalie, <b>20:41 ET</b>: <q>I can fill more of the forms out to test but I don't know where they are going and I'm not getting anything stating approved or denied.</q> Then <q>Can you make yourself the approved of the forms?</q> You answered <q>Absolutely</q> at 20:46. <b>She cannot finish testing until the approval routing resolves to somebody.</b> Your own words at 20:41: <q>need those rocking we can really start telling what is going on out there.</q>",
+     src:"Verified, the full exchange read in Teams for 2026-09-09 evening. **This is also the delegation check below**, because agreeing to be the standing approver on field forms across 67 communities is a different commitment from unblocking one test."},
+    {n:"w4", mins:"3 min", title:"Pick a dashboard, because Natalie has done the comparison and is waiting on the choice",
+     waiting:"Waiting on <b>one line choosing one</b>. She wrote at <b>20:05 ET</b> after going through both side by side: the original is <q>more useful for the field team</q>, the newer one <q>goes toward the variance reporting goal I want to get to.</q> Her Teams note at 20:05: <q>Sent email hope it makes sense LOL. I think my brain just died.</q> <b>She spent her evening on it and the answer is a sentence.</b>",
+     src:"Verified, her 2026-09-09 20:05 ET email and the Teams thread from 18:03 to 20:46 read in full. The live page she was comparing against is on the Parakeet SharePoint at `Operations/_Operations Report/Ops dashboard/`."},
+    {n:"w5", mins:"2 min", title:"Clear the Quickbase billing permission before the 09:00 call, not after it",
+     waiting:"Waiting on <b>an approve or a decline</b>. The alert landed at <b>06:54 ET this morning</b>: <q>Ritika Sinha requests permission to create applications billed to the account: Austin_Berk_account.</q> You are the account administrator. <b>She is one of the people on the 09:00 Discovery Session</b>, so this either gets settled in two minutes beforehand or becomes the first two minutes of the call.",
+     src:"Verified, the Quickbase notification read in the Inbox pull this morning, and the attendee list read on today's calendar entry. Whether billing to your personal account is the right arrangement at all is a separate question and is in the tail."},
+    {n:"w6", mins:"2 min", title:"Put a name on the GL 51804 anomaly Jon found at 23:25",
+     waiting:"Waiting on <b>an owner, because Jon addressed it to nobody</b>. His words: <q>One flag for accounting: a $33,227.00 entry hit GL 51804 on 9/3/2025 in two postings and was reversed 9/30. Net zero, but it is 40 times every real charge on that account.</q> <b>Net zero means it costs nothing and explains nothing</b>, and an entry that size posting twice and reversing inside a month is either a correction somebody made properly or a control that is not there.",
+     src:"Verified, the Teams message read this morning. **Single-source** on Jon's own reading of the ledger; the underlying GL detail was not pulled. Related to `KP-0108`, the Rent Manager controls question opened by last night's close, and to the audit work Jon described at 00:01 as wanting to pair against the utility data."}
+  ],
+  projects:[
+    {n:"01", title:"Tuesday 2026-09-15 still carries three things and it is now five days away",
+     body:"The Fund II filing deadline, the first working day of budget week, and the MMHA convention which runs the 15th to the 18th. <span class=\"ask\">Nothing has moved off that date since it was flagged on Tuesday, and emergency 01 is the only one of the three you can still get ahead of.</span> The shape that helps is unchanged: front load the Fund II work into this week while Berman is still here, and record who other than you could have done each piece.",
+     src:"Verified for the deadline and budget week. The convention dates are **single-source** on the 21st Mortgage email of 2026-09-08 08:02 ET, and whether you are attending is still not established. `TD-0589` at `10-Business/eos/to-dos.md`."},
+    {n:"02", title:"The 21st wire goes today and the capacity number you made it conditional on still does not exist",
+     body:"You told Greg Valentine at 15:59 ET yesterday <q>We will get the wire sent out tomorrow.</q> <b>`PD-35` was decided after nine days and the precondition you set on 2026-08-31 was never met</b>: <q>would like understand where our capacity is on all three lines before making that decision.</q> It was not mentioned once in the exchange that decided it. <span class=\"ask\">`CM-15` is why it mattered, with 46 duplicate lender submissions and 28 orders the lenders were never told about, so the capacity being committed against is misstated by an unknown amount.</span> Triad stood at roughly $266,000 of headroom on Monday. The wire goes either way; the question is the next one.",
+     src:"Verified, your 15:59 ET message read in Sent Items. `PD-35` marked decided at `00-Meta/parked-decisions.md` and `KP-0107` opened on the dropped precondition by the 2026-09-09 close. `CM-15` and the Triad figure at `00-Meta/commitments.md`."},
+    {n:"03", title:"The separation agreement may be handed over today, and `CM-13` is due in twenty days behind it",
+     body:"Karen Doner, 18:00 ET yesterday: <q>We are hoping to give the Separation Agreement to David tomorrow.</q> Traci Tomaselli said the document <q>may slip until Friday.</q> <b>The intercompany reconciliation `CM-13` is due 2026-09-30</b> and its gating prerequisite is still a signed entity list with EINs that does not exist, and <b>Moe has still never been asked</b>. <span class=\"ask\">Your own sequencing call on 2026-08-31 was to push this before the exit, which makes the unasked question the entire risk.</span> **Guardrail 7 governs the personnel half and no compensation figure from any of it is recorded anywhere.**",
+     src:"Verified, the Lowenstein and Doner thread read in the Inbox pull for 09-09 evening. `CM-13` read in full at `00-Meta/commitments.md`. Nothing has been drafted, replied to or distributed."},
+    {n:"04", title:"Belle Haven and the Clearwater and Titusville site plans have a target now, and it is end of month",
+     body:"Jon to Gunster, <b>21:11 ET</b>: <q>OK great, yes site count is for sure priority. Time is urgent too but I think if in any way we can have a resolution by end of month that would be ideal? Too optimistic?</q> Christen Spake had written at 20:30 that aerial imagery and tax maps are ordered from Brevard County and her assistant will chase <b>twice a week</b> until they arrive. <b>Site count is the priority and the aerials are the evidence.</b>",
+     src:"Verified, both messages read in the Inbox pull. Rule 16 applies to the naming here: the matter is characterised from this thread rather than from a folder, and the underlying Belle Haven memo was not opened on this pass."},
+    {n:"05", title:"Silver Breeze is moving on the county side while the deadline behind it is still unsourced",
+     body:"Auzzi wrote to Melanie Howarter and Terri Breeden at Brevard County at <b>16:47 ET</b>, with Gunster's H Benitez and the whole internal group copied: <q>we've been doing tremendous work to get upgrades lined up for this project including buying new homes to have placed in the community</q> and colleagues will <q>step in and help get this agreement finalized.</q> <span class=\"ask\">The <b>2026-09-25</b> SOIRL date Jon pasted into the construction chat is still sourced to nothing in this vault, and John Clark's own note that the permit is expected any moment with 8 to 10 weeks of construction after it means a construction milestone on that date cannot be met.</span> `KP-0106`, `PF-0487`, `TD-0621`.",
+     src:"Verified for Auzzi's message, read in the Inbox pull. The 09-25 date is **uncorroborated**: the message asserting it exists and is verified, the claim inside it is not, and a vault wide search returns nothing."},
+    {n:"06", title:"`CM-06` is the reason the 11:30 call exists, and that is the third time it has arrived wearing a costume",
+     body:"It reached you as the Geiger seller entity blank, then as the Citrin ND distribution history, and now as Fund I books nobody can reconcile. <b>The work is not building a map, it is finishing one</b>: the governed master org chart at <code>/sites/main/Shared Documents/Corporate/Formation Documents/Master Org Chart.xlsx</code> carries about 115 entities with a documentation status on every line. <span class=\"ask\">You claimed this one yourself and called it not delegable, which is exactly why it keeps surfacing as somebody else's deadline.</span>",
+     src:"Verified, read in full 2026-09-02 and recorded on `CM-06` at `00-Meta/commitments.md`, with the analysis at `00-Meta/analysis/2026-09-02-entity-map-found.md`."}
+  ],
+  delegation:[
+    {n:"g1", title:"You said Absolutely to becoming the approver on the field forms. Is that for the test, or forever?",
+     body:["<b>The item.</b> Easy win w3. Natalie asked at 20:46 ET <q>Can you make yourself the approved of the forms?</q> and you answered in five seconds. <b>The immediate reason is good</b>: she is testing FastField, submissions are going nowhere, and nothing comes back approved or denied. Somebody has to be in that slot for the test to mean anything.",
+       "<b>Why it is worth one question anyway, tested against the three readings.</b> It is not yours by law; nothing about a field inspection form needs a CEO. It is not blocked on a missing person either, because Natalie owns Property Operations and the three regionals sit under her. <span class=\"ask\">It is <b>habit, and specifically the fastest kind</b>: an unblocking favour at nine at night that quietly becomes a permanent routing rule for 67 communities.</span>",
+       "<b>The cost is not today, it is in six weeks.</b> These forms are `PK-HAI-01` and `PK-RMW-01`, vendor QC and resident move in, and they are designed to fire on every turn. <b>An approver slot with your name in it is a queue that only grows</b>, and the failure mode is not that you refuse, it is that you approve everything unread and the control stops being a control. <b>You have said the opposite thing already this week</b>, at 20:42: <q>It's for you and your team. Trial and error.</q>"],
+     src:"Verified, the Teams exchange of 2026-09-09 20:41 to 20:46 ET read in full. The two forms are recorded at `15-Projects/fastfield-phase-i/build-register.md` as `FF` items. This section is the input to the `business-coach` monthly delegation audit.",
+     prompt:"Are you the approver so the test can run this week, or is that meant to be the standing arrangement?"}
+  ],
+  sched:[
+    {tm:"09:00-10:00", title:"Parakeet | Quickbase Discovery Session", people:"Ritika Sinha, Kaitlyn Slider, A Alexander, B Saha (Quickbase) · Zach, Natalie · Gong recording bot · tentative", note:"<b>External.</b> Easy win w5 is Ritika Sinha's billing permission request and it lands two minutes before this. The unresolved thread from the last session is the vendor flowchart putting home delivery confirmation before the home is ordered, plus verbal ordering and the FastField forms being missing from what they were given. <b>Jon asked you at 21:02 last night whether you had made headway on the Quickbase work.</b>"},
+    {tm:"10:00-11:00", title:"Parakeet x Jadian Weekly Check-in", people:"Jon, Zach, Joe Cridge (Jadian) · tentative", note:"<b>External, and it is the only Jadian room today.</b> The Pipeline Review that was in this same slot with Hennessy, Nelson, Cridge and Berman <b>is cancelled</b>. `CM-17`, the E and O and D and O binder that was supposed to be discussed with Jadian and was not, is still unraised and your own answer on it was <q>Discuss with Jon.</q> Jon is in this room."},
+    {tm:"11:30-12:00", title:"A2Z Mobile Home Fund I, LLC", people:"Tim McNamara, Lisa Timbrook (Citrin)", note:"<b>External. This is emergency 02, and emergency 01's release question belongs here too</b> because Timbrook is the person who sent the Fund II return. Thirty minutes, one entity in the title, two entities in the chases."},
+    {tm:"14:00-14:30", title:"Mayflower Plymouth", people:"Christopher Hoke, Dean DiMarco (Woods Oviatt), Adam Freedman (Post RE Group)", note:"<b>External.</b> You accepted at 19:26 ET after offering a 2 to 4 window. <b>The thing to settle is Freedman's objection from Monday night</b>, unanswered since: <q>the other group was about to go hard without any sort of credit, no?</q> `TD-0627`."},
+    {tm:"16:30-17:30", title:"Finance and Accounting EOS Meeting", people:"David Berman, Zach, A Gano, Jon · tentative", note:"Agenda as sent: Occupancy Dashboard, Capex Projects, Acquisition Overview, then Engie, Tax Update, Audit Update, New Monthly Close, FP and A. <b>This is the room for the $5M+ AR owner question</b> and for the GL 51804 flag in easy win w6."}
+  ],
+  decisions:[
+    {n:"d1", text:"**Are you deliberately proceeding on 21st without the capacity number, or did it get lost in the afternoon?** The wire goes today either way. You set that precondition yourself on 2026-08-31. `KP-0107`, `TD-0622`, `PD-35`. **Ask 2.**", prompt:"Deliberate, or lost?"},
+    {n:"d2", text:"**Is the 2026-09-25 Silver Breeze grant date real, and is it a contract, a reimbursement or a construction deadline?** The kind of deadline decides everything, because a construction milestone on that date cannot be met and a filing window probably can. `KP-0106`, `PF-0487`, `TD-0621`. **Ask 2.**", prompt:"Do you know what it is?"},
+    {n:"d3", text:"**Does the $5M+ of uncollected AR get a named owner and a date?** Berman named it as what has to happen to fully fund ongoing infill, and it is the actual route to the MHC shortfall now the draw request turns out never to have existed. Nobody owns it, and the Finance EOS at 16:30 is the room. `CM-31`. **Ask 2.**", prompt:"Name an owner today?"},
+    {n:"d4", text:"**Who owns `ir@thebedrockgrp.com`.** `KP-0088` is critical and unassigned: 74 threads, 236 messages, nothing added since 2026-04-28, almost entirely Fund II investor relations. **This question has now been unanswerable for two runs for a different reason than yours**, because the mailbox itself has been unreachable, so it is not counted against the drop rule. **Ask 3.**", prompt:"Ready to name someone?"},
+    {n:"d5", text:"**The Geiger seller entities.** You gave the Designated Representative hedged as Jon Wyss. Counsel's other blank, which entities are the Seller as fee owner of the Property and owner of the businesses, is still empty and only you can fill it. `CM-06`. **Ask 3.**", prompt:"Ready to name them?"},
+    {n:"d6", text:"**The house project: send the lien waiver demand before the 9/15 onsite with Rick?** The $5,000 undelivered fireplace, the $22,000 duplicate cabinet install and the possible $40,000 Argiterra double bill are specific and dated enough to name in writing, and unpaid subs can lien the property regardless of what Rick was paid. **Separately, Laurence Brokaw sent the latest iteration at 17:04 last night and wants to talk this morning.** **Ask 2.**", prompt:"Send it before the 15th?"}
+  ],
+  stillopen:[
+    {n:"o1", text:"**`CM-17`, the Jadian E and O and D and O consultation gap.** Your answer was discuss with Jon. He is in the 10:00 Jadian room with you today and the Pipeline Review that would have been the other chance is cancelled. **Ask 4.**"},
+    {n:"o2", text:"**`KP-0034`, the CBRE comparable set for the Massachusetts settlement.** Report due around **2026-09-11**, which is tomorrow. Under Option 1 those comps go to plaintiffs' counsel and become Parakeet's stated position."},
+    {n:"o3", text:"**`TD-0612`, the Borrower's Certificate on the MHC escrow package.** No movement on 09-09 and none overnight. This is cash in against `CM-31`. **Ask 3.**"},
+    {n:"o4", text:"**`TD-0613`, the High Pace hold.** No answer, and the same vendor sits on your Weekly Rehabs Call. **Ask 3.**"},
+    {n:"o5", text:"**`KP-0103`, `TD-0589` is still recorded on two rows.** Nothing is renumbered without you. **Ask 3.**"},
+    {n:"o6", text:"**`TD-0580`, Albert is still owed the note that the SharePoint restructure is on hold.** `KP-0100` carries the storage wall behind it. **Ask 4.**"},
+    {n:"o7", text:"**`TD-0329` and `TD-0330` still have no owner.** The trespass protocol and the Great Oak boil water paperwork. **Ask 4.**"},
+    {n:"o8", text:"**`PR-0033`, the Belle Haven water leak inspection you promised face to face.** Owner Alex Pontes, status VERIFY. A promise closes when the person is told, not when the work is done. **Ask 5.**"},
+    {n:"o9", text:"**`PR-0025`, Vicky is still out of pocket for the River Oaks bingo machine.** An employee fronted her own cash. **Ask 5.**"},
+    {n:"o10", text:"**`PD-22`, whether Jon's one word Sold approved the Triple S lease or only the lot and floorplan.** Parked, and no longer asked here."},
+    {n:"o11", text:"**`KP-0088`, the 74 thread To Respond backlog, is untouched for a fourth consecutive routine** and this time because the mailbox holding it could not be reached at all. **This is the cost of the connector gap, stated as a number rather than as a complaint.**"},
+    {n:"o12", text:"**GATE 0 on the SharePoint restructure has been dropped from the asking rotation**, per the two run rule, after 09-04 returned a blank note and 09-08 asked for the last time. It is not resolved; it is no longer being asked. It sits on `TD-0580` and `KP-0100`."}
+  ],
+  unknown:[
+    {n:"u1", title:"When you and Jon disagree in front of the team, which of you is meant to be the one who says no?",
+     body:"Jon wrote *continue to make me the bad guy* and you answered *im ok with that. gives me an opening.* That reads like a deliberate division of labour rather than friction. **If it is a standing arrangement it changes how this Brain should route a hard message**: to the person who is supposed to carry it, rather than to whoever owns the function. Rule 18 says route by owner, and a house convention about who plays which role would be a real exception to it and worth writing down once. **Ask 2, and this is the last run that asks.**"},
+    {n:"u2", title:"What counts as a control in Rent Manager here, and who is allowed to turn one off?",
+     body:"You switched several off on 09-09 and the whole record of it is one sentence in a private chat, with Moe named as the monitor in a chat he is not in. **The question is not about that judgement**, which had a reason behind it. It is that nothing in this Brain says what those controls are, who can change them, or whether anyone is meant to be told. **Budget week opens in five days and every budget runs off that ledger**, so a convention here settles a class of items rather than one. Jon's GL 51804 flag in easy win w6 is the same question arriving from the data side. `KP-0108`. **Ask 2, and this is the last run that asks.**"}
+  ],
+  tail:[
+    "**Plaud has recorded nothing since 2026-09-05 19:55 ET.** 316 recordings scanned, newest is the Friday contractor billing review. **That is five days and at least six meetings with no spoken record**, and last night's close read the same empty result. The connector answers; the library is not growing. **Worth thirty seconds checking the device, because Teams meeting transcripts are disabled tenant wide and Plaud is the only spoken layer this Brain has.**",
+    "**The Weekly Rehabs Call is not on today's calendar.** Last night's close said Thursday carries it at 10:00 to 10:30 ET. Today's calendar returns seven events and it is not among them. **Recorded as a disagreement rather than resolved**, because the close corrected itself on this series once already.",
+    "**The Parakeet Pipeline Review with Jadian was cancelled for today**, Hennessy, Nelson, Cridge, Jon, Berman. The weekly check in at the same hour stands.",
+    "**Jon asked at 01:31 ET whether the utility question was resolved**: *did we get to the bottom of this? we could be recapturing this from residents starting in january.* Unanswered, and it has a January implementation date behind it.",
+    "**Jon is running an audit push and said so at 00:01 ET:** *as we are trying to audit the fuck out of stuff*, wanting the GL work paired against the utility data. Easy win w6 and question u2 are both inside this.",
+    "**Jon queried the site plan schedule with John Clark at 20:38 ET.** RV pedestals for lots 87 to 108 appear twice with different dates, lots 99 to 108 sit inside the green loop but are named in a red callout, and lots 69 to 71 are ambiguous. John answered that pedestals are installed before the wiring is pulled, which is why the dates differ. **Jon's takeaway, confirmed: homes can be ordered 60 days from pedestal date.**",
+    "**Jon flagged four lots to Leslie at 21:38 ET:** tranche 2 PL orders on lots 3, 111, 22 and 58 look occupied but are on the 34 home order list. He has already moved those orders to four other lots for budgeting. **No action on you; recorded because it is the same population as `CM-15`.**",
+    "**Zach pushed back on KeyBank on the Walton Street JREFI CapEx Draw #3 at 21:48 ET:** Parakeet will address the $95,437.17, and he asked them to use what was already sent as the basis for reimbursing **$179,916.25**. No ask on you.",
+    "**The A and A Development invoice is now five months unassigned.** AvidXchange invoice 3452, $108,919.00, dated 2026-04-02, still in Pending Workflow Assignment on this morning's 05:50 ET report. The only other row is Housecalls at $250. **Unchanged since it was first recorded.**",
+    "**A second AvidXchange report went out at 23:43 ET**, Invoices Escalated, naming Olga Benitez, to nine people including you.",
+    "**For Signature had content for the second run running.** 6 items, 2 unread, and both unread are `Completed:` notices: `VO_INFILL_CHANGEORDER_MULTI` and `PPH_CAPEX_CLOSEOUT_15706`, both cleared yesterday afternoon. **Your approval queue there is empty.**",
+    "**Ashlyne answered on the Belmart titles at 19:02 ET.** Lot 35 has an RV Larry bought and has been trying to sell; lot 37 holds a home a friend brought in that **has never been sat**. You replied *Thank you!!!* at 19:26.",
+    "**Laurence Brokaw sent the latest house project iteration at 17:04 ET** with *Adam said David was fine with it*, then declined a 18:30 call: *Let's talk in the AM. I have an easy day tomorrow.* **He is expecting you this morning.** See `d6`.",
+    "**You told ClickUp to reprice at 18 members.** 16:32 ET to Kyle Poon: *The idea here was to only have a 18 members on the platform. Can you give me the pricing update with that in mind?* And to Samantha Smith at 16:29: *We are going to renew with a much lower membership base.* Renewal is 2026-11-09.",
+    "**The Controller job description came back in Word at 01:24 ET** and you said you would comment on it *tonight*, wanting to *remove stuff that I feel created an issue previously*. **Guardrail 7; drafts to you only.**",
+    "**The Daniel PTO letter is drafted and sitting with counsel.** Demetria sent Karen Doner a draft at 20:18 ET. Your position at 15:58: *Waiting for Lowenstein's comments back. Unfortunately not getting better so as soon as we get those back, the conversation will be had.* **Guardrail 7. Nothing recorded beyond the fact that it exists.**",
+    "**The equity buyout paperwork moved four times last night and is with Lowenstein.** Doner confirmed at 18:00 there is no Cause. Tomaselli said the calculation methodology is not written down and is for the Parakeet Holdco II board to determine, suggested checking with Jadian on the valuation, and may slip to Friday. You answered at 19:26: *Ideally get it all done at once. We will honor the right but would just like to have all to present at once and move on.* **Guardrails 7 and 9. No figure from any of it is recorded anywhere in this Brain.**",
+    "**Jon said he will run the buyout number off the last valuation** at 21:00 ET and send it by morning, on the assumption David will anchor to it.",
+    "**Natalie is a form approval away from having field data.** Beyond easy win w3, she asked at 20:43 for the dashboard to *make it easy for anyone to read and find the information snapshots useful*, which is the same ask as w4 from the other direction.",
+    "**An Abacus.ai task of yours is paused waiting on you**, *Property Crosswalk Table*, notified at 01:03 ET. Low stakes; noted because it is a half finished piece of the same data work.",
+    "**Two Citrin attachments went out from you at 15:26 and 15:30 ET** on the A2Z Com thread, to McNamara and Timbrook. Contents not opened on this pass.",
+    "**A Quickbase account alert arrived at 06:54 this morning** and is easy win w5. **The separate question nobody has asked is why the Parakeet Quickbase evaluation is billing to an account named `Austin_Berk_account`.**",
+    "**Jamie forwarded the Bullis note at 21:40 ET.** Separately you answered the student leader question at 15:36 with *If Julia wants to do it, let her do it. Don't strip a leadership honor from her because of what other kids and their parents might think or do.* **Closed by your own action; recorded because it happened, not because anything is open.**",
+    "**Two sales yesterday**, TC A-11 and Fox 74, reported by Natalie at 13:54 ET. No ask.",
+    "**The registered agent card and the CSC Global annual report request are both carried from Tuesday** and neither was re-surfaced in this window. Three Northwest Registered Agent payments failed on the Visa ending 1923 for J Bar J MHC, Hunter Springs MHC and Lake Saunders MHC. **A lapsed agent puts an entity out of good standing.**",
+    "**`00-Meta/id-conventions.md` was stale again, exactly as its own rule predicts.** It advertised `KP-0105`, `TD-0620` and `PF-0486`; the register files carry **`KP-0108`, `TD-0627`, `PF-0487`, `CM-34`, `PD-46`, `PR-0040`**. Verified by grep against the files this morning and the page is corrected. **Nothing on that page is ever the authority for the next free number.**",
+    "**No new IDs were issued by this run.** Everything above resolves to rows that already exist, which is unusual and is the one genuinely good sign on the page.",
+    "**Nothing was sent, drafted, replied to, labelled or moved.** Read only throughout, per the 2026-08-29 delivery decision."
+  ],
+  foot:"**Answer here and the next run reads it and files it.** Yes, No, or Other with a note, saving the instant you click or the moment you stop typing. Nothing to press for a plain note. **Tuesday's two answers were still marked new when this run opened and are now applied**, which is the second time that flip has had to be done retrospectively. One caveat stands: an answer given at 08:30 lands in the Brain at the next brief, not immediately. Fastest of all is the chat, read every turn. **Not the artifact comments**, which are pull only and are not a reply path for this page. Confidence labels: **Verified** means the primary source was read, **Single-source** means it appears in one place with nothing to check it against, **Inferred** means it was reasoned rather than stated."
+},
+{
+  date:"2026-09-08", weekday:"Tuesday", label:"Sep 8",
+  headline:"A resident on half power for eight weeks, an investor portal that renews tomorrow, and Citrin chasing two entities at 07:31.",
+  scope:"<b>Archived reference page.</b> Both mailboxes were readable on this run, a2zcp first. <code>austin@a2zcp.com</code> carrying <code>austin@</code>, <code>ir@</code> and <code>info@thebedrockgrp.com</code>: <code>in:inbox</code> swept twice, all 22 threads for 09-04 onward and again for 09-07 onward, three opened with <code>get_thread</code>. <code>austin@parakeetcommunities.com</code>: Inbox all 42 then all 21, Sent Items all 11 then all 4, For Signature 0 of 0. Teams unreachable on the rebuild pass at 0 of 50 chats. Plaud empty for 09-06 to 09-08. Rent Manager and the warehouse probed and up.<br><br><b>The full original is archived at</b> <code>99-Archive/2026-09-briefs/brief-2026-09-08-restructured.html</code>. Its emergencies were the River Oaks half power case, the Fund II K-1 portal, and the Citrin two entity chase. Its easy wins `w1` and `w2` are the two answers resolved on the Sep 10 tab.",
+  flags:[
+    {kind:"warn", text:"**Kept for reference, and its tail is re-rendered.** The original shipped with HTML tags written into the tail and footer, which the renderer escapes, so those blocks displayed their markup as text. Converted to markdown here. **No content was changed in the conversion.**"}
+  ],
+  closed:[],
+  emergencies:[
+    {n:"01", kind:"crit", due:"eight weeks on half power", mins:"15 min",
+     title:"A River Oaks resident on half power since mid July, hurt on the extension cords, and the two bid rule is why",
+     body:["Cindy Graves wrote on Aug 17, Aug 26, Aug 29 and Sept 4, and tripped over one of the extension cords she runs across her floor. Jon, 09-07 18:59 ET: <q>Our two-bid rule is what put an eight week gap between a failed service and a repair, and that is on the process, not on the site.</q>",
+       "<b>Natalie took the resident half end to end.</b> What stayed open was the policy Jon addressed to nobody, an emergency capex exception with a dollar threshold, and the claim, which he left as a conditional with no name on it."],
+     src:"Verified, the full thread read end to end. Guardrail 5 governs anything that goes back to her.",
+     prompt:null},
+    {n:"02", kind:"crit", due:"InvestNext renewal; 9/15", mins:"20 min",
+     title:"Three LPs wrote in over the weekend and a fourth report says the portal door is dead",
+     body:["The fund told the LP base on 09-02 that K-1s arrive through the InvestNext portal. <b>Four independent people have now reported <code>thebedrockgrp.com</code> is down.</b> David K. Gustafson set his own deadline of 2026-09-10.",
+       "<b>Ridaa deflected one LP to <q>the managers</q></b> with Austin only on copy, said <q>I'll do so shortly</q>, and nothing followed."],
+     src:"Verified, three threads pulled with `get_thread`. `KP-0076`, `KP-0099`. Guardrail 6 throughout.",
+     prompt:null},
+    {n:"03", kind:"crit", due:"fourth chase, two entities", mins:"10 min",
+     title:"Citrin added a second entity to the same thread",
+     body:["McNamara, 07:31 ET: <q>Have you been able to resolve the distribution issue on A2Z ND Portfolio Partners or made any progress on the balance sheet continuity from 2024 to 2025 as it relates to A2Z Mobile Home Fund I, LLC?</q>",
+       "<b>Cumulative distributions Evergreen $120,138.94 against OPR $778,663.37</b>, roughly $90,024 of cash in the entity at 1/1/2026. <b>This became the 11:30 call on the Sep 10 tab.</b>"],
+     src:"Verified, the message body read in full. `CM-18` at `00-Meta/commitments.md`.",
+     prompt:null}
+  ],
+  winnote:"<b>Archived. These were the seven easy wins on the Sep 8 page.</b> `w1` and `w2` were answered and are resolved on the Sep 10 tab; the rest carried.",
+  easywins:[
+    {n:"w1", mins:"5 min", title:"Sign the ND Community Homes 2025 return",
+     waiting:"<b>Answered yes and resolved.</b> See the Sep 10 tab.",
+     src:"Verified, SafeSend notices of 09-06, 09-07 and 09-08 read."},
+    {n:"w2", mins:"3 min", title:"One line to Greg Valentine and `CM-34` stops being a relationship risk",
+     waiting:"<b>Answered no, then overtaken by his own action on 09-09.</b> See the Sep 10 tab. `CM-34` is still open.",
+     src:"Verified, the 21st Mortgage thread read for 09-09."}
+  ],
+  projects:[],
+  delegation:[
+    {n:"g1", title:"Four chases from Citrin, and every reply has been yours. Is that law or is that the missing entity map?",
+     body:["<b>Unanswered.</b> The finding stands and it got sharper: a fifth chase arrived 09-09 and a call is now booked for 09-10.",
+       "It is not yours by law and it is not habit. <span class=\"ask\">It is blocked on a missing artefact, and the artefact is `CM-06`.</span>"],
+     src:"Verified against the thread and against `CM-06` and `CM-13`.",
+     prompt:"Could Moe or Timbrook answer McNamara if you handed them the OA and the distribution table?"}
+  ],
+  sched:[],
+  decisions:[],
+  stillopen:[],
+  unknown:[],
+  tail:[
+    "**The Florida $50,000 dealer bond may have been paid twice and nobody can find the first payment.** `TD-0537`. Berman: *Has this been paid twice now?* Moe: *NO record of it being paid around 8/14 from any corporate bank account.* **A guess is where this rests.**",
+    "**The Saturday billing review on the house project found roughly $67,000 of disputed charges and no lien waivers from any vendor.** Roofing moved from about $71,300 to a trend of $130,000 to $137,000. **Single-source**, one Plaud AI summary.",
+    "**An AvidXchange invoice has been in Pending Workflow Assignment since April.** A and A Development, invoice 3452, $108,919.00. **Still true on 09-10.**",
+    "**Three registered agent payments failed on one card.** Northwest Registered Agent, Visa ending 1923: J Bar J MHC, Hunter Springs MHC, Lake Saunders MHC.",
+    "**A second registered agent provider wants information.** CSC Global, annual report filings coming due.",
+    "**From the To Respond backlog, an LP was threatening counsel in January and it is not on any register.** Tom Gallagher, co-trustee of the Don Levin Trust: *Guess I'll have to get out atty's involved in this one too.*",
+    "**And the label itself stopped being maintained on 2026-04-28**, so it is a frozen backlog rather than a live queue. `KP-0088`. **Unread for a fourth routine as of 09-10.**",
+    "**The agent brief that governs this job contradicted itself and it was corrected.** `95-Agents/morning-brief.md` specified the new section order while a later paragraph said the hold on it stood. **That is why the 06:05 run published in the old order.**"
+  ],
+  foot:"**Archived reference page.** Answers given here were applied on 2026-09-10 and their status is flipped in the database. The live brief is the Latest tab."
+},
+{
+  date:"2026-09-04", weekday:"Friday", label:"Sep 4",
+  headline:"A $29 million signature, a payment run, and a K-1 that should not ship yet.",
+  scope:"<b>Archived reference page, and it predates the 2026-09-08 restructure</b>, so it has no easy wins, no projects and no delegation check. <b>The full original is at</b> <code>99-Archive/2026-09-briefs/brief-2026-09-04.html</code>. Both mailboxes were read, a2zcp first: <code>in:inbox</code> to exhaustion at 21 threads, then <code>in:sent</code>, then the To Respond, Superhuman Respond and Accounting labels. Parakeet Outlook Inbox all 64, Sent Items 6, For Signature 0 of 0.",
+  flags:[
+    {kind:"warn", text:"**Kept for reference.** This is the brief whose second republish carried the JavaScript syntax error that blanked the page from roughly 09:22 ET until 2026-09-08. `KP-0102`. The twelve answers given on it all saved before that republish and are applied."}
+  ],
+  closed:[],
+  emergencies:[
+    {n:"01", kind:"crit", due:"buyer wanted signature that day", mins:"20 min",
+     title:"The Geiger PSA is substantively final at $29 million, and two of the five blanks are only yours to fill",
+     body:["Jared Huff at Paul Hastings: the revised PSA <q>should be substantively final</q>, then five inputs to build the execution version, of which the Seller entities and the Designated Representative are yours.",
+       "<b>Zach escalated straight to Austin:</b> <q>Can you provide the legal entities for Geiger? I'm not sure where the org chart is saved.</q> <span class=\"ask\">That sentence is `CM-06` arriving as a closing condition.</span>"],
+     src:"Verified. **Outcome: the Designated Representative was answered hedged, and the seller entities are still open as `d5` on the Sep 10 tab.**",
+     prompt:null},
+    {n:"02", kind:"crit", due:"last banking day before Labor Day", mins:"10 min",
+     title:"MHC still cannot pay, the debt payment is inside the window, and the draw order is still unruled",
+     body:["<b>Outcome, and it is why this card is kept.</b> The answer was <q>No draws for MHC, only HoldCo II</q>, and Berman then wrote on 09-07 that <q>MHC hasn't been able to call equity for some years now.</q> <b>The queue never existed.</b> The real route is the $5M+ of uncollected AR, which is `d3` on the Sep 10 tab."],
+     src:"Verified. Guardrail 8 applied throughout.",
+     prompt:null}
+  ],
+  winnote:"",
+  easywins:[],
+  projects:[],
+  delegation:[],
+  sched:[],
+  decisions:[],
+  stillopen:[],
+  unknown:[],
+  tail:[
+    "**The Fund II K-1s had eleven parties waiting**, one represented by counsel, against a 2026-09-15 filing date.",
+    "**`To Respond` was read for the first time ever** and returned 236 messages across 74 threads, newest 2026-04-28. `KP-0088`, `KP-0089`, `KP-0090`.",
+    "**`PD-45`, the crystallization decision**, was opened here: whether to lock the promote against a $349,000,000 JREF I mark before the Q1 recap. **Single-source** on one recording."
+  ],
+  foot:"**Archived reference page.** The live brief is the Latest tab."
+}
+];
+
+const esc = s => String(s).replace(/&(?!(amp|lt|gt|quot|#\d+);)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function md(s){
+  return esc(s)
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g,'<em>$1</em>');
+}
+
+function answerUI(qid, prompt, first){
+  return '<div class="ans'+(first?' first':'')+'" data-qid="'+qid+'">'
+    + '<div class="abtns">'
+    +   (prompt ? '<span class="src" style="margin-right:6px">'+esc(prompt)+'</span>' : '')
+    +   '<button class="ab y" type="button" data-c="yes" aria-pressed="false">Yes</button>'
+    +   '<button class="ab" type="button" data-c="no" aria-pressed="false">No</button>'
+    +   '<button class="ab" type="button" data-c="other" aria-pressed="false">Other</button>'
+    +   '<span class="state"></span>'
+    + '</div>'
+    + '<textarea class="note" placeholder="Notes, context, a correction. Saves as you type."></textarea>'
+    + '</div>';
+}
+
+function pathsUI(paths){
+  if(!paths || !paths.length) return '';
+  return '<div class="paths"><span class="lbl">Three paths</span>'
+    + paths.map(p=>'<div class="path'+(p.rec?' rec':'')+'"><span class="pn">'+md(p.n)+'</span>'+p.text+'</div>').join('')
+    + '</div>';
+}
+
+function render(c){
+  document.getElementById('dt').textContent = c.weekday + ' ' + c.date;
+  document.getElementById('hl').textContent = c.headline;
+  document.getElementById('scope').innerHTML = c.scope;
+  document.getElementById('flags').innerHTML = (c.flags||[]).map(f=>'<div class="flag'+(f.kind==='alert'?' alert':f.kind==='good'?' good':'')+'">'+md(f.text)+'</div>').join('');
+
+  const closed = c.closed || [];
+  document.getElementById('closedh').hidden = !closed.length;
+  document.getElementById('closedcnt').textContent = closed.length + ' resolved';
+  document.getElementById('closed').innerHTML = closed.map(x=>
+    '<div class="card done"><span class="num">'+x.n+' · Resolved</span><h3>'+md(x.title)+'</h3>'
+    + x.body.map(p=>'<p>'+p+'</p>').join('')
+    + '<p class="src">'+md(x.src)+'</p></div>'
+  ).join('');
+
+  const em = c.emergencies || [];
+  document.getElementById('emcnt').textContent = em.length ? em.length + ' · waiting costs something' : 'none';
+  document.getElementById('emergencies').innerHTML = em.length ? em.map(x=>
+    '<div class="card '+x.kind+'"><span class="num">'+x.n+' · '+md(x.due)+'<span class="mins">'+esc(x.mins)+'</span></span><h3>'+md(x.title)+'</h3>'
+    + x.body.map(p=>'<p>'+p+'</p>').join('')
+    + '<p class="src">'+md(x.src)+'</p>'
+    + pathsUI(x.paths)
+    + (x.prompt ? answerUI(x.n, x.prompt) : '')
+    + '</div>'
+  ).join('') : '<p class="src">Nothing is getting worse on its own this morning. A quiet start, stated plainly rather than filled.</p>';
+
+  const wins = c.easywins || [];
+  document.getElementById('winh').hidden = !wins.length;
+  document.getElementById('winbudget').hidden = !wins.length;
+  document.getElementById('wincnt').textContent = wins.length + ' items';
+  const total = wins.reduce((a,w)=>a + (parseInt(w.mins,10)||0), 0);
+  document.getElementById('winbudget').innerHTML = '<span class="n">'+total+' minutes</span> across '+wins.length
+    + ' items, all of them already decided or already written and waiting on a word, a send or a signature. ' + (c.winnote||'');
+  document.getElementById('easywins').innerHTML = wins.map(x=>
+    '<div class="card warn"><span class="num">'+x.n+'<span class="mins">'+esc(x.mins)+'</span></span><h3>'+md(x.title)+'</h3>'
+    + '<p class="waiting">'+x.waiting+'</p>'
+    + '<p class="src">'+md(x.src)+'</p>'
+    + answerUI(x.n, 'Done, or not today?')
+    + '</div>'
+  ).join('');
+
+  const projs = c.projects || [];
+  document.getElementById('projh').hidden = !projs.length;
+  document.getElementById('projcnt').textContent = projs.length + ' · shape, not actions';
+  document.getElementById('projects').innerHTML = projs.map(x=>
+    '<div class="card"><span class="num">'+x.n+'</span><h3>'+md(x.title)+'</h3>'
+    + '<p>'+x.body+'</p><p class="src">'+md(x.src)+'</p></div>'
+  ).join('');
+
+  document.getElementById('delh').hidden = !(c.delegation||[]).length;
+  document.getElementById('delegation').innerHTML = (c.delegation||[]).map(x=>
+    '<div class="card"><span class="num">Why did this reach you</span><h3>'+md(x.title)+'</h3>'
+    + x.body.map(p=>'<p>'+p+'</p>').join('')
+    + '<p class="src">'+md(x.src)+'</p>'
+    + answerUI(x.n, x.prompt)
+    + '</div>'
+  ).join('');
+
+  document.getElementById('schedcnt').textContent = (c.sched||[]).length + ' meetings';
+  document.getElementById('sched').innerHTML = (c.sched||[]).map(s=>
+    '<tr'+(s.clash?' class="clash"':'')+'><td class="tm">'+esc(s.tm)+'</td><td><b>'+md(s.title)+'</b>&nbsp;&nbsp;'+(s.people?md(s.people):'')
+    + (s.note ? '<span class="note-line">'+s.note+'</span>' : '') + '</td></tr>'
+  ).join('');
+
+  const dec = c.decisions||[], so = c.stillopen||[], unk = c.unknown||[], tl = c.tail||[];
+  const tailTotal = dec.length + so.length + unk.length + tl.length;
+  document.getElementById('tailcnt').textContent = tailTotal + ' items, every one shown';
+  let h = '<p class="src" style="margin:0 0 14px">The tail is <b>'+tailTotal+'</b> long this morning: '
+    + dec.length+' decisions, '+so.length+' carried items, '+unk.length+' open questions and '+tl.length
+    + ' one-liners. <b>Its length is itself a finding</b> and it is reported rather than trimmed.</p>';
+  h += '<p class="sub">Decisions only you can make</p>';
+  h += dec.map(d=>'<div class="disprow"><div class="txt">'+md(d.text)+'</div>'+answerUI(d.n, d.prompt)+'</div>').join('');
+  h += '<p class="sub">Still open, carried forward</p>';
+  h += so.map(o=>'<div class="disprow"><div class="txt">'+md(o.text)+'</div>'+answerUI(o.n, 'Cleared, or still open?')+'</div>').join('');
+  h += '<p class="sub">What I don\'t know</p>';
+  h += unk.map(u=>'<div class="u"><h3>'+md(u.title)+'</h3><p>'+md(u.body)+'</p>'+answerUI(u.n, 'Tell me the rule')+'</div>').join('');
+  h += '<p class="sub">Found, filed, no action from you</p>';
+  h += '<ul class="tail">'+tl.map(t=>'<li>'+md(t)+'</li>').join('')+'</ul>';
+  document.getElementById('tailwrap').innerHTML = h;
+
+  document.getElementById('foot').innerHTML = md(c.foot);
+
+  [...document.querySelectorAll('.dbtn')].forEach(b=>{
+    b.setAttribute('aria-current', b.dataset.d===c.date ? 'true':'false');
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+const nav = document.getElementById('dates');
+nav.innerHTML = BRIEFS.map((c,i)=>
+  '<button class="dbtn" data-d="'+c.date+'" data-i="'+i+'">'+(i===0?'Latest · ':'')+c.label+'</button>'
+).join('');
+nav.addEventListener('click', e=>{
+  const b = e.target.closest('.dbtn');
+  if(b){ current = BRIEFS[+b.dataset.i]; render(current); paint(); }
+});
+
+let DB = null, current = BRIEFS[0], ANS = {};
+
+function key(qid){ return current.date + '__' + qid; }
+
+function paint(){
+  document.querySelectorAll('.ans').forEach(box=>{
+    const a = ANS[key(box.dataset.qid)];
+    const st = box.querySelector('.state');
+    const ta = box.querySelector('.note');
+    box.querySelectorAll('.ab[data-c]').forEach(b=>
+      b.setAttribute('aria-pressed', String(!!a && a.choice === b.dataset.c)));
+    const card = box.closest('.card') || box.closest('.disprow') || box.closest('.u');
+    if(card) card.classList.toggle('answered', !!a);
+    if(!DB){ st.textContent = 'offline'; st.className='state'; return; }
+    if(a){
+      const lbl = a.choice==='other' ? 'Other' : a.choice==='yes' ? 'Yes' : a.choice==='no' ? 'No' : 'Note';
+      st.textContent = 'saved · ' + lbl + (a.note ? ' + note' : '');
+      st.className = 'state ok';
+      if(document.activeElement !== ta && (a.note || '') !== ta.value) ta.value = a.note || '';
+    } else { st.textContent = ''; st.className='state'; }
+  });
+  const total = document.querySelectorAll('.ans').length;
+  let done = 0;
+  document.querySelectorAll('.ans').forEach(b=>{ if(ANS[key(b.dataset.qid)]) done++; });
+  const s = document.getElementById('sync');
+  s.innerHTML = DB
+    ? '<span class="n">'+done+' of '+total+'</span> answered. <strong>Nothing to press for a plain note.</strong> Buttons save on click, notes save as you type. The next run reads them, files them, and marks them applied. Say it in the chat instead if you want it acted on right now.'
+    : '<span class="n">Answering unavailable in this view.</span> Open this page from the artifact link on claude.ai for the buttons to work. The chat always works.';
+}
+
+async function save(qid, choice, note){
+  if(!DB) return;
+  const box = document.querySelector('.ans[data-qid="'+qid+'"]');
+  const st = box.querySelector('.state');
+  st.textContent = 'saving...'; st.className = 'state';
+  const body = { date: current.date, qid: qid, choice: choice, note: note || '', at: new Date().toISOString(), status: 'new' };
+  try{
+    await DB.doc('answers/' + key(qid)).set(body);
+    ANS[key(qid)] = body;
+    paint();
+  }catch(e){
+    st.textContent = (e && e.code === 'revoked') ? 'access ended' : 'not saved, try again';
+    st.className = 'state err';
+  }
+}
+
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.ab[data-c]');
+  if(btn){
+    const box = btn.closest('.ans');
+    const qid = box.dataset.qid;
+    const ta = box.querySelector('.note');
+    if(btn.dataset.c === 'other'){ ta.focus(); }
+    save(qid, btn.dataset.c, ta.value.trim());
+  }
+});
+
+const timers = {};
+function saveNote(box, now){
+  const qid = box.dataset.qid;
+  const ta = box.querySelector('.note');
+  const prev = ANS[key(qid)];
+  const txt = ta.value.trim();
+  if(prev && (prev.note||'') === txt) return;
+  if(!prev && !txt) return;
+  clearTimeout(timers[qid]);
+  const go = ()=> save(qid, prev ? prev.choice : 'note', txt);
+  if(now) go(); else timers[qid] = setTimeout(go, 900);
+}
+document.addEventListener('input', e=>{
+  const ta = e.target.closest('.ans .note');
+  if(!ta) return;
+  const st = ta.closest('.ans').querySelector('.state');
+  st.textContent = 'typing...'; st.className = 'state';
+  saveNote(ta.closest('.ans'), false);
+});
+document.addEventListener('blur', e=>{
+  const ta = e.target.closest && e.target.closest('.ans .note');
+  if(ta) saveNote(ta.closest('.ans'), true);
+}, true);
+
+document.getElementById('freesave').addEventListener('click', async ()=>{
+  const st = document.getElementById('freestate');
+  const txt = document.getElementById('freenote').value.trim();
+  if(!DB){ st.textContent = 'unavailable in this view'; st.className='state err'; return; }
+  if(!txt){ st.textContent = 'nothing to save'; st.className='state'; return; }
+  st.textContent = 'saving...'; st.className='state';
+  try{
+    await DB.collection('notes').add({date: current.date, text: txt, at: new Date().toISOString(), status: 'new'});
+    st.textContent = 'saved to the Brain'; st.className = 'state ok';
+    document.getElementById('freenote').value = '';
+  }catch(e){ st.textContent = 'not saved, try again'; st.className='state err'; }
+});
+
+render(current);
+paint();
+
+claude.use('db').then(db=>{
+  if(!db){ paint(); return; }
+  DB = db;
+  db.collection('answers').onSnapshot(
+    snap=>{ ANS = {}; snap.docs.forEach(d=>{ const v = d.data(); if(v) ANS[d.id] = v; }); paint(); },
+    ()=>{ paint(); }
+  );
+  paint();
+}).catch(()=>paint());
+</script>

@@ -1,0 +1,28 @@
+# My Brain .gitignore, added 2026-09-29 (Path B, Austin approved)
+# Why: no ignore file existed, so git tracked 11 GB of media, UI state and cache files,
+# and GitHub rejects any file over 100 MB. Notes and working files stay tracked.
+
+# Obsidian UI state (changes on every click, not content)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.trash/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Candid people assessments never leave this computer (CLAUDE.md hard rule 7)
+10-Business/people/_private-assessments.md
+
+# Media and bulk binaries belong in SharePoint or Dropbox, linked from notes
+20-Brand-Marketing/assets/
+20-Brand-Marketing/branding-assets/
+20-Brand-Marketing/brochures/
+*.mp4
+*.MP4
+*.mov
+*.MOV
+*.zip
+# 73 MB deck, over GitHubs 50 MB warning line
+80-Finance/planning/2026-executive-strategy/Parakeet - Executive Strategy Meeting v1.pptx

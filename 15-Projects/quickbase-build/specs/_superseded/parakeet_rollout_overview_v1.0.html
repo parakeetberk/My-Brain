@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parakeet Communities — QB + FastField Rollout Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #4ABA81;
+    --red: #F16262;
+    --yellow: #FFCC3B;
+    --navy: #2F4E65;
+    --bg: #f5f7fa;
+    --white: #ffffff;
+    --border: #dde2e8;
+    --text: #1a2533;
+    --muted: #6b7280;
+    --green-light: #e8f7ef;
+    --navy-light: #eef3f7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Red Hat Display', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  .doc-header { background: var(--navy); color: white; padding: 40px 60px 36px; }
+  .logo-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .logomark { width: 44px; height: 44px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; }
+  .brand { font-size: 20px; font-weight: 700; color: white; }
+  .brand span { color: var(--green); }
+  .doc-header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .doc-header .subtitle { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 22px; }
+  .meta-row { display: flex; gap: 36px; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.08em; }
+  .meta-item strong { display: block; font-size: 13px; color: rgba(255,255,255,0.85); text-transform: none; letter-spacing: 0; font-weight: 600; margin-top: 2px; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 44px 40px; }
+
+  /* INTRO */
+  .intro-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 36px; }
+  .intro-box p { font-size: 15px; color: var(--text); line-height: 1.75; margin-bottom: 12px; }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .intro-box strong { color: var(--navy); }
+
+  /* STAT STRIP */
+  .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 44px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; }
+  .stat-card .num { font-size: 30px; font-weight: 900; color: var(--green); line-height: 1; }
+  .stat-card .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; margin-top: 4px; }
+
+  /* SECTION */
+  .section-title { font-size: 18px; font-weight: 800; color: var(--navy); border-left: 5px solid var(--green); padding-left: 14px; margin-bottom: 22px; margin-top: 0; }
+
+  /* WAVE CARDS */
+  .wave-list { display: flex; flex-direction: column; gap: 18px; margin-bottom: 44px; }
+
+  .wave-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .wave-head { display: flex; align-items: stretch; }
+  .wave-badge { width: 78px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px 8px; }
+  .wave-badge .wv { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; opacity: 0.75; }
+  .wave-badge .wn { font-size: 28px; font-weight: 900; line-height: 1; }
+  .wave-info { flex: 1; padding: 18px 20px 16px; border-left: 1px solid var(--border); }
+  .wave-info h3 { font-size: 16px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+  .wave-info .why { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
+  .wave-info .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-ff  { background: #e0f2fe; color: #0369a1; }
+  .tag-qb  { background: #ede9fe; color: #6d28d9; }
+  .tag-mix { background: #fef9c3; color: #a16207; }
+
+  /* PROCESS TABLE inside card */
+  .process-table { width: 100%; border-collapse: collapse; }
+  .process-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 700; padding: 7px 10px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: left; background: var(--bg); }
+  .process-table td { font-size: 13px; padding: 9px 10px; border-bottom: 1px solid #f0f2f5; vertical-align: top; }
+  .process-table tr:last-child td { border-bottom: none; }
+  .wf-id { font-weight: 800; color: var(--navy); white-space: nowrap; }
+  .process-name { font-weight: 600; color: var(--text); }
+  .process-desc { color: var(--muted); font-size: 12.5px; }
+  .form-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+  .fp-ff  { background: #e0f2fe; color: #0369a1; }
+  .fp-qb  { background: #ede9fe; color: #6d28d9; }
+  .fp-pol { background: #f3f4f6; color: #6b7280; }
+
+  /* WAVE COLORS */
+  .wc-0  { background: #2F4E65; color: white; }
+  .wc-pre{ background: #374151; color: white; }
+  .wc-1  { background: #4ABA81; color: white; }
+  .wc-2  { background: #8B5CF6; color: white; }
+  .wc-3  { background: #D97706; color: white; }
+  .wc-4  { background: #0891B2; color: white; }
+  .wc-5  { background: #F16262; color: white; }
+  .wc-6  { background: #059669; color: white; }
+  .wc-7  { background: #7C3AED; color: white; }
+  .wc-8  { background: #9CA3AF; color: white; }
+
+  /* ALREADY SPECCED CALLOUT */
+  .specced-box { background: var(--green-light); border: 1px solid #b6e6cf; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  .specced-box h4 { font-size: 13px; font-weight: 800; color: #1a7a52; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .specced-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .specced-item { background: white; border-radius: 8px; padding: 10px 12px; border: 1px solid #b6e6cf; }
+  .specced-item .sid { font-size: 11px; font-weight: 800; color: var(--green); }
+  .specced-item .sname { font-size: 12px; font-weight: 600; color: var(--navy); line-height: 1.3; margin-top: 2px; }
+  .specced-item .sstatus { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+  /* PRINCIPLES */
+  .principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 44px; }
+  .principle { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .principle .pnum { font-size: 22px; font-weight: 900; color: var(--green); line-height: 1; margin-bottom: 6px; }
+  .principle h4 { font-size: 14px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .principle p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FOOTER */
+  .footer { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 8px; text-align: center; }
+  .footer p { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="logo-row">
+    <div class="logomark">P</div>
+    <div class="brand">Parakeet <span>Communities</span></div>
+  </div>
+  <h1>QB + FastField Build Rollout — Team Overview</h1>
+  <div class="subtitle">Proposed build sequence for the full QB + FastField operating system &mdash; for team review and input</div>
+  <div class="meta-row">
+    <div class="meta-item">Version <strong>v1.1 — For Review</strong></div>
+    <div class="meta-item">Prepared <strong>August 2026</strong></div>
+    <div class="meta-item">Workflows <strong>46 Total</strong></div>
+    <div class="meta-item">Build Waves <strong>8 Waves</strong></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-box">
+    <p>This document outlines the proposed rollout sequence for building Parakeet's full operations system in QuickBase (QB) and FastField. It is being shared with the team prior to finalizing the plan so everyone can weigh in on order, priority, and anything that may be missing before we commit to a build sequence.</p>
+    <p>The system covers <strong>46 workflows</strong> spanning every department — Operations, Construction, Sales, Legal, Accounting, Acquisitions, and HR. Five workflows are already specced or in progress (<strong>Home Ordering, Rehab, TBD Process, Move Out, and Listings</strong>). The remaining 41 are organized into <strong>8 build waves</strong> in the proposed order below.</p>
+    <p><strong>Why does order matter?</strong> Many workflows depend on data created by earlier ones. A Collections record, for example, needs to look up a Resident — which means Resident records have to exist first. The order below is designed to ensure no workflow has to be rebuilt later because a dependency was missed. That said, we want your input before locking this in.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-strip">
+    <div class="stat-card"><div class="num">46</div><div class="lbl">Total Workflows</div></div>
+    <div class="stat-card"><div class="num">5</div><div class="lbl">Already Specced</div></div>
+    <div class="stat-card"><div class="num">8</div><div class="lbl">Build Waves</div></div>
+    <div class="stat-card"><div class="num">18</div><div class="lbl">FastField Forms</div></div>
+  </div>
+
+  <!-- ALREADY SPECCED -->
+  <div class="section-title">What's Already In Progress</div>
+  <div class="specced-box">
+    <h4>&#10003; Wave 0 — Complete or In Progress</h4>
+    <div class="specced-grid">
+      <div class="specced-item">
+        <div class="sid">WF001</div>
+        <div class="sname">Home Ordering</div>
+        <div class="sstatus">LOCKED v1.2</div>
+      </div>
+      <div class="specced-item">
+        <div class="sid">WF002</div>
+        <div class="sname">Rehab Management</div>
+        <div class="sstatus">LOCKED v1.3</div>
+      </div>
+      <div class="specced-item">
+        <div class="sid">WF003</div>
+        <div class="sname">TBD Process</div>
+        <div class="sstatus">LOCKED v1.1</div>
+      </div>
+      <div class="specced-item">
+        <div class="sid">WF004</div>
+        <div class="sname">Move Out</div>
+        <div class="sstatus">DRAFT v1.0</div>
+      </div>
+      <div class="specced-item">
+        <div class="sid">WF006</div>
+        <div class="sname">Listings</div>
+        <div class="sstatus">DRAFT v1.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUIDING PRINCIPLES -->
+  <div class="section-title" style="margin-top: 36px;">How We Organized the Build Order</div>
+  <div class="principles-grid">
+    <div class="principle">
+      <div class="pnum">1</div>
+      <h4>Field Team First</h4>
+      <p>Waves 1–4 prioritize workflows that CMs, RMs, and construction staff touch every day — move-ins, site visits, inspections, and maintenance. High daily visibility = faster adoption.</p>
+    </div>
+    <div class="principle">
+      <div class="pnum">2</div>
+      <h4>Dependencies Drive Order</h4>
+      <p>You can't build a Collections workflow before Resident records exist. Each wave creates the data the next wave needs, so nothing has to be rebuilt due to a missed dependency.</p>
+    </div>
+    <div class="principle">
+      <div class="pnum">3</div>
+      <h4>Shared Tables Are Pre-Work</h4>
+      <p>Five core data tables (Residents, Lease Records, Work Orders, Title Records, Utility Accounts) must be built before Wave 1. Every workflow reads from at least one of them.</p>
+    </div>
+    <div class="principle">
+      <div class="pnum">4</div>
+      <h4>Revenue Protection Follows Field</h4>
+      <p>Collections, Stipulations, and Evictions (Wave 5) are high-stakes workflows that build on the resident and field data established in Waves 1–4. Legal teams get a fully integrated system.</p>
+    </div>
+  </div>
+
+  <!-- BUILD WAVES -->
+  <div class="section-title">Proposed Build Waves</div>
+  <div class="wave-list">
+
+    <!-- PRE-WORK -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-pre">
+          <span class="wv">Pre</span>
+          <span class="wn">&#9632;</span>
+        </div>
+        <div class="wave-info">
+          <h3>Pre-Work &mdash; Shared Data Tables</h3>
+          <div class="why">Before any workflow can be built, these five reference tables must exist in QB. Every workflow in Waves 1&ndash;8 reads from at least one of them. This is foundational infrastructure, not a workflow itself.</div>
+          <div class="tag-row"><span class="tag tag-qb">QB Setup</span></div>
+          <table class="process-table">
+            <tr><th>Table</th><th>What It Stores</th><th>Feeds Into</th></tr>
+            <tr><td class="wf-id">Residents</td><td class="process-name">Active &amp; former resident records</td><td class="process-desc">21 workflows — the single most critical table</td></tr>
+            <tr><td class="wf-id">Lease Records</td><td class="process-name">Lease terms, state, rent, status</td><td class="process-desc">Move In, Collections, Evictions, Rent Increases</td></tr>
+            <tr><td class="wf-id">Work Orders</td><td class="process-name">Repair and maintenance tasks</td><td class="process-desc">Rehab, Site Visits, Inspections, Month End</td></tr>
+            <tr><td class="wf-id">Title Records</td><td class="process-name">Home ownership, lien status, HUD labels</td><td class="process-desc">Evictions, Home Sales, Title Transfers</td></tr>
+            <tr><td class="wf-id">Utility Accounts</td><td class="process-name">Utility accounts per home/lot</td><td class="process-desc">Utility Activation, Recapture Reporting, Acquisitions</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 1 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-1">
+          <span class="wv">Wave</span>
+          <span class="wn">1</span>
+        </div>
+        <div class="wave-info">
+          <h3>Resident Lifecycle</h3>
+          <div class="why">The first workflows to build after WF004 (Move Out) is locked. These create the Resident and Lease records that every downstream workflow depends on. Without Move In records, nothing else can look up a resident.</div>
+          <div class="tag-row"><span class="tag tag-mix">QB + FastField</span><span class="tag tag-qb">3 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF005</td>
+              <td class="process-name">Move In</td>
+              <td class="process-desc">New resident setup — lease execution, lot assignment, key issuance, RM record creation. Triggered by WF004 Move Out (vacancy) or WF007 Offer to Purchase (new sale). FastField move-in inspection form captured on-site.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF015</td>
+              <td class="process-name">Resident Information Sheet</td>
+              <td class="process-desc">Resident contact and household data collection at move-in. Feeds the Residents table with vehicles, pets, occupants, emergency contacts, and consent records. Replaces paper intake forms.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF016</td>
+              <td class="process-name">Lease Renewal</td>
+              <td class="process-desc">Annual and mid-term lease renewal workflow. QB tracks renewal offer, resident response, and new lease term. State-specific notice periods built in. Updates Lease Records table on completion.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 2 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-2">
+          <span class="wv">Wave</span>
+          <span class="wn">2</span>
+        </div>
+        <div class="wave-info">
+          <h3>Asset Sales Pipeline</h3>
+          <div class="why">Picks up where Listings (WF006) leaves off — from offer received through closing and title transfer. Completes the full listing-to-closed arc and handles both new-home sales and existing Parakeet-owned home sales. Requires WF006 locked and Title Records table built.</div>
+          <div class="tag-row"><span class="tag tag-qb">QB Only</span><span class="tag tag-qb">4 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF007</td>
+              <td class="process-name">Offer to Purchase / Rent</td>
+              <td class="process-desc">Triggered when WF006 receives an offer. Tracks offer terms, financing type (cash / dealer loan / in-house), and AMRENT background check. Approved offer triggers Home Closing; rejected returns listing to Active.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF022</td>
+              <td class="process-name">Home Closing Process</td>
+              <td class="process-desc">Full closing checklist: title search, lien clearance, HUD label verification, settlement statement. QB tracks all milestones; closing package uploaded to SharePoint. Triggers WF023 (POH sale) or WF005 (rental/LTP).</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF023</td>
+              <td class="process-name">POH Sales Title Transfer</td>
+              <td class="process-desc">Parakeet-owned home title transfer to buyer. Coordinates state DMV/HCD filings. QB tracks document submission and recorded title receipt. Asset status auto-updates to "Sold" on confirmation.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF024</td>
+              <td class="process-name">Asset Title Transfer &amp; Title Work</td>
+              <td class="process-desc">All non-sale title transfers: estate, deceased owner, abandoned home, lender repo, and mid-portfolio corrections. Tracks document submissions and state agency responses. Works with Vector Law or FL Fast Title.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 3 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-3">
+          <span class="wv">Wave</span>
+          <span class="wn">3</span>
+        </div>
+        <div class="wave-info">
+          <h3>Field Operations &amp; Construction</h3>
+          <div class="why">The highest FastField usage wave — these are the workflows CMs and construction staff interact with most. Site visits, weekly maintenance, rental inspections, utility activation, demo, and lot prep. Building these early drives field-team adoption of the whole system.</div>
+          <div class="tag-row"><span class="tag tag-ff">Heavy FastField</span><span class="tag tag-qb">7 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF008</td>
+              <td class="process-name">Community Site Visit Inspection</td>
+              <td class="process-desc">Regional Manager monthly site visit checklist: grounds, signage, amenities, infrastructure, common areas. Items rated "Repair" auto-generate Work Orders in QB. PDF report saved to SharePoint. 30-day follow-up auto-triggered for open items.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF009</td>
+              <td class="process-name">Weekly Maintenance Checklist</td>
+              <td class="process-desc">CM-completed FastField form weekly: pool/spa, gates, common area equipment, generator, water systems. Repair items auto-generate Work Orders. Feeds into monthly equipment rollup (WF010).</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF010</td>
+              <td class="process-name">Monthly Equipment &amp; Inventory</td>
+              <td class="process-desc">Monthly FastField form: full equipment inventory, PPE stock, chemical supplies, capital equipment condition. QB rolls up from weekly records. Flagged shortfalls auto-generate procurement or repair Work Orders.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF025</td>
+              <td class="process-name">Demo to Infill</td>
+              <td class="process-desc">Triggered by WF003 when disposition = Demo. Tracks 4 phases: Pre-Demo Approval, Demolition, Lot Clearance, Infill Prep. Includes permit coordination by state. Connects to WF026 (Lot Prep) and WF001 (new home ordering) on completion.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF026</td>
+              <td class="process-name">Lot Prep</td>
+              <td class="process-desc">Prepares the lot between home removal and new delivery: utility stub-outs, concrete pad, underpinning, ground leveling. FastField before/after inspection form. Gates WF001 Home Ordering (lot must pass before ordering is allowed).</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF027</td>
+              <td class="process-name">Utility Activation</td>
+              <td class="process-desc">Physical and account-level utility verification before any home goes live. FastField form captures meter reads and provider confirmations. Two paths: New Home (triggered by WF001 Stage 8) and Rehab (triggered by WF002 completion).</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF028</td>
+              <td class="process-name">Rental Inspections</td>
+              <td class="process-desc">Annual inspection of community-owned rental homes: interior (kitchen, bath, HVAC, appliances, flooring) and exterior (siding, skirting, steps, roof). Poor/Fail items auto-generate WF002 Rehab or Work Order based on severity.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 4 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-4">
+          <span class="wv">Wave</span>
+          <span class="wn">4</span>
+        </div>
+        <div class="wave-info">
+          <h3>Compliance &amp; Legal</h3>
+          <div class="why">Compliance workflows are largely field-adjacent and calendar-triggered, making them a natural follow-on to Wave 3. Violations connect to the Residents table (built in Wave 1). License/permit and insurance renewals are simpler to build because they run on a calendar, not events. Can run partially in parallel with Wave 3.</div>
+          <div class="tag-row"><span class="tag tag-mix">QB + FastField</span><span class="tag tag-qb">5 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF013</td>
+              <td class="process-name">Incident Report</td>
+              <td class="process-desc">Property-level incidents: injuries, property damage, emergency infrastructure, break-ins, environmental issues. FastField form submitted by CM immediately at incident. Auto-routes to Regional Manager and DOO. Elevated incidents flagged to legal. Replaces JotForm incident reports.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF029</td>
+              <td class="process-name">Violation Process</td>
+              <td class="process-desc">Lease and community rules violations: parking, pets, noise, property condition, unauthorized occupants. Progressive discipline: 1st notice → 2nd notice → legal action. Cure period tracked by violation type. Uncured violations trigger WF019 Eviction.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF030</td>
+              <td class="process-name">License &amp; Permit Renewals</td>
+              <td class="process-desc">Calendar-triggered: MH community licenses, business licenses, pool permits, electrical, water/sewer permits by state. QB sends 90/60/30/14/7-day reminders. Expired license = hard block flagged to leadership.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF031</td>
+              <td class="process-name">Fair Housing Annual Training</td>
+              <td class="process-desc">Tracks annual Fair Housing training completion for all CMs, RMs, and staff. QB record per employee per year with completion date, provider, and certificate number. Auto-escalates to HR if incomplete 14 days before deadline.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF032</td>
+              <td class="process-name">Insurance Renewals</td>
+              <td class="process-desc">Tracks all property and liability policies by community: carrier, policy number, coverage type, premium, expiration. 90-day and 30-day reminders to Asset Management. COI uploaded to SharePoint per renewal. Links to WF013 for claims tracking.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 5 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-5">
+          <span class="wv">Wave</span>
+          <span class="wn">5</span>
+        </div>
+        <div class="wave-info">
+          <h3>Revenue Protection — Collections &amp; Legal</h3>
+          <div class="why">Collections, Stipulations, Evictions, Post-Eviction Title, and Rent Increases. These workflows carry the highest financial stakes but require the full resident and field data layer to work correctly. Building on top of an established system means the team is already comfortable with QB before the most complex workflows go live.</div>
+          <div class="tag-row"><span class="tag tag-qb">QB Only</span><span class="tag tag-qb">5 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF017</td>
+              <td class="process-name">Collections / AR</td>
+              <td class="process-desc">Monthly collections workflow. QB auto-calculates cure period deadline from state on Lease record (FL 5 bd, SC 5 days, GA 3 bd, NC 10 days, MA 30 days). Demand notices coordinated through Ops. If not cured: triggers Stipulation (WF018) or Eviction (WF019).</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF018</td>
+              <td class="process-name">Stipulation Process</td>
+              <td class="process-desc">Payment plan agreement when a resident cannot pay in full. Regional Manager approval required. QB tracks the full payment schedule and compliance. Missed payment auto-triggers escalation to WF019 Eviction.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF019</td>
+              <td class="process-name">Eviction Pipeline</td>
+              <td class="process-desc">27 steps across 5 phases. Roles: CM/DM, Evictions Team, Regional Manager, DOO, Asset Management, Attorney. POH vs. rental path diverge post-filing. QB tracks all filing, hearing, and writ dates by state. Lot Status auto-updates via automation. Triggers WF020 on writ granted for POH.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF020</td>
+              <td class="process-name">Post-Eviction Title Process</td>
+              <td class="process-desc">Triggered by WF019 when writ of possession is granted on a POH home. Liened path (Vector Law) vs. non-liened path (FL Fast Title). QB tracks title status through Title Records table. Connects to WF003 TBD Process once title clears.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF021</td>
+              <td class="process-name">Rent Increase &amp; Tax Pass-Throughs</td>
+              <td class="process-desc">State-specific notice requirements: FL Ch. 723 (90-day), GA (60-day), NC/SC (60-day), MA (most restrictive). QB auto-calculates notice deadline from the current date and state rule. Regional Manager approval required before any notices are sent. RM billing schedule updated post-approval.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 6 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-6">
+          <span class="wv">Wave</span>
+          <span class="wn">6</span>
+        </div>
+        <div class="wave-info">
+          <h3>Accounting &amp; Financial Operations</h3>
+          <div class="why">Most accounting workflows depend on resident-level data (security deposits, utility recapture) or asset-sale data that comes from earlier waves. Month End Close Out is the integrating workflow — it reads from Work Orders, Listings, and Lease Records. Note: RM remains the system of record for all financial data; QB tracks workflow status and operational metrics only.</div>
+          <div class="tag-row"><span class="tag tag-qb">QB Only</span><span class="tag tag-qb">6 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF011</td>
+              <td class="process-name">Month End Ops Close Out</td>
+              <td class="process-desc">Monthly QB rollup: open Work Orders, active rehabs, listing status, move-in/move-out counts, eviction status, open collections. CM/RM/Regional sign-off. Generates a month-end summary record per community. Connects to Financial Reporting (WF037).</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF033</td>
+              <td class="process-name">AP / Avid Exchange</td>
+              <td class="process-desc">Invoice receipt, GL coding, approval routing, and Avid Exchange submission. Approval tiers: &lt;$2,500 = Regional; $2,500–$5,000 = Director; &gt;$5,000 = Austin. Approved invoices pushed to Avid Exchange queue automatically.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF034</td>
+              <td class="process-name">Security Deposit Refund</td>
+              <td class="process-desc">Triggered by WF004 Move Out. QB tracks refund request: resident lookup, deposit amount (from RM sync), deductions, final refund amount, approval status. Regional Manager approval required for any deductions. State-specific refund timelines enforced.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF035</td>
+              <td class="process-name">Utility Recapture Reporting</td>
+              <td class="process-desc">Tracks utility billing vs. resident recapture for sub-metered and RUBS communities. QB produces monthly recapture report per community: total billed, total collected, variance. Flags communities where utility costs exceed recapture. Feeds WF037.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF036</td>
+              <td class="process-name">Home Lender Repo Process</td>
+              <td class="process-desc">When a resident defaults on their manufactured home loan. QB tracks repo notice date, lender contact, and home status. If Parakeet acquires title: triggers WF024. If lender removes the home: triggers lot status update and WF025/WF001 path.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF037</td>
+              <td class="process-name">Financial Reporting (P&amp;L / Rent Roll / Quarterly)</td>
+              <td class="process-desc">QB dashboards pulling from Lease Records (rent roll), Work Orders (maintenance costs), Rehab Records (capex), Listing Records (sales pipeline), Collections (delinquency). Operational-metric overlay for leadership. No financial data written back to RM from this workflow.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 7 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-7">
+          <span class="wv">Wave</span>
+          <span class="wn">7</span>
+        </div>
+        <div class="wave-info">
+          <h3>Acquisitions &amp; New Community Onboarding</h3>
+          <div class="why">Acquisitions workflows bring new communities into the system — they feed all prior waves by populating Communities, Lots, and Residents records for newly acquired properties. They don't depend on day-to-day operational data, so they can be specced in parallel with Waves 4–6. The Acquisitions Transition workflow (WF039) is the most complex single workflow in the entire OS — it touches every shared table.</div>
+          <div class="tag-row"><span class="tag tag-mix">QB + FastField</span><span class="tag tag-qb">4 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF038</td>
+              <td class="process-name">Due Diligence &amp; Acquisition</td>
+              <td class="process-desc">Multi-department DD process: Legal (title search, HUD label verification), Finance (rent roll, operating statements), Construction (infrastructure audit), Ops (management assessment). QB tracks task status per department. FastField on-site infrastructure inspection form included. Gate: DD cleared → Austin approval → WF039.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF039</td>
+              <td class="process-name">Acquisitions Transition</td>
+              <td class="process-desc">Full community takeover: staff, systems, residents, vendors. QB creates: new Community record, all Lot records, initial Resident records (from RM import), and Utility Account records. FastField transition inspection per lot. Connects to WF040, WF005, and WF027. Most complex workflow in the OS — touches every shared table.</td>
+              <td><span class="form-pill fp-ff">FastField</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF040</td>
+              <td class="process-name">Utility Onboarding (Acquisitions)</td>
+              <td class="process-desc">MH-specific utility setup for new communities: sub-metering installation, master-meter conversion, RUBS setup. Reads and populates Utility Accounts table for the new community. Coordinates account name changes with providers. Connects to WF027 and WF035.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF041</td>
+              <td class="process-name">Acq-OPS Transition Recaps</td>
+              <td class="process-desc">Post-acquisition handoff from Acquisitions to Operations. QB record: 90-day recap of outstanding transition items, committed repairs, pending title issues, and utility changes. Regional Manager is assigned to the new community at this stage. First site visit (WF008) triggered within 30 days of close.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAVE 8 -->
+    <div class="wave-card">
+      <div class="wave-head">
+        <div class="wave-badge wc-8">
+          <span class="wv">Wave</span>
+          <span class="wn">8</span>
+        </div>
+        <div class="wave-info">
+          <h3>HR, Training &amp; Operational Cadence</h3>
+          <div class="why">HR, training, and cadence workflows support the team that runs every other workflow — they don't depend on operational data and don't block any core process. Wave 8 means "build last," not "unimportant." Manager Onboarding (WF042) should be ready before any new CMs start, and Prospect Screening (WF045) needs to be live before Offer to Purchase (WF007) goes fully active.</div>
+          <div class="tag-row"><span class="tag tag-qb">QB Only</span><span class="tag tag-qb">5 Workflows</span></div>
+          <table class="process-table">
+            <tr><th>WF#</th><th>Process</th><th>Description</th><th>Form Type</th></tr>
+            <tr>
+              <td class="wf-id">WF042</td>
+              <td class="process-name">Manager Onboarding</td>
+              <td class="process-desc">New CM/RM onboarding checklist in QB: system access setup (RM, QB, FastField, Teams, SharePoint), keys/codes, property walkthrough, training completion. 30/60/90-day milestone check-ins. Connects to WF031 Fair Housing training record creation.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF043</td>
+              <td class="process-name">Team Onboarding &amp; Training Tracking</td>
+              <td class="process-desc">Broader training log covering all staff and all training programs. QB record per training event per employee. Connects to WF031 (Fair Housing) and WF042 (Manager Onboarding). Compliance training completion tracked for legal audit purposes.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF044</td>
+              <td class="process-name">Property Business Plan</td>
+              <td class="process-desc">Monthly/quarterly community business plan: occupancy targets, revenue goals, capex priorities, delinquency thresholds. CM and Regional Manager complete in QB. Live data from Lease Records, Work Orders, and Listings pre-populates key metrics. Regional approval before submission to leadership.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF045</td>
+              <td class="process-name">Prospect Screening &amp; Background Check</td>
+              <td class="process-desc">Initiated with WF007 Offer to Purchase. QB tracks AMRENT order status, results, and approval/denial decision. Denial requires documented reason for Fair Housing compliance. Approved: WF007 next step; Denied: WF007 rejected path returns to Active Listing.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+            <tr>
+              <td class="wf-id">WF046</td>
+              <td class="process-name">Online Loan Application</td>
+              <td class="process-desc">Parakeet in-house financing or lender referral process. QB tracks loan application status: submitted, under review, approved, denied. Reads Offer record from WF007. Connects to WF022 Home Closing on approval. Denial returns to WF007 for cash or alternative financing.</td>
+              <td><span class="form-pill fp-qb">QB Only</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wave-list -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Parakeet Communities &mdash; QB + FastField Build Rollout Overview &mdash; v1.1 &mdash; For Team Review &mdash; August 2026</p>
+    <p style="margin-top:6px;">Questions or feedback? Bring to the review session before this plan is finalized.</p>
+  </div>
+
+</div>
+</body>
+</html>

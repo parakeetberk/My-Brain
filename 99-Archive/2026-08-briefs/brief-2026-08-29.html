@@ -1,0 +1,562 @@
+<title>Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+  :root {
+    --paper:#F4F6F7;
+    --card:#FFFFFF;
+    --ink:#12171B;
+    --muted:#5C666E;
+    --rule:#D8DEE2;
+    --signal:#B45309;
+    --critical:#A32036;
+    --ok:#16794A;
+    --slate:#2F4858;
+    --wash:#EDF1F3;
+
+    --sans:"IBM Plex Sans Condensed","Helvetica Neue",Arial,sans-serif;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0E1317;
+      --card:#161D23;
+      --ink:#E6EAED;
+      --muted:#94A0A8;
+      --rule:#29333B;
+      --signal:#E9A63F;
+      --critical:#F2657C;
+      --ok:#4FBF87;
+      --slate:#9FC0D4;
+      --wash:#1C242B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:#0E1317;
+    --card:#161D23;
+    --ink:#E6EAED;
+    --muted:#94A0A8;
+    --rule:#29333B;
+    --signal:#E9A63F;
+    --critical:#F2657C;
+    --ok:#4FBF87;
+    --slate:#9FC0D4;
+    --wash:#1C242B;
+  }
+
+  * { box-sizing:border-box; }
+
+  body {
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.55;
+    margin:0;
+    padding:28px 18px 72px;
+    -webkit-text-size-adjust:100%;
+  }
+
+  .wrap { max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:30px; }
+
+  /* ---------- masthead ---------- */
+  .mast { display:flex; flex-direction:column; gap:8px; border-bottom:2px solid var(--ink); padding-bottom:14px; }
+  .mast h1 {
+    font-family:var(--sans); font-weight:700; font-size:34px; line-height:1.02;
+    letter-spacing:-0.01em; margin:0; text-wrap:balance;
+  }
+  .mast .date {
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted); font-variant-numeric:tabular-nums;
+  }
+  .mast .standfirst { font-size:16.5px; color:var(--muted); margin:2px 0 0; font-style:italic; }
+
+  /* ---------- section headings ---------- */
+  h2 {
+    font-family:var(--sans); font-weight:700; font-size:13px; letter-spacing:0.13em;
+    text-transform:uppercase; color:var(--slate); margin:0 0 12px; padding-bottom:6px;
+    border-bottom:1px solid var(--rule);
+  }
+  section { display:flex; flex-direction:column; }
+  .stack { display:flex; flex-direction:column; gap:12px; }
+
+  /* ---------- cards ---------- */
+  .card {
+    background:var(--card); border:1px solid var(--rule); border-left:4px solid var(--rule);
+    border-radius:2px; padding:14px 16px; display:flex; flex-direction:column; gap:8px;
+  }
+  .card.crit { border-left-color:var(--critical); }
+  .card.warn { border-left-color:var(--signal); }
+  .card.good { border-left-color:var(--ok); }
+  .card.flat { border-left-color:var(--slate); }
+
+  .card h3 {
+    font-family:var(--sans); font-weight:600; font-size:19.5px; line-height:1.22;
+    margin:0; text-wrap:balance;
+  }
+  .card p { margin:0; font-size:16.5px; }
+  .card p + p { margin-top:2px; }
+
+  .rank {
+    font-family:var(--mono); font-size:11.5px; font-weight:600; letter-spacing:0.08em;
+    color:var(--muted); text-transform:uppercase;
+  }
+
+  /* ---------- quote ---------- */
+  blockquote {
+    margin:2px 0; padding:8px 0 8px 13px; border-left:2px solid var(--rule);
+    font-size:16px; font-style:italic; color:var(--ink);
+  }
+  blockquote cite {
+    display:block; margin-top:6px; font-style:normal; font-family:var(--mono);
+    font-size:11.5px; letter-spacing:0.03em; color:var(--muted);
+  }
+
+  /* ---------- do line ---------- */
+  .do {
+    font-family:var(--sans); font-size:16px; font-weight:500; line-height:1.4;
+    background:var(--wash); border-radius:2px; padding:9px 11px;
+  }
+  .do b { font-weight:700; }
+
+  /* ---------- confidence tags ---------- */
+  .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .tag {
+    font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:0.07em;
+    text-transform:uppercase; border:1px solid var(--rule); border-radius:2px;
+    padding:2px 6px; color:var(--muted); white-space:nowrap;
+  }
+  .tag.v { color:var(--ok); border-color:var(--ok); }
+  .tag.s { color:var(--signal); border-color:var(--signal); }
+  .tag.i { color:var(--muted); }
+
+  /* ---------- schedule ---------- */
+  .sched { display:flex; flex-direction:column; gap:0; }
+  .slot {
+    display:grid; grid-template-columns:78px 1fr; gap:12px;
+    padding:12px 0; border-bottom:1px solid var(--rule);
+  }
+  .slot:first-child { border-top:1px solid var(--rule); }
+  .slot .t {
+    font-family:var(--mono); font-size:13px; font-variant-numeric:tabular-nums;
+    color:var(--slate); font-weight:600; padding-top:2px;
+  }
+  .slot.done .t, .slot.done .s-body { opacity:0.5; }
+  .slot .s-title { font-family:var(--sans); font-weight:600; font-size:17px; line-height:1.25; }
+  .slot .s-meta { font-size:14.5px; color:var(--muted); margin-top:2px; }
+  .slot .s-prep {
+    margin-top:7px; font-size:15px; border-left:3px solid var(--signal);
+    padding:5px 0 5px 10px;
+  }
+  .slot .s-prep b { font-family:var(--sans); font-weight:700; font-size:11.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--signal); display:block; }
+  .slot.ghost .t { color:var(--critical); }
+  .slot.ghost .s-prep { border-left-color:var(--critical); }
+  .slot.ghost .s-prep b { color:var(--critical); }
+
+  /* ---------- closed list ---------- */
+  .closed { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .closed li { display:grid; grid-template-columns:20px 1fr; gap:9px; font-size:16.5px; }
+  .closed .mark { color:var(--ok); font-family:var(--sans); font-weight:700; line-height:1.5; }
+  .closed b { font-family:var(--sans); font-weight:600; }
+  .closed .why { display:block; color:var(--muted); font-size:15px; margin-top:1px; }
+
+  /* ---------- decisions ---------- */
+  .dec { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; }
+  .dec li {
+    display:grid; grid-template-columns:24px 1fr; gap:9px; align-items:start;
+    padding:12px 0; border-bottom:1px solid var(--rule); font-size:16.5px;
+  }
+  .dec li:first-child { border-top:1px solid var(--rule); }
+  .dec .box { font-family:var(--mono); font-size:19px; color:var(--slate); line-height:1.35; }
+  .dec .lede { font-family:var(--sans); font-weight:600; display:block; }
+  .dec .sub { display:block; color:var(--muted); font-size:15px; margin-top:2px; }
+
+  /* ---------- open list ---------- */
+  .open { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .open li { font-size:15.5px; color:var(--muted); padding-left:15px; position:relative; }
+  .open li::before {
+    content:""; position:absolute; left:0; top:0.62em; width:6px; height:1px; background:var(--muted);
+  }
+  .open b { font-family:var(--sans); font-weight:600; color:var(--ink); }
+
+  /* ---------- misc ---------- */
+  .note {
+    font-size:15px; color:var(--muted); border:1px dashed var(--rule);
+    border-radius:2px; padding:11px 13px;
+  }
+  .note b { font-family:var(--sans); font-weight:600; color:var(--ink); }
+  code {
+    font-family:var(--mono); font-size:0.86em; background:var(--wash);
+    padding:1px 4px; border-radius:2px;
+  }
+  footer {
+    border-top:1px solid var(--rule); padding-top:14px; font-family:var(--mono);
+    font-size:11.5px; line-height:1.7; color:var(--muted); letter-spacing:0.02em;
+  }
+  .scroller { overflow-x:auto; }
+</style>
+
+<div class="wrap">
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="mast">
+    <div class="date">Saturday 29 August 2026 &middot; 07:27 ET</div>
+    <h1>Morning Brief</h1>
+    <p class="standfirst">Your calendar is empty today. Two things landed after 6pm Friday that
+    decide how Monday goes, and one of them is a stranger&rsquo;s number on your company&rsquo;s work.</p>
+  </header>
+
+  <!-- ============ BEFORE MONDAY ============ -->
+  <section>
+    <h2>Three things, before Monday</h2>
+    <div class="stack">
+
+      <!-- 1 -->
+      <div class="card crit">
+        <div class="rank">01 &middot; Royal Oaks &middot; unanswered 12 hours</div>
+        <h3>Nine missing titles, $67,500 on the table, and the seller says retitling was Parakeet&rsquo;s job</h3>
+        <p>Larry Brokaw forwarded you his broker&rsquo;s title reconciliation last night at 18:55 ET.
+        You are the only recipient.</p>
+        <blockquote>It looks like 9 titles are missing. They are requesting $10K per title. I brought
+        it up to them that $2,000 per title is a number most sellers are comfortable with and they
+        said they could possibly live with $7,500&hellip; 9 titles at $7,500 per home is $67,500.
+          <cite>Enon Winkler, Sunstone Real Estate Advisors &rarr; Brokaw &middot; 2026-08-28 17:22 ET</cite></blockquote>
+        <blockquote>I am going to be very angry if these were never registered! We moved these homes
+        in in 2022!! This is going to cost me a significant amount of money and may ruin my deal
+          <cite>Laurence Brokaw &rarr; Austin, direct &middot; 2026-08-28 18:55 ET</cite></blockquote>
+        <p>The allegation is explicit and it is one line up the chain, to his own broker:
+        <em>&ldquo;The homes you are referring to were purchased by me from the Twin Lakes park in
+        Davie Florida and transported and set up at Royal Oaks. Parakeet was responsible for
+        retitleing them.&rdquo;</em></p>
+        <p>His own account also contains the thread to pull: Julie at Royal Oaks was told to stop
+        selling homes because Parakeet didn&rsquo;t have the titles, Brokaw contacted <b>Melanie</b>,
+        and she found them <em>&ldquo;in a folder labeled Twin Lakes.&rdquo;</em> That is the same
+        Melanie who ran License &amp; Permits before Berman &mdash; the function you are currently
+        trying to move to Ops, from a person who is mid-exit.</p>
+        <div class="do"><b>Do:</b> reply today to acknowledge and name who pulls the 2022 Twin Lakes
+        folder against the nine units. Acknowledge receipt, not responsibility &mdash; nobody has
+        read the file yet, and $67,500 is being negotiated on the assumption that we failed.</div>
+        <div class="tags"><span class="tag v">Verified &mdash; full chain read</span></div>
+      </div>
+
+      <!-- 2 -->
+      <div class="card crit">
+        <div class="rank">02 &middot; Belle Haven settlement &middot; call Monday 10:30 ET</div>
+        <h3>Two settlement paths. Jon told counsel which one before you weighed in, and the invite hasn&rsquo;t come.</h3>
+        <p>Zach Wallack, after his call with plaintiffs&rsquo; counsel, 2026-08-28 17:38 ET, to you,
+        Jon and Natalie:</p>
+        <blockquote>Plaintiffs&rsquo; counsel wants a way out. They do not have an expert, and it did
+        not sound like they were very interested in retaining one, either.
+          <cite>Zachary M. Wallack, Eckert Seamans &middot; 2026-08-28 17:38 ET</cite></blockquote>
+        <p><b>Path 1</b> &mdash; hand them the preliminary CBRE numbers once the report is done, and
+        let the data carry the rent increases. <b>Path 2</b> &mdash; a jointly selected independent
+        appraiser sets fair market rent and <em>both sides are bound by it</em>, either on submitted
+        analyses or on submitted ranges, where in Wallack&rsquo;s words <em>&ldquo;our range would be
+        below our initial proposal but above our current position.&rdquo;</em></p>
+        <p>They are not symmetric. Path 1 spends disclosure and keeps the number yours. Path 2 hands
+        the number to a stranger and closes the question permanently. Jon replied at 18:20 ET
+        &mdash; <em>&ldquo;Amazing news. 1 sounds like the best. How about 1030est Monday?&rdquo;</em>
+        &mdash; and Wallack answered <em>&ldquo;That works well. I will send invite&rdquo;</em> at
+        19:36 ET. Jon is very likely right. It is still your call, and counsel has already heard the
+        company&rsquo;s answer.</p>
+        <p><b>The invite has not arrived.</b> Monday 10:00&ndash;10:30 currently holds the RentViewer
+        sync, so 10:30 works &mdash; but nothing is booked.</p>
+        <div class="do"><b>Do:</b> one line to Wallack and Jon confirming path 1, and ask Wallack to
+        send the 10:30 invite so it exists before Monday morning.</div>
+        <div class="tags"><span class="tag v">Verified &mdash; thread read in full</span></div>
+      </div>
+
+      <!-- 3 -->
+      <div class="card warn">
+        <div class="rank">03 &middot; Lucky Clover &amp; Great Oaks &middot; day 11</div>
+        <h3>Both safety items are still un-owned, and the contrast this week is the argument</h3>
+        <p>A resident pointed a gun at contractors at Lucky Clover; Angel, the new manager, alone on
+        site: <em>&ldquo;he was probably going to shoot me&hellip; it keeps getting worse.&rdquo;</em>
+        Great Oaks has an active boil water notice, aerator pump out, vendor absent. Neither has a
+        named owner. Nothing on either in any 8/28&ndash;8/29 traffic &mdash; that is now five channels
+        with nothing.</p>
+        <p>Meanwhile the Lucky Clover <b>water leak</b> (capex 17178) was signed by Jon at 00:54,
+        queried, photo-documented and closed out by John Clark and Vlad before 08:25 the same
+        morning. The property has a channel that works. The armed-resident incident has simply never
+        been put into it.</p>
+        <div class="do"><b>Do:</b> Monday 08:30 with Jon. One name against each, in writing. That is
+        the entire action &mdash; it has never needed anything more than that.</div>
+        <div class="tags">
+          <span class="tag s">Single-source &mdash; incident, road-trip review</span>
+          <span class="tag v">Verified &mdash; the silence</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section>
+    <h2>Today &mdash; Saturday 29 August</h2>
+    <p class="note" style="margin-bottom:22px;"><b>Nothing on the calendar.</b> No events, no
+    external commitments, nothing due today by anyone else&rsquo;s clock. The two items above are
+    Monday-morning items you can close in ten minutes from a phone whenever suits.</p>
+
+    <h2>Monday 31 August &mdash; where it all lands</h2>
+    <div class="sched">
+
+      <div class="slot">
+        <div class="t">08:30<br>&ndash;09:30</div>
+        <div class="s-body">
+          <div class="s-title">Monday Catch-up &amp; Week Priority Planning</div>
+          <div class="s-meta">Jon Wyss &middot; Teams &middot; 1:1</div>
+          <div class="s-prep"><b>Prep</b>The one room where the two safety owners get named. Also
+          confirm the settlement path here before 10:30, and hand him Royal Oaks &mdash; the titles
+          question sits across Ops and the Berman/Melanie handover he already owns.</div>
+        </div>
+      </div>
+
+      <div class="slot ghost">
+        <div class="t">09:00<br>&ndash;10:00</div>
+        <div class="s-body">
+          <div class="s-title">AI convo</div>
+          <div class="s-meta">Jon Wyss, Zach Schwartz &middot; Teams</div>
+          <div class="s-prep"><b>Conflict</b>Overlaps the 08:30 catch-up by thirty minutes. Both are
+          Jon&rsquo;s. One of them moves &mdash; easiest is to let Jon know today rather than discover
+          it at 09:00.</div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <div class="t">10:00<br>&ndash;10:30</div>
+        <div class="s-body">
+          <div class="s-title">RentViewer &times; Parakeet Weekly Sync</div>
+          <div class="s-meta">External: Dan, Raghu, Guru, Saad (RentViewer) &middot; you are tentative</div>
+        </div>
+      </div>
+
+      <div class="slot ghost">
+        <div class="t">10:30</div>
+        <div class="s-body">
+          <div class="s-title">Eckert Seamans &mdash; settlement strategy call</div>
+          <div class="s-meta">Proposed by Jon, accepted by Wallack &middot; <b>not on your calendar</b></div>
+          <div class="s-prep"><b>Unscheduled</b>Wallack said he would send the invite Friday evening
+          and it has not come. This is the meeting where the rent-increase path gets chosen.</div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <div class="t">14:00<br>&ndash;14:30</div>
+        <div class="s-body">
+          <div class="s-title">Rillet &times; Parakeet &mdash; Introduction</div>
+          <div class="s-meta">External: JD Bagolor (Rillet) &middot; Zoom &middot; with Jon</div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <div class="t">17:00<br>&ndash;17:30</div>
+        <div class="s-body">
+          <div class="s-title">Nixon Peabody &times; Parakeet Catchup</div>
+          <div class="s-meta">External: K. Grant (Nixon Peabody) &middot; organized by Jon &middot; you are tentative</div>
+          <div class="s-prep"><b>Prep</b>Jon set this up at 06:10 this morning and the invite carries
+          no agenda &mdash; just a Teams link. Worth one line to Jon asking what it is, particularly
+          because a different &ldquo;Karen&rdquo; is live in the Berman file this week (below).</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ NEW SINCE YESTERDAY ============ -->
+  <section>
+    <h2>New since yesterday</h2>
+    <div class="stack">
+
+      <div class="card crit">
+        <h3>The Berman decision was made yesterday afternoon, and the machinery is already running</h3>
+        <p>A 93-minute session starting 15:30 ET Friday reached consensus to terminate, on
+        performance, insubordination and fit. The working package: <b>six months of salary and
+        benefits continuation plus a prorated bonus, target ~25% of salary, aligned to work through
+        September 30.</b> Benchmarked against Janine (~6 months + $50,000) and Stacy (~$38,000).</p>
+        <p>Already in motion: a <b>legal hold is placed</b>; IT has audited recent logins and opened
+        a forensic review of six months of email. You, to Charles Cimaglia on Teams at 16:37 ET:
+        <em>&ldquo;we want to pull some specific things like what he could be sending to himself over
+        the last few months.&rdquo;</em></p>
+        <p>Two deliberate framings worth holding on to: terminate on performance and insubordination,
+        and <b>do not cite the MIP dispute or the auditor contact as formal reasons</b>; and prepare
+        for the over-40 review and release requirements. On the MIP, 20% of his MIP II units are
+        vested, the repurchase exposure is estimated at roughly $1,500, and it is <b>still open
+        whether forfeiture requires termination for cause</b> &mdash; which is the one item that
+        changes how the stated reason has to be documented.</p>
+        <p>He also did not come to work Friday. You, to <code>hr@</code> at 11:33 ET:
+        <em>&ldquo;He is still not in at 11:30am and his status on Teams is out of the office. No
+        communication about time off.&rdquo;</em></p>
+        <div class="tags">
+          <span class="tag v">Verified &mdash; Plaud note, Teams and mail read</span>
+        </div>
+      </div>
+
+      <div class="card warn">
+        <h3>&ldquo;Karen&rdquo; is probably Karen Doner, not Karen Grant &mdash; one line confirms it</h3>
+        <p>You asked HR for a Karen call Friday 09:15 ET. That afternoon you forwarded, to
+        <code>kdoner@donerlawplc.com</code>, exactly the three documents an employment lawyer would
+        need: the floorplan tie-out performance chain (15:56), the MIP II 83(b) filings (16:33), and
+        MIP II itself (16:40). Demetria then wrote at 17:14 ET: <em>&ldquo;Let me know if
+        there&rsquo;s anything I need to follow up with Karen on.&rdquo;</em></p>
+        <p>The competing candidate is K. Grant at Nixon Peabody, on Monday at 17:00 &mdash; but that
+        meeting was set by Jon, not HR, and nothing has been sent to that address. Reading Doner Law
+        as the employment counsel, and Nixon Peabody as separate business.</p>
+        <div class="tags"><span class="tag i">Inferred &mdash; from routing, not stated</span></div>
+      </div>
+
+      <div class="card warn">
+        <h3>The Citrin reply you promised for Friday morning did not go</h3>
+        <p>Thursday 21:35 ET you told Tim McNamara: <em>&ldquo;I need to confirm the contributions
+        with you in the morning but the only contributions were the initial contributions in
+        2018.&rdquo;</em> All eighteen messages you sent Friday were read. Three went to Citrin
+        &mdash; the Lamberton draft, A2Z/Bedrock, Royal Palm/Gulf Breeze &mdash; and <b>none of them
+        answers Tim&rsquo;s question.</b> The Business Extensions you told Lisa Timbrook were
+        <em>&ldquo;on my list today&rdquo;</em> on Thursday are also still unsent.</p>
+        <p>This blocks final 2025 returns for ND, Cambridge and Mayflower, and the schedule itself has
+        been chased since March. The answer is already written, in your own words, in Thursday&rsquo;s
+        message. It needs sending, not deciding &mdash; two minutes.</p>
+        <div class="tags"><span class="tag v">Verified &mdash; Sent Items enumerated</span></div>
+      </div>
+
+      <div class="card good">
+        <h3>The floorplan duplicates now have a number, a cause and a mechanism</h3>
+        <p>Friday&rsquo;s 13:00 ET Cavco call put the duplicate count at <b>50&ndash;60 units</b>
+        across 21st, Triad and CountryPlace, and named the cause: homes moved between lenders without
+        every system being updated. The fix is concrete &mdash; IT runs a query of all sales to
+        Cherokee entities with serial, community, unit and flooring source, and that list gets checked
+        against the lender portals to clear the dupes.</p>
+        <p>Separately, on the 141 Rent Manager vs Cavco conflicts, Jon at 06:14 this morning:
+        <em>&ldquo;@Justin Minkoff thanks for leading the charge here. Let&rsquo;s touch base mondy
+        here on clean-up.&rdquo;</em> So Justin has the Rent Manager half.</p>
+        <p><b>What still has no owner:</b> Jon&rsquo;s three original assignments from 8/27 are still
+        written as open questions, and the insurance leg you assigned &mdash; the serial-by-serial
+        tie-out of the carrier schedule against the corrected RM master &mdash; has still not been
+        accepted by anyone.</p>
+        <div class="tags"><span class="tag v">Verified &mdash; Plaud note and mail read</span></div>
+      </div>
+
+      <div class="card flat">
+        <h3>Correction: Wednesday&rsquo;s 15:00 recording was not the Jadian check-in</h3>
+        <p>Thursday&rsquo;s brief closed the question &ldquo;did the Jadian weekly happen?&rdquo; on a
+        recording that returned nothing on all three retrieval paths, matched to the calendar slot by
+        time alone. <b>It reads now.</b> It is a go-to-market session &mdash; Unity AI launching
+        1 October, regional sales hires, removing fees, Google Ads from 1 September, a secret-shopper
+        audit that failed at two communities. Useful, but internal.</p>
+        <p>Which means the honest answer is that <b>we still do not know what was said to Jadian this
+        week</b> &mdash; and DR-035, the mislabelled hard-costs subtotal in the Riverwalk and McGregor
+        reports already delivered to them, appears nowhere in it. Treat the earlier closure as
+        withdrawn.</p>
+        <p style="margin-top:6px;">Net-new from the same recording, worth keeping: Northgate Ag land
+        sold 8/26; a <b>$960,000 offer on the Hershey front parcel</b>; ~44 homes scheduled to deliver
+        across the weeks of 8/31 and 9/7 after transport pushed the 8/24 week.</p>
+        <div class="tags"><span class="tag v">Verified &mdash; note read in full</span></div>
+      </div>
+
+      <div class="card flat">
+        <h3>Smaller movements</h3>
+        <p><b>High Pace FL.</b> You released the rush payment Friday 15:05 ET &mdash;
+        <em>&ldquo;Released.&rdquo;</em> This is High Pace Construction <b>FL</b>, a different request
+        from the closed High Pace <b>MA</b> / Monson lot-19 item. Not a reopening.</p>
+        <p><b>A&amp;A Development, $108,919.</b> Still sitting unassigned in AvidXchange on this
+        morning&rsquo;s 05:50 ET report. Entered 2026-04-08 &mdash; 143 days. This was single-source
+        from one daily report; it is now verified against a second, and it is a lookup, not a
+        decision.</p>
+        <p><b>Lamberton MHC.</b> Draft 2025 federal and state returns arrived from Citrin at 16:11 ET.
+        You asked the same evening for Lamberton Lake MHC and Bedrock &harr; EM Holdings, which
+        weren&rsquo;t in the package.</p>
+        <p><b>Worth noting.</b> Berman signed off on the draft Parakeet MIP at 19:54 Friday &mdash;
+        <em>&ldquo;No comments on my end&rdquo;</em> &mdash; four hours after the meeting that worked
+        through his own MIP forfeiture terms.</p>
+        <div class="tags"><span class="tag v">Verified</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ DECISIONS ============ -->
+  <section>
+    <h2>Decisions only you can make</h2>
+    <ul class="dec">
+      <li>
+        <span class="box">&#9744;</span>
+        <span>
+          <span class="lede">Settlement: confirm path 1, or open path 2</span>
+          <span class="sub">CBRE data keeps the number yours; a joint appraiser binds you to
+          someone else&rsquo;s. Counsel has already been told 1. Before Monday 10:30 ET.</span>
+        </span>
+      </li>
+      <li>
+        <span class="box">&#9744;</span>
+        <span>
+          <span class="lede">Royal Oaks: what you concede in writing, before anyone reads the 2022 file</span>
+          <span class="sub">Nine titles, $67,500 being negotiated on the premise that Parakeet
+          failed to retitle. Melanie already found one batch mis-filed once.</span>
+        </span>
+      </li>
+      <li>
+        <span class="box">&#9744;</span>
+        <span>
+          <span class="lede">Berman sequencing: does G1 come out of him before the exit?</span>
+          <span class="sub">The signed entity list with EINs gates the entire intercompany AR/AP
+          programme. Unmade since 2026-08-26, and the exit is now days out, not weeks.</span>
+        </span>
+      </li>
+      <li>
+        <span class="box">&#9744;</span>
+        <span>
+          <span class="lede">E&amp;O / D&amp;O binder &mdash; $43,090.21, and whether Jadian was consulted</span>
+          <span class="sub">Your own question from 8/27 is unanswered:
+          <em>&ldquo;Didn&rsquo;t we say when we brought this up it had to be discussed with
+          Jadian.&rdquo;</em> Declining the binder does not undo the governance half.</span>
+        </span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ STILL OPEN ============ -->
+  <section>
+    <h2>Still open, not urgent</h2>
+    <ul class="open">
+      <li><b>DR-035, Jadian.</b> Mislabelled hard-costs subtotal in the Riverwalk and McGregor FINALs
+      already delivered. Disclosure posture still undecided; 52 further divergences behind it.</li>
+      <li><b>Lamberton Lake.</b> 26 days since the &ldquo;out in &lt; 90 days&rdquo; handoff to
+      Dustin Wilmer. Draft email is written; the deadline date is the only blank.</li>
+      <li><b>Jon&rsquo;s 13 standardization decision groups.</b> Nothing downstream can be codified
+      until they land. One meeting clears all of them.</li>
+      <li><b>Albert Gano.</b> The <code>to review</code> queue, and the migration risk brief still
+      unsent &mdash; the <code>ParakeetHome</code> / <code>ParakeetHomes</code> item destroys data if
+      hit cold.</li>
+      <li><b>Credential exposure.</b> <code>A2Z Utility Logins.xlsx</code> still in plaintext on
+      corporate storage; a live Visa number and gate code still in the Post River Oaks Plaud
+      recording.</li>
+      <li><b>Champion + Cavco joint improvement call.</b> Proposed 2026-08-03, 26 days, still
+      unscheduled &mdash; and it is the only lever on lead times.</li>
+      <li><b>Personal.</b> Hensdale Club application; Belmart bank package to lenders, plus the lot-35
+      back injury and the unsanded handrails.</li>
+    </ul>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    SOURCES &mdash; Outlook inbox and Sent Items 2026-08-28 06:00 ET to 2026-08-29 07:15 ET (60 inbound,
+    18 sent, all human correspondence read); Teams 2026-08-28 onward; Outlook calendar 8/29 and 8/31;
+    Plaud recordings 8/27&ndash;8/28 (5 notes read). Automated feeds excluded: Rent Manager, AvidXchange,
+    Paychex, FastField, DocuSign.<br>
+    ARCHIVE CHECKED &mdash; all 6 files in <code>99-archive/</code> plus <code>open-loops.md</code> and
+    <code>PRIORITY-LIST.md</code> read before any item was surfaced. Nothing already closed appears above.<br>
+    NO DISPOSITION CAPTURED &mdash; a full-mailbox search for &ldquo;Morning Brief&rdquo; returns no
+    reply from you, because <code>Mail.Send</code> is still unconsented on the connector app
+    registration and no brief has ever reached the mailbox. Four consecutive days. A tenant admin
+    granting <code>Mail.Send</code> and <code>Mail.ReadWrite</code> turns this brief into a
+    conversation.<br>
+    BLIND SPOT &mdash; Teams meeting transcripts remain disabled tenant-wide. Any Teams-only meeting
+    with no Plaud recording is invisible to this brief.
+  </footer>
+
+</div>

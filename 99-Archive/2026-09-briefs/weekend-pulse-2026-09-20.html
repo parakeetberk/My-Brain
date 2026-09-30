@@ -1,0 +1,1341 @@
+<title>Weekend Pulse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --brand:#2F4E65;
+  --brand-lift:#3E6885;
+  --good:#4ABA81;
+  --warn:#FFCC3B;
+  --crit:#F16262;
+
+  --paper:#F4F6F7;
+  --surface:#FFFFFF;
+  --surface-2:#EAEEF0;
+  --ink:#16242E;
+  --ink-2:#41565F;
+  --ink-3:#6D828C;
+  --rule:#D3DBDF;
+  --rule-soft:#E4EAEC;
+
+  --chip-good-bg:#E4F4EB; --chip-good-ink:#1D6B45;
+  --chip-warn-bg:#FDF2D4; --chip-warn-ink:#7A5B06;
+  --chip-crit-bg:#FBE4E4; --chip-crit-ink:#8E2C2C;
+  --chip-neut-bg:#E6ECEF; --chip-neut-ink:#3A5563;
+
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --body:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --brand:#7FB2D1; --brand-lift:#A6CCE3;
+    --good:#5FCB93; --warn:#F2C64B; --crit:#F58585;
+    --paper:#101A21; --surface:#17242C; --surface-2:#1E2E38;
+    --ink:#E6EDF0; --ink-2:#B4C4CC; --ink-3:#8298A3;
+    --rule:#2B3E49; --rule-soft:#22323B;
+    --chip-good-bg:#12362A; --chip-good-ink:#7EDCAB;
+    --chip-warn-bg:#3A2F0E; --chip-warn-ink:#F4D274;
+    --chip-crit-bg:#3C1E1E; --chip-crit-ink:#F7A5A5;
+    --chip-neut-bg:#213038; --chip-neut-ink:#A9BDC7;
+  }
+}
+:root[data-theme="dark"]{
+  --brand:#7FB2D1; --brand-lift:#A6CCE3;
+  --good:#5FCB93; --warn:#F2C64B; --crit:#F58585;
+  --paper:#101A21; --surface:#17242C; --surface-2:#1E2E38;
+  --ink:#E6EDF0; --ink-2:#B4C4CC; --ink-3:#8298A3;
+  --rule:#2B3E49; --rule-soft:#22323B;
+  --chip-good-bg:#12362A; --chip-good-ink:#7EDCAB;
+  --chip-warn-bg:#3A2F0E; --chip-warn-ink:#F4D274;
+  --chip-crit-bg:#3C1E1E; --chip-crit-ink:#F7A5A5;
+  --chip-neut-bg:#213038; --chip-neut-ink:#A9BDC7;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:18px; line-height:1.62;
+  margin:0; padding:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px;padding-block:0 72px}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:2px solid var(--brand);padding-block:36px 20px;margin-bottom:0}
+.eyebrow{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px
+}
+h1{
+  font-family:var(--display);font-weight:700;font-size:clamp(38px,8vw,60px);
+  line-height:.98;letter-spacing:-.025em;margin:0 0 16px;color:var(--brand);text-wrap:balance
+}
+.standfirst{font-size:20px;line-height:1.5;color:var(--ink-2);margin:0 0 22px;max-width:60ch}
+.runmeta{
+  display:flex;flex-wrap:wrap;gap:8px 10px;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.03em;color:var(--ink-2)
+}
+.runmeta span{
+  background:var(--surface-2);border:1px solid var(--rule-soft);
+  padding:4px 9px;border-radius:3px;white-space:nowrap
+}
+
+/* ---------- sticky toc ---------- */
+nav.toc{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:color-mix(in srgb,var(--paper) 94%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+  margin-inline:-20px;padding:9px 20px;
+}
+nav.toc ol{
+  list-style:none;display:flex;gap:4px;overflow-x:auto;margin:0;padding:0;
+  scrollbar-width:thin
+}
+nav.toc a{
+  display:inline-block;white-space:nowrap;text-decoration:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-2);padding:5px 9px;border-radius:3px
+}
+nav.toc a:hover{background:var(--surface-2);color:var(--brand)}
+nav.toc a:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+nav.toc .n{color:var(--ink-3);margin-right:5px}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:68px;padding-block:44px 0}
+h2{
+  font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-.015em;
+  line-height:1.15;margin:0 0 6px;color:var(--ink);text-wrap:balance
+}
+h2 .num{
+  font-family:var(--mono);font-size:13px;font-weight:500;color:var(--brand);
+  display:block;letter-spacing:.1em;margin-bottom:7px
+}
+.deck{color:var(--ink-3);font-size:16px;margin:0 0 22px;max-width:62ch}
+h3{
+  font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.005em;
+  margin:32px 0 10px;color:var(--ink);text-wrap:balance
+}
+h4{
+  font-family:var(--mono);font-weight:500;font-size:11.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);margin:26px 0 10px
+}
+p{margin:0 0 15px;max-width:66ch}
+a{color:var(--brand);text-underline-offset:2px}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic}
+code,.id{
+  font-family:var(--mono);font-size:.82em;background:var(--surface-2);
+  border:1px solid var(--rule-soft);border-radius:3px;padding:1px 5px;
+  color:var(--ink-2);white-space:nowrap
+}
+
+/* ---------- highlight cards ---------- */
+.hl{
+  background:var(--surface);border:1px solid var(--rule);
+  border-left:5px solid var(--crit);border-radius:4px;
+  padding:22px 24px;margin:0 0 18px
+}
+.hl.two{border-left-color:var(--warn)}
+.hl.three{border-left-color:var(--brand)}
+.hl-rank{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 8px
+}
+.hl h3{margin:0 0 10px;font-size:21px}
+.hl p:last-child{margin-bottom:0}
+.paths{margin:16px 0 0;border-top:1px solid var(--rule-soft);padding-top:14px}
+.paths dt{
+  font-family:var(--display);font-weight:600;font-size:15px;margin:12px 0 3px;color:var(--ink)
+}
+.paths dt:first-child{margin-top:0}
+.paths dd{margin:0;font-size:16px;color:var(--ink-2);max-width:64ch}
+.rec{
+  display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;background:var(--chip-good-bg);color:var(--chip-good-ink);
+  padding:2px 7px;border-radius:3px;margin-left:7px;vertical-align:2px;font-weight:500
+}
+
+/* ---------- chips ---------- */
+.chip{
+  display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap;font-weight:500
+}
+.c-ver{background:var(--chip-good-bg);color:var(--chip-good-ink)}
+.c-ss{background:var(--chip-warn-bg);color:var(--chip-warn-ink)}
+.c-inf{background:var(--chip-neut-bg);color:var(--chip-neut-ink)}
+.c-crit{background:var(--chip-crit-bg);color:var(--chip-crit-ink)}
+
+/* ---------- tables ---------- */
+.tscroll{overflow-x:auto;margin:0 0 18px;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px;font-variant-numeric:tabular-nums}
+thead th{
+  position:sticky;top:0;z-index:2;background:var(--surface-2);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-2);text-align:left;padding:10px 13px;
+  border-bottom:1px solid var(--rule);white-space:nowrap
+}
+tbody td{padding:11px 13px;border-bottom:1px solid var(--rule-soft);vertical-align:top;color:var(--ink-2)}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 45%,transparent)}
+tbody tr:last-child td{border-bottom:none}
+td strong{color:var(--ink)}
+.num-cell{font-family:var(--mono);font-size:13.5px;white-space:nowrap;color:var(--ink)}
+.days{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)}
+.days.hot{color:var(--crit)}
+
+/* ---------- person blocks ---------- */
+.person{
+  border-top:1px solid var(--rule);padding-block:18px 4px
+}
+.person:first-of-type{border-top:2px solid var(--brand)}
+.person h3{margin:0 0 3px;font-size:19px}
+.role{
+  font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 11px
+}
+.person ul{margin:0 0 6px;padding-left:19px}
+.person li{margin-bottom:6px;color:var(--ink-2);max-width:64ch}
+.person li::marker{color:var(--ink-3)}
+
+/* ---------- tail lists ---------- */
+.tail{margin:0 0 20px;padding-left:0;list-style:none;counter-reset:t}
+.tail li{
+  counter-increment:t;position:relative;padding:8px 0 8px 40px;
+  border-bottom:1px solid var(--rule-soft);font-size:16.5px;color:var(--ink-2);line-height:1.5
+}
+.tail li::before{
+  content:counter(t);position:absolute;left:0;top:9px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  background:var(--surface-2);border-radius:3px;padding:2px 6px;min-width:26px;text-align:center
+}
+.tail li:last-child{border-bottom:none}
+
+/* ---------- callout ---------- */
+.note{
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;
+  padding:18px 20px;margin:0 0 20px
+}
+.note.flag{border-left:5px solid var(--warn)}
+.note.stop{border-left:5px solid var(--crit)}
+.note p:last-child{margin-bottom:0}
+.note h4{margin-top:0}
+
+.count{
+  display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px;padding:0;list-style:none
+}
+.count li{
+  flex:1 1 128px;background:var(--surface);border:1px solid var(--rule);
+  border-radius:4px;padding:13px 15px
+}
+.count b{
+  display:block;font-family:var(--display);font-size:28px;font-weight:700;
+  line-height:1;color:var(--brand);font-variant-numeric:tabular-nums;margin-bottom:5px
+}
+.count span{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+
+.foot{
+  border-top:2px solid var(--brand);margin-top:56px;padding-top:22px;
+  font-size:15px;color:var(--ink-3)
+}
+hr.soft{border:none;border-top:1px solid var(--rule-soft);margin:26px 0}
+
+@media (max-width:560px){
+  body{font-size:17px}
+  .standfirst{font-size:18px}
+  h2{font-size:24px}
+  .hl{padding:18px 17px}
+  .tail li{padding-left:34px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">Parakeet Communities &middot; Weekend Pulse &middot; Run 2026-09-20 18:09 ET</p>
+  <h1>Weekend Pulse</h1>
+  <p class="standfirst">Fourteen days across Parakeet and the affiliates, enumerated rather than triaged. Three things are highlighted. Everything else is listed.</p>
+  <div class="runmeta">
+    <span>Window 2026-09-07 &rarr; 2026-09-20 incl.</span>
+    <span>6 registers read</span>
+    <span>5 connectors live</span>
+    <span>1 connector down</span>
+    <span>Artifact only &middot; nothing sent</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <ol>
+    <li><a href="#s1"><span class="n">01</span>Read first</a></li>
+    <li><a href="#s2"><span class="n">02</span>Corrections</a></li>
+    <li><a href="#s3"><span class="n">03</span>Waiting on</a></li>
+    <li><a href="#s4"><span class="n">04</span>Your commitments</a></li>
+    <li><a href="#s5"><span class="n">05</span>Everyone</a></li>
+    <li><a href="#s6"><span class="n">06</span>Might still be a to-do</a></li>
+    <li><a href="#s7"><span class="n">07</span>Safety</a></li>
+    <li><a href="#s8"><span class="n">08</span>Money</a></li>
+    <li><a href="#s9"><span class="n">09</span>Closed</a></li>
+    <li><a href="#s10"><span class="n">10</span>Week ahead</a></li>
+    <li><a href="#s11"><span class="n">11</span>Blind spots</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>Read this first</h2>
+
+  <p>The fortnight's real work got done: five tax returns signed on the 9/15 deadline, eight LPs and partners served K-1s by hand after the portal failed every one of them, the $250,000 escrow wired to 21st, and the approval queue emptied itself three days running mid-week. <strong>What is stuck is not work, it is three decisions and one toggle.</strong> A tree destroyed a resident couple's car at Brunswick on the evening of 2026-09-17, the couple have gone to the press, and as of the last verified reading the carrier had still not been notified and no arborist report exists anywhere in the portfolio. Massachusetts counsel has now put in writing twice that the entrance fee at three communities already under a Chapter 93A claim is <em>"completely illegal"</em>, and neither branch has been chosen in four days. The Lucky Clover sewer change order at $179,200 runs a thirty-day invoice clock to roughly 10 October with Zach's hard 9/30 paperwork deadline inside it, and the grant appeal has to start before the invoice rather than after.</p>
+
+  <p>Underneath those, the number that matters most is structural. <strong>The a2zcp and Bedrock mailbox has now been unreadable for fourteen consecutive routines, this run included.</strong> It is the mailbox hard rule 14 ranks first, nine register rows cite it as their only source, and this run confirmed the cause is not an outage. Touch the three decisions and flip the connector and the board moves further than any amount of clearing the tail would.</p>
+
+  <ul class="count">
+    <li><b>1,426</b><span>Register IDs ever issued</span></li>
+    <li><b>~1,334</b><span>Read as open <span class="chip c-inf">upper bound</span></span></li>
+    <li><b>25</b><span>For Signature, 9 distinct docs</span></li>
+    <li><b>14</b><span>Routines a2zcp has been dark</span></li>
+  </ul>
+
+  <h3>The three</h3>
+  <p class="deck">Chosen by what costs most to ignore until tomorrow. Everything else in this document is listed, not held.</p>
+
+  <div class="hl">
+    <p class="hl-rank">Highlight 1 of 3 &middot; <code>TD-0681</code> <code>KP-0121</code></p>
+    <h3>The Brunswick tree, and the fact that nobody owns first notice of loss</h3>
+    <p><strong>The ask:</strong> two lines to Natalie. Notify the carrier now, and yes or no on engaging counsel. <strong>Who is blocked:</strong> Natalie Magurne, since 2026-09-19 10:46 ET. <strong>Source:</strong> the full three-message exchange, read end to end. <span class="chip c-ver">verified</span></p>
+    <p>A tree destroyed a resident couple's car at the Brunswick community on the evening of 2026-09-17. Natalie learned of it Friday afternoon. You asked three questions on Saturday at 10:41 ET; she answered two, and <strong>the one she answered with <em>"Not yet"</em> was whether insurance knows.</strong> There is no arborist report, and she does not believe one was done before tree work was performed there. The couple have spoken to the press. <strong>Her own question back to you — whether to engage an attorney — has now sat unanswered for over thirty-one hours</strong> and it is blocking her.</p>
+    <p><strong>Why it matters tomorrow rather than Tuesday:</strong> first notice of loss is the only clock on this page that is already running and cannot be restarted, and <strong>you have Baldwin at 16:00 ET Monday</strong>, which is both the natural place to ask what the policy actually requires and the last easy moment to have already notified before you do.</p>
+    <dl class="paths">
+      <dt>Notify the carrier tomorrow morning and let the arborist question follow<span class="rec">recommended</span></dt>
+      <dd>Puts the loss on record before the Baldwin call rather than during it, and costs one call. <strong>What it deliberately leaves broken:</strong> the portfolio question — how many communities have had tree work with no assessment on file — stays open, and the press angle is unmanaged. <em>Wrong choice if counsel would rather control the notice, which is exactly why Natalie's second question needs answering in the same breath.</em></dd>
+      <dt>Answer both of Natalie's questions and put a first-notice-of-loss rule on the board in the same message</dt>
+      <dd>Fixes the mechanism so this stops recurring: a role and a number of hours, written once. <strong>Costs:</strong> ten minutes rather than one, and it needs Baldwin's input to be right, so the rule is provisional until Monday 16:00. <strong>Still exposed when done:</strong> the existing tree work is still unassessed. <em>Wrong choice if you would rather not commit to a standard before hearing what the policy already obliges.</em></dd>
+      <dt>Treat it as a portfolio arborist problem and commission the sweep now</dt>
+      <dd>Rebuilds from the actual risk rather than the incident: Natalie has already said a bigger sweep may be needed this year, and the TreeIQ reports she asked National Pro Services for on 09-19 are the cheap first look at it. <strong>Costs:</strong> real money and a vendor decision, and it does nothing about the car. <strong>Still exposed:</strong> the carrier still has not been told. <em>Wrong choice as a substitute for the notice; right choice as the thing that comes after it.</em></dd>
+    </dl>
+    <p><strong>Why the first wins.</strong> Path two is correct and slower, and the rule it writes will be better after Baldwin rather than before. Path three answers a question nobody has asked yet while the one that is asked goes unanswered. <strong>Graft the useful half of both on:</strong> answer Natalie's counsel question in the same message as the notice instruction, and put the arborist sweep on Wednesday's NM check-in, which already exists.</p>
+  </div>
+
+  <div class="hl two">
+    <p class="hl-rank">Highlight 2 of 3 &middot; <code>TD-0673</code> <code>KP-0117</code></p>
+    <h3>Massachusetts counsel has called the entrance fee illegal in writing, twice, and neither branch has been chosen</h3>
+    <p><strong>The ask:</strong> one instruction to Natalie. Stop collecting at all three communities from tomorrow, or keep collecting until Kraus scopes it. <strong>Who is blocked:</strong> Natalie, and through her Monson, American and Whispering Pines. <strong>Source:</strong> the whole Kraus thread, read end to end. <span class="chip c-ver">verified</span></p>
+    <p>Robert Kraus wrote on 2026-09-17 08:32 ET that the entrance fee is <em>"completely illegal"</em>, and separately that security deposits are held contrary to the separate funds statute, adding <em>"as I wrote yesterday"</em> — <strong>which makes it his second written notice, not his first.</strong> Natalie picked up the deposit and application fee points inside four minutes and confirmed no application fees are being charged. <strong>The entrance fee is a third charge and nobody has addressed it in four days.</strong></p>
+    <p><strong>Why it matters tomorrow:</strong> silence defaults to still collecting, at the three communities already carrying the Chapter 93A claim and the $400,000 settlement whose rent schedule is still open. <strong>Every day of collection is another day on the record</strong>, and the record is the thing being litigated.</p>
+    <dl class="paths">
+      <dt>Stop collecting at all three from tomorrow, and tell Kraus you have<span class="rec">recommended</span></dt>
+      <dd>Caps the exposure at four days and is reversible if he later scopes it narrower. <strong>What it deliberately leaves broken:</strong> it concedes the point before counsel has quantified it, it forfeits revenue nobody has sized, and <strong>it says nothing about fees already collected</strong>, which is the larger question. <em>Wrong choice if the fee is contractually load-bearing somewhere and stopping it breaches a lease.</em></dd>
+      <dt>Ask Kraus to scope it in one email — which charges, which communities, which periods, and what happens to what has already been taken</dt>
+      <dd>Fixes the mechanism: you would be deciding against a scope rather than a characterisation, and the refund question gets asked now rather than in discovery. <strong>Costs:</strong> days, during which collection continues by default unless you also stop it. <strong>Still exposed:</strong> everything, until he answers. <em>Wrong choice on its own, and that is the point — it is the right second half of path one, not an alternative to it.</em></dd>
+      <dt>Pull every Massachusetts fee schedule and audit what is actually being charged at all five communities</dt>
+      <dd>Rebuilds from the system of record rather than from counsel's characterisation. Natalie already has the SD reports running, so the machinery exists. <strong>Costs:</strong> a week of Liznette's and Natalie's time. <strong>Still exposed:</strong> the entrance fee keeps being collected throughout. <em>Wrong choice now, right choice once the fee stops, because an audit is worth more when it is not also the thing delaying a decision.</em></dd>
+    </dl>
+    <p><strong>Why the first wins.</strong> Path three is the most thorough and the least urgent, and doing it first means four more weeks of collection. Path two is not actually a competing option, it is the missing half of path one: <strong>stop, then ask him to scope it, in the same message.</strong> The one thing none of the three does is answer what happens to fees already taken, and that is the question to put to Kraus rather than to decide.</p>
+  </div>
+
+  <div class="hl three">
+    <p class="hl-rank">Highlight 3 of 3 &middot; <code>TD-0678</code> <code>KP-0118</code> <code>PF-0493</code></p>
+    <h3>Lucky Clover: $179,200, and the appeal has to start before the invoice rather than after</h3>
+    <p><strong>The ask:</strong> tell John Clark appeal or pay. <strong>Who is blocked:</strong> John Clark, Auzzi Dixon and High Pace. <strong>Source:</strong> both messages read end to end, and the figures reconcile to the ledger. <span class="chip c-ver">verified</span></p>
+    <p>128 unit connections at $1,400.00 each, profit and overhead waived, insurance only. It is one of three change orders totalling $304,841.00; <strong>the other two are absorbed — the engineer paid for his own error at $95,641.00 and High Pace ate the septic work — so $179,200.00 is the only unfunded piece.</strong> The connections were drawn at 5ft from the curb and are running 50ft to 100ft-plus in the field. <strong>Doucette's own funding suggestion is already in writing: appeal the granting agency for unforeseen expenses.</strong></p>
+    <p><strong>Why it matters tomorrow:</strong> three clocks overlap. The invoice is dated as thirty days from 2026-09-10, so it runs out around 10 October. <strong>Zach put a hard 9/30 on the Lucky Clover paperwork, which is inside that.</strong> And an appeal has to be lodged before the invoice is paid, not after — pay it first and the appeal route closes. John asked you for twenty minutes on Friday and you told him to send it instead; <strong>he is on Wednesday's Weekly Rehabs call with Doucette, which is the last forum before the 9/30 date.</strong></p>
+    <dl class="paths">
+      <dt>Appeal the granting agency, and run the 5ft question beside it rather than behind it<span class="rec">recommended</span></dt>
+      <dd>The contractor has already said this is the route and the agency relationship exists. <strong>What it deliberately leaves broken:</strong> the appeal may fail, in which case you have spent two weeks and still owe $179,200 against a tie-in the ledger carries at $1.6M with $1.4M grant funded. <strong>And it does not settle who supplied the 5ft drawing</strong>, which is the difference between an unforeseen condition and a design error somebody else should carry. <em>Wrong choice if the grant agreement excludes change orders, which nobody here has checked — the executed SOIRL agreement has never been pulled.</em></dd>
+      <dt>Pay it as a capex overrun and take the schedule</dt>
+      <dd>Certainty, no appeal risk, and Zach's 9/30 paperwork goes in clean. <strong>Costs:</strong> $179,200 of unbudgeted capex and it sets the precedent that field variance against a drawing is the owner's to absorb. <strong>Still exposed:</strong> the same 5ft-versus-100ft problem exists wherever that engineer's drawings were used. <em>Wrong choice while an appeal route the contractor has named is still open and unexercised.</em></dd>
+      <dt>Pull the executed SOIRL agreement first and decide against what it actually says</dt>
+      <dd>Rebuilds from the primary document rather than from anybody's characterisation, and it would also settle the uncorroborated 2026-09-25 Brevard date sitting on <code>KP-0106</code> four days out — <strong>one document answers two open items.</strong> <strong>Costs:</strong> a day or two, and Gunster is already on the Brevard thread so somebody can get it fast. <strong>Still exposed:</strong> the invoice clock keeps running. <em>Wrong choice as a reason to delay the appeal, right choice as the thing done in parallel with it this week.</em></dd>
+    </dl>
+    <p><strong>Why the first wins.</strong> Path two buys certainty at full price while a free option is unexercised. Path three is genuinely valuable and is not an alternative — <strong>pull the agreement and start the appeal in the same week</strong>, because the appeal has a deadline and the document does not. Give John the twenty minutes he asked for on Tuesday's check-in rather than at Wednesday's group call, so Doucette arrives at Wednesday already knowing the answer.</p>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>Corrections to what you were told earlier</h2>
+  <p class="deck">What this sweep changes about what earlier briefs, closes or the ledger asserted. Short and factual.</p>
+
+  <h4>1. The a2zcp mailbox count is fourteen, not thirteen, and the diagnosis needs amending</h4>
+  <p>The 2026-09-19 close recorded a thirteenth consecutive routine without that mailbox. <strong>This run is the fourteenth.</strong> <span class="chip c-ver">verified</span> And the diagnosis on <code>KP-0116</code> needs a correction rather than a repeat: earlier runs recorded Gmail as <em>authenticated with its tools switched off</em>. <strong>In this session the Gmail read tools are not present at all.</strong> A direct tool search returns exactly one Gmail tool, <code>delete_draft</code>, and nothing that can read a thread, a label or an inbox. <code>search_threads</code> and <code>get_thread</code> — the two calls every a2zcp sweep in this Brain is written against — do not exist here. That is a different failure from a toggle, and it may mean the fix is different too.</p>
+
+  <h4>2. Plaud has not gone quiet, it has gone unreadable, and the distinction was blurred</h4>
+  <p>Several closes recorded Plaud as <em>"empty"</em> or <em>"has not grown"</em>. <span class="chip c-ver">verified</span> The scan this run is complete across 321 files and returns <strong>five recordings inside the window</strong>, not zero. Four of the five are unreadable. <code>KP-0112</code> already holds three of them; <strong>the 2026-09-15 10:01 ET recording is a fourth and is not on that row</strong> — 52 minutes 40 seconds of audio whose entire transcript is the three words <em>"Come for me"</em>, returned as processed rather than pending. Only the 2026-09-11 11:24 ET recording returned usable content.</p>
+
+  <h4>3. For Signature is not at 17, it is at 25</h4>
+  <p>The 2026-09-19 close read the folder at 17 items with eight of nine documents sending daily reminders. <span class="chip c-ver">verified</span> <strong>It is 25 items this evening, all unread, across nine distinct documents</strong>, and the eight capex and infill approvals have now sent a third reminder wave, on 9/18, 9/19 and again this afternoon between 17:19 and 17:42 ET. Nothing has been approved since they arrived on 9/18. Jon signs behind every one of them and he is at sea until midweek.</p>
+
+  <h4>4. "Monday is a holiday" is your own statement and the calendar disagrees with it</h4>
+  <p>Two closes recorded that you told Post REgroup Monday 2026-09-21 is a holiday, and both then ran clocks across it. <span class="chip c-ss">single-source</span> <strong>Your Monday calendar carries four live meetings</strong>: the 08:30 ET catch-up with Jon, RentViewer at 10:00, Baldwin management liability at 16:00 and a Quickbase discovery session. Separately, David Berman told eight people on 2026-09-20 09:19 ET that he is on and offline through Yom Kippur on the 21st. <strong>The holiday is real for part of the company and the calendar was never cleared.</strong> This is not resolved here; it is flagged because three clocks in this document were sized against it.</p>
+
+  <h4>5. Nothing was sent from the Parakeet mailbox on 2026-09-20</h4>
+  <p><span class="chip c-ver">verified</span> Sent Items for the whole window read to exhaustion; the newest item is 2026-09-19 16:40 ET. <strong>That is a fact about today and not a criticism</strong> — it is recorded only because four items in section 3 are waiting on a one-line reply and none of them received it today.</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>Deliverables you are waiting on</h2>
+  <p class="deck">Sorted by days outstanding, longest first. Where nobody was ever actually asked, the row says so — that is a different problem from committed and late.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>What</th><th>Who owes it</th><th>Since</th><th>Days</th><th>Last movement</th><th>Conf.</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Six wind-down questions on Bedrock Fund II</strong> <code>CM-27</code></td>
+        <td>Internal — no owner ever named</td>
+        <td class="num-cell">2026-04-30</td>
+        <td class="days hot">143</td>
+        <td>Chased six times by John B. Davies; no substantive answer on file. Mailbox dark.</td>
+        <td><span class="chip c-ss">single</span></td>
+      </tr>
+      <tr>
+        <td><strong>Line capacity across CountryPlace, 21st and Triad</strong> — the precondition you set yourself <code>KP-0107</code> <code>TD-0622</code></td>
+        <td>Unassigned</td>
+        <td class="num-cell">2026-08-31</td>
+        <td class="days hot">20</td>
+        <td>Never produced. <code>PD-35</code> was decided without it on 09-09; Triad then moved the denominator by $3,000,000 on 09-10.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Executed Brevard County SOIRL agreement</strong>, to source or kill the 2026-09-25 date <code>KP-0106</code> <code>TD-0621</code></td>
+        <td>Auzzi Dixon / Gunster</td>
+        <td class="num-cell">2026-09-09</td>
+        <td class="days hot">11</td>
+        <td>Jon pasted the date into the construction chat and said he did not know if it was right. Nothing in this vault sources it. <strong>The date is four days away.</strong></td>
+        <td><span class="chip c-crit">uncorroborated</span></td>
+      </tr>
+      <tr>
+        <td><strong>Triad covered-homes list</strong>, called urgent on 09-17 <code>TD-0677</code></td>
+        <td>Katelyn Houseworth, Triad Financial</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days">3</td>
+        <td>Half delivered. Triad gave the premium formula and a worked example 09-18 11:07 ET; the list itself has not come. Leslie sent them the missing inventory list 09-19 07:52 ET.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Silver Breeze Second Modification</strong>, promised to the lender for Monday <code>TD-0674</code></td>
+        <td>Seller's counsel — Paul Hastings says the other side drafts it</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days">3</td>
+        <td>Jon told the lender Monday. Monday is tomorrow. Jon's prepay question is unanswered in both of counsel's replies. Nothing moved 09-18 or 09-19.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Folder access grid for the two finance seats</strong> <code>TD-0680</code></td>
+        <td>Charles Cimaglia / Cedric</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>Asked by Jon 09-18 17:14 ET, re-asked in the same words 09-19 01:40 ET. Charles replied with raw data files rather than the grid.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Mayflower deposit reconciliation</strong> <code>TD-0676</code></td>
+        <td>Internal — you owe it to Post REgroup</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days">3</td>
+        <td>Adam Freedman asked twice; at 09-18 17:32 ET in writing: <em>"We haven't been withholding, we're just looking for that supporting detail."</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>TreeIQ reports for the Georgia parks</strong></td>
+        <td>Danny, National Pro Services</td>
+        <td class="num-cell">2026-09-19</td>
+        <td class="days">1</td>
+        <td>Natalie asked 09-19 11:19 ET. <strong>Newly relevant</strong> — it lands inside the Brunswick tree matter and <code>KP-0121</code>.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Lamberton Lake PSA, Word version</strong> — returned, awaiting counsel <code>TD-0680</code></td>
+        <td>Christopher Hoke, Woods Oviatt</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>Crystal View sent the Word version 09-18 16:39 ET; you forwarded it to Hoke at 16:51 ET. Nothing back.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Confirmation that counsel has enough on the accounting seat matter</strong> <code>CM-36</code></td>
+        <td>Karen Doner, Doner Law</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>Material went across Friday and Saturday. Her confirmation is the only missing piece. <em>No terms, figures or names are recorded anywhere in this Brain.</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cambridge Citrin bills</strong> — Jon re-raised it <code>new</code></td>
+        <td>You, to Berman and Citrin</td>
+        <td class="num-cell">2026-09-11</td>
+        <td class="days">9</td>
+        <td>Berman sent it 09-11 14:49 ET. Jon forwarded it back to you 2026-09-20 00:24 ET with <em>"Don't forget about this."</em> <strong>Nine days, and the only movement is a nudge.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Journal entry correction, with the problem and the fix stated</strong> <code>new</code></td>
+        <td>Sony / accounting, direction owed by you</td>
+        <td class="num-cell">2026-09-15</td>
+        <td class="days">5</td>
+        <td>Jon forwarded Berman's 09-15 11:20 thread to you 2026-09-20 00:20 ET: <em>"Can you direct them as to what needs to be done so this is corrected. We have to present the problem and the fix."</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>A2Z ND Portfolio: whether the $100,000 Evergreen distribution needs a journal entry</strong> <code>TD-0638</code> <code>KP-0084</code></td>
+        <td>You, to Citrin</td>
+        <td class="num-cell">2026-09-11</td>
+        <td class="days">9</td>
+        <td>Chased twice on 09-14. Overtaken by the filing rather than answered — the 2024 return is now being amended because OPR's 2025 beginning capital will not tie.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Plattsburgh state apportionment</strong> <code>TD-0656</code></td>
+        <td>Brad Johnson, Evergreen Capital</td>
+        <td class="num-cell">2026-09-14</td>
+        <td class="days">6</td>
+        <td>He offered to find it. <strong>Whether he produced it or Citrin fell back to the 2025 figures is not established in any message in either mailbox.</strong></td>
+        <td><span class="chip c-inf">inferred</span></td>
+      </tr>
+      <tr>
+        <td><strong>21st Mortgage set-up statuses for the inventory homes</strong> <code>TD-0668</code></td>
+        <td>You / John Clark, to Merrick Snider</td>
+        <td class="num-cell">2026-09-16</td>
+        <td class="days">4</td>
+        <td>Unmoved four days, while the escrow half of the same relationship closed on 09-17. Their Applegate inspection found homes still on wheels and not set.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Melbourne: Eau Gallie site plan on current aerial imagery</strong> <code>TD-0670</code></td>
+        <td>John Clark / Gunster</td>
+        <td class="num-cell">2026-09-16</td>
+        <td class="days">4</td>
+        <td>Jon committed roughly $7,000 of Gunster flights on 09-15 for Clearwater and Titusville. <strong>Eau Gallie was not in that scope.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>A2Z K-1 for the 2023 and 2024 years</strong> <code>TD-0661</code></td>
+        <td>You, to Marious Sjulsen at EquityMultiple</td>
+        <td class="num-cell">2026-09-15</td>
+        <td class="days">5</td>
+        <td>Your own words were <em>"Whoa. Let me request"</em>. <strong>No commitment was made to a date and nobody is holding it.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Kirsten's book value or the 2025 financials</strong> <code>TD-0660</code></td>
+        <td>You, to James Perkins at GTBA</td>
+        <td class="num-cell">2026-09-15</td>
+        <td class="days">5</td>
+        <td>Asked 15:02 ET after the K-1 was served. Unanswered. Mailbox dark since.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>$165,000 of A2Z Community Partners Miscellaneous Expense recharacterised, plus $311,000 of Consulting explained</strong> <code>TD-0657</code></td>
+        <td>You, to Tim McNamara at Citrin</td>
+        <td class="num-cell">2026-09-15</td>
+        <td class="days">5</td>
+        <td>A2Z Community Partners is the top of the entity structure. Unanswered.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Georgia sales tax numbers decision</strong> <code>TD-0669</code></td>
+        <td>You, to Melanie Sanchez-Soto</td>
+        <td class="num-cell">2026-09-16</td>
+        <td class="days">4</td>
+        <td>Four days. Without them Florida Fast Title pays transfer tax on every title.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Hire approvals</strong> <code>TD-0675</code></td>
+        <td>You and Jon, to Demetria Loukas</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days">3</td>
+        <td>You answered 09-18 09:32 ET with a condition rather than a date: <em>"Still reviewing payroll… Will come back once it's done."</em> The payroll review then grew a second workstream the same day.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fox Creek decision</strong> <code>TD-0672</code></td>
+        <td>You, to John Clark, who then unblocks HR</td>
+        <td class="num-cell">2026-09-16</td>
+        <td class="days">4</td>
+        <td>Counsel recommended twice on 09-16 and routed the decision to John rather than HR. <strong>Nothing written anywhere says the call happened.</strong> You and John were both on the 09-17 TreeIQ call, which is contact but not evidence.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note flag">
+    <h4>Rows where nobody was ever actually asked</h4>
+    <p>Three of the above are <strong>not late, because no request was ever made</strong>: the line capacity number has no assignee at all and never did; the SOIRL agreement has never been requested from Gunster in writing that this Brain can see; and the 2023/2024 EquityMultiple K-1s exist only as your own <em>"Let me request"</em>. Treating these as overdue deliverables would be wrong. They are unassigned work wearing a deadline.</p>
+  </div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>Your own open commitments</h2>
+  <p class="deck">The mirror image, and the one that gets forgotten. What you said, to whom, in your words.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>What</th><th>Who is waiting</th><th>Promised</th><th>Days</th><th>Your words</th><th>Conf.</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A call and the review material</strong> <code>PD-53</code> <code>CM-26</code></td>
+        <td>Ridaa Murad, 33% partner in Bedrock Group</td>
+        <td class="num-cell">2026-09-15</td>
+        <td class="days hot">5</td>
+        <td>His: <em>"I still do not have anything you promised for review. On Sep 30 everything goes away from me and only counsel gets involved."</em> He offered Wednesday or Friday. Both have gone. <strong>Ten days to his date.</strong></td>
+        <td><span class="chip c-inf">inferred</span></td>
+      </tr>
+      <tr>
+        <td><strong>Notify the carrier and rule on engaging counsel</strong> <code>TD-0681</code></td>
+        <td>Natalie Magurne</td>
+        <td class="num-cell">2026-09-19</td>
+        <td class="days hot">1</td>
+        <td>You asked three questions at 10:41 ET; she answered two and asked one back at 10:46. <strong>Nothing has moved on that thread since.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>One instruction on the Massachusetts entrance fee</strong> <code>TD-0673</code> <code>KP-0117</code></td>
+        <td>Natalie Magurne, and through her three communities</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days hot">3</td>
+        <td>No words of yours exist on this half. Natalie answered the deposit and application-fee points in four minutes; <strong>the entrance fee is a third charge and nobody has addressed it.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Appeal or pay on Lucky Clover</strong> <code>TD-0678</code> <code>KP-0118</code></td>
+        <td>John Clark, Auzzi Dixon, High Pace</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days hot">2</td>
+        <td>John asked for 5:30 on Friday; you told him to send it instead. <strong>He asked for twenty minutes and got an email thread.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Say who pulls the Paychex audit trail before Tuesday</strong> <code>TD-0679</code> <code>KP-0119</code></td>
+        <td>Demetria Loukas</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>You accepted her Tuesday meeting. The open question is not the meeting, it is that <strong>the person running the reports is the person whose access is in question.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Direct accounting on the journal entry fix</strong> <code>new</code></td>
+        <td>Jon Wyss, then Sony and accounting</td>
+        <td class="num-cell">2026-09-20</td>
+        <td class="days">0</td>
+        <td>Jon's, at 00:20 ET today: <em>"Can you direct them as to what needs to be done so this is corrected. We have to present the problem and the fix."</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cambridge Citrin bills</strong> <code>new</code></td>
+        <td>Jon Wyss and David Berman</td>
+        <td class="num-cell">2026-09-11</td>
+        <td class="days hot">9</td>
+        <td>Jon's, at 00:24 ET today: <em>"Don't forget about this."</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Rule on Leslie's MHVillage card limit at $7,500</strong> <code>TD-0682</code></td>
+        <td>Leslie Croft</td>
+        <td class="num-cell">2026-09-19</td>
+        <td class="days">1</td>
+        <td>You asked <em>"What card is this on?"</em> at 10:42 ET. <strong>The answer is already in this Brain</strong> — the Ramp virtual card you created for her and Melanie on 2026-08-27 so it would not hit their individual spend. Only the $7,500 decision is actually open.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Insurance, timing and an arborist report on the Brunswick tree</strong></td>
+        <td>Natalie Magurne</td>
+        <td class="num-cell">2026-09-19</td>
+        <td class="days">1</td>
+        <td>Yours, 14:41 ET: <em>"Did we let insurance know. When did this happen? Do we have a real arborist report."</em> <strong>Two of the three answers were no.</strong></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Ninety days to close Bedrock and A2Z all the way down</strong> <code>CM-35</code></td>
+        <td>Citrin Cooperman, and behind them the whole LP base</td>
+        <td class="num-cell">2026-09-17</td>
+        <td class="days">3</td>
+        <td>Yours, 15:48 ET: <em>"we have 3 months to close them all the way down for final K1s."</em> <strong>Nothing in this Brain defines what done means</strong>, so the clock has no finish line attached to it.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Find the older Origins documents</strong></td>
+        <td>Karen Doner and Jon</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>Yours, 18:11 ET: <em>"We will find those I am sure. Just have to go back further."</em></td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+      <tr>
+        <td><strong>Stop unprompted sends to Citrin and wait</strong></td>
+        <td>Lisa Timbrook and Tim McNamara</td>
+        <td class="num-cell">2026-09-18</td>
+        <td class="days">2</td>
+        <td>Yours, 18:33 ET: <em>"Last unprompted email I will wait for your questions."</em> <strong>Recorded as a commitment because it binds you, not them</strong> — the next move on that thread is theirs by your own statement.</td>
+        <td><span class="chip c-ver">verified</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>What everyone is working on</h2>
+  <p class="deck">One block per person who appears substantively in the fortnight, then the externals. Performance and personnel content is deliberately absent under guardrail 7, and no compensation figure appears anywhere under guardrail 9.</p>
+
+  <div class="person">
+    <h3>Jon Wyss</h3>
+    <p class="role">CIO &amp; Co-Founder &middot; Miami &middot; acquisitions, asset management, capital markets</p>
+    <ul>
+      <li><strong>At sea until midweek</strong>, having boarded from an airport on 09-18. He signs last behind all nine For Signature documents, which is why that queue cannot clear without him.</li>
+      <li>Ran the Uniti rollout board through the weekend and shipped the 09-19 edition covering two days because no board went out Friday.</li>
+      <li>Committed roughly $7,000 of Gunster aerial imagery on 09-15 for Clearwater and Titusville. Pushed Charles Cimaglia twice for the finance-seat folder access grid.</li>
+      <li>Negotiated the Silver Breeze second 12-month extension to a 2026-12-01 maturity, same terms, same documents. Told the lender the Second Mod would reach her Monday.</li>
+      <li><strong>Two things came to you from him overnight into today</strong>, both forwards with one line attached: the Cambridge Citrin bills and the journal entry fix.</li>
+      <li>Wrote to you and Karen Doner on 09-19 20:48 ET about how the accounting function is being directed. <em>Carried at state level only; the substance is deliberately not recorded here or on any register.</em></li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Natalie Magurne</h3>
+    <p class="role">Director of Property Operations &middot; your operating right hand</p>
+    <ul>
+      <li><strong>Holding the Brunswick tree incident and waiting on you</strong> for two answers since 09-19 10:46 ET: notify the carrier, and whether she engages an attorney. She also flagged that a bigger tree sweep may be needed this year.</li>
+      <li>Answered the Massachusetts security deposit and application fee points inside four minutes on 09-17. <strong>The entrance fee is the half nobody picked up.</strong></li>
+      <li>Opened the TreeIQ relationship with National Pro Services on 09-19 and asked for the Georgia park reports.</li>
+      <li>Routed the Massachusetts RAFT notice at American over the weekend with Melanie; it resolved inside a minute.</li>
+      <li>Carrying the Posner claim-set change at Whispering Pines, the Palm Spring Estates purchaser, and the portfolio mould pattern in new homes she named on 09-11.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>David Berman</h3>
+    <p class="role">Corporate Controller</p>
+    <ul>
+      <li>Traced the $117,000 double-payment flag to a single $235,000 invoice on 09-15 and closed it inside two hours. <strong>The project being over budget is the open half and nobody owns it.</strong></li>
+      <li>Asked twice whether the two Parakeet BOA accounts ending 8422 and 4261 are shut. <code>TD-0651</code> moved rather than closed: his 09-16 plan is to shut the account and open new Home Sales accounts in JPM Access.</li>
+      <li>Chased an audit DocuSign for a letter that had already gone signed, because your 09-16 15:02 ET reply dropped him from the recipients.</li>
+      <li>Off and on through Yom Kippur Monday 09-21, told to eight people on 09-20 09:19 ET.</li>
+      <li><em>His transition and the accounting-seat matter are live and are recorded at state level only. Guardrails 7 and 9.</em></li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Demetria Loukas</h3>
+    <p class="role">Human Resources &middot; reports to you</p>
+    <ul>
+      <li><strong>Told both founders in writing on 09-18 that employee records are changing in Paychex without her making the changes</strong>, and that she had already contacted Paychex herself. Her words: <em>"this is not an isolated episode."</em> <code>KP-0119</code></li>
+      <li>Meeting set for Tuesday. The unanswered question is who pulls the vendor audit trail, since her own reports answer accuracy but not authorship.</li>
+      <li>Waiting on hire approvals from you and Jon since 09-17, currently held behind the payroll review.</li>
+      <li>Lost visibility into the Parakeet workers compensation breakdown when Baldwin took over the brokerage; <strong>nobody noticed until she said so.</strong> <code>TD-0652</code></li>
+      <li>Toast locked her account overnight on 09-18 and Justin Hults had to be provisioned to submit payroll at all.</li>
+      <li>Reported on 09-18 that she has had no reply to a documentation request or its follow-up.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>John Clark</h3>
+    <p class="role">Director of Construction</p>
+    <ul>
+      <li><strong>Forwarded the $179,200 Lucky Clover change order on 09-18 17:54 ET, eight days after High Pace sent it</strong>, with <em>"Had hoped to discuss this during the week but totally fell off the line."</em> He asked for twenty minutes and did not get them.</li>
+      <li>Confirmed on 09-14 that no Cavco trim-out invoices had ever been submitted for payment, after Cavco called Leslie about being unpaid.</li>
+      <li>Owes Melbourne the Eau Gallie site plan on current aerial imagery plus the city's outstanding list.</li>
+      <li>Holds the Fox Creek decision conversation, routed to him by counsel rather than to HR.</li>
+      <li><strong>Named in <code>KP-0121</code></strong>: Natalie does not believe an arborist assessment was done before tree work at Brunswick. Stated as her belief, not as fact.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Zach Schwartz</h3>
+    <p class="role">Director of Asset Management &amp; Acquisitions &middot; Jon's right hand</p>
+    <ul>
+      <li>Put a <strong>hard 9/30 deadline on the Lucky Clover paperwork</strong> on 09-18, which sits inside the change-order invoice clock.</li>
+      <li>Asked for another week on Quickbase before calling an intervention, after it escalated to you, him and Natalie on 09-18 12:48 ET. Two discovery sessions are booked this week.</li>
+      <li>On the JREF I and JREF II combined portfolio sale thread with Jadian.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Leslie Croft</h3>
+    <p class="role">Director of Sales &amp; Marketing</p>
+    <ul>
+      <li>Sent Triad the missing inventory list on 09-19 07:52 ET with community and lot numbers against most of it. <strong>The clearest piece of finished work in the back half of the window.</strong></li>
+      <li>Asked for the MHVillage card limit to go to $7,500 after exceeding it on open houses. Waiting on your ruling.</li>
+      <li>Working the MAV pipeline build with Auzzi; a second weekly call is being added.</li>
+      <li>Raised the Southgate mould in two new Skyline homes at high importance on 09-11 and pointed it at the manufacturer.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Auzzi Dixon</h3>
+    <p class="role">Construction / capex &middot; grant-facing</p>
+    <ul>
+      <li>Holds the Brevard SOIRL thread with the county and Gunster, and would be the one to appeal the grant agency on Lucky Clover if that is the route.</li>
+      <li>Sent the FDEP Wastewater Clearance Brevard for your signature on 09-18; it is still unsigned in For Signature.</li>
+      <li>Building the multi-funnel pipelines with MAV alongside Leslie.</li>
+      <li><strong>Named in the open question nobody has answered</strong>: four people sit around the Lucky Clover grant and this Brain cannot say which of them the agency would call.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Melanie Sanchez-Soto</h3>
+    <p class="role">Administration, titles, licensing</p>
+    <ul>
+      <li>Waiting four days on the Georgia sales tax decision for Parakeet Homes II GA LLC and Auburn Ridge MHC LLC. Without it Florida Fast Title pays transfer tax on every title.</li>
+      <li>Found on 09-18 that Shirley's DBPR P2 prospectus was approved back in early August and nobody here knew. <strong>A gap that closed itself.</strong></li>
+      <li>Handled the American RAFT access question over the weekend: Kiara already has the main account and does not need a new one.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Moe Mehmood</h3>
+    <p class="role">Finance</p>
+    <ul>
+      <li>On the JREF I and II financing-related cash flows workstream, and on 09-19 17:27 ET wrote to defuse a misread: <em>"I was not suggesting that Daniel had done anything incorrectly… I did not want to duplicate work he may have already completed."</em></li>
+      <li>Confirmed the $250,000 pending release in JPM on 09-17 that became the 21st escrow wire.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Albert Gano</h3>
+    <p class="role">SharePoint / Birdcage migration</p>
+    <ul>
+      <li><strong>His laptop is gone</strong> and he said on 09-16 he would buy a replacement himself. <code>TD-0671</code>. Nothing says whether he did.</li>
+      <li>Owns the Birdcage migration, which is on hold behind the tenant running at roughly 274% of its SharePoint storage entitlement.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Kiara Colon and the Massachusetts field team</h3>
+    <p class="role">On-site &middot; American, Monson, Whispering Pines</p>
+    <ul>
+      <li>Worked a resident heat complaint in person on 09-19 evening, offered two space heaters which were refused, and arranged a plumber for the next day under a court arrangement. <strong>Handled correctly and documented in writing the same night.</strong> No resident name is recorded here.</li>
+      <li>Three communities carry the Chapter 93A claim, the entrance fee question and now a RAFT action-required notice.</li>
+    </ul>
+  </div>
+
+  <h3>Externals</h3>
+
+  <div class="person">
+    <h3>Citrin Cooperman</h3>
+    <p class="role">Accountants &middot; Lisa Timbrook, Tim McNamara, Jared Kulbick</p>
+    <ul>
+      <li>Cleared five returns on the 9/15 deadline with you. Now amending the A2Z ND Portfolio Partners 2024 return because OPR's 2025 beginning capital will not tie.</li>
+      <li><strong>Holding the ninety-day Bedrock and A2Z wind-down</strong> you opened on 09-17, and your four technical positions, which you asked them to read before any catch-up entry is booked.</li>
+      <li>Waiting on you for the $165,000 recharacterisation and the $311,000 of Consulting.</li>
+      <li>Received trial balances and general ledgers from you across 09-18 evening. By your own statement the next move is theirs.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Karen Doner &middot; Doner Law</h3>
+    <p class="role">Counsel</p>
+    <ul>
+      <li>Recommended a Fox Creek course of action twice on 09-16 and moved the decision to John Clark.</li>
+      <li>Held a 14:00 ET call on 09-18 and asked you and Jon for help assembling a factual basis. Material went across Friday and Saturday; <strong>her confirmation that it is enough has not come.</strong> <code>CM-36</code></li>
+      <li>On the Origins document search with you and Jon.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Robert Kraus &middot; Kraus and Hummel</h3>
+    <p class="role">Massachusetts counsel</p>
+    <ul>
+      <li><strong>Has now stated in writing twice that the entrance fee is <em>"completely illegal"</em></strong> and that security deposits are held contrary to the separate funds statute, adding <em>"as I wrote yesterday"</em>. Three communities, all already in litigation. <code>KP-0117</code></li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>21st Mortgage &middot; Greg Valentine, Jon Lancaster, Merrick Snider</h3>
+    <p class="role">Floorplan lender</p>
+    <ul>
+      <li>$250,000 escrow wire released 09-17 after Lancaster asked a second time. <strong>Receipt by 21st is not evidenced anywhere.</strong></li>
+      <li>Snider still waiting on inventory-home set-up statuses, four days, and on an answer to the Applegate homes-on-wheels finding.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Crystal View Capital &middot; Matt Ricciardella</h3>
+    <p class="role">Lamberton Lake buyer</p>
+    <ul>
+      <li>Sent the signed PSA 09-18 19:55 ET, then the Word version at 16:39 ET on your request. It is with Woods Oviatt.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>High Pace Construction &middot; Mark Doucette</h3>
+    <p class="role">Rehabs and sitework</p>
+    <ul>
+      <li>Hunter Springs confirmed at $30,000 a home. <strong>No kickoff has ever appeared in For Signature.</strong></li>
+      <li>Sent the Lucky Clover change orders on 09-10 and put his own funding suggestion in writing: appeal the granting agency for unforeseen expenses.</li>
+      <li>Reported on 09-16 that DERM appears to be signing off on the Redlands drainfield permit. Not yet in hand.</li>
+    </ul>
+  </div>
+
+  <div class="person">
+    <h3>Others active in the window</h3>
+    <p class="role">Short form</p>
+    <ul>
+      <li><strong>Laurence Brokaw</strong> — sending documentation unprompted on the Dune water metering question; you told him on 09-18 you would check the file size on the largest attachment.</li>
+      <li><strong>Adam Freedman, Post REgroup</strong> — asked twice for the Mayflower deposit reconciliation and said in writing they are not withholding.</li>
+      <li><strong>Baldwin Group</strong> — management liability call Monday 16:00 ET. <em>They are the natural place to ask what first notice of loss actually requires.</em></li>
+      <li><strong>Charles Cimaglia</strong> — sent raw data files rather than the folder access grid Jon asked for twice.</li>
+      <li><strong>Quickbase</strong> — escalated on 09-18; two discovery sessions booked this week.</li>
+      <li><strong>Uniti, RentViewer, Cavco, Champion, Rillet, Rent Manager</strong> — all carry standing weekly or booked slots this week. See section 10.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>Everything that might still be a to-do</h2>
+  <p class="deck">Grouped by domain, one line each, with source and confidence. Not filtered for importance. This is the sweep's own tail; the full 1,334-row enumeration lives on the open board.</p>
+
+  <h3>Property and Operations</h3>
+  <ol class="tail">
+    <li><strong>The Brunswick tree</strong> — carrier not notified as of 09-19 17:11 ET, no arborist report, couple in the press. <code>TD-0681</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Tree work portfolio-wide with no arborist assessment on file</strong>, and nobody can say at how many communities. <code>KP-0121</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Massachusetts entrance fee</strong> — still being collected by default at Monson, American and Whispering Pines. <code>TD-0673</code> <code>KP-0117</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>RAFT action-required notice at American</strong>, reminder one, landed Saturday. <code>PF-0494</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Palm Spring Estates purchaser</strong> being told she inherited the previous occupants' arrears — three days, no written reply to her. <code>PF-0492</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Posner claim set at Whispering Pines changed</strong> — punitive damages, retaliation, two civil theft counts in; title and deed count out. <code>PF-0491</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Mould in new homes is a portfolio pattern</strong>, and the fix Natalie named is a thermostat setting nobody has on a form. <code>PF-0489</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Southgate: mould in two new Skyline homes</strong>, pointed at the manufacturer. <code>PF-0488</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>River Oaks water test and portfolio-wide notification</strong> if the source is community-wide. <code>PF-0485</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>River Oaks: are other pedestals in the same condition, and was an incident report filed</strong> on the 2026-08-17 injury. <code>PF-0486</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Belle Haven BELL-41</strong> keyed with all six lease-option-purchase deal term fields blank. <code>PF-0490</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Trespass protocol and the Great Oak boil-water paperwork still have no owner.</strong> <code>TD-0329</code> <code>TD-0330</code> <span class="chip c-ss">single</span></li>
+    <li><strong>Auburn rent control meeting</strong> — a call Natalie owes and a trip never booked. <code>CM-23</code> closed on <em>"will go last minute if needed"</em>; recorded because the meeting date has passed. <span class="chip c-inf">inferred</span></li>
+  </ol>
+
+  <h3>Construction and Supply Chain</h3>
+  <ol class="tail">
+    <li><strong>Lucky Clover: appeal the grant or pay $179,200.</strong> <code>TD-0678</code> <code>KP-0118</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Lucky Clover field conditions</strong> — connections built at four to twenty times the drawn distance, septic decommissioning never in the original scope. <code>PF-0493</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Who supplied the 5ft-from-curb drawing</strong> that the change order is priced against. Runs beside the appeal decision either way. <span class="chip c-inf">inferred</span></li>
+    <li><strong>Brevard SOIRL deadline of 2026-09-25 is four days out and nothing sources it.</strong> <code>KP-0106</code> <code>TD-0621</code> <span class="chip c-crit">uncorroborated</span></li>
+    <li><strong>Silver Breeze permit still not issued</strong>, construction 8 to 10 weeks behind it, against a $500,000 sewer tie-in and 7% occupancy. <code>PF-0487</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Hunter Springs kickoff at $30,000 a home has never reached For Signature</strong> despite being confirmed on 09-15. <code>TD-0662</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Redlands drainfield permit</strong> — DERM appears to be signing off, not in hand. <span class="chip c-ss">single</span></li>
+    <li><strong>Melbourne Eau Gallie overlay</strong> plus the city's outstanding list. <code>TD-0670</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>21st inventory set-up statuses and the Applegate homes on wheels.</strong> <code>TD-0668</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Cavco trim-out invoices</strong> — the 13-home invoice first sent by the plant on 2026-08-10 and never submitted for payment; Jason Calvert resending park-specific. <span class="chip c-ver">verified</span></li>
+    <li><strong>No threshold exists anywhere above which a change order goes straight to a founder.</strong> The eight-day Lucky Clover gap was nobody breaking a rule. <span class="chip c-ver">verified</span></li>
+    <li><strong>Nine For Signature documents</strong>: two Sea Shells, Windmill, Valley Oaks, Orange Blossom, two Rolling Wood infills, Tradewinds, and the FDEP Brevard clearance. <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <h3>Finance, Tax and Accounting</h3>
+  <ol class="tail">
+    <li><strong>$165,000 A2Z Community Partners recharacterisation and $311,000 of Consulting.</strong> <code>TD-0657</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>A2Z ND Portfolio 2024 return is being amended</strong> because OPR's 2025 beginning capital will not tie. Changes a filed year. <span class="chip c-ver">verified</span></li>
+    <li><strong>The $100,000 Evergreen distribution journal entry question</strong> was overtaken by the filing, never answered. <code>TD-0638</code> <code>KP-0084</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Account 44201 "Beginning Balance" on several Parakeet Origins entities</strong> looks like a mistitled revenue account; Citrin asked before the returns went. <span class="chip c-ver">verified</span></li>
+    <li><strong>Journal entry correction</strong> — Jon wants the problem and the fix presented together. <span class="chip c-ver">verified</span></li>
+    <li><strong>Cambridge Citrin bills</strong>, nine days, re-raised by Jon today. <span class="chip c-ver">verified</span></li>
+    <li><strong>Mayflower deposit reconciliation</strong>, asked twice. <code>TD-0676</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Two Parakeet BOA accounts 8422 and 4261</strong> — plan stated, closure never confirmed, and 4261 showed a returned $1,022.18 payment on a negative balance. <code>TD-0651</code> <code>CM-33</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Two Fannie annual certifications for Lamberton Lake and Mayflower Hills</strong> — the sixth cycle of the same ask, now parked as a signer question. <code>PD-49</code> <code>CM-29</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Line capacity across all three floorplan lines has never been produced.</strong> <code>KP-0107</code> <code>TD-0622</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>46 duplicate lender submissions and 28 orders the lenders were never told about</strong> mean the capacity being committed against is misstated by an unknown amount. <code>CM-15</code> <span class="chip c-ss">single</span></li>
+    <li><strong>MHC uncollected AR of roughly $5,000,000 has no schedule behind it.</strong> <code>CM-31</code> <code>KP-0101</code> <span class="chip c-ss">single</span></li>
+    <li><strong>AvidXchange invoice unassigned longest: $108,919.00</strong>, A &amp; A Development, dated 2026-04-02, still in Pending Workflow Assignment. <code>TD-0609</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>The Bedrock and A2Z wind-down has no definition of done</strong> against a ninety-day clock you set. <code>CM-35</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Northwest Registered Agent card decline for A2Z Shasta Partners LLC</strong>, untouched, now parked. <code>PD-49</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>How many bonds "several others" is</strong>, plus whether the Florida $50,000 bond was paid twice. <code>TD-0537</code> <code>TD-0604</code> <span class="chip c-ss">single</span></li>
+    <li><strong>Rillet demo Friday</strong> — a ledger replacement conversation running while the current close is mid-rebuild. <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <h3>Legal and Insurance</h3>
+  <ol class="tail">
+    <li><strong>First notice of loss on the Brunswick tree</strong> — nothing in this Brain names who owns it or what the window is. <span class="chip c-ver">verified</span></li>
+    <li><strong>Massachusetts entrance fee called illegal in writing, twice.</strong> <code>KP-0117</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Security deposits held contrary to the separate funds statute</strong>, same counsel, same notice. Natalie is running the SD reports. <span class="chip c-ver">verified</span></li>
+    <li><strong>Gallagher v. Bedrock MHC Fund II GP, LLC</strong> — live California litigation with a December hearing. <code>CM-28</code> <span class="chip c-ss">single</span></li>
+    <li><strong>Kippy dispute</strong> — defaulted note, roughly $1M of unpaid management fees, three portfolio communities inside it, plus Crystal Acres and Hunter Springs. <code>CM-24</code> <span class="chip c-ss">single</span></li>
+    <li><strong>Royal Oaks third amendment names a lot Parakeet no longer controls</strong> — five lots, not six. <code>TD-0678</code> (second allocation) <span class="chip c-ver">verified</span></li>
+    <li><strong>E&amp;O and D&amp;O governance gap with Jadian.</strong> <code>TD-0530</code> <code>CM-17</code> <span class="chip c-ss">single</span></li>
+    <li><strong>Demetria's workers compensation visibility</strong>, lost at the Baldwin transition. <code>TD-0652</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Nothing records a step that checks for access lost at a vendor transition</strong>, and the same loss is available at every one. <span class="chip c-inf">inferred</span></li>
+    <li><strong>Rent Manager cancellation document</strong> — a DocuSign reminder arrived 09-16 and nobody knows what it cancels. <code>TD-0665</code> <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <h3>Systems and AI Build</h3>
+  <ol class="tail">
+    <li><strong>The a2zcp and Bedrock mailbox, fourteen routines dark.</strong> <code>KP-0116</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>SharePoint tenant at 6,567.38 GB against a 2,394 GB entitlement</strong>, roughly 274%, and it is stopping people working. <code>KP-0100</code> <code>KP-0111</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Birdcage migration on hold behind it</strong>, and Albert is owed the note saying so. <code>TD-0580</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Three to-do IDs allocated twice on 09-18</strong>, third collision of the same shape in four days; patched, not fixed. <code>KP-0120</code> <span class="chip c-ver">verified</span></li>
+    <li><strong><code>TD-0589</code> still sits on two rows</strong> and has been asked about six times. <code>KP-0103</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Nothing reserves an ID range or notices another session mid-write.</strong> <span class="chip c-ver">verified</span></li>
+    <li><strong>Four Plaud recordings unreadable</strong>, roughly two hours thirty-eight minutes of meetings. <code>KP-0112</code> plus the 09-15 recording not yet on that row. <span class="chip c-ver">verified</span></li>
+    <li><strong>The morning brief reply buttons have taken no answer since 2026-09-10.</strong> <code>KP-0113</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>The clock fault has fired six times</strong>, most recently caught on 09-19 before anything was written. <code>KP-0115</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Daily operating reports shipping on stale Rent Manager data</strong>, third occurrence announcing itself in its own subject line. <code>KP-0109</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Rent Manager controls switched off 09-09 with monitoring assigned in a chat the monitor is not in.</strong> <code>KP-0108</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>The two dashboards the team actually looks at do not touch the MCPs and nobody owns either.</strong> <code>KP-0105</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>The RentViewer warehouse exposes eleven models; this Brain worked from five.</strong> <code>KP-0104</code> <span class="chip c-ver">verified</span> — <em>re-verified live this run, the schema returns all eleven.</em></li>
+    <li><strong>Quickbase escalated and is one week from an intervention call.</strong> <span class="chip c-ver">verified</span></li>
+    <li><strong>A2Z cleanup on parakeetcommunities.com</strong> — down to the SMS copy and one PDF tied to Rent Manager; Jon went direct at 09-17. <code>TD-0645</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Rent Manager company name on SMS and phone disclosures</strong> — the reason for Tuesday's call with John Hemelgarn. <span class="chip c-ver">verified</span></li>
+    <li><strong>Albert's laptop.</strong> <code>TD-0671</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>ClickUp renewal at $4,104 for 18 seats, 2026-11-09</strong>, while ClickUp is the control plane for a restructure that is on hold. <code>TD-0630</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>MAV to warehouse migration checks in 2026-09-25.</strong> <code>CM-33</code> <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <h3>People and HR</h3>
+  <ol class="tail">
+    <li><strong>Employee records changing in Paychex without HR making the changes.</strong> <code>KP-0119</code> <code>TD-0679</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Who pulls the Paychex audit trail</strong> — not the person whose access is in question. <span class="chip c-ver">verified</span></li>
+    <li><strong>Hire approvals</strong>, held behind a payroll review that grew a second workstream. <code>TD-0675</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Missing SOC codes on Paychex company 2215</strong>, still unassigned, now parked. <code>PD-49</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Fox Creek decision</strong> — three people waiting on one conversation. <code>TD-0672</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Whether a functional director or HR owns a site employee decision</strong> — counsel routed one each way in two days. <span class="chip c-inf">inferred</span></li>
+    <li><strong>Toast locked HR's account</strong> and payroll submission had to be re-provisioned to Justin Hults. <span class="chip c-ver">verified</span></li>
+    <li><strong>An employee separation matter is live</strong> with counsel and both founders. <em>Carried at state level only. No terms, no names, no figures, guardrails 7 and 9.</em> <span class="chip c-ver">verified</span></li>
+    <li><strong>The accounting seat matter is on a decided course</strong> and counsel is waiting on you and Jon. <code>CM-36</code> <em>Same treatment.</em> <span class="chip c-ver">verified</span></li>
+    <li><strong>Leslie is still not on Triad's notification list</strong> after asking twice; now parked. <code>PD-49</code> <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <h3>Capital, Deals and Dispositions</h3>
+  <ol class="tail">
+    <li><strong>Ridaa Murad, 33% Bedrock Group partner, and his 2026-09-30 date.</strong> <code>PD-53</code> <code>CM-26</code> <span class="chip c-inf">inferred</span></li>
+    <li><strong>Six wind-down questions from John B. Davies, unanswered since 2026-04-30.</strong> <code>CM-27</code> <span class="chip c-ss">single</span></li>
+    <li><strong>The Fund II investor portal failed for at least five named LPs</strong> in the week the K-1s were released through it. <code>KP-0110</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Replies from the Bedrock addresses never reach the Gmail Sent folder</strong>, so a served LP and an ignored one look identical from here. <span class="chip c-ver">verified</span></li>
+    <li><strong>2023 and 2024 K-1s for EquityMultiple.</strong> <code>TD-0661</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Kirsten's book value or the 2025 financials for GTBA.</strong> <code>TD-0660</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Silver Breeze Second Modification</strong>, promised for Monday. <code>TD-0674</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Lamberton Lake PSA with Woods Oviatt.</strong> <code>TD-0680</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Mayflower Hills buyer financing deadline moved to 2026-10-19.</strong> <span class="chip c-ver">verified</span></li>
+    <li><strong>JREF I and JREF II combined portfolio sale</strong> is live with Jadian and counsel. <span class="chip c-ver">verified</span></li>
+    <li><strong>Brokaw / Dune</strong> — whether residents can be billed for water meter monitoring under Levy County PSC jurisdiction. <code>TD-0632</code> <code>CM-24</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Palm Spring Estates purchaser</strong> — a new owner escalating by hand. <code>PF-0492</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Shirley MHP cost segregation engagement letter</strong> — Source Advisors still needs to know whether it goes to you or Jon. <code>TD-0631</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Ozzie's role comes back at quarter end</strong>, deferred rather than decided. <code>CM-32</code> <span class="chip c-ss">single</span></li>
+  </ol>
+
+  <h3>Personal and Admin</h3>
+  <ol class="tail">
+    <li><strong>Fogle's Septic estimate 73451</strong> — approved on 09-18 with <em>"Looks good Rick thank you"</em>. Closed, listed for completeness. <span class="chip c-ver">verified</span></li>
+    <li><strong>Leslie's MHVillage card limit at $7,500</strong> — your own question is already answered in this Brain. <code>TD-0682</code> <span class="chip c-ver">verified</span></li>
+    <li><strong>Bullis lacrosse Wednesday and two BLC games Saturday</strong>, plus the Bigfoot clinic today. On the calendar, no action. <span class="chip c-ver">verified</span></li>
+  </ol>
+
+  <div class="note">
+    <h4>The length of the tail, which is itself a finding</h4>
+    <p><strong>This sweep's tail is 88 items across eight domains.</strong> Last week's equivalent, read off the daily closes, ran between 13 and 20 items a night — but those are a night's new ground, not a fortnight's standing list, so the two are not comparable and no trend is claimed from them.</p>
+    <p><strong>The comparable number is the register total, and it has grown.</strong> On 2026-09-01 this Brain recorded 808 rows across the six registers. Today 1,426 IDs have been issued and roughly 1,334 read as open by a deliberately conservative test that only counts a row closed when a heading or a bold marker says so. <span class="chip c-inf">inferred</span> <strong>Prose closures are not caught by that test, so 1,334 is an upper bound and the true open count is lower.</strong> Even allowing for that, the direction is unambiguous: <strong>roughly 618 new IDs in nineteen days against 92 detectably closed.</strong> Work is being captured far faster than it is being cleared, which is what a capture system is supposed to do in its first month, and it is also the thing that stops being healthy if it continues past one.</p>
+    <p><em>A row count across six registers is a count of rows and not of distinct problems.</em> They legitimately overlap: Lucky Clover alone sits on <code>TD-0678</code>, <code>KP-0118</code> and <code>PF-0493</code> at once.</p>
+  </div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>Safety and compliance</h2>
+  <p class="deck">Its own section because of the stakes. Physical safety, public health, injuries, code and permit exposure. Owner or explicitly no owner, days open, last evidence of movement.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Item</th><th>Owner</th><th>Days open</th><th>Last evidence of movement</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Tree destroyed a resident couple's car at Brunswick</strong>; couple have gone to the press. Carrier not notified, no arborist report. <code>TD-0681</code></td>
+        <td>Natalie Magurne, blocked on you</td>
+        <td class="days hot">3</td>
+        <td>2026-09-19 10:46 ET. <strong>Nothing since, by either party.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Tree work performed with no arborist assessment on file</strong>, portfolio-wide, count unknown. <code>KP-0121</code></td>
+        <td class="num-cell"><strong>NO OWNER</strong></td>
+        <td class="days hot">1</td>
+        <td>2026-09-19. Natalie offered to call an arborist. TreeIQ reports requested from National Pro Services the same day.</td>
+      </tr>
+      <tr>
+        <td><strong>Massachusetts entrance fee, called illegal in writing twice</strong>, at three communities already carrying a Chapter 93A claim. <code>KP-0117</code> <code>TD-0673</code></td>
+        <td>You, then Natalie</td>
+        <td class="days hot">3</td>
+        <td>2026-09-17 08:46 ET, the deposit half only. <strong>The entrance fee half has had no movement from anyone.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Security deposits held contrary to the separate funds statute</strong>, same notice</td>
+        <td>Natalie Magurne</td>
+        <td class="days">3</td>
+        <td>2026-09-17 08:46 ET. SD reports requested from Liznette Santiago the same morning.</td>
+      </tr>
+      <tr>
+        <td><strong>Resident without heat in Massachusetts</strong>; refused two space heaters, plumber arranged next day under a court arrangement</td>
+        <td>Kiara Colon, with Liz and Natalie copied</td>
+        <td class="days">1</td>
+        <td>2026-09-19 23:17 ET, resident confirmed <em>"I will be here all day."</em> <strong>Handled in person and documented in writing the same night.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Mould in brand new homes, portfolio pattern</strong>; the fix is a thermostat setting that appears on no form. <code>PF-0489</code> <code>PF-0488</code></td>
+        <td>Leslie Croft raised it; <strong>no owner on the pattern</strong></td>
+        <td class="days hot">9</td>
+        <td>2026-09-11 16:25 ET. Nothing since.</td>
+      </tr>
+      <tr>
+        <td><strong>River Oaks: asserted fall injury from extension cords</strong> during a month of half electrical service; two abatement requests. <code>PF-0481</code> <code>PF-0486</code></td>
+        <td>Natalie Magurne, under Jon's 09-07 instruction</td>
+        <td class="days hot">34</td>
+        <td>2026-09-08 19:04 ET, <em>"Guys I'm on it."</em> <strong>Whether an incident report was ever filed is still unanswered.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>River Oaks water test and community-wide notification</strong> if the source is not isolated. <code>PF-0485</code></td>
+        <td>Natalie Magurne</td>
+        <td class="days hot">13</td>
+        <td>2026-09-07 18:59 ET, Jon's instruction 5 of 6. No result recorded.</td>
+      </tr>
+      <tr>
+        <td><strong>Great Oak boil-water paperwork</strong>. <code>TD-0330</code></td>
+        <td class="num-cell"><strong>NO OWNER</strong></td>
+        <td class="days hot">20+</td>
+        <td>Unassigned since it opened. Asked twice on the closes.</td>
+      </tr>
+      <tr>
+        <td><strong>Trespass protocol</strong>. <code>TD-0329</code></td>
+        <td class="num-cell"><strong>NO OWNER</strong></td>
+        <td class="days hot">20+</td>
+        <td>Unassigned since it opened.</td>
+      </tr>
+      <tr>
+        <td><strong>Applegate: 21st inspection found inventory homes still on wheels and not set</strong>. <code>TD-0668</code></td>
+        <td>John Clark / you</td>
+        <td class="days hot">4</td>
+        <td>2026-09-16 12:26 ET. Unmoved.</td>
+      </tr>
+      <tr>
+        <td><strong>FDEP Wastewater Clearance, Brevard</strong> — sent for your signature, unsigned</td>
+        <td>You</td>
+        <td class="days">2</td>
+        <td>2026-09-18 18:31 ET. Still sitting in For Signature.</td>
+      </tr>
+      <tr>
+        <td><strong>Lucky Clover septic decommissioning was never permitted in the original scope</strong>. <code>PF-0493</code></td>
+        <td>Auzzi Dixon / High Pace</td>
+        <td class="days hot">10</td>
+        <td>2026-09-10 23:39 ET, from the contractor. Reached founders 09-18.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note stop">
+    <h4>The pattern under the incidents</h4>
+    <p>Three of the rows above carry <strong>NO OWNER</strong>, and two more are owned only in the sense that somebody raised them. <strong>Nothing in this Brain names who owns first notice of loss or what the window is</strong>, which means nobody was late against a standard on the Brunswick tree, because there is no standard. The same is true of the change-order threshold. One sentence each — a role and a number of hours, a dollar figure or a percentage of contract — retires both classes permanently, and <strong>Baldwin on Monday at 16:00 ET is the natural place to establish the first one</strong>, because they are the ones who know what the policy actually requires.</p>
+  </div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+  <h2><span class="num">08</span>Money in motion</h2>
+  <p class="deck">Every figure with a decision or a deadline attached. Each reconciles to <code>00-Meta/numbers-ledger.md</code> unless the row says otherwise. Hard rule 3. No individual compensation appears here or anywhere in this document, under hard rule 9.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Amount</th><th>What</th><th>Owner</th><th>Status</th><th>Conf.</th></tr></thead>
+    <tbody>
+      <tr><td class="num-cell">$179,200.00</td><td><strong>Lucky Clover sewer, 128 unit connections at $1,400 each.</strong> Profit and overhead waived. Part of $304,841.00 across three change orders; the other two are absorbed elsewhere.</td><td>You — appeal or pay</td><td>Thirty-day invoice from 2026-09-10, runs to roughly 10 October</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$250,000.00</td><td><strong>21st Mortgage escrow funding</strong></td><td>Closed</td><td>Released 2026-09-17. <strong>Receipt by 21st is not evidenced.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$7,500,000.00</td><td><strong>Triad floorplan line</strong>, up from $4,500,000, plus a $2,000,000 CAP program</td><td>David Berman</td><td>Approved 2026-09-10. <strong>Moved the capacity denominator by $3,000,000 after <code>PD-35</code> was decided without it.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">~$8,900,000</td><td><strong>Bedrock fund-level income pickups never taken at the Fund</strong>, across 2025 sale gains, 2024 Vandemere and Valley View recognitions and 2026 Lambeth and Parkwood gains</td><td>You and Citrin</td><td>Sent to Citrin 2026-09-17 for a read <strong>before</strong> any catch-up entry is booked. These entries move partner capital accounts.</td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">$5,151,983.30</td><td><strong>Tarheel deferred 1031 gains recognised at 2/28/2026</strong> — Cedar Grove $1,913,377.17, Colonial $1,071,639.62, Lambeth $897,160.12, Parkwood $1,269,806.39</td><td>Citrin</td><td>Stated by you to Citrin 2026-09-17. Vandemere's $1,120,199.44 excluded, taken into income 12/31/2024.</td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">~$5,000,000+</td><td><strong>Parakeet MHC uncollected AR</strong>, named as what must be collected to fully fund ongoing infill</td><td>David Berman</td><td><strong>His own approximate figure. No schedule behind it anywhere.</strong> <code>CM-31</code></td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">~$165,000<br>+$311,000</td><td><strong>A2Z Community Partners Miscellaneous Expense to recharacterise, plus Consulting to explain</strong></td><td>You, to Tim McNamara</td><td>Asked 2026-09-15 15:37 ET. Unanswered five days. Top of the entity structure.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$147,831.28</td><td><strong>Key Bank defeasance premium</strong>, 12/30/2025, loan 10222238, net, securities over principal</td><td>Citrin</td><td>Split across the six Fund II ledgers as filed in 2025. Stated by you 2026-09-17.</td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">$108,919.00</td><td><strong>A &amp; A Development invoice 3452</strong>, dated 2026-04-02</td><td class="num-cell"><strong>UNASSIGNED</strong></td><td><strong>Still in Pending Workflow Assignment. The longest-unassigned invoice in AvidXchange.</strong> <code>TD-0609</code></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$100,000.00</td><td><strong>A2Z ND Portfolio Evergreen distribution</strong></td><td>You, to Citrin</td><td>Whether it needs a journal entry is <strong>still unanswered</strong>, nine days. Overtaken by the filing.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$500,000.00</td><td><strong>Silver Breeze sewer tie-in</strong></td><td>Auzzi Dixon</td><td>Permit not issued. Construction 8 to 10 weeks behind it. Property at 7% occupancy.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$47,183.00</td><td><strong>Fund II 2025 North Carolina balance due</strong></td><td>Closed</td><td>Authorised by you 2026-09-09. Return signed 09-10.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$30,000/home</td><td><strong>Hunter Springs rehab</strong>, raised from $20,000</td><td>Mark Doucette / John Clark</td><td>Confirmed by you 2026-09-15 17:41 ET. <strong>No kickoff has ever reached For Signature.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">~$7,000</td><td><strong>Gunster aerial imagery</strong>, Clearwater and Titusville, all flights 2007 to 2026</td><td>Jon Wyss</td><td>Committed 2026-09-15, not yet invoiced. <strong>Eau Gallie is not in scope and Melbourne has asked for it.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$15,300.00</td><td><strong>Fund II 2025 New Jersey refund</strong></td><td>Closed</td><td>Confirmed 2026-09-10.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$7,500.00</td><td><strong>Leslie's MHVillage card limit</strong>, up from the current limit on the Ramp virtual card</td><td>You</td><td>Asked 2026-09-19 07:14 ET. One decision, and the card question you asked back is already answered.</td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$4,104.00</td><td><strong>ClickUp renewal, 18 seats</strong></td><td>You</td><td>Renews 2026-11-09. <strong>ClickUp is the control plane for a restructure that is on hold.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$1,022.18</td><td><strong>Returned electronic payment on BOA account 4261</strong>, against a balance of minus $26.48</td><td>David Berman / you</td><td>As of 2026-09-10. <strong>Evidence the account is not dormant while it is being called closed.</strong></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">$400,000.00</td><td><strong>Massachusetts class settlement</strong>, American and Whispering Pines</td><td>Counsel</td><td>Agreed. The rent schedule is the only open issue. <code>CM-20</code></td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">~$1,000,000</td><td><strong>Unpaid management fees inside the Kippy dispute</strong>, on a defaulted note where Parakeet is the lender</td><td>Woods Oviatt / you</td><td>Three portfolio communities inside it, plus Crystal Acres and Hunter Springs. <code>CM-24</code></td><td><span class="chip c-ss">single</span></td></tr>
+      <tr><td class="num-cell">Not established</td><td><strong>Line capacity across CountryPlace, 21st and Triad</strong></td><td class="num-cell"><strong>UNASSIGNED</strong></td><td><strong>The precondition you set on 2026-08-31 and which was never met.</strong> <code>KP-0107</code></td><td><span class="chip c-ver">verified</span></td></tr>
+      <tr><td class="num-cell">Not in ledger</td><td><strong>Cavco trim-out invoices</strong>, 13-home invoice first sent 2026-08-10</td><td>Jason Calvert, resending park-specific</td><td><strong>No dollar amount is stated in any message this Brain has read.</strong></td><td><span class="chip c-ss">single</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section id="s9">
+  <h2><span class="num">09</span>Closed in the last two weeks</h2>
+  <p class="deck">Completed work made visible, with dates and who did it. This is the section that counters the sense of standing still, and this fortnight it is long.</p>
+
+  <h4>The 9/15 filing, which was the largest single piece of it</h4>
+  <ol class="tail">
+    <li><strong>Five returns signed or good to file on the deadline itself.</strong> Founders overnight, Parakeet Origins I GP 08:41 ET, A2Z MH Fund I 12:56 ET, Parakeet Origins Portfolio I 14:02 ET, A2Z ND Portfolio Partners 15:59 ET. <em>Four of these were open questions on the previous night's close and none of them was by the end of the day.</em></li>
+    <li><strong>The Bedrock Fund II 2025 return went draft to signature-ready inside one working day</strong> and was signed 09-10. You authorised the $47,183 North Carolina balance yourself.</li>
+    <li><strong>Eight LPs and partners served K-1s by your own hand</strong> after the portal failed every one of them, keyed to the last four of the tax ID: Koretsky, Scruggs, Buckwalter and Brown on Fund II; Brown, Alpert, Perkins and Sjulsen on A2Z. Brown, Perkins and Sjulsen each acknowledged inside the hour.</li>
+    <li><strong>Four of the five K-1 asks outstanding on Friday 09-11 closed over that weekend</strong>, by you, with nobody chasing.</li>
+    <li><strong>Eight to-do rows closed in one day on 09-15</strong>, the most in any single day of the window.</li>
+  </ol>
+
+  <h4>Money and lenders</h4>
+  <ol class="tail">
+    <li><strong>The $250,000 21st Mortgage escrow wire released 09-17</strong> after the lender asked a second time. You pushed it internally four minutes after Lancaster wrote, and confirmed release at 12:41 ET. <code>TD-0666</code></li>
+    <li><strong>The $117,000 double-payment flag turned out not to be a double payment.</strong> Berman traced it to a single $235,000 invoice inside a $152,000 attachment; Auzzi closed it in writing at 16:47 ET on 09-15: <em>"Resolved."</em></li>
+    <li><strong>The BOA wire question was answered by inverting its premise.</strong> You settled the mechanism as a check into Chase, and the escrow wire still went.</li>
+    <li><strong><code>PD-35</code> decided after nine days</strong>, and the Triad line moved from $4,500,000 to $7,500,000 with a $2,000,000 CAP program approved.</li>
+    <li><strong>Silver Breeze got a second 12-month extension</strong> to a 2026-12-01 maturity, same terms, same documents, seller and lender agreed.</li>
+    <li><strong>Mayflower's buyer moved to a 19 October financing deadline</strong> through counsel, fixing a date that had been open.</li>
+  </ol>
+
+  <h4>Operations, legal and systems</h4>
+  <ol class="tail">
+    <li><strong>The For Signature queue went from 19 items and 18 unread to zero on 09-15, and stayed at zero for three straight days</strong>, with nobody chasing you on it. <code>TD-0646</code>, <code>TD-0649</code> and <code>TD-0664</code> all retired.</li>
+    <li><strong>The audit confirmation letter opened and closed inside four hours on 09-16.</strong> Citrin asked at 10:59 ET naming Eckert Seamans; you answered the substance at 11:09 and returned the signed letter at 15:02.</li>
+    <li><strong>Hunter Springs confirmed at $30,000 a home</strong> one minute after the 09-15 close stopped looking for it.</li>
+    <li><strong>Triad answered the insurance cost-per-home method in writing with a worked example</strong> on 09-18. Half of <code>TD-0677</code> closed.</li>
+    <li><strong>Leslie sent Triad the missing inventory list</strong> on 09-19 07:52 ET with community and lot numbers against most of it.</li>
+    <li><strong>The Lamberton Lake umbrella questionnaire returned and was confirmed by Judi Adams.</strong></li>
+    <li><strong>The Lamberton Lake PSA came back signed from Crystal View</strong>, then in Word on your request, and went to Woods Oviatt inside twelve minutes.</li>
+    <li><strong>Jon waived the second-bid requirement on the River Oaks electrical repair</strong> thirty-six minutes after a close published the question, gave Natalie six numbered actions, and took the sequencing call himself.</li>
+    <li><strong>Shirley's DBPR P2 prospectus turned out to have been approved back in early August.</strong> A gap that closed itself, found by Melanie.</li>
+    <li><strong>The Massachusetts security deposit and application fee questions were answered in four minutes</strong> by Natalie on 09-17, and no application fees are being charged.</li>
+    <li><strong>The American RAFT notice was routed in under a minute</strong> on a Saturday, and Melanie confirmed Kiara already has the account access needed.</li>
+    <li><strong>The resident heat complaint was worked in person the same evening</strong>, a plumber arranged for the next day, and the whole exchange documented in writing that night.</li>
+    <li><strong>Rent Manager answered on account ownership</strong>, unblocking <code>TD-0645</code>, which had been held for exactly that answer.</li>
+    <li><strong>The A2Z cleanup on parakeetcommunities.com is down to two items</strong> from 199 instances.</li>
+    <li><strong>The clock fault was caught before it wrote anything</strong> on 09-19, for the first time in six occurrences, by a check that compares the clock against the newest audit row.</li>
+    <li><strong>The three-strike rule fired for the first time since it was written</strong>, retiring four questions into <code>PD-49</code> rather than letting them nag indefinitely.</li>
+    <li><strong>The Fund II filing and budget week collision that <code>TD-0589</code> was written to warn about did not happen.</strong></li>
+  </ol>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <h2><span class="num">10</span>The week ahead</h2>
+  <p class="deck">Seven days from tomorrow, converted out of UTC to ET, with the commitments and deadlines that land inside them.</p>
+
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>When (ET)</th><th>What</th><th>What lands on it</th></tr></thead>
+    <tbody>
+      <tr><td class="num-cell"><strong>Mon 09-21</strong><br>08:30</td><td>Monday catch-up &amp; week priority planning — Jon</td><td>Jon is at sea until midweek. Cambridge Citrin bills and the journal entry fix both came from him overnight.</td></tr>
+      <tr><td class="num-cell">Mon 09-21<br>10:00</td><td>RentViewer weekly sync</td><td>Ten attendees. <code>KP-0104</code>, the six warehouse models this Brain never recorded.</td></tr>
+      <tr><td class="num-cell">Mon 09-21<br>10:00</td><td>Quickbase discovery session</td><td><strong>Collides with RentViewer.</strong> Quickbase escalated 09-18 and Zach asked for a week before an intervention.</td></tr>
+      <tr><td class="num-cell hot"><strong>Mon 09-21</strong><br>16:00</td><td><strong>Baldwin — management liability</strong></td><td><strong>The insurance conversation, with a live uninsured-notice incident sitting behind it.</strong> Also the natural forum for Demetria's lost workers comp visibility, <code>TD-0652</code>. Berman, Jon and Zach are all on it.</td></tr>
+      <tr><td class="num-cell">Mon 09-21</td><td><em>Standing Acquisitions Transition Call — cancelled</em></td><td>23 people held it. Cancellation is on the calendar.</td></tr>
+      <tr><td class="num-cell">Mon 09-21</td><td><em>Yom Kippur</em></td><td>David Berman on and offline. <strong>You told Post REgroup this is a holiday and the calendar was never cleared.</strong></td></tr>
+      <tr><td class="num-cell">Tue 09-22<br>09:30</td><td>Parakeet Analytics, biweekly — RentViewer</td><td>Zach and Saad.</td></tr>
+      <tr><td class="num-cell">Tue 09-22<br>10:00</td><td>Rent Manager — John Hemelgarn</td><td><strong>The company name on SMS and phone disclosures</strong>, which is the last blocker on <code>TD-0645</code>.</td></tr>
+      <tr><td class="num-cell">Tue 09-22<br>10:00</td><td>Quickbase discovery session</td><td><strong>Collides with Rent Manager.</strong></td></tr>
+      <tr><td class="num-cell">Tue 09-22<br>14:00 / 15:00</td><td>LC/AB/JW then JC/AB/JW weekly check-ins</td><td>Leslie's $7,500 card limit. John Clark's twenty minutes on Lucky Clover, and the Fox Creek decision. <strong>Both of John's open items have a forum here.</strong></td></tr>
+      <tr><td class="num-cell">Tue 09-22</td><td><em>Demetria's Paychex meeting</em></td><td>Set by her, accepted by you. <strong>Who pulls the vendor audit trail is still unanswered.</strong> <code>TD-0679</code></td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>09:00</td><td>ZS/AB/JW weekly check-in</td><td>Lucky Clover 9/30 paperwork deadline, Quickbase, JREF portfolio sale.</td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>10:00</td><td>Weekly Rehabs — High Pace</td><td><strong>Doucette is on this call and the $179,200 decision is his to act on.</strong></td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>11:00</td><td>Champion construction update</td><td>22 attendees across Champion, Cavco and Fleetwood.</td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>14:00</td><td>Parakeet x Uniti implementation</td><td>The rollout board has been running daily.</td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>16:00</td><td>NM/AB/JW weekly check-in</td><td><strong>The tree, the entrance fee, the arborist question, the mould pattern, River Oaks.</strong> Five of this document's safety rows sit with Natalie.</td></tr>
+      <tr><td class="num-cell">Wed 09-23<br>17:00</td><td>Lax practice, Bullis</td><td>&mdash;</td></tr>
+      <tr><td class="num-cell">Thu 09-24<br>09:00</td><td>Quickbase discovery session</td><td>Third session in three days.</td></tr>
+      <tr><td class="num-cell">Thu 09-24<br>10:00</td><td>Parakeet x Jadian weekly</td><td><strong>The E&amp;O and D&amp;O governance gap has been re-pointed at this meeting twice.</strong> <code>TD-0530</code> <code>CM-17</code></td></tr>
+      <tr><td class="num-cell">Thu 09-24<br>16:30</td><td>Finance &amp; Accounting EOS</td><td>Agenda already carries audit, tax, Engie, new monthly close and FP&amp;A. Albert is on it. <strong>Berman's transition sits behind this meeting.</strong></td></tr>
+      <tr><td class="num-cell">Fri 09-25<br>10:00</td><td>Weekly HR — Demetria</td><td>Hire approvals, Paychex, workers comp visibility.</td></tr>
+      <tr><td class="num-cell">Fri 09-25<br>13:00</td><td>Cavco x Parakeet weekly</td><td>The trim-out invoices that were never submitted.</td></tr>
+      <tr><td class="num-cell">Fri 09-25<br>14:00</td><td>L10 EOS call</td><td>Eight on the executive team.</td></tr>
+      <tr><td class="num-cell">Fri 09-25<br>15:00</td><td>Rillet demo</td><td>A ledger replacement conversation while the current close is mid-rebuild.</td></tr>
+      <tr><td class="num-cell hot"><strong>Fri 09-25</strong></td><td><strong>Brevard County SOIRL date</strong> <code>KP-0106</code></td><td><strong>Uncorroborated and four days out.</strong> Nothing in this vault sources it and the executed agreement has never been pulled.</td></tr>
+      <tr><td class="num-cell hot"><strong>Fri 09-25</strong></td><td><strong>MAV to warehouse migration check-in</strong> <code>CM-33</code></td><td>Three weeks to the day from when it was set.</td></tr>
+      <tr><td class="num-cell">Sat 09-26<br>13:30 / 15:30</td><td>BLC 2035 Blue vs HoCo White, then vs M&amp;D Black</td><td>Columbia MD.</td></tr>
+      <tr><td class="num-cell hot"><strong>Wed 09-30</strong></td><td><strong>Ridaa Murad's stated date</strong> <code>PD-53</code> <code>CM-26</code></td><td><em>"On Sep 30 everything goes away from me and only counsel gets involved."</em> Ten days. <strong>Outside the seven-day window and listed because it is the hardest date on the board.</strong></td></tr>
+      <tr><td class="num-cell hot"><strong>Wed 09-30</strong></td><td><strong>Zach's hard Lucky Clover paperwork deadline</strong></td><td>Sits inside the change-order invoice clock.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note flag">
+    <h4>Attendee collisions worth knowing about</h4>
+    <p><strong>Three double-bookings at 10:00 ET</strong> on Monday and Tuesday, all involving Quickbase against something with a live blocker behind it. Quickbase is the one with three sessions this week and therefore the one that can move.</p>
+    <p><strong>Thursday's Finance and Accounting EOS carries an open personnel and governance matter in its attendee list.</strong> The agenda is ordinary; the room is not. Flagged under guardrail 7 without further detail.</p>
+    <p><strong>Jon is at sea until midweek and signs last on all nine For Signature documents.</strong> Anything requiring his signature before Wednesday will not get it.</p>
+  </div>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <h2><span class="num">11</span>Blind spots</h2>
+  <p class="deck">What this report cannot see, and why. A pulse that silently omits a domain is worse than one that names the gap.</p>
+
+  <h4>Sources read</h4>
+  <p><strong>Mailbox:</strong> <code>austin@parakeetcommunities.com</code> via Microsoft 365. Folders read: <strong>Inbox</strong> (380 messages in the window, newest page read to 2026-09-19 11:19 ET), <strong>Sent Items</strong> (360 in the window, read newest-first to 2026-09-18 14:12 ET), and <strong>For Signature</strong> by name (25 items, all unread, complete). <strong>Teams:</strong> chat message search across the window, 25-message pages, no channel coverage. <strong>Calendar:</strong> 2026-09-20 through 2026-09-28, 28 events, all converted out of UTC. <strong>Plaud:</strong> 321 files scanned, scan complete, 5 in the window. <strong>Registers:</strong> all six enumerated by ID. <strong>Archive:</strong> <code>99-Archive/</code> listed in full and the 2026-09 briefs, closes and tombstone directories read. <strong>Daily closes:</strong> 2026-09-07 through 2026-09-19, all thirteen.</p>
+
+  <h4>Connectors probed, and what each returned</h4>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Connector</th><th>State</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Microsoft 365</strong> — mail, calendar, Teams, SharePoint</td><td><span class="chip c-ver">live</span></td><td><code>get_me</code> returned Austin Berk. All three surfaces answered.</td></tr>
+      <tr><td><strong>Plaud</strong></td><td><span class="chip c-ver">live</span></td><td>Authenticated as <code>austin@parakeetcommunities.com</code>. <strong>Content largely unreadable — see below.</strong></td></tr>
+      <tr><td><strong>Rent Manager</strong></td><td><span class="chip c-ver">live</span></td><td>21 reports enabled. Not queried — the sweep did not point there.</td></tr>
+      <tr><td><strong>RentViewer warehouse</strong></td><td><span class="chip c-ver">live</span></td><td><code>get_schema</code> returned all eleven models. <em>Note: <code>list_measures</code> returns empty and should not be read as an outage.</em></td></tr>
+      <tr><td><strong>Google Drive</strong></td><td><span class="chip c-ver">live</span></td><td>Returned corporate Lamberton refinancing folders, viewed by you on 09-17 and 09-18. <strong>The Shared Drives are reachable.</strong></td></tr>
+      <tr><td><strong>Gmail — a2zcp and Bedrock mailbox</strong></td><td><span class="chip c-crit">unreachable</span></td><td><strong>Only one Gmail tool exists in this session: <code>delete_draft</code>.</strong> No read tool of any kind. <code>search_threads</code> and <code>get_thread</code> are absent.</td></tr>
+      <tr><td><strong>Dropbox, ClickUp, Ramp</strong></td><td><span class="chip c-ss">not authorised</span></td><td>Present but requiring OAuth this session cannot run. Not needed by this sweep.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note stop">
+    <h4>The a2zcp and Bedrock mailbox, and why this one matters more than the others</h4>
+    <p><strong>Fourteen consecutive routines without it.</strong> Hard rule 14 as extended on 2026-09-03 ranks that mailbox first, not second, and says explicitly that where a sweep must be cut short it is Outlook that gets cut. <strong>This run could not follow that rule, because the tools to read it do not exist in this session.</strong></p>
+    <p><strong>What is behind the gap.</strong> Nine register rows cite that mailbox as their only source. <code>PD-53</code>, the Ridaa Murad ruling with a 2026-09-30 date on it, parks partly on it. <code>CM-25</code>, <code>CM-26</code>, <code>CM-27</code> and <code>CM-28</code> — the entire Fund II LP relationship, the 33% Bedrock partner, the six unanswered wind-down questions and the live California litigation — all live there. <strong>And your own replies from the Bedrock addresses never reach that mailbox's Sent folder even when it is readable</strong>, so a served LP and an ignored one are indistinguishable from here in both directions.</p>
+    <p>Everything this document says about the LP base is therefore <strong>as of 2026-09-15 at the latest</strong>, which is the last date any routine could read it.</p>
+    <dl class="paths">
+      <dt>Reconnect it in the connector settings and treat the count as a symptom<span class="rec">recommended</span></dt>
+      <dd>The cheapest thing on this page and the only one that costs no judgement. <strong>What it leaves broken:</strong> it has been tried before by that description and the gap reached fourteen anyway, and this run found the tools absent rather than toggled off, which suggests the earlier diagnosis was incomplete. So do it, and if the next routine still cannot read the mailbox, the answer is not a toggle. <em>Wrong choice if you have already tried this twice since 09-16, in which case go straight to the second path.</em></dd>
+      <dt>Forward the four Bedrock addresses into the Parakeet mailbox and make Outlook the single surface</dt>
+      <dd>Fixes the mechanism rather than the session: one mailbox, one sweep, one Sent folder that actually captures your replies, which also closes the invisible-reply problem that <code>KP-0110</code> and three closes have run into. <strong>Costs:</strong> a tenant-crossing mail rule, an hour of somebody's time, and it mixes two entity streams that are deliberately separate today. <strong>Still exposed:</strong> the 12,244-message archive label stays where it is. <em>Wrong choice while the wind-down is live and the streams need to stay separable for final K-1s.</em></dd>
+      <dt>Give the LP relationship a human owner and stop routing it through a connector at all</dt>
+      <dd>Rebuilds from the system of record: <code>ir@thebedrockgrp.com</code> has no person on it, which is why a 33% partner had to phone and why five LPs chased the same document. <strong>Costs:</strong> a named seat, and it is the only path that survives the connector breaking again. <strong>Still exposed:</strong> nothing gets read faster this week. <em>Wrong choice if the wind-down genuinely closes in ninety days, because you would be staffing something you are dismantling.</em></dd>
+    </dl>
+    <p><strong>Why the first one wins.</strong> The second and third are both right and both take longer than the 2026-09-30 date on <code>PD-53</code>. Take the minute, and graft the second path's real insight onto it immediately: <strong>the Sent-folder blindness is a separate defect from the connector and it does not get fixed by reconnecting.</strong> Until it is, ask Murad and Davies to confirm receipt rather than assuming silence means delivery.</p>
+  </div>
+
+  <h4>What else this report cannot see</h4>
+  <ol class="tail">
+    <li><strong>Teams meeting transcripts are disabled tenant-wide.</strong> A Teams meeting with no Plaud recording leaves no trace at all. <strong>Plaud is the only source for verbally made commitments.</strong></li>
+    <li><strong>Four of five Plaud recordings in the window are unreadable</strong>, across notes, transcript, transaction and outline blocks. The 2026-09-11 09:19 ET recording is <strong>66 minutes</strong> and returns nothing in any block; 2026-09-09 10:00 and 11:03 return nothing; 2026-09-15 10:01 is <strong>52 minutes of audio whose entire transcript is three words</strong>. Only the 2026-09-11 11:24 ET separation-agreement recording was readable. <strong>That is roughly two hours thirty-eight minutes of meetings with no recoverable record.</strong> <code>KP-0112</code>, which needs the 09-15 recording added to it.</li>
+    <li><strong>Meetings in the window with no recording at all.</strong> Every standing check-in from 09-16 onward, the L10s, the Finance and Accounting EOS of 09-17 and 09-24, the Cavco and Champion calls, the 09-18 14:00 ET counsel call, and the TreeIQ call of 09-17. <strong>The 09-18 counsel call is the single most consequential gap</strong>, because <code>CM-36</code> turns on what came out of it and Jon boarded a ship the same afternoon.</li>
+    <li><strong>Outlook pagination is partial by design.</strong> 380 inbox and 360 sent messages fall in the window; this run read the newest pages of each to exhaustion and relied on the thirteen daily closes — which each read their own day in full — for the earlier ground. <strong>Nothing between 09-07 and 09-18 was re-read from source by this run.</strong> Where a close and this document disagree, the close read the primary.</li>
+    <li><strong>No Teams channel coverage.</strong> Chat search reaches 1:1 and group chats only, and every prior close recorded the same limit.</li>
+    <li><strong>The open-row count of ~1,334 is an upper bound</strong> from a conservative closure test that only catches headings and bold markers. Prose closures are missed. The true figure is lower and nobody has measured it.</li>
+    <li><strong>Receipt is not confirmed on two closed items</strong>: 21st has never acknowledged the $250,000 escrow wire, and Glen Alpert never acknowledged his K-1. Both are recorded as delivered, not received.</li>
+    <li><strong>The Brunswick tree status is as of 2026-09-19 17:11 ET.</strong> If the carrier was notified on Sunday it happened by phone and would not appear in any source this run can read.</li>
+    <li><strong>Personnel and compensation content is deliberately absent</strong>, not missing. The separation matter, the accounting seat matter, the Fox Creek allegation content, every figure inside them, and all resident names have been kept off this page and off every register under guardrails 5, 7 and 9. <strong>The rows record that decisions are owed and by whom.</strong></li>
+    <li><strong>No Rent Manager or warehouse query was run.</strong> Both are live and the sweep did not point there. Occupancy, delinquency and rent-roll movement in the fortnight are therefore <strong>not covered by this document at all</strong>, and that is a scope choice rather than a failure.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <p><strong>Weekend Pulse, run 2026-09-20 18:09 ET.</strong> Window 2026-09-07 through 2026-09-20 inclusive. Read only: nothing was sent, replied to, drafted, labelled or moved in either mailbox. Diffed against <code>99-Archive/</code> and all six registers before anything was called open, per hard rule 11.</p>
+  <p>Every substantive claim carries <span class="chip c-ver">verified</span>, <span class="chip c-ss">single-source</span> or <span class="chip c-inf">inferred</span>, per hard rule 10. Register IDs are permanent and are how you close things: give the ID and what changed.</p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      var i=secs.indexOf(e.target);
+      if(i<0)return;
+      links.forEach(function(l){l.style.background='';l.style.color='';});
+      links[i].style.background='var(--surface-2)';
+      links[i].style.color='var(--brand)';
+    });
+  },{rootMargin:'-60px 0px -70% 0px'});
+  secs.forEach(function(s){if(s)io.observe(s);});
+})();
+</script>

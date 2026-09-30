@@ -1,0 +1,24 @@
+# Needs sorting, flagged and never guessed
+
+**Status:** one item open, re-checked 2026-09-15 by the Page Update, which also emptied the Inbox: the `Building Automated Dashboard` folder (two files, landed 2026-09-09) is filed at `10-Business/systems-architecture/` on Austin's ruling, with its *Approved* label treated as unverified because nobody has said who wrote it. **The empty folder itself is still there**, because this session has no delete permission; it is the one piece of housekeeping left. Earlier status, 2026-09-08: **The index said two; there is one.** That row is corrected. This run added nothing here: the four items it cleared out of the Inbox all had a folder that owns them, and the one judgement call it met, whether `WP-36-M3` had been signed, Austin answered in session rather than leaving it to be guessed. **Rewritten by the Page Update**, which found this page still describing 2026-08-31 as though it were today: it asked whether the scheduled briefs still run when two September brief artifacts are archived, it said the `05-Inbox/brain/` scaffold still needed deleting when it is gone, and it flagged the 14:01 recording as unresolved when that placeholder retired to `99-Archive/2026-08-plaud-raw/` marked SUPERSEDED. **A flagged-items page that goes stale is worse than no page**, because the next session reads it and re-raises what is already closed, which is rule 11 in reverse. Re-checked 2026-09-26 by the Page Update: nothing new landed in `05-Inbox/` since 2026-09-22, and the empty `Building Automated Dashboard` folder is still there for want of delete permission. Re-checked 2026-09-28 by the Page Update: nothing new in `05-Inbox/`; one new flag, the empty `2026-09-27.md` at the vault root.
+
+---
+
+## Open, and it is Austin's call
+
+**NARROWED 2026-09-02, not closed.** Austin: *"Personal items to connect with personal is belmart and jamie berk (wife)."* **He defined what personal contains: two markers, Belmart and Jamie Berk.** That settles the routing test, which was previously inferred from Belmart being a non-manufactured-housing asset and is now stated. **It does not settle whether this vault follows his personal portfolio**, which is the question below and is still his. Recorded per this page's standing rule: an item leaves when he makes the call, and half an answer is not the call. Filed to [[10-Business/outlook-folder-map]] as the routing test.
+
+**Does his personal portfolio get tracked in this Brain?** Belmart is a personal, non-manufactured-housing asset. Under the 2026-08-26 storage decision its documents belong in Dropbox rather than in the Parakeet estate, so its page is parked at `99-Archive/2026-08-catchup/entity-pages/belmart.md`. **It carries three live items and one of them is Austin's to send**: the lender package, which is `CM-10` in [[00-Meta/commitments]]; an employee back injury at lot 35 with workers' comp documentation unconfirmed; and unsanded handrails. This Brain is scoped to the business, and whether that scope should widen is a decision rather than a guess. **The commitment stays live either way** - only where the supporting documents live is in question.
+**An empty file at the vault root, `2026-09-27.md`, 0 bytes, created 2026-09-27 09:18 ET.** Added 2026-09-28 by the Page Update. Most likely an Obsidian daily note opened by accident, since daily closes live in `00-Meta/daily-close/`. **Ruled 2026-09-28 by Austin: leave it.** His words: *"you can leave it."* The file stays at the root, and future runs should not re-raise it.
+
+## Closed by this run
+
+**The personnel transcript has a home.** `_private-2026-08-31-controller-performance-and-transition.md` moved to `10-Business/people/` on Austin's instruction 2026-09-02, prefix intact so no sweep, brief or filing run picks it up. It is a 16 minute discussion of a named current employee's performance and transition. **Guardrail 7 governs it and rule 9 forbids reproducing any compensation figure from it anywhere in this Brain**, including in any summary of it. It must be removed before this vault is shared with anyone.
+
+**The QuickBase drop is filed and the scaffold is gone.** 86 files, in this folder since 2026-09-01, now [[15-Projects/quickbase-build/overview]]. **The empty scaffold folders were deleted 2026-09-08** with Austin's permission, along with seven others this Inbox had accumulated. That item is closed rather than carried.
+
+**The briefs run.** The morning brief and the Weekend Pulse both have briefs in `95-Agents/` and archived output in `99-Archive/2026-09-briefs/`. The 2026-08-31 question is answered by the evidence.
+
+## The standing rule for this page
+
+**A flag lands here when the call is not Claude's to make**, and it leaves when Austin makes it, not when it ages. Every item says whose decision it is. **Nothing gets guessed into a resolution to clear the page.**
