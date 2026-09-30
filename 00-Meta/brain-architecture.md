@@ -78,6 +78,10 @@ Rows with no agent yet are the hiring list for the agent team.
 > 23. **Skills are steps, pages are facts.** A skill or brief says how to do a job and reads what it needs from these pages. It never carries its own copy of a business fact.
 > 24. **Git is the proof.** Every change here is committed and pushed within 15 minutes, so any agent's work can be checked line by line.
 
+## Phase 3 progress
+
+**2026-09-29 23:05 ET.** The feed map is live on `10-Business/data-lineage.md` under *Feed map*: fifteen sources, each with its harvester, its verified schedule and the page it writes to. **Five gaps make the hiring list**: morning brief and weekend pulse not scheduled (plus hot sheets, pulse and lineage probe), no Citrin watch, no Plaud harvester, Ramp bookkeeper not built, founders report schedule unconfirmed. Recommended path C, one agent per source, cheapest first. **Waiting on Austin's go before any scheduled task is created.**
+
 ## Three paths
 
 **A. Memory diet only.** Shrink every fat memory file to a pointer card after diffing its contents into the vault page. About two hours of Claude's work. Fixes the drift. **Still exposed:** no written contract, so the next agent built can recreate the mess. Wrong choice if the goal is a team of agents, which it is.

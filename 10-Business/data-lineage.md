@@ -2,7 +2,7 @@
 
 **What this is:** the one register that answers three questions without opening anything else. What reports and models each connector actually exposes. What each dashboard, report and vault surface is fed by. And which of those feeds is broken, unowned or fed by nobody.
 
-**Status:** created 2026-09-09; rows 7 and 8 of the breaks table added 2026-09-15 by the Page Update from the daily closes. **Source layer probed live this session.** Consumer layer built from the refresh skills and the vault; the parts nobody has ever written down are marked as such rather than guessed.
+**Status:** created 2026-09-09; feed map added 2026-09-29 (Phase 3 of the One Brain plan); rows 7 and 8 of the breaks table added 2026-09-15 by the Page Update from the daily closes. **Source layer probed live this session.** Consumer layer built from the refresh skills and the vault; the parts nobody has ever written down are marked as such rather than guessed.
 
 **This page owns the report catalog.** [[10-Business/connector-status]] keeps connector identity, authentication and the blocked list. Two pages, one fact each — do not restate a report list over there.
 
@@ -134,6 +134,42 @@ Standing rules on both: sold properties are stripped via `excluded_properties.js
 | **EOS scorecard** — [[10-Business/eos/scorecard]] | **Out of scope for this register.** No measure has a data feed today, and **Zach Schwartz is rebuilding the scorecard** as his Q1 rock. Feeds get mapped once the rebuild defines the measures — mapping them against the current names would be pre-work against a spec that does not exist. Withdrawn 2026-09-09 on Austin's instruction |
 
 ---
+
+## Feed map: every source, which agent harvests it, where it lands
+
+**Added 2026-09-29, Phase 3 of `00-Meta/brain-architecture.md`, under rule 20 in `CLAUDE.md` (facts land here first).** One row per source. *Schedule* is read from the live scheduled task list on 2026-09-29, not from a brief; a brief that names a time with no scheduled task behind it is marked **not scheduled**. Rows with no running harvester are the hiring list for the agent team.
+
+| Source | Harvested by | Schedule, verified 2026-09-29 | Writes to | Status |
+|---|---|---|---|---|
+| **Outlook**, all folders, **For Signature first** | `95-Agents/morning-brief`, `90-Skills/end-of-day`, `90-Skills/community-pulse-refresh` | Close runs weekdays 6:00 PM. **Morning brief: not scheduled** (brief says 6 AM). Pulse: on request | The six registers, community pages, `00-Meta/daily-close/` | Partly running |
+| **a2zcp / Bedrock Gmail** (first class, rule 14) | `90-Skills/end-of-day`, morning brief | Weekdays 6:00 PM through the close | `80-Finance/fund-reporting/bedrock-fund-ii-winddown.md`, `30-Customers/capital-partners/bedrock-fund-ii-lps.md`, registers | Running through the close |
+| **Tim and Lisa (Citrin)**, both mailboxes | Nobody by name. The close sees their mail as part of the sweep | None of its own | `10-Business/outside-help/citrin-cooperman.md`, `00-Meta/commitments.md` | **Gap.** Austin ruled 2026-09-29 their mail matters to everything; no sweep flags it first yet |
+| **Teams** chats and channels | `90-Skills/end-of-day`, community pulse | Weekdays 6:00 PM through the close | Registers, community pages | Running. Meeting transcripts blocked tenant wide (see [[10-Business/connector-status]]) |
+| **Plaud** recordings | `95-Agents/transcript-to-action`, `90-Skills/transcript-filing` | On request only | `70-Operations/meetings/`, decisions, registers | **Gap.** 283+ recordings; nothing picks up a new one on its own |
+| **Adobe Sign** kickoffs and closeouts (via For Signature) | Community pulse; skill `kickoff-closeout-review-sign` | On request | Community pages, lot pages, WIP bridge in `80-Finance/jrefi-cashflow-model.md` | On request |
+| **Rent Manager API** | `90-Skills/community-hot-sheet-refresh`; *Accounting daily audit* task | Audit weekdays 6:00 PM. **Hot sheets: not scheduled** | Community hot sheets (Live block), `80-Finance/` | Partly running |
+| **RentViewer warehouse** | Hot sheet refresh, *Rehab call pre-read* task, `90-Skills/data-lineage-probe` | Pre-read Tuesdays 5:00 PM. **Lineage probe: not scheduled** (page says weekly) | Hot sheets, `70-Operations/rehab-program/`, this page | Partly running |
+| **Rent Manager CSV exports** (Birdcage Data & Analytics sync) | *Ops dashboard v3 daily refresh* task; skill `parakeet-founders-report-refresh` | Ops dashboard daily 6:50 AM. **Founders report: no scheduled task found** (this page says Mondays) | The two dashboards, outside the vault | Ops running; founders report to confirm |
+| **Ramp** | *Weekly Ramp expense audit* task; `95-Agents/ramp-charge-coding-agent` | Audit Mondays 9:00 AM. **Bookkeeper agent paused, not built** | Ramp booking program, `80-Finance/` | Audit running; booking is a gap |
+| **ClickUp** | *Month end close list* task; skill `meeting-transcript-to-clickup` | 1st of the month 6:00 AM | ClickUp (outbound), EOS to-dos | Running |
+| **SharePoint Accounting & Finance folder** | *Accounting daily audit* task | Weekdays 6:00 PM | `projects` audit notes, registers | Running |
+| **Paychex files** (Payroll Project folder) | Skill `payroll-tie-out` | On request, per check date | `80-Finance/payroll-model.md` | On request |
+| **Dropbox and Google Drive** (Fund II and A2Z records) | Fund II program, by hand | None | `80-Finance/fund-reporting/` | On request |
+| **No connector:** AvidXchange, AHJ permit portals, state title portals, MAV CRM, Camp Spot, QuickBooks, lender portals | Nobody | None | None | **Structural gap**, see connector-status |
+
+### The hiring list, cheapest first
+
+1. **Schedule what is already written.** Morning brief (weekdays 6 AM) and weekend pulse (Fridays 7 PM) have finished briefs and no scheduled task. Same for the hot sheet refresh, community pulse and data lineage probe, which their pages call weekly.
+2. **A Citrin watch.** Every sweep lists Tim and Lisa's mail first, in both mailboxes, with the ask and the deadline.
+3. **A Plaud harvester.** Daily, picks up recordings since the last run and runs transcript-to-action on each.
+4. **The Ramp bookkeeper.** Brief exists, agent not built, scheduled task paused.
+5. **Confirm the founders report schedule.** This page says Mondays; no scheduled task exists.
+
+### Three paths for building the team
+
+- **A. Schedule the briefs that exist, one task each.** Items 1 and 5 above, about an hour of setup, no new agents. Leaves Citrin, Plaud and Ramp uncovered. Wrong if the goal is coverage of every source.
+- **B. One daily harvester agent that sweeps every source in a single run** and writes to the registers. Fewest moving parts. Wrong because one failure blinds every feed at once, and a single run long enough to read everything is the kind that times out.
+- **C (recommended). One agent per source, each with one brief, one schedule and one page it writes to,** built cheapest first from the list above. Starts with A's step, so the first win is the same hour of setup; adds Citrin, Plaud and Ramp one at a time. Wins over B because a broken feed breaks alone and shows up as one stale row here, and over A because it closes the gaps rather than stopping at what is already written.
 
 ## Breaks and unowned feeds
 
