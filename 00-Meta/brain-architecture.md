@@ -63,6 +63,21 @@ Rows with no agent yet are the hiring list for the agent team.
 
 **About 126 KB of memory notebooks (37 + 17 + 25 + 20 + 2 + 11 + 9 + 5 KB) became seven pointer cards of about 1 KB each.** Still to do in Phase 1: the smaller doubles (Moe, camera rollout, Ramp booking), the project scoped files that are left, and ledger rows for the dollar figures the moved records carry.
 
+## Phase 2: the CLAUDE.md wording, awaiting Austin's sign-off
+
+**Drafted 2026-09-29 22:06 ET.** Nothing below is in `CLAUDE.md` yet; the CLAUDE.md team rule needs his sign-off. It would go in as its own section just above *The folder map*, numbered after the existing rules.
+
+> ## One Brain: where every agent and model gets its knowledge
+>
+> Adopted 2026-09-29 at Austin's instruction: *"My Brain is where every agent and model goes first."*
+>
+> 19. **Brain first.** Any agent, model, skill or scheduled task starts here: this file, then `00-Meta/index.md`, then the folder MOC, then only the pages it needs. No agent answers from a raw source (mail, Teams, Rent Manager, the warehouse) when a page already holds the answer.
+> 20. **Facts land here first.** Anything learned from a source is written to its page or register, with its source link and date, before it is used anywhere else.
+> 21. **Close out before a chat ends.** Every chat writes what it decided, built or learned to its page, logs it, and lets git push it. Then the chat holds nothing the Brain lacks and can be archived.
+> 22. **Memory points, it does not hold.** Claude's cross-chat memory keeps who Austin is, how he works, and short pointer cards naming the page to read. Every memory file has a row in `00-Meta/memory-registry.md`. A memory file that grows past a pointer gets moved here.
+> 23. **Skills are steps, pages are facts.** A skill or brief says how to do a job and reads what it needs from these pages. It never carries its own copy of a business fact.
+> 24. **Git is the proof.** Every change here is committed and pushed within 15 minutes, so any agent's work can be checked line by line.
+
 ## Three paths
 
 **A. Memory diet only.** Shrink every fat memory file to a pointer card after diffing its contents into the vault page. About two hours of Claude's work. Fixes the drift. **Still exposed:** no written contract, so the next agent built can recreate the mess. Wrong choice if the goal is a team of agents, which it is.

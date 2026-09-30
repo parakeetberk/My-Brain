@@ -24,6 +24,7 @@ One line per thing that matters. Claude keeps this current, when a page is added
 | [[00-Meta/start-here]] | New to this Brain? Five files, ten minutes. |
 | [[00-Meta/index]] | This page. The map. |
 | [[00-Meta/brain-architecture]] | One Brain: where every agent gets its knowledge, the memory diet, the feed map, the agent team plan. DRAFT 2026-09-29. |
+| [[00-Meta/memory-registry]] | Every Claude memory file, what it is for, and the vault page that holds the real content. Rebuilt by the brain-audit skill. |
 | [[00-Meta/numbers-ledger]] | The only place a business number is trusted from. Every entry sourced and dated. |
 | [[00-Meta/open-items]] | **Known problems, `KP-0001` to `KP-0128`, ranked by risk. Work it down; don't rediscover it.** Ceiling re-read 2026-09-26 (`KP-0123` on 2026-09-22); closed rows stay in the file, so the ID ceiling is not the open count. |
 | [[00-Meta/commitments]] | **What Austin owes and is owed. `CM-01` to `CM-37`. Every line has an owner and a next action.** Ceiling re-read 2026-09-26 (`CM-36` on 2026-09-22; `CM-37` opened state only 2026-09-25). Closed rows sit in a full-text tail under `## Recently closed`, never under Active. |
