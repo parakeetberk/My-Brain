@@ -142,6 +142,7 @@ One line per thing that matters. Claude keeps this current, when a page is added
 | [[80-Finance/board-reporting]] | The March 2026 board deck: thesis, misses, asks. **Carries per-person compensation; point at it, reproduce nothing.** |
 | [[80-Finance/portfolio-reporting-rules]] | **Austin's own rules for what counts as an operating property. Do not re-derive, do not re-ask.** |
 | [[80-Finance/intercompany-arap-recon]] | Eight years unreconciled, why the packet failed, and the quarterly process that replaces it. |
+| [[80-Finance/intercompany-operating-rules]] | Operating manual for the intercompany recon, merged from three Claude memory files 2026-09-29. |
 | [[80-Finance/fund-reporting/bedrock-fund-ii-winddown]] | The wind-down record and the path to dissolution. |
 | [[80-Finance/fund-reporting/bedrock-fund-ii-operating-rules]] | Operating manual for the wind-down, Close It Down plus BMHCII Financials as one program. Moved from Claude memory 2026-09-29. |
 | [[80-Finance/fund-reporting/wp36-38-integrity-reaudit]] | **Why `WP-36-M3` was not signed. 37 figures held, 12 refuted, and the ordered fix.** |

@@ -29,6 +29,7 @@ The money structure. How cash comes in, where it goes, what the plan costs, and 
 **Added 2026-08-31 from the second vault**
 - [[80-Finance/portfolio-reporting-rules]] — **Austin's own inclusion rules. Every portfolio number in this Brain traces to these.**
 - [[80-Finance/intercompany-arap-recon]] — eight years unreconciled, why the one-shot packet failed, and the quarterly process that replaces it.
+- [[80-Finance/intercompany-operating-rules]] - how the intercompany program is run: method rules, files, refresh pipeline, entries, status. Merged from three memory files 2026-09-29.
 - [[80-Finance/drafts/draft-zach-capex-reply]] - the unsent reply to Zach on the retaining-wall capex governance question. Never sent, item closed, and the archive record says so.
 
 **Added 2026-09-02**

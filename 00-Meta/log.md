@@ -250,3 +250,5 @@ A dated line or two for every ingest, filing run, and review. Never rewrite old 
 - 2026-09-29 21:05 ET. **One Brain architecture drafted** at `00-Meta/brain-architecture.md` after Austin's rulings (Brain first for every agent, Tim relevant to everything, Close It Down equals BMHCII). CPA memory cards made global. Awaiting his go on Path B, Phase 1.
 
 - 2026-09-29 21:40 ET. **Phase 1, Fund II merge, vault half done.** Both Fund II memory notebooks moved verbatim to `80-Finance/fund-reporting/bedrock-fund-ii-operating-rules.md`. Memory shrink to a pointer card waits on Austin's look.
+
+- 2026-09-29 22:00 ET. **Phase 1: Fund II memory shrunk to a pointer; Intercompany moved to the vault.** `80-Finance/intercompany-operating-rules.md` holds all three intercompany memory files verbatim. Intercompany memory shrink waits on the open Intercompany chat closing out.
