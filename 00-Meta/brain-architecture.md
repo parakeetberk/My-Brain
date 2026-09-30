@@ -63,9 +63,9 @@ Rows with no agent yet are the hiring list for the agent team.
 
 **About 126 KB of memory notebooks (37 + 17 + 25 + 20 + 2 + 11 + 9 + 5 KB) became seven pointer cards of about 1 KB each.** Still to do in Phase 1: the smaller doubles (Moe, camera rollout, Ramp booking), the project scoped files that are left, and ledger rows for the dollar figures the moved records carry.
 
-## Phase 2: the CLAUDE.md wording, awaiting Austin's sign-off
+## Phase 2: the CLAUDE.md wording, signed off
 
-**Drafted 2026-09-29 22:06 ET.** Nothing below is in `CLAUDE.md` yet; the CLAUDE.md team rule needs his sign-off. It would go in as its own section just above *The folder map*, numbered after the existing rules.
+**Drafted 2026-09-29 22:06 ET.** **Signed off by Austin 2026-09-29 ("approved") and added to `CLAUDE.md` at 22:29 ET** as rules 19 to 24, just above *The folder map*. It would go in as its own section just above *The folder map*, numbered after the existing rules.
 
 > ## One Brain: where every agent and model gets its knowledge
 >

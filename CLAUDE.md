@@ -116,6 +116,17 @@ These were written into the Claude Code vault's constitution on 2026-09-03, **af
 
 18. **Route by owner, not by discovery.** The person who finds a thing is almost never the person who should hold it. **A finding goes to whoever owns the function it belongs to**, which is the point of the delivery rule above, and it goes there even when that is less convenient than handing it to whoever is nearest. *The precedent: a Gunster matter was routed to the person who surfaced it rather than to Jon, who owns the relationship, which put the work one hop away from the person able to act on it.* Where no owner exists in any source, the task says **unassigned** and names the forum where Austin can settle it, per the delivery rule. **Never a guessed name, and never the finder by default.**
 
+## One Brain: where every agent and model gets its knowledge
+
+Adopted 2026-09-29 at Austin's instruction and sign-off: *"My Brain is where every agent and model goes first."* Background, the memory move that preceded it, and the feed map: [[00-Meta/brain-architecture]].
+
+19. **Brain first.** Any agent, model, skill or scheduled task starts here: this file, then `00-Meta/index.md`, then the folder MOC, then only the pages it needs. No agent answers from a raw source (mail, Teams, Rent Manager, the warehouse) when a page already holds the answer.
+20. **Facts land here first.** Anything learned from a source is written to its page or register, with its source link and date, before it is used anywhere else.
+21. **Close out before a chat ends.** Every chat writes what it decided, built or learned to its page, logs it, and lets git push it. Then the chat holds nothing the Brain lacks and can be archived.
+22. **Memory points, it does not hold.** Claude's cross-chat memory keeps who Austin is, how he works, and short pointer cards naming the page to read. Every memory file has a row in `00-Meta/memory-registry.md`. A memory file that grows past a pointer gets moved here. The `brain-audit` skill checks this.
+23. **Skills are steps, pages are facts.** A skill or brief says how to do a job and reads what it needs from these pages. It never carries its own copy of a business fact.
+24. **Git is the proof.** Every change here is committed and pushed within 15 minutes, so any agent's work can be checked line by line.
+
 ## The folder map — thirteen top-level folders
 
 Thirteen folders, and they follow the org chart rather than a generic template. Marketing gets us found, Customers is who we serve, Products & Sales is what we sell and how, Communities is the asset all of it lands on, Operations is how the work gets done, Finance is the money. **Your business lives in the subfolders and pages inside them**; when the business changes, add a subfolder, never a new top-level.
