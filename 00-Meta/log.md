@@ -246,3 +246,5 @@ A dated line or two for every ingest, filing run, and review. Never rewrite old 
 - 2026-09-29 19:40 to 19:50 ET. **Brain backup repaired locally, Path B step one.** A GitHub Desktop push of the old history was stopped on Austin's instruction (it could only fail at GitHub's 100 MB limit). Stale `.git/index.lock` from 2026-09-02 cleared, `.gitignore` added, September saved as `d0feca7`. Offsite push waits on where the media goes. See `KP-0132`.
 
 - 2026-09-29 20:03 to 20:15 ET. **Brain backup, Path B step three.** Second stray push killed at 20:03. Austin confirmed repo Private and ruled media to SharePoint per set. Old history archived, clean baseline `2c4974f` built, Obsidian Git auto push on. Manifest at `20-Brand-Marketing/media-move-manifest.md`. See `KP-0132`.
+
+- 2026-09-29 21:05 ET. **One Brain architecture drafted** at `00-Meta/brain-architecture.md` after Austin's rulings (Brain first for every agent, Tim relevant to everything, Close It Down equals BMHCII). CPA memory cards made global. Awaiting his go on Path B, Phase 1.
