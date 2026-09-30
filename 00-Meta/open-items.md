@@ -513,3 +513,59 @@ Five rows now. Two questions came out of filing today's three transcripts; **T1 
 **Status 2026-09-29 20:38 ET.** First push done from GitHub Desktop; `origin/main` matches local `1d249fa` (SINGLE-SOURCE, local tracking ref). **GitHub now holds a copy of the Brain for the first time.** Still open: Obsidian Git needs a one-time GitHub sign-in before it can push on its own, then GitHub Desktop comes off this folder.
 
 **Closed 2026-09-29 20:45 ET.** Bridge test passed, VERIFIED against GitHub directly: remote matches local, unattended push works, private assessments and oversized files absent from GitHub. Follow-ups that do not keep this open: remove the folder from GitHub Desktop (Austin), media moves per `20-Brand-Marketing/media-move-manifest.md` set by set.
+
+---
+
+## `KP-0133` **Payments are being released outside the control that exists to release them, and this time the person stepping round it was the CEO**
+
+**Opened 2026-09-30 at the Wednesday close. Medium.**
+
+**VERIFIED**, David Berman to Austin, Moe Mehmood and Jon Wyss at 09:52 ET, read in full: *"Just saw you released a few wires out of JPM that were set up for Q4 payments this AM. No need to jump in there. The team has a process in place for payment release controls, and we'll always let you or Jon know if somebody needs to step in."*
+
+**Nothing went wrong today and that is the point.** The wires were legitimate, they were already set up, and the message is collegial rather than an escalation. **What it records is that the release control has no lock on it**, only a convention, and a convention that the most senior person in the company can walk past without noticing is not a control. **No amount, counterparty or account is asserted and none was stated**, and nothing is approved, paid or reversed from here, guardrail 8.
+
+**This is the third payment control event in three weeks and they are not the same shape.** `TD-0708` is an Empire Engineering invoice at Shady Oaks paid in full while it was being held for a certificate of occupancy. `TD-0724` is a High Pace rush payment that has now been asked about twice in writing and released neither way. **This one is the opposite failure: not a payment escaping a hold, but a hold escaping the person who set it.** Taken together they say the release path is understood differently by Accounting, by Construction and by the founders.
+
+**Searched this Brain before calling the gap**, per rule 15: no SOP in the 300s Accounting band defines payment release authority, `10-Business/departments/` names no owner for it, and `00-Meta/decisions-log.md` carries no ruling on who releases a wire.
+
+**Three paths.**
+
+*Minimum, write the convention down.* Take Berman's sentence, make it a one page rule naming who releases, who may step in, and what triggers the notification he describes, and put it in the 300s band. **Cost:** an hour. **Who:** Accounting, with Austin signing it. **Still exposed:** nothing enforces it, so the same thing happens again the next time a founder is in the banking portal at 09:00 with a deadline in front of him. **Wrong choice if** the banking platform already supports dual release and is simply not configured for it, because then writing a rule is a substitute for a switch.
+
+*Fix the mechanism, configure release roles in JPM.* Set the entitlements so a release requires the assigned releaser, with founders holding an explicit break glass role that notifies rather than one that is silently available. **Cost:** a JPM treasury services conversation and a half day of testing. **Who:** Accounting with the JPM relationship team already on the thread. **Still exposed:** every other payment rail, Ramp, AvidXchange and the cheque runs, all of which have their own paths and none of which this touches. **Wrong choice if** the founders genuinely need to release out of hours often enough that an entitlement change turns into a standing exception, which is worse than no rule.
+
+*Rebuild from the system of record, map every rail.* Inventory every way money leaves the company, name the releaser and the approver on each, and fix the ones that disagree. **Cost:** a week of Accounting's time and it will surface things nobody wants surfaced mid audit. **Who:** Accounting, with Asset Management on the capex rails. **Still exposed:** nothing, which is the point, but it does not land before the audit does. **Wrong choice if** the audit file in partner review at `TD-0698` would be disturbed by an open control remediation running alongside it.
+
+**Recommended: path two, with path one written first as its input.** **Path one alone loses because this Brain already has the written version of this lesson and it did not hold**, which is what `TD-0708` is; a second memo is not a different remedy. **Path three loses on timing rather than on merit**, and it is named rather than dropped because it is the right end state and should follow the audit. Path two is the only one that changes what is possible rather than what is expected, and **path one's page is what path two configures against**, so it is not wasted work.
+
+**Related:** `TD-0708` (a payment escaping a hold), `TD-0724` (a payment stuck at the same gate), `KP-0130` (an action executing ahead of its sign off, the same shape on the resident side). **No personnel content sits on this row**, guardrail 7.
+
+| `KP-0133` **Payment release controls are convention rather than configuration, and a founder released wires round them.** Three paths and a recommendation above. | Medium | **unassigned** · settle at the Finance and Accounting EOS meeting | open, raised 2026-09-30 |
+
+---
+
+## `KP-0134` **The close artifact's reply path took six answers and no run read them for a day, which is the failure step zero exists to prevent, recurring**
+
+**Opened 2026-09-30 at the Wednesday close. High.**
+
+**VERIFIED** by reading the `answers` collection directly. Austin answered six questions on the close page between **20:08 and 20:11 ET on 2026-09-29**: `q1`, `q2`, `t1`, `t2`, `t3` and `t4`. **All six carried `status: new`.** The earliest previous answer in the collection is dated 2026-09-10 and every one of those is `applied`. **So the path worked, he used it, and nothing collected it until the next scheduled close twenty three hours later.**
+
+**The sharpest fact is the timing.** The 2026-09-29 close was refreshed and republished at 19:29 ET. It says on its own face *"All three reply paths were empty again, re-checked at the refresh. Twelve runs and nineteen days."* **He answered thirty nine minutes later.** The statement was true when written and stale within the hour, which is not a defect in that run; **the defect is that nothing between 20:11 ET and the next close was capable of noticing.**
+
+**This is the second recorded instance of the same failure and the first one is why step zero exists.** On 2026-08-31 Austin typed `--> Same person` under question 2 of the close file, nothing read it back, and a row sat wrong in `00-Meta/commitments.md` for a full day while counsel ran two workstreams against one man. `90-Skills/end-of-day` records that precedent in its own words: **a reply path this skill advertises and never checks is worse than one it does not offer.** The path changed from typed markdown to a database and the failure came back unchanged, which says the fault is the polling interval rather than the medium.
+
+**What it cost this time, stated rather than minimised.** Two of the six answers were instructions to draft something, now `TD-0735` and `TD-0736`. One was a ruling that changes the character of a regulatory row and raises counsel, `TD-0730`. One was an instruction to pull detail on a fire at a lot, `PF-0497`. **A day of delay on any of those is survivable; a pattern of it is what teaches him the buttons do not work.**
+
+**Three paths.**
+
+*Minimum, say the latency out loud on the page.* The artifact already says a run applies the answer rather than the click. Put the actual number on it, next run is the morning brief or the following close, so he can decide whether to use the chat instead. **Cost:** one line of copy. **Who:** whoever next publishes the page. **Still exposed:** everything; the delay is unchanged and only his expectations move. **Wrong choice if** he is answering at 20:00 precisely because the chat is closed, in which case honest latency is just a documented shrug.
+
+*Fix the mechanism, poll the collection on a schedule of its own.* A short scheduled task that reads `answers` for `status: new`, applies what it can and reports what it cannot, running two or three times between the close and the next morning. **Cost:** one scheduled task and the rules for what it is allowed to apply unattended. **Who:** Austin's go on the scheduled task, since it writes to registers. **Still exposed:** anything needing judgement rather than filing still waits for a full run, which is correct. **Wrong choice if** an unattended writer applying answers is more risk than a day of delay, which is a real argument on rows carrying counsel or capital partner content.
+
+*Rebuild the path, take answers where they are already read.* Stop relying on a page that has to be polled and route the disposition back through the chat, which is read every turn. **Cost:** loses the three button interface Austin specifically asked for on 2026-09-03 and the ask count dots with it. **Who:** nobody, it is a deletion. **Still exposed:** nothing on latency, everything on usability, and **he built this path because the markdown was unreadable on a phone at the end of the day.** **Wrong choice if** the page is what makes him answer at all, which the evidence of last night rather suggests it is.
+
+**Recommended: path two, with path one shipped tonight as its interim.** **Path three loses because it solves the latency by removing the thing that produced six answers in three minutes after nineteen silent days**, which would be trading the only working evidence for a known failure. **Path one alone loses because it manages his expectations instead of the defect.** Path two is the only one that shortens the loop, and the honest line on the page costs nothing in the meantime.
+
+**Related:** `KP-0131` (the same page published without a check that it renders), `KP-0115` (the clock rules on the same skill), `90-Skills/end-of-day` step zero, which is the text this row is evidence against.
+
+| `KP-0134` **The close artifact's reply path holds answers until the next full run, and six sat unread for a day.** Three paths and a recommendation above. | High | **Austin** on the scheduled task ruling | open, raised 2026-09-30 |
