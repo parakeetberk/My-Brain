@@ -143,6 +143,7 @@ One line per thing that matters. Claude keeps this current, when a page is added
 | [[80-Finance/portfolio-reporting-rules]] | **Austin's own rules for what counts as an operating property. Do not re-derive, do not re-ask.** |
 | [[80-Finance/intercompany-arap-recon]] | Eight years unreconciled, why the packet failed, and the quarterly process that replaces it. |
 | [[80-Finance/fund-reporting/bedrock-fund-ii-winddown]] | The wind-down record and the path to dissolution. |
+| [[80-Finance/fund-reporting/bedrock-fund-ii-operating-rules]] | Operating manual for the wind-down, Close It Down plus BMHCII Financials as one program. Moved from Claude memory 2026-09-29. |
 | [[80-Finance/fund-reporting/wp36-38-integrity-reaudit]] | **Why `WP-36-M3` was not signed. 37 figures held, 12 refuted, and the ordered fix.** |
 | [[80-Finance/fund-reporting/esg-reporting]] | What the funds report on ESG, and to whom. |
 | [[80-Finance/planning/2027-budget/overview]] | **How the 2027 budgets get built: the absorption cap that replaces per-unit overrides, the cash-flow roll-up, the JREF I pricing module.** The first description of this process anywhere here. |

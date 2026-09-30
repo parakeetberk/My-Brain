@@ -236,6 +236,7 @@ Both contradicted by the Fund's own investor activity records and its filed Sche
 - 2026-03-14 — $18.78M seller note paid off, funding the $0.99-per-unit LP distribution paid in March 2026. (Source: [[80-Finance/fund-reporting/bedrock-fund-ii/BMHCII Wind Down Update April 2026.pdf]])
 
 ## Related
+- [[80-Finance/fund-reporting/bedrock-fund-ii-operating-rules]] - how this program is run day to day; moved from Claude memory 2026-09-29 so every agent reads it here.
 
 - [[30-Customers/capital-partners/bedrock-fund-ii-lps]] — the LP base and the handling constraint that governs every communication in the remaining months.
 
