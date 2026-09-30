@@ -43,6 +43,14 @@ Owned by [[10-Business/data-lineage]], which is extended rather than duplicated.
 
 Rows with no agent yet are the hiring list for the agent team.
 
+## Chats become disposable (added 2026-09-29, Austin's question)
+
+**Austin asked whether this lets him archive chats daily or weekly and stop working project by project.** It does, on one condition: **nothing may live only in a chat.**
+
+- **Close-out rule.** Before a chat ends, whatever it decided, built or learned is written to its vault page or register, logged, and pushed. Then the chat holds nothing the Brain lacks and can be archived without loss. The daily close lists which chats filed what that day, so a chat that filed nothing is visible before it is archived.
+- **One home, not many projects.** Work starts in the My Brain folder by default. A separate Cowork project is only for a big isolated build, and its knowledge still lands here. Project scoped memory is what made work project focused; Phase 1 moves it into vault pages, after which those projects can be archived too.
+- **Limit, stated plainly.** Claude cannot see or archive the chat list. Archiving is Austin's click; the close-out rule is what makes that click safe.
+
 ## Three paths
 
 **A. Memory diet only.** Shrink every fat memory file to a pointer card after diffing its contents into the vault page. About two hours of Claude's work. Fixes the drift. **Still exposed:** no written contract, so the next agent built can recreate the mess. Wrong choice if the goal is a team of agents, which it is.
@@ -54,7 +62,7 @@ Rows with no agent yet are the hiring list for the agent team.
 **Why B:** A fixes today and leaves tomorrow open; C scales the problem before fixing it. B takes A as its first step and C as its last.
 
 ## Order of work
-1. **Phase 1, memory diet.** Wind-down merged (Close It Down plus BMHCII) first, then Intercompany, then JREFI, Payroll, permits. Anything in memory that the vault page lacks is added to the page with its date. Then the memory file becomes a pointer card. Old duplicates removed only on Austin's go.
+1. **Phase 1, memory diet, plus the chat close-out rule.** Wind-down merged (Close It Down plus BMHCII) first, then Intercompany, then JREFI, Payroll, permits. Anything in memory that the vault page lacks is added to the page with its date. Then the memory file becomes a pointer card. Old duplicates removed only on Austin's go.
 2. **Phase 2, contract into CLAUDE.md.** On Austin's sign-off.
 3. **Phase 3, feed map** into `10-Business/data-lineage.md`.
 4. **Phase 4, agents,** one at a time from the feed map's empty rows.
