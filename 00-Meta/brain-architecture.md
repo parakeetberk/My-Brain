@@ -51,6 +51,18 @@ Rows with no agent yet are the hiring list for the agent team.
 - **One home, not many projects.** Work starts in the My Brain folder by default. A separate Cowork project is only for a big isolated build, and its knowledge still lands here. Project scoped memory is what made work project focused; Phase 1 moves it into vault pages, after which those projects can be archived too.
 - **Limit, stated plainly.** Claude cannot see or archive the chat list. Archiving is Austin's click; the close-out rule is what makes that click safe.
 
+## Phase 1 progress
+
+**As of 2026-09-29 21:54 ET.** Five programs moved from Claude memory into vault pages, every line checked by script, and their memory files shrunk to pointer cards of about 1 KB:
+- Fund II wind-down, Close It Down plus BMHCII Financials: `80-Finance/fund-reporting/bedrock-fund-ii-operating-rules.md`
+- Intercompany, three memory files into one: `80-Finance/intercompany-operating-rules.md` (the open Intercompany chat closed out to it first)
+- JREFI cash flow model: `80-Finance/jrefi-cashflow-model.md`
+- Payroll rebuild: section on `80-Finance/payroll-model.md`
+- Permits rebuild: section on `70-Operations/license-and-permit-ownership.md`
+- The CPAs, Tim and Lisa: one shared memory card each, project copies removed
+
+**Memory went from about 150 KB of working notebooks to pointer cards.** Still to do in Phase 1: the smaller doubles (Moe, camera rollout, Ramp booking), the project scoped files that are left, and ledger rows for the dollar figures the moved records carry.
+
 ## Three paths
 
 **A. Memory diet only.** Shrink every fat memory file to a pointer card after diffing its contents into the vault page. About two hours of Claude's work. Fixes the drift. **Still exposed:** no written contract, so the next agent built can recreate the mess. Wrong choice if the goal is a team of agents, which it is.
