@@ -4,6 +4,8 @@
 
 **The rule it enforces** (`00-Meta/brain-architecture.md`): memory holds who Austin is, how he works, and short pointer cards. **Business facts live in the vault.** A memory file over about 2 KB, or one with no vault page to point at, is a candidate to move.
 
+**Visual version:** the *Claude Memory Map* artifact (claude.ai/artifact/VxcsXg3G4D1mKZTwjkxpFD, private): five cards, click one for its files. **Everything else we built** (skills, scheduled tasks, procedures, agents): the *Parakeet Brain Playbook* artifact (claude.ai/artifact/SzZzsdRYLs47PuGWMb1ipy, private).
+
 ## Counts, 2026-09-29
 
 - **59 memory files.** 7 are pointer cards already moved into the vault. 11 are personal and stay in memory by design. 12 are program files not yet moved. 11 are scoped to one project. The rest are short people files.
