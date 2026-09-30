@@ -12,6 +12,7 @@ The money structure. How cash comes in, where it goes, what the plan costs, and 
 
 **Fund reporting** — `fund-reporting/`
 - [[80-Finance/fund-reporting/bedrock-fund-ii-winddown]] — the wind-down record and the path to dissolution.
+- [[80-Finance/fund-reporting/bedrock-fund-ii-operating-rules]] - how the wind-down is run: the live tracker, Austin's rulings, the 9/30 gate. Close It Down and BMHCII Financials as one program.
 - [[80-Finance/fund-reporting/wp36-38-integrity-reaudit]] - **why `WP-36-M3` was not signed on 2026-09-04.** 37 figures held, 12 refuted, and the ordered fix. Read before anything goes to counsel, Citrin or Murad.
 - [[80-Finance/fund-reporting/bmhcii-archive-audit-2026-09-03]] - the fourteen-agent audit of the Dropbox memorialization vault.
 - [[80-Finance/fund-reporting/esg-reporting]] - what the funds report on ESG, and to whom.
