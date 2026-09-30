@@ -61,7 +61,7 @@ Rows with no agent yet are the hiring list for the agent team.
 - Permits rebuild: section on `70-Operations/license-and-permit-ownership.md`
 - The CPAs, Tim and Lisa: one shared memory card each, project copies removed
 
-**Memory went from about 150 KB of working notebooks to pointer cards.** Still to do in Phase 1: the smaller doubles (Moe, camera rollout, Ramp booking), the project scoped files that are left, and ledger rows for the dollar figures the moved records carry.
+**About 126 KB of memory notebooks (37 + 17 + 25 + 20 + 2 + 11 + 9 + 5 KB) became seven pointer cards of about 1 KB each.** Still to do in Phase 1: the smaller doubles (Moe, camera rollout, Ramp booking), the project scoped files that are left, and ledger rows for the dollar figures the moved records carry.
 
 ## Three paths
 
