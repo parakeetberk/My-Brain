@@ -178,6 +178,28 @@ This is the right metric because it is denominated in dead capital, not in paper
 
 ---
 
+## The 2026-09-03 tracker rebuild, working record (from Claude memory)
+
+**Why this section exists.** Moved verbatim on 2026-09-29 from Claude's memory (the permit and license tracker file, last written 2026-09-03), Phase 1 of `00-Meta/brain-architecture.md`, so every agent reads it here instead of in one project's memory. `[stated]` lines are Austin's own rulings. Figures below are the working record as written at the time, not ledger entries; `00-Meta/numbers-ledger.md` stays the only place a number is trusted from. Where this section and the page above disagree, both stay visible and the newer dated line wins.
+
+- [stated] License/permit renewal tracking has been a disorganized process for a long time; wants it back under control (2026-09-03)
+- [stated] Legacy tracker is "Permits and Licenses_Master List.xlsx" — 69 tabs, one per property plus MASTER, maintained largely by Melanie per its notes
+- [stated] Wants three things addressed: which licenses/permits each community needs (varies by state/county/city), the best tracking method, and scraping agency websites to confirm active/expired status and renewal dates per community
+- [stated] Decisions: rebuild phased — clean Excel now, migrate to SharePoint List after; scope is everything (active communities, dealer licenses, non-Parakeet parks, dispo properties)
+- [stated] Derek Flynn does not have a Claude account — deliverables for him go as standalone files (built him "Permit Closeout - DEREK.html" in the License & Permits folder: local-browser page, autosaves, Export answers button produces a JSON dropped into _Claude Verification for ingestion)
+- [stated] Derek Flynn ([[derek]], dflynn@parakeetcommunities.com) owns the closeout — the 87 open items and Community Profile confirmations (2026-09-03)
+- [stated] Geiger Key and Royal Oaks (in disposition): keep permits fully current until closing, then archive (2026-09-03)
+- [stated] Wolf Bay (AL) and Lamberton Lake (MI) are still active/owned — added to the register (their folder docs were 2-6 years stale, 5 verify items opened); Apple Creek, Countryside, Parktown (ND) never owned — archived (2026-09-03)
+- [stated] Connected the "License & Permits" SharePoint/OneDrive folder (folder per community with current + historical permit docs) as an additional verification source and for renewal info (2026-09-03)
+- Verification pilot 2026-09-03: Sunbiz/DBPR/county-taxes/WV board lookups all work in-browser; found Tradewinds Brevard county BTR account CLOSED (lapsed since 9/30/2024), Cambridge WV contractor license lapsed, Applegate DBPR MH Project License already renewed through 10/1/2027 (register a year behind), Crystal Acres LLCs active but missing from workbook with a non-CSC registered agent (Shoreline Holdings) to confirm; v2 workbook committed to the License & Permits folder as "Permits and Licenses_Master List v2 (Rebuilt 9.3.26).xlsx"
+- [stated] Bee's RV Resort and Lake Toho were never purchased (not owned assets) - removed from tracker; Cambridge (WV) has been sold - archived (2026-09-03)
+- [stated] Won't lock in the scheduled/automated process until the record is complete - full account of everything owned and needed first (2026-09-03)
+- [stated] Wanted the full audit run across all entities/websites/folders before bringing anything to anyone's attention (2026-09-03)
+- Full audit 2026-09-03 (110 live lookups): all 46 Sunbiz entities ACTIVE but Bee's RV Resort + Lake Toho RV Resort have NO 2026 annual report (dissolution ~end Sept 2026); all 39 DBPR MH Project Licenses renewed to 10/1/2027 (3 delinquency flags: Belle Haven, Silver Breeze, Vantage Oaks); county BTRs: Tradewinds + Southgate Brevard accounts CLOSED since 9/30/2024 (true lapses), Whispering Pines FY27 billed unpaid $62, 9 others paid thru 2027; Geiger food service SEA5400170 due 10/1/26 (register had wrong number); 2 developer licenses still titled to prior owners (Tradewinds, The Oaks); GA SOS 4/4 Active; Westwood + Shady Oaks were once administratively dissolved and reinstated; audited workbook with Action Plan tab committed to License & Permits folder
+- Claude rebuilt the workbook 2026-09-03 (Parakeet_Permits_Licenses_v2.xlsx): 644 legacy rows → 315-line Permit Register with formula-driven status, Renewal Log history, Requirements Matrix with gap flags, Agency Directory; found 42 permits filed per MASTER but never updated on tabs, ~48 renewals due by early Oct (FL 9/30-10/1 wall), plaintext agency passwords in legacy Renewal Links tab flagged for removal to a password manager
+- [stated] Team keeps updating the legacy master list's first tab (MASTER Renewal List) on SharePoint (sites/main web copy; Austin's local OneDrive copy lags it); asked for that data to be ingested into the rebuilt register (2026-09-03)
+- Ingest 2026-09-03: team's Aug-2026 paid confirmations reconciled into register (most FY27 renewals already reflected from folder docs/audit); new: Triple S NC city license paid to 6/30/2027, Ormond Beach Oasis community permits 64-54-2310595/2310599 paid to 9/30/2027 (PO permits are the 64-54-40835xx series, FY27 unconfirmed), Riviera pool 13-60-01322 expired 6/30/26; conflict flagged: team says Whispering Pines Brevard BTR 154470 paid 8/24/26 but county site showed FY27 unpaid on 9/3/26 — confirm payment posted; register 325 rows, workbook recommitted same path
+
 ## Risks
 
 **This becomes another unowned initiative.** The single highest risk, and the base rate is bad: Natalie's *"again"* proves permits have already been raised and dropped at least once. Mitigation is the weekly number — an unowned initiative dies quietly, a missing weekly number is visible.

@@ -139,6 +139,7 @@ One line per thing that matters. Claude keeps this current, when a page is added
 | [[80-Finance/money-flow]] | How cash moves, and the monthly calendar that is the real rhythm. |
 | [[80-Finance/capex-plan]] | The $11.6M 2026 plan. |
 | [[80-Finance/payroll-model]] | Payroll at 5% of property revenue, and where it breaks. |
+| [[80-Finance/jrefi-cashflow-model]] | JREFI cash flow model, Belle Haven pilot. Moved from Claude memory 2026-09-29. |
 | [[80-Finance/board-reporting]] | The March 2026 board deck: thesis, misses, asks. **Carries per-person compensation; point at it, reproduce nothing.** |
 | [[80-Finance/portfolio-reporting-rules]] | **Austin's own rules for what counts as an operating property. Do not re-derive, do not re-ask.** |
 | [[80-Finance/intercompany-arap-recon]] | Eight years unreconciled, why the packet failed, and the quarterly process that replaces it. |

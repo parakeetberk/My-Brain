@@ -8,6 +8,7 @@ The money structure. How cash comes in, where it goes, what the plan costs, and 
 - [[80-Finance/capex-plan]] — the $11.6M 2026 plan. 245 line items, 52% of it utilities, 70 items with no owner.
 - [[80-Finance/utility-cost-per-lot]] — sewer, WWTP and trash cost per occupied lot by community, 2026 YTD. **Carries the 22 communities with occupied lots and no utility expense booked at all.**
 - [[80-Finance/payroll-model]] — payroll benchmarked to 5% of property revenue, and the model's defects.
+- [[80-Finance/jrefi-cashflow-model]] - per-property cash flow model for JREFI, Belle Haven pilot, WIP to kickoff bridge, Walton Street terms. Moved from Claude memory 2026-09-29.
 - [[80-Finance/board-reporting]] — the March 2026 board deck: the thesis, the misses named candidly, and the asks.
 
 **Fund reporting** — `fund-reporting/`
