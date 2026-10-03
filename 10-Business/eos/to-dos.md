@@ -1574,3 +1574,12 @@ Artifact: `https://claude.ai/code/artifact/16dff1a7-c12c-4937-a64e-c58ddfe01f17`
 | `TD-0750` | Send the held CPA entity list email to Tim and Lisa after pass 2 | Austin | Internal sweep first, then external | same | open, held |
 | `TD-0751` | Decide who runs the dissolution paperwork (hire or assign) | Austin | Handoff on hold by Austin 10/2 | same | open, on hold |
 | `TD-0752` | Resolve Wolf Bay MHC, LLC state (DE on deed vs AL at SOS) before any filing | unassigned, counsel | Blocks its termination filing | same | open |
+
+
+### Routed from the 2026-10-03 Entity Register pass 2
+
+| # | Item | Owner | Why it is here | Where | Status |
+|---|---|---|---|---|---|
+| `TD-0753` | Decide the 8 cure workstreams (recommendations on the Cure Program tab) | Austin | Pass 2 done; nothing moves until he picks paths | [[10-Business/entity-structure/entity-register-program]] | open |
+| `TD-0754` | Request the HoldCo II to Property Owner II contribution package from Walton Street's counsel | Proposed: Jon. Unassigned until Austin confirms | Cure workstream 1 | same | open |
+| `TD-0755` | Fix A2Z Community Partners' own cap table (Schwartz 40% exit, one current A&R) | Austin with counsel | Cure workstream 3, prerequisite to any rollup | same | open |
