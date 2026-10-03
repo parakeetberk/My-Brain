@@ -100,3 +100,8 @@ Only six document types, across `Formation Documents/` and its `Archived/` subfo
 - [[10-Business/entity-structure/Asset Management Agreement/Asset Management Agreement_Parakeet HoldCo II.pdf]] — the Owner / Manager relationship and the OpCo's place in it.
 - [[00-Meta/daily-close/2026-09-21]] — the CSC delinquency and the pattern behind it; `00-Meta/daily-close/2026-09-17.md` context question 2 for the ECORP account and the formations rule; `10-Business/eos/to-dos.md` rows `TD-0484`, `TD-0492`, `TD-0549`, `TD-0607`, `TD-0683` and `00-Meta/commitments.md` `CM-30`. Added 2026-09-22.
 
+
+
+## Update 2026-10-02
+
+Superseded in part by [[10-Business/entity-structure/entity-register-program]], which is built from opened and read documents. **Correction:** Bedrock MHC Fund II, LP formation documents do exist (certified Certificate of Limited Partnership and the LPA); see that page for paths. The Bedrock register and chart now live there.

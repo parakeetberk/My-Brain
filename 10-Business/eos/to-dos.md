@@ -1563,3 +1563,14 @@ Artifact: `https://claude.ai/code/artifact/16dff1a7-c12c-4937-a64e-c58ddfe01f17`
 - **`For Signature` re-read live by folder ID at 19:02 ET: still nine, all still unread, none completed.** Newest is `OBOPO_CAPEX_CLOSEOUT_17483_` at 14:12 ET. No Adobe Sign Completed or Canceled notice arrived in the folder during the 18:25 to 19:05 window, so the queue is unchanged rather than merely unrechecked. Per [[10-Business/outlook-folder-map]] and `KP-0127`, disposition comes from Adobe Sign and never from the folder count.
 
 - **Nothing else moved in the refresh window.** Teams is silent after 17:18 ET, Sent Items is unchanged since 16:45 ET, and Plaud is still empty for today with 327 scanned and the scan complete. The only two Inbox arrivals after 18:20 ET are the two rows above plus an industry newsletter.
+
+
+### Routed from the 2026-10-02 Entity Register pilot
+
+| # | Item | Owner | Why it is here | Where | Status |
+|---|---|---|---|---|---|
+| `TD-0748` | Prove the two $100,000 Grove Banyan MIPA payments (Everglades MHP Holdings, Royal Palm TP Holdings). MIPA s.2.2: closing not effective until wired | Austin | Woods Oviatt 8/24/2026: done "except transferring the money" | [[10-Business/entity-structure/entity-register-program]] | open |
+| `TD-0749` | Send the registered agent dissolution email to Northwest / CSC | Austin | Filings go through the agent, not legal (Austin 10/2) | same | open, draft ready |
+| `TD-0750` | Send the held CPA entity list email to Tim and Lisa after pass 2 | Austin | Internal sweep first, then external | same | open, held |
+| `TD-0751` | Decide who runs the dissolution paperwork (hire or assign) | Austin | Handoff on hold by Austin 10/2 | same | open, on hold |
+| `TD-0752` | Resolve Wolf Bay MHC, LLC state (DE on deed vs AL at SOS) before any filing | unassigned, counsel | Blocks its termination filing | same | open |
