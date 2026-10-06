@@ -974,3 +974,11 @@ Last reviewed: **2026-09-23**: **morning brief**, opened 05:44 ET, published **0
 **What is deliberately not claimed.** **Nothing here says what the summary would contain, what Jadian has already been told, or what anyone's position is.** Whether Austin sent it after 18:12 ET, or gave it verbally on the budget review call that ran 16:15 to 17:30 ET with Cridge on it, cannot be established from here and is not inferred either way. **Guardrail 6: nothing is drafted, sent or prepared for the capital partner by this run**, and guardrail 7 keeps every characterisation of the matter and of the person out of this Brain entirely.
 
 **Owner:** Austin. **Next action:** send it, or record that it was given on today's call. **Clock:** stated as today by the counterparty. Related: `CM-36`.
+
+### `CM-37` state update, 2026-10-06 Tuesday end of day close
+
+**No change in state, and today is the strongest contact signal this row has ever had.** **VERIFIED**, Sent Items read in full for the Eastern day. **Austin was in a room with Joseph Cridge for ninety minutes**, the Jadian x Parakeet exec catch up, 16:00 to 17:30 ET, with Toby Nelson, Jon Wyss, Zach Schwartz, Natalie Magurne, John Clark and Leslie Croft also on it. **Nothing in Sent Items shows the summary going out before, during or after.** Three unrelated Jadian exchanges did run today and are recorded so they are not mistaken for this one: Cridge's 13:24 ET AGM request for land as a percentage of purchase price across JREF II, Jon's 13:26 ET acceptance, and Austin's 17:15 ET forward of the Citrin draft financial statements to Cridge and Jon.
+
+**So the row is now eleven days old against a counterparty commitment stated as same day, and the only remaining explanation that fits the evidence is that it was given verbally today.** That is exactly the shape rule 11 exists for and it is asked as question 1 on tonight's close. **Ask 2.**
+
+**Unchanged:** this row still carries no terms, no figures, no characterisation of any person and no account of the matter itself. Guardrails 6, 7 and 9. **Owner:** Austin. **Next action:** send it, or say it was given in the room today and close it.
