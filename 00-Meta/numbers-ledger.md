@@ -485,3 +485,10 @@ Added 2026-10-06. **Source for every row: the 10/3 ledger above with 83 books re
 - 9/30: 247 broken (148 / 99), gross 13,872,008.09; bucket 1 46 / 1,653,797.60; bucket 2 7 / 150,435.94; bucket 3 (Parakeet vs External) 27 / 164,507.73; bucket 4 167 / 11,903,266.82
 - 173 KEET J26542 9/30 Dr 12192 / Cr 32000 100,000, verified both legs; MWMHP J26535 Cr 21147 2,151.75; ROYAL J26535 Cr 21147 1,210.89
 - Balance Map v20: KEET 80 lines net 2,576,428.44 (59 / 21); PC 91 lines net (8,768,862.89) (41 / 50)
+
+## Intercompany reconciliation, v26 (2026-10-06 night)
+- Source: GL Compare 8-31-2026 v23.xlsx, Intercompany Matrix 9-30-2026 v23.xlsx, Balance Map v21, Exposure v22 (Intercompany folder)
+- 8/31: 570 pairs, 226 broken, gross 13,566,457.79 (unchanged from v22 through v26)
+- 9/30: 223 broken, gross 13,828,506.65 (v25 the same night: 247 / 13,872,008.09); Parakeet internal 44 / 1,638,385.60; affiliates 7 / 150,435.94; Parakeet vs External 7 / 136,418.29 (five Hunter Springs pairs, A2Z/HSRC, CA/HSRC); External vs External 167 / 11,903,266.82
+- Entries verified 10/6: 174 SO J26543 Dr 21147 / Cr 21148 7,706; 175 PC J26544 20 lines 11,892.97 each side; 176 PC J26545 Dr 12192 / Cr 12107 2,151.75; all 9/30/2026. 24 pairs moved, each by exactly the entry amount
+- Balance Map v21: KEET 80 lines net 2,576,428.44 (60 / 20); PC 83 lines net (8,768,862.89) (56 / 27)
