@@ -963,7 +963,7 @@ Last reviewed: **2026-09-23**: **morning brief**, opened 05:44 ET, published **0
 **`KP-0115`, and this is the first run to exercise its second half.** The opening clock was clean on four sources at 05:44 ET; **the pre-publish re-check returned 07:51 ET**, a two hour drift. The page states its true publish time on its own face, says the 06:15 reading window was lost, and confirms the 08:00 block was intact with the first meeting at 09:00. **The rule written last night caught what it was written to catch.**
 
 
-## `CM-37` 37. Jadian asked for a written summary of the accounting seat situation and Austin agreed to send it the same day
+## `CM-37` 37. Jadian asked for a written summary of the accounting seat situation and Austin agreed to send it the same day **CLOSED 2026-10-08**
 
 **Opened 2026-09-25 at the Friday end of day close.** **State only.** This row records what was asked, what was promised and by when. **It carries no terms, no figures, no characterisation of any person and no account of the matter itself**, exactly as `CM-36` is written. Guardrails 6, 7 and 9.
 
@@ -986,3 +986,7 @@ Last reviewed: **2026-09-23**: **morning brief**, opened 05:44 ET, published **0
 ### `CM-37` state update, 2026-10-08 Thursday end of day close
 
 **No change in state. Ask 3.** **VERIFIED**, Sent Items read in full for 2026-10-07 and 2026-10-08. Five messages went to Joseph Cridge across the two days and every one concerns the Citrin draft financial statements or the affiliate party schedule he asked for at 13:34 ET on 2026-10-07. **None is this summary.** No close ran on 2026-10-07, so this is the third close to ask. **If it goes unanswered tonight it converts to a parked decision at the next close**, per [[90-Skills/end-of-day]]. Guardrails 6, 7 and 9 unchanged. **Owner:** Austin.
+
+### `CM-37` CLOSED, 2026-10-08, on Austin's answer
+
+**Closed by Austin in chat at 19:37 ET, answering question 1 of the 2026-10-08 close: "YES".** Jadian has the accounting seat summary. **How it reached Cridge is not recorded**, because the answer did not say and Sent Items holds nothing; the most likely forum is the 2026-10-06 exec catch up, INFERRED. Closed on his word per rule 11, the same way a call or a car closes things. Thirteen days from the ask. Nothing is recorded about the content, guardrails 6, 7 and 9.
