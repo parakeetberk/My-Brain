@@ -226,3 +226,7 @@ Ranked here in document order (§7's own sequence), not by stakes. See `00-Meta/
 **Recommended: ask Natalie, and ask for the file list rather than a yes or no.** The read the package path loses on cost rather than quality and becomes the right move the moment her answer is uncertain. The manage forward path loses because it buys silence on a disclosure question by assuming the answer. **The piece of the third worth keeping is the framing for Ben Cohen if the answer is bad**: the inspection has run, so the approach is a retrieval request and not a correction, which is what the 2026-10-05 close already recorded.
 
 **Owner:** Austin Berk, with **Natalie Magurne** on what was sent. **Nothing is sent, retrieved or disclosed from here.** Related: `TD-0726`, `TD-0760`, `PF-0499`.
+
+### `PD-61` state update, 2026-10-08 Thursday end of day close
+
+**Advanced, not decided.** Parakeet accounting told Citrin's billing team at 11:02 ET 2026-10-07 that invoices A2180838 and C1078167 were processed and *"the remaining invoices, our system shows that these were already paid."* Lisa Timbrook sent an excerpt from her 2026-10-01 cash receipts report at 12:34 ET 2026-10-08 under *"Apologies in Advance"*. **VERIFIED** from previews; the excerpt itself was not opened. **INFERRED:** the arrears are largely or wholly a reconciliation question now rather than a payment one. No figures recorded, rule 3.

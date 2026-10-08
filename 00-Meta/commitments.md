@@ -982,3 +982,7 @@ Last reviewed: **2026-09-23**: **morning brief**, opened 05:44 ET, published **0
 **So the row is now eleven days old against a counterparty commitment stated as same day, and the only remaining explanation that fits the evidence is that it was given verbally today.** That is exactly the shape rule 11 exists for and it is asked as question 1 on tonight's close. **Ask 2.**
 
 **Unchanged:** this row still carries no terms, no figures, no characterisation of any person and no account of the matter itself. Guardrails 6, 7 and 9. **Owner:** Austin. **Next action:** send it, or say it was given in the room today and close it.
+
+### `CM-37` state update, 2026-10-08 Thursday end of day close
+
+**No change in state. Ask 3.** **VERIFIED**, Sent Items read in full for 2026-10-07 and 2026-10-08. Five messages went to Joseph Cridge across the two days and every one concerns the Citrin draft financial statements or the affiliate party schedule he asked for at 13:34 ET on 2026-10-07. **None is this summary.** No close ran on 2026-10-07, so this is the third close to ask. **If it goes unanswered tonight it converts to a parked decision at the next close**, per [[90-Skills/end-of-day]]. Guardrails 6, 7 and 9 unchanged. **Owner:** Austin.
