@@ -492,3 +492,10 @@ Added 2026-10-06. **Source for every row: the 10/3 ledger above with 83 books re
 - 9/30: 223 broken, gross 13,828,506.65 (v25 the same night: 247 / 13,872,008.09); Parakeet internal 44 / 1,638,385.60; affiliates 7 / 150,435.94; Parakeet vs External 7 / 136,418.29 (five Hunter Springs pairs, A2Z/HSRC, CA/HSRC); External vs External 167 / 11,903,266.82
 - Entries verified 10/6: 174 SO J26543 Dr 21147 / Cr 21148 7,706; 175 PC J26544 20 lines 11,892.97 each side; 176 PC J26545 Dr 12192 / Cr 12107 2,151.75; all 9/30/2026. 24 pairs moved, each by exactly the entry amount
 - Balance Map v21: KEET 80 lines net 2,576,428.44 (60 / 20); PC 83 lines net (8,768,862.89) (56 / 27)
+
+## Intercompany reconciliation, JREFII walk (computed 2026-10-07, book date 9/30/2026)
+- Source: Intercompany\Workpapers\JREFII Walk 9-30-2026.xlsx, from GL Exports\GL 10062026; 114 in-test accounts tie to Matrix 9-30-2026 v23 Data tab, 0 exceptions
+- KEET / PC vs JREFII properties: 44 pairs, 29 broken, gross 886,108.26 (KEET 557,868.20; PC 328,240.06); 29 of 29 explained to the cent
+- Proposed 177 to 184 (9/30/2026, not posted): 177 ARD 200,000; 178 DO 7,017.45; 179 SUR 17,792.51; 180 GPT 3,375.00; 181 SA 7,637.25; 182 PARK 20,000.00; 183 PC 5,521.71 (Northgate / Silver Hill); 184 HELD 50,000.00 across 12 properties; import file 38 legs, 311,343.92 each side
+- Gross left after 177 to 184: 678,240.07 = Q1 Walton Street Tranche 1 EMD 150,000.01 + Q2 Silver Hill 250,000.00 + Q3 10/31/2025 payments to PC 250,000.00 + Q4 RED / SUR 26,291.35 + Q5 Shell Pointe 1,948.71
+- Per Parakeet books at 9/30, JREFII properties ex KEETII: KEET owes them 382,820.78 net; PC owes them 169,933.61 net (ties to Parakeet Exposure 9-30-2026 v22 JREFII block less KEETII)
