@@ -990,3 +990,29 @@ Last reviewed: **2026-09-23**: **morning brief**, opened 05:44 ET, published **0
 ### `CM-37` CLOSED, 2026-10-08, on Austin's answer
 
 **Closed by Austin in chat at 19:37 ET, answering question 1 of the 2026-10-08 close: "YES".** Jadian has the accounting seat summary. **How it reached Cridge is not recorded**, because the answer did not say and Sent Items holds nothing; the most likely forum is the 2026-10-06 exec catch up, INFERRED. Closed on his word per rule 11, the same way a call or a car closes things. Thirteen days from the ask. Nothing is recorded about the content, guardrails 6, 7 and 9.
+
+### `CM-38` 38. Austin owes FTI Consulting an eleven item document production covering Parakeet MHC from inception, and he accepted it in writing the same afternoon
+
+**Opened 2026-10-09.** **VERIFIED**, the request read in full from the primary message rather than from a subject line, per rule 16.
+
+**What was asked.** Tim Sherman of FTI Consulting sent an initial document request at 14:28 ET to Bryan LaPlant and Joe Cridge of Jadian, copying Laura Baer and Matthew Greenblatt of FTI and Julie Levinson Werner of Lowenstein Sandler, headed **Privileged and Confidential, Prepared at the Request of Counsel**. Joe Cridge forwarded it to Jon and Austin at 16:24 ET: *"Per our convo, see below for the information request list from FTI. Goal is to get this info to FTI as soon as practical, let them digest for a few days, then set up a call Wednesday / Thursday next week to run through."*
+
+**The period is inception to date.** Sherman's own words: *"The request below should cover from inception of Parakeet MHC, LLC (August 2021) through today."*
+
+**The eleven items**, recorded because the list is the commitment and a summary of it would not be auditable: read-only or auditor access to Rent Manager for Sherman and Baer; ERP user audit logs through today; **the intercompany receivables analysis prepared by David Berman and Moe Mehmood, with the underlying files and data**; read-only or auditor access to Ramp, with a note to check and match what Citrin had; a historical listing of all Parakeet Communities clients, current and former; **a historical listing of all properties owned by the Founders, current and former**; the full Paychex register including employee and contractor data; the full ADP register on the same terms; documentation identifying where employees were assigned to perform property management services, such as historical assignment schedules or rosters; all Bank of America account statements; and a listing of all Parakeet entity bank accounts.
+
+**Austin accepted at 16:43 ET**, to the full list including FTI and Lowenstein: *"Received. Pleasure meeting everyone. I will get this documentation and log in access turned around as soon as possible. Look forward to working with you."* He forwarded the thread to Karen Doner at 17:11 ET, *"Karen wanted to keep you in the loop here"*, and told Jon in Teams at 17:28 ET *"Just putting it all together."*
+
+**A draft response exists and has not gone.** Austin posted it to Jon in Teams at 17:25 ET, addressed to Tim and Laura, item by item, opening *"Documents will go into one shared folder, and I'll send the link once the first batch is up"* and recording that the Rent Manager logins are ready. Jon at 17:26 ET: *"I think that's great."* **Per rule 17 a draft is not a commitment and does not create one; the commitment here is Austin's own 16:43 ET acceptance**, and the draft is only evidence of where the work stands.
+
+**Next action: send the response to Sherman and Baer and stand up the shared folder.** The clock is Cridge's *"a few days"* before a Wednesday or Thursday call next week, and **Monday 2026-10-12 is a holiday**, per Jon on the Knightsville thread at 17:31 ET.
+
+**What this Brain does not do with it.** **Items 7, 8 and 9 are payroll registers and employee assignment records.** Guardrails 7 and 9 hold without exception: **no individual's compensation, and no personnel detail beyond the existence of the request, is recorded here or anywhere in this Brain**, and nothing from those registers is reproduced, summarised or quoted. Guardrail 6 governs the rest: this is capital partner material and **nothing leaves this vault**. **Nothing is produced, sent, granted or disclosed from this Brain**; the production is Austin's, done by him.
+
+**What is deliberately not asserted.** Nothing about the investigation's subject, scope, trigger or likely findings is claimed here, and nothing in the request states any of it. **The shape of the list is not evidence of its purpose** and is not read as such, per rule 15. Karen Doner's call with Austin at 11:15 ET today carried *"Jadian investigation update and who is running it"* as a calendar topic, which establishes that the matter predates today's request and that Austin has counsel on it, and establishes nothing further.
+
+**Related.** `TD-0770` the Ramp auditor access, `TD-0767` and `TD-0772` the intercompany work item 3 asks for, [[30-Customers/capital-partners/jadian]], [[10-Business/outside-help/counsel]].
+
+| Owner | Source | Raised | State |
+| --- | --- | --- | --- |
+| **Austin Berk**, with **Jon Wyss** | Outlook Inbox, `FW: Parakeet Investigation \| Privileged & Confidential`, 2026-10-09 20:24 UTC, [webLink](https://outlook.office365.com/owa/?ItemID=AAMkADM5NmY0ZmQ1LWI2ZDUtNGFjYy1hN2M3LTcxNGZmNjkxNDgwNwBGAAAAAAAdz1OD1IrqRaFRepAlyYk2BwCVkYasAQi2QqY2To5b8ObuAAAAAAEMAACVkYasAQi2QqY2To5b8ObuAAnJa5PXAAA%3D&exvsurl=1&viewmodel=ReadMessageItem) | 2026-10-09 | open, **call Wednesday or Thursday 2026-10-14 or 15** |

@@ -230,3 +230,13 @@ Ranked here in document order (§7's own sequence), not by stakes. See `00-Meta/
 ### `PD-61` state update, 2026-10-08 Thursday end of day close
 
 **Advanced, not decided.** Parakeet accounting told Citrin's billing team at 11:02 ET 2026-10-07 that invoices A2180838 and C1078167 were processed and *"the remaining invoices, our system shows that these were already paid."* Lisa Timbrook sent an excerpt from her 2026-10-01 cash receipts report at 12:34 ET 2026-10-08 under *"Apologies in Advance"*. **VERIFIED** from previews; the excerpt itself was not opened. **INFERRED:** the arrears are largely or wholly a reconciliation question now rather than a payment one. No figures recorded, rule 3.
+
+### `PD-61` update 2026-10-09: Austin ruled on the method and the person
+
+**He answered on the close page at 20:59 ET 2026-10-08**, tail item 6, choosing **No** and writing: *"put this on my list in the morning have moe give this task to daniel. no ai"*. **VERIFIED**, read from the artifact `answers` collection, document `2026-10-08__t6`, version 8, one of only two of the night's seventeen clicks that carries typed text and is therefore readable at all, `KP-0138`.
+
+**Three things are settled by it and they are worth separating.** The Citrin arrears reconciliation **goes to Daniel**, routed **through Moe Mehmood** rather than assigned directly, which matches the reporting line recorded on `TD-0746`. And it is to be done **by hand: "no ai"**, which is a standing instruction about this task rather than a comment on this run, and it is recorded here so no later session offers to automate it.
+
+**It also lands on Austin's own morning list by his own instruction**, so the next action is his to raise with Moe rather than anything this Brain sends. **Nothing is delegated, assigned or sent from here.**
+
+**The row stays parked.** He named who does the work and how; **he did not rule on the underlying question**, which is whether the past due balance Citrin has never put on its list is owed. Lisa Timbrook's cash receipts excerpt of 2026-10-08 12:34 ET is still the newest evidence and it was not reconciled against anything. **Ask count does not advance**: he engaged with the row.
