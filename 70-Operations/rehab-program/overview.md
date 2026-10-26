@@ -154,3 +154,23 @@ Austin asked to be able to *"analyze from any angle."* These are the cuts, and e
 **A new scope rule was agreed and it is not in the SOP.** While a rehab is in progress the crew now checks **HVAC, hot water heater, roof and, as far as possible, windows.** The vendor named the limit himself: it cannot be caught during leveling, and a roof leak is often only findable while it is raining. `TD-0448`.
 
 **Two capex questions came out of the call rather than out of the tracker.** Fox Creek started with 120 rentals and has a heavy AC repair run with replacements coming due on large package units at two to two and a half tons; **priced as one bulk decision across rehab homes and occupied rentals it is a capex decision, not twenty repairs.** Against that, the vendor's Silver Breeze alternative is **roughly $3,500 installed for two one-ton mini splits** plus tankless water heaters, which he rates highly and also flags as unproven over time. `TD-0449`. **Neither figure is in `00-Meta/numbers-ledger.md`**: both are prices quoted out loud on a call.
+
+## Live-data rebuild, 2026-10-20
+
+**Austin asked on 10-20 to get arms around every rehab (completed, in progress, upcoming, needed), tie out all costs, and push inventory ready.** Rebuilt off live sources, replacing the 08-28 snapshot.
+
+- **Sources:** live High Pace tracker on SharePoint (`Operations/_Operations Report/rehab 2026/High Pace rehab tracker/Rehab Tracker - Working Copy 7-26-26.xlsx`, modified 10-20); Rent Manager API General Ledger, accrual, 2025-01-01 to 2026-10-20, all 638 accounts under 16400 Work in Process; Rent Manager Asset Listing active and inactive; Ramp spend by GL category.
+- **The 09-16 "ledger cannot see rehab capital" finding is superseded.** That was the RentViewer warehouse. Rent Manager's own GL report reads every unit WIP account. `VERIFIED`.
+- **Pipeline:** 64 completed in 2026 (47 with a tracker end date, 17 complete with no date), 72 in progress, 38 upcoming, 11 cleaned out only, 46 active homes RM marks Needs Rehab with no tracker row.
+- **Money:** $1,997,896 rehab GL spend since 1/1/25 against $1,522,491 on the tracker. 61 of 73 completed units still carry $1,272,793 in WIP; only 10 placed in service. 36 in-progress units show only the $3,500 deposit. Silver Breeze GL is ~$92K behind the tracker. Ramp holds only $71,531 coded to WIP; $2,177,106 of Ramp spend is Uncategorized.
+- **Inventory push:** 6 finished homes still Needs Rehab in RM, 8 finished with title issues, 9 For Sale in RM but In Progress on the tracker.
+- **Not yet tied:** High Pace invoice by invoice. Draft to Mark asks for his open-invoice list.
+- Data: `data/rehab_tieout_2026-10-20.csv`, `data/needs_rehab_not_tracked_2026-10-20.csv`. Board: `build/rehab-board-2026-10-20.html`, published to the dashboard artifact.
+- Drafts in Austin's Outlook (not sent): to Natalie and Moe cc John, Leslie, Jon; to Mark cc Natalie.
+
+## Job costing replaces per-unit WIP accounts, decided 2026-10-21
+
+- **Austin: "We are a go."** Job costing replaces the 638 per-unit WIP sub-accounts under 16400, rehabs first, then infill, then community capex.
+- **Adobe kickoff and closeout forms go away** and move into the forms module in the React Parakeet Birdcage. Birdcage generates the job ID; the display name is a scripted template.
+- **Rent Manager carries a job ID** and the API can pull it (Austin, 10-21). The open risk is the RentViewer warehouse loading it; Dan is looking into it.
+- Rollout plan: Claude Doc "Rehab Job Costing Rollout", https://claude.ai/artifact/Rb76DTs5ou9iPGGzC6z7FE

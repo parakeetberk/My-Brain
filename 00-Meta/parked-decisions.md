@@ -240,3 +240,41 @@ Ranked here in document order (§7's own sequence), not by stakes. See `00-Meta/
 **It also lands on Austin's own morning list by his own instruction**, so the next action is his to raise with Moe rather than anything this Brain sends. **Nothing is delegated, assigned or sent from here.**
 
 **The row stays parked.** He named who does the work and how; **he did not rule on the underlying question**, which is whether the past due balance Citrin has never put on its list is owed. Lisa Timbrook's cash receipts excerpt of 2026-10-08 12:34 ET is still the newest evidence and it was not reconciled against anything. **Ask count does not advance**: he engaged with the row.
+
+### `PD-64` Whether Parakeet pursues internet service at Great Oak RV Resort
+
+**Parked 2026-10-12 from `TD-0763`, at ask 3 unanswered.** Raised by Natalie Magurne on 2026-10-06, forwarded from Lizinette Santiago and flagged high importance. Asked in the closes of 10-06, 10-08 and 10-09 and not answered in any of them.
+
+**Why it parks rather than ages further.** The skill's own rule: a question unanswered three closes running stops being a question and becomes something waiting on Austin's ruling. **It is not stale.** Charles Cimaglia of OHmazing re-raised the same subject in Teams at 12:39 ET today, asking whether Airspring proceeds, which means the vendor is holding too. `TD-0782`.
+
+**Owner:** Austin Berk. **Nothing is ordered, quoted or committed from here.** Related: `TD-0763`, `TD-0782`.
+
+### `PD-65` Whether Parakeet sells the outside parcels of land at Vantage Oaks
+
+**Parked 2026-10-12 from `TD-0764`, at ask 3 unanswered.** Raised by Natalie Magurne in Teams on 2026-10-06 at 18:06 ET: *"Are we interested in selling the outside parcels of land?"* Asked in the closes of 10-06, 10-08 and 10-09 and not answered in any of them.
+
+**Context that makes it a live decision rather than housekeeping.** Parakeet is actively transacting on two other South Carolina parcels today: the Knightsville LOI went executed to Lighthouse Properties at 14:38 ET and a proposed PSA for the Summerville parcel came back at 16:24 ET. **A parcel disposition policy is being set by practice while this row sits unruled.**
+
+**Owner:** Austin Berk, with Jon Wyss on disposition. **Nothing is listed, offered or marketed from here.** Related: `TD-0764`.
+
+### `PD-66` Whether Jon Wyss's Hend and Nalls wires were sent
+
+**Parked 2026-10-13 from `TD-0762`, at ask 4 unanswered.** Jon committed in Teams on 2026-10-06 at 17:32 ET: *"sorry i got side tracked i will make sure the hend and nalls wires are sent tonight for morning delivery."* Asked in the closes of 10-08, 10-09 and 10-12 and answered in none of them.
+
+**Why it parks rather than ages further.** The skill's own rule: a question unanswered three closes running stops being a question and becomes something waiting on Austin's ruling. **It should have parked on the 10-12 close**, which said so in its own text, and it did not, because the 10-13 close could not reach this vault until 19:43 ET. That is the delay, not a judgement that the row was still a question.
+
+**What makes it worth a ruling rather than a reminder.** The original row exists because it is a self declared slip with a same night clock on it, made at the end of a day when a separate debt wire was only released late. **Austin was in the Monday catch up with Jon for an hour on 10-12**, which is the strongest contact signal this close has, and it did not come up in writing afterwards. Four Teams messages passed between them today and none touches it.
+
+**Owner:** Jon Wyss, with Austin to rule on whether it is chased or dropped. **Guardrail 8: nothing is paid, released or instructed from here.** Related: `TD-0762`.
+
+## `PD-67` The Citrin representation letter for the 12/31/25 Parakeet MHC audit, parked at ask 3
+
+**What is waiting on a ruling.** Jacqueline Kulbick of Citrin sent the representation letter for the 12/31/25 Parakeet MHC audit on 2026-10-09 and chased the same day: *"Once we have received, we can move to finalize and issue the statements."* **It has been asked on the 10-12, 10-13 and 10-14 closes and answered on none of them**, which is the point at which [[90-Skills/end-of-day]] says a question stops being a question.
+
+**Why this parks rather than staying a nag, which is the distinction the 10-14 close drew for `TD-0761` and declined to apply there.** `TD-0761` is a status question for Moe and belongs on a Finance agenda. **This one is Austin's signature on a representation letter in an audit**, and a representation letter is a document a CEO can reasonably want reviewed before signing rather than one he has simply not got to. **The ruling is which of those it is**: sign it as sent, or route it for review first and say to whom. Until that is said, the row cannot be chased honestly.
+
+**What it is holding.** Citrin cannot finalise and issue the 12/31/25 Parakeet MHC statements. **The audited statements have been at Jadian since 2026-10-12**, which means the version a capital partner is reading is ahead of the version the auditor can issue.
+
+**What is deliberately not asserted.** Whether Austin has signed it outside both swept mailboxes. **No movement was found today in either mailbox**, and Austin was in contact with Citrin twice today on unrelated matters, which is evidence of contact and not of signature. **VERIFIED** as to the absence of a written record; nothing inferred from it, per rule 11.
+
+**Owner:** Austin Berk. Related: `TD-0771`, `CM-38`.
