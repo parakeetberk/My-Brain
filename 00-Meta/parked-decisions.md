@@ -278,3 +278,15 @@ Ranked here in document order (§7's own sequence), not by stakes. See `00-Meta/
 **What is deliberately not asserted.** Whether Austin has signed it outside both swept mailboxes. **No movement was found today in either mailbox**, and Austin was in contact with Citrin twice today on unrelated matters, which is evidence of contact and not of signature. **VERIFIED** as to the absence of a written record; nothing inferred from it, per rule 11.
 
 **Owner:** Austin Berk. Related: `TD-0771`, `CM-38`.
+
+### `PD-68` Are Josh Blum and John Danos the same lawyer, or two
+
+**Parked 2026-10-30 because it went unanswered three closes running**, which is the rule in `90-Skills/end-of-day.md`: a question asked three times stops being a question and becomes something waiting on Austin's ruling. **Nagging is how a tool gets ignored**, so it leaves the close file tonight and sits here until he rules.
+
+**What is known.** Austin told Vikki Farrah of Shulman Rogers on 2026-10-26 *"Josh Blum. Waiting for contact information"*. John Danos of Wilson Elser appears on the 2026-10-26 Habitat Homes thread as counsel representing Habitat against the DSL and Gallagher nuisance matter. **INFERRED** that they may be the same person; nothing states it.
+
+**Why it matters rather than being trivia.** The Habitat Homes production has been review complete and held since 2026-10-19, now eleven days, and `CM-28` is waiting on a contact. **If they are the same man the contact already exists and the hold is unnecessary.** If they are two, counsel is being asked for someone nobody has identified.
+
+**What makes this cheap to settle.** Farrah was a copy recipient on the Gallagher thread on both 2026-10-29 and 2026-10-30, so Austin and she have now been in the same message twice in two days without it coming up.
+
+**Owner:** Austin Berk. Related: `TD-0840`, `CM-28`, `KP-0149`.

@@ -105,3 +105,15 @@ Only six document types, across `Formation Documents/` and its `Archived/` subfo
 ## Update 2026-10-02
 
 Superseded in part by [[10-Business/entity-structure/entity-register-program]], which is built from opened and read documents. **Correction:** Bedrock MHC Fund II, LP formation documents do exist (certified Certificate of Limited Partnership and the LPA); see that page for paths. The Bedrock register and chart now live there.
+
+## The Parakeet to Bedrock relationship, stated by Austin 2026-10-30
+
+**Austin confirmed in writing to litigation counsel that no Parakeet entity controls Bedrock or the GP of any Bedrock Fund.** Kimberly Mann of Shulman Rogers put it to him as a confirm or correct on 2026-10-30 at 16:09 ET and he answered *"Correct"* at 16:49 ET. **VERIFIED**, his own words in his own Sent folder, read in full.
+
+**He also said there is no other written agreement between any Parakeet entity and the Bedrock Funds** beyond management of the properties, answering *"No"* to that question in the same message.
+
+**On the management agreements themselves his answer was *"Yes unsigned but not sure I can get off the computer"***, and that sits against what this folder contains. `Property Management Agreements/` holds 131 PDFs, 69 of them unique, including `Lamberton Lake`, `Everglades` and `Royal Palm - Property Management Agreement.pdf`, which are the three remaining Fund II assets. **No PDF has been opened, so whether any is executed is unknown**, and this page does not assert that it is. The open question is `KP-0154`; the production task is `TD-0872`.
+
+**Why this is recorded here rather than only in a register.** This Brain has twice read the Bedrock layer as foreign or as an error when it is the prior generation of the same company, which is the precedent behind rule 15. **A plain statement of the control relationship, in Austin's words and dated, is the thing that stops that happening a third time.**
+
+Source: Gmail thread `1a18de18f5abce24`, `austin@a2zcp.com`, 2026-10-30.
